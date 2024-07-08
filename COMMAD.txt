@@ -1,0 +1,8 @@
+
+npx react-native run-android
+npx react-native start --reset-cache
+
+cd android
+gradlew.bat clean
+
+

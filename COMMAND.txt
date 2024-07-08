@@ -1,0 +1,6 @@
+keytool -genkeypair -v -storetype PKCS12 -keystore dorkarlyf-captain-testing.keystore -alias dorkarlyf-captain-testing -keyalg RSA -keysize 2048 -validity 10000
+
+123456
+
+dorkarlyf-captain-testing.keystore
+ 

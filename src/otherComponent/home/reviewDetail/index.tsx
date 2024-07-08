@@ -1,0 +1,80 @@
+import React from 'react';
+import {View, Text, FlatList, Image} from 'react-native';
+import {styles} from './styles';
+import {Star} from '@utils/icons';
+import {reviewData} from './data';
+import {ReviewType} from './data/types';
+import {useValues} from '../../../../App';
+import appColors from '@theme/appColors';
+import {windowHeight} from '@theme/appConstant';
+
+export function ReviewDetail({data}: {data?: ReviewType[]}) {
+  const {isDark,t} = useValues();
+  return (
+    <View
+      style={[
+        styles.reviewsBg,
+        {
+          backgroundColor: isDark ? appColors.darkTheme : appColors.white,
+          borderWidth: isDark ? 0.1 : 1,
+          borderRadius: isDark ? windowHeight(0.2) : windowHeight(1.8),
+        },
+      ]}>
+      <FlatList
+        data={data ? data : reviewData}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({item}) => (
+          <View>
+            <View style={styles.providerContainer}>
+              <View style={[styles.row]}>
+                <Image source={item.user} style={styles.userImg} />
+                <View style={styles.textContainer}>
+                  <Text
+                    style={[
+                      styles.textStyle,
+                      {color: isDark ? appColors.white : appColors.darkText},
+                    ]}>
+                    {t(item.name)}
+                  </Text>
+                  <Text style={styles.content}>
+                    {item.time} {t('reviews.minAgo')}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.ratingView}>
+                <Star height={'20'} width={'14'} />
+                <Text
+                  style={[
+                    styles.providerRating,
+                    {color: isDark ? appColors.white : appColors.darkText},
+                  ]}>
+                  {item.rating}
+                </Text>
+              </View>
+            </View>
+            <Text
+              style={[
+                styles.review,
+                {color: isDark ? appColors.lightText : appColors.darkText},
+              ]}>
+              {t(item.review)}
+            </Text>
+            {item.serviceName && (
+              <View style={styles.row}>
+                <Text style={styles.service}>{t('packages.service')}:</Text>
+                <Text style={styles.name}>{t(item.serviceName)}</Text>
+              </View>
+            )}
+          </View>
+        )}
+        ItemSeparatorComponent={() => (
+          <View
+            style={[
+              styles.horizontalLine,
+              {borderColor: isDark ? appColors.darkBorder : appColors.border},
+            ]}></View>
+        )}
+      />
+    </View>
+  );
+}

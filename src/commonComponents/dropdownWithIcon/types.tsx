@@ -14,4 +14,6 @@ export type Props = {
   overlayStyle?: ViewStyle;
   iconStyle?: ViewStyle;
   dropdownOptionStyle?: StyleProp<ViewStyle>;
+  selectedValue:DropdownItem;
+  error:string
 };

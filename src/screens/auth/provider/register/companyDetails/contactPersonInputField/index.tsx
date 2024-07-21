@@ -1,23 +1,19 @@
 import {View, Text} from 'react-native';
 import React, {useState,useEffect} from 'react';
 import {styles} from './styles';
-import UploadContainerView from '@otherComponent/auth/uploadContainer';
 import TextInputComponent from '@otherComponent/auth/textInput';
 import {Company, Experience} from '@utils/icons';
-import PhoneTextInput from '@otherComponent/auth/phoneTextInput';
+
 import {windowHeight, windowWidth} from '@theme/appConstant';
-import {Notes, Email} from '@utils/icons';
-import {experienceData} from '../data/data';
-import {ImageLibraryOptions} from 'react-native-image-picker';
-import {handleImagePicker} from '@utils/functions';
-import {DropdownWithIcon} from '@commonComponents/dropdownWithIcon';
-import {GlobalStyle} from '@style/styles';
-import {dropDownType} from './types';
+import {Email} from '@utils/icons';
+
 import {useValues} from '../../../../../../../App';
-import { CheckBox } from 'react-native-elements';
+import { Checkbox } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { registerFieldActions } from '@src/store/redux/register-field-redux';
+import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
+import PhoneTextInput from '@otherComponent/auth/phoneTextInput';
 
 
 export default function ContactPersonInputField() {
@@ -28,7 +24,13 @@ export default function ContactPersonInputField() {
       field: 'contact_person_name',
       data: value,
      }))
+
+     dispatch(registerFieldErrorActions.setData({
+      field: 'contact_person_name',
+      data: '',
+     }))
   }
+  const errorContactPersonName = useSelector((state: RootState)=>state['registerProviderErrorField'].contact_person_name)
 
   const email = useSelector((state: RootState)=>state['registerProviderField'].contact_person_email)
   const setEmail = (value:string)=>{
@@ -36,7 +38,16 @@ export default function ContactPersonInputField() {
       field: 'contact_person_email',
       data: value,
      }))
+
+     dispatch(registerFieldErrorActions.setData({
+      field: 'contact_person_email',
+      data: '',
+     }))
+
+
   }
+
+  const errorContactPersonEmail = useSelector((state: RootState)=>state['registerProviderErrorField'].contact_person_email)
   
   const phoneCountryCode = useSelector((state: RootState)=>state['registerProviderField'].contact_person_country)
   const setPhoneCountryCode = (value:string)=>{
@@ -60,7 +71,15 @@ export default function ContactPersonInputField() {
       field: 'contact_person_phone',
       data: value,
     }))
-}
+
+    dispatch(registerFieldErrorActions.setData({
+      field: 'contact_person_phone',
+      data: '',
+     }))
+  }
+  const errorContactPersonPhoneNo = useSelector((state: RootState)=>state['registerProviderErrorField'].contact_person_phone)
+
+
   const {t} = useValues(); 
   const [sameAsGeneralInfo, setSameAsGeneralInfo] = useState(false);
 
@@ -86,16 +105,18 @@ export default function ContactPersonInputField() {
 
     
     <View style={styles.container}>
-      <View style={styles.checboxStyle}>
-      <CheckBox
-        title={t('newDeveloper.SameAsGeneralInfo')}
-        checked={sameAsGeneralInfo}
-        onPress={() => setSameAsGeneralInfo(!sameAsGeneralInfo)}
-      />
-    </View>
+      <View style={styles.checkboxContainer}>
+          <Checkbox
+            status={sameAsGeneralInfo ? 'checked' : 'unchecked'}
+            onPress={() => setSameAsGeneralInfo(!sameAsGeneralInfo)}
+            color={sameAsGeneralInfo ? 'orange' : undefined}
+          />
+            <Text style={styles.label}>{t('newDeveloper.SameAsGeneralInfo')}</Text>
+      </View>
      {/* Company/Individual Name */}
      <TextInputComponent
         placeholder={t('newDeveloper.ContactPersonName')} 
+        error={errorContactPersonName}
         Icon={<Company />}
         value={company}
         onChangeText={value => {
@@ -113,6 +134,7 @@ export default function ContactPersonInputField() {
             <TextInputComponent
               containerStyle={{marginTop: windowWidth(3)}}
               textContainerStyle={{width: windowWidth(45)}}
+              error={errorContactPersonPhoneNo}
               placeholder={t('auth.phoneNumber')}
               keyboardType="number-pad"
               value={phoneNo}
@@ -128,6 +150,7 @@ export default function ContactPersonInputField() {
         placeholder={t('auth.companyMail')}
         Icon={<Email />}
         value={email}
+        error={errorContactPersonEmail}
         onChangeText={value => {
           setEmail(value);
         }}

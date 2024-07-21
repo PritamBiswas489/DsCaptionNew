@@ -55,4 +55,11 @@ export const styles = StyleSheet.create({
     borderWidth: 0.3,
     borderColor: appColors.border,
   },
+  error: {
+    color: appColors.error,
+    fontFamily: appFonts.NunitoSemiBold,
+    fontSize: fontSizes.FONT4,
+    marginTop: 0.7,
+    
+  },
 });

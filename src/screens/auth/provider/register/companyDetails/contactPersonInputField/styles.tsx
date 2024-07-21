@@ -31,5 +31,13 @@ export const styles = StyleSheet.create({
      flex: 1, 
      justifyContent: 'center', 
      alignItems: 'flex-end'
-  }
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  label: {
+      marginLeft: 8,
+      color:'black'
+  },
 });

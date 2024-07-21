@@ -19,7 +19,6 @@ const BusinessInformation=() =>{
         <Text style={styles.textStyle}>1. {t('newDeveloper.BusinessInformation')}</Text>
       </View>
       <InputField />
-      
     </View>
   );
 }

@@ -6,5 +6,6 @@ export type propsType = {
   containerStyle?: ViewStyle;
   onPress: (props: FormEvent<HTMLFormElement> | undefined) => void;
   image: string | null;
-  setImage: React.Dispatch<React.SetStateAction<string | null>>;
+  setImage: (value:string)=>void;
+  error:string | null;
 };

@@ -13,6 +13,7 @@ import {ImageLibraryOptions} from 'react-native-image-picker';
 import {handleImagePicker} from '@utils/functions';
 import {propsType} from './types';
 import {useValues} from '../../../../App';
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 export default function UploadContainerView({
   title,
@@ -20,6 +21,7 @@ export default function UploadContainerView({
   onPress,
   image,
   setImage,
+  error
 }: propsType) {
   const {isDark,t} = useValues();
 
@@ -32,8 +34,12 @@ export default function UploadContainerView({
     };
 
     handleImagePicker(options, (imageUri: string) => {
+     
       setImage(imageUri);
     });
+  };
+  const removeImage = () => {
+    setImage(''); // or setImage(null) depending on your initial state
   };
   return (
     <>
@@ -43,6 +49,9 @@ export default function UploadContainerView({
           onPress={openImage}
           style={styles.imageContainer}>
           <Image source={{uri: image}} style={styles.imageStyle} />
+          <TouchableOpacity onPress={removeImage} style={styles.crossButton}>
+            <Icon name="close" size={24} color="#fff" /> 
+          </TouchableOpacity>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -60,6 +69,8 @@ export default function UploadContainerView({
           </ImageBackground>
         </TouchableOpacity>
       )}
+       
+      <View style={{marginStart:30}}>{error && <Text style={styles.error}>{error}</Text>}</View>
     </>
   );
 }

@@ -53,6 +53,8 @@ import {
   CommissionDetail,
   ChatHistory,
   Booking,
+  AddressCurrentLocation
+
 } from '../screens';
 import {MultipleServiceMenList} from '@otherComponent/booking/bookingDetail/multipleServiceMenList';
 import {AddExtraCharges} from '@otherComponent/booking/addExtraCharges';
@@ -60,6 +62,7 @@ import {ServiceProof} from '@otherComponent/booking/serviceProof';
 import {ProviderInfo} from '@screens/dashboard/serviceMan/home';
 import NoInternet from '@otherComponent/noInternet';
 import NetInfo from '@react-native-community/netinfo';
+
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -220,11 +223,21 @@ export default function MyStack() {
               name="CommissionDetail"
               component={CommissionDetail}
             />
+             <RootStack.Screen
+              name="AddressCurrentLocation"
+              component={AddressCurrentLocation}
+            /> 
             <RootStack.Screen name="ProviderInfo" component={ProviderInfo} />
             <RootStack.Screen
               name="CurrentLocation"
               component={CurrentLocation}
             /> 
+
+           
+
+
+
+            
           </>
         )}
       </RootStack.Navigator>

@@ -32,10 +32,10 @@ export default function ProgressBar({
           label={currentStep == stepCount ? 'common.finish' : 'common.next'}
           onPress={handleNextStep}
         />
-        {currentStep > 1 && <GradientBtn
+        {/* {currentStep > 1 && <GradientBtn
           label={'newDeveloper.BackButton'}
           onPress={handlePrevStep}
-        />}
+        />} */}
         
       </View>
       

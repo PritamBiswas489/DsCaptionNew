@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userAccountDataSlice from "./redux/user-account-data.redux";
 import registerFieldSlice from "./redux/register-field-redux";
+import zoneDataSlice from "./redux/zone-list-redux";
+import registerFieldErrorSlice from "./redux/register-error-redux";
 
 const store = configureStore({
     reducer: { 
       userAccountData:userAccountDataSlice.reducer,
       registerProviderField:registerFieldSlice.reducer,
+      registerProviderErrorField:registerFieldErrorSlice.reducer,
+      zoneList:zoneDataSlice.reducer,
     },
   });
   

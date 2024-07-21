@@ -15,10 +15,12 @@ export const DropdownWithIcon: FC<Props> = ({
   overlayStyle,
   iconStyle,
   dropdownOptionStyle,
+  selectedValue,
+  error
 }) => {
   const DropdownButton = useRef<TouchableOpacity>(null);
   const [visible, setVisible] = useState(false);
-  const [selected, setSelected] = useState<DropdownItem | undefined>(undefined);
+  const [selected, setSelected] = useState<DropdownItem | undefined>(selectedValue);
   const [dropdownTop, setDropdownTop] = useState(0);
   const {isDark,t} = useValues();
 
@@ -85,6 +87,7 @@ export const DropdownWithIcon: FC<Props> = ({
   };
 
   return (
+    <>
     <TouchableOpacity
       activeOpacity={0.9}
       ref={DropdownButton}
@@ -103,6 +106,9 @@ export const DropdownWithIcon: FC<Props> = ({
       <View style={iconStyle}>
         <Dropdown color={appColors.lightText} />
       </View>
+      
     </TouchableOpacity>
+    <View style={{marginStart:20}}>{error && <Text style={styles.error}>{error}</Text>}</View>
+    </>
   );
 };

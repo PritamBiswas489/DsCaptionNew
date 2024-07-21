@@ -11,8 +11,11 @@ import { getValue } from '@utils/localstorage';
 import { RootStackParamList } from 'src/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import { getZoneList } from '@src/services/settings.service';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { zoneDataActions } from '@src/store/redux/zone-list-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 interface Response {
   data: any;
@@ -24,13 +27,21 @@ interface Response {
 }
 
 const Register = ({ route }: any) => {
+  const dispatch = useDispatch()
   const [locationData, setLocationData] = useState();
   const [currentStep, setCurrentStep] = useState(1);
   const progress = useState(new Animated.Value(0))[0];
   const [isFreelancerLogin, setIsFreelancerLogin] = useState<boolean>();
   const [isSkeletonLoaderView, setSkeletionLoaderView] = useState<boolean>(true);
-  const [isZoneLoaded,setZoneLoaded] = useState<boolean>(false);
-  const [zoneList,setZoneList] = useState<[]>([]);
+
+  const {zones} = useSelector((state: RootState)=>state['zoneList'])
+  let zoneList = []; 
+  if(zones!=''){
+    zoneList = JSON.parse(zones)
+  }
+  const [isZoneLoaded,setZoneLoaded] = useState<boolean>(zoneList && false);
+
+   
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -47,7 +58,11 @@ const Register = ({ route }: any) => {
         //console.log("================ called ended ==========================")
         setZoneLoaded(true);
         if(response?.data?.content?.data){
-          setZoneList(response?.data?.content?.data)
+          
+          dispatch(zoneDataActions.setData({
+            field: 'zones',
+            data: JSON.stringify(response?.data?.content?.data),
+           }))
         }
       }
       if(!isZoneLoaded){
@@ -55,7 +70,7 @@ const Register = ({ route }: any) => {
         getzones()
       }
      
-   },[isZoneLoaded])
+   },[isZoneLoaded ])
 
     
 
@@ -78,6 +93,8 @@ const Register = ({ route }: any) => {
         duration: 200,
         useNativeDriver: false,
       }).start();
+    }else{
+      navigation.goBack();
     }
     //navigation.goBack();
   };
@@ -109,9 +126,9 @@ const Register = ({ route }: any) => {
             borderColor: isDark ? appColors.darkBorder : appColors.border,
           },
         ]}>
-        {isSkeletonLoaderView && <View style={{marginTop:20}}><SkeletonLoader /></View>}
+         
 
-        {!isSkeletonLoaderView &&
+        
           <>
             <AuthBg
               containerStyle={{ borderWidth: 0 }}
@@ -121,7 +138,7 @@ const Register = ({ route }: any) => {
                     showBack={true}
                     authTitle={'auth.register'}
                     content={'auth.registerContent'}
-                    gotoScreen={() => handleInitalStep()}
+                    gotoScreen={() => handlePrevStep()}
                     containerStyle={styles.containerStyle}
                   />
                 </View>
@@ -135,7 +152,12 @@ const Register = ({ route }: any) => {
               setCurrentStep={setCurrentStep}
               progress={progress}
             />
-          </>}
+          </> 
+          <Spinner
+            visible={isSkeletonLoaderView}
+            textContent={'Loading.....'}
+            textStyle={{ color: '#FFF' }}
+          />
 
       </View>
     </ScrollView>

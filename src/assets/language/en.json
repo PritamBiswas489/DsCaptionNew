@@ -147,7 +147,10 @@
             "panCard": "PAN card",
             "adharCard": "Aadhar card",
             "bankPassbook": "Bank passbook",
-            "votingCard": "Voting card"
+            "votingCard": "Voting card",
+            "trade_license": "Trade License",
+            "driving_license": "Driving License",
+             "nid": "NID"
         },
         "language": {
             "english": "English",
@@ -814,9 +817,30 @@
             "AddYourAddress":"Add your address",
             "BusinessInformation":"Business Information",
             "SelectZone":"Select Zone",
-            "IndentityDocumentType": "Indentity Document Type",
-            "IndentityNumber":"Indentity Number",
-            "IdentityImages": "Identity Images"                   
+            "IndentityDocumentType": "Identity Document Type",
+            "IndentityNumber":"Identity Number",
+            "IdentityImages": "Identity Images",
+            "uploadidentityFrontImage":"Upload identity document front image",
+            "uploadidentityBackImage":"Upload identity document back image",
+            "selectServiceLocation":"Selected Address location",
+            "selectLocationHere":"Search location here",
+            "errorCompanyName":"Enter Company name here",
+            "errorCompanyPhone":"Enter valid company contact number",
+            "errorCompanyAddress":"Select valid company address",
+            "errorCompanyEmail":"Enter valid company email",
+            "errorContactPerson":"Enter contact person name",
+            "errorContactPersonPhone":"Enter contact person phone number",
+            "errorContactPersonEmail":"Enter Contact person email address",
+            "uploadCompanyLogo":"Upload company logo",
+            "errorZoneId":"Select your service zone",
+            "errorIdentityType":"Select your Identity document type",
+            "errorIdentityNumber":"Enter your Identity document number",
+            "erroridentityFrontImage":"Enter your identity front image",
+            "errorProviderName":"Enter provider name",
+            "errorProviderPhoneNumber":"Enter provider valid phone number",
+            "errorProviderEmailAddress":"Enter provider valid email address",
+            "errorProviderPassword":"Enter 6 length password"
+            
         }
     }
 }

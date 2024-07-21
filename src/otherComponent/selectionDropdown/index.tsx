@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 interface DataItem {
   label: string;
   value: string;
@@ -33,43 +33,48 @@ export default function SelectionDropdown ({data,value,setValue,label}:dropdownC
 
   return (
     <View style={styles.container}>
-      {renderLabel()}
-      <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'black' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? label : '...'}
-        searchPlaceholder="Search..."
+      <RNPickerSelect
+        onValueChange={(value) => setValue(value)}
+        items={data}
+        style={pickerSelectStyles}
+        useNativeAndroidPickerStyle={false}
+        placeholder={{label}}
         value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        
-        onChange={(item: DataItem) => {
-          setValue(item.value);
-          setIsFocus(false);
+        Icon={() => {
+          return <Icon  style={{marginTop:10,fontSize:30}} name="arrow-drop-down" size={24} color="gray" />;
         }}
-         itemTextStyle={{color:'black'}}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color={'black'}
-            name="Safety"
-            size={20}
-          />
-        )}
       />
     </View>
   );
 };
 
- 
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    color: 'gray',
+    backgroundColor: '#f0f1f2',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    color: 'gray',
+    backgroundColor: '#f0f1f2',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  placeholder: {
+    color: 'gray',
+  },
+}); 
 
 const styles = StyleSheet.create({
     container: {

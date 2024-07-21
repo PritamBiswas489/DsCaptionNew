@@ -87,6 +87,7 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   CompanyDetails: undefined;
   CompanyLocation: undefined;
+  AddressCurrentLocation:undefined;
   ProviderDetails: undefined;
   Register: locationProp | undefined;
   CurrentLocation: CurrentLocationProp | undefined;

@@ -3,4 +3,5 @@ export type locationType = {
   longitude: number | null;
   screen?: String;
   company_address:String;
+  set_map_address:()=>void
 };

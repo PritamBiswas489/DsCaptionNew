@@ -13,13 +13,13 @@ export const env = {
   },
   mediaUrls: {
     dev: {
-      apiUrl: 'http://192.168.29.117:4000',
+      apiUrl: 'https://unified.dorkarservice.com/storage/app/public',
     },
     staging: {
-      apiUrl: 'http://192.168.29.117:4000',
+      apiUrl: 'https://unified.dorkarservice.com/storage/app/public',
     },
     prod: {
-      apiUrl: 'https://api.rimannonce.com',
+      apiUrl: 'https://unified.dorkarservice.com/storage/app/public',
     },
   },
 };

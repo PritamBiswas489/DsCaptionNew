@@ -1,37 +1,44 @@
-import {View, Image, Text} from 'react-native';
+import { View, Image, Text } from 'react-native';
 import React from 'react';
-import {customer1} from '@utils/images';
-import {styles} from './styles';
-import {Email} from '@utils/icons';
+import { customer1 } from '@utils/images';
+import { styles } from './styles';
+import { Email } from '@utils/icons';
 import appColors from '@theme/appColors';
-import {GlobalStyle} from '@style/styles';
-import {AvailableBalance} from './avialableBalance';
-import {useValues} from '../../../../../../App';
+import { GlobalStyle } from '@style/styles';
+import { AvailableBalance } from './avialableBalance';
+import { useValues } from '../../../../../../App';
+import { useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { getMediaUrl } from '@src/config/utility';
 
 export function SettingInfo() {
-  const {isDark, t} = useValues();
-
+  const { isDark, t } = useValues();
+  const { company_name, company_email, logo } = useSelector((state: RootState) => state['serviceProviderAccountData'])
+  //console.log("================= Hello One ======================")
+  //console.log(getMediaUrl())
+  //console.log("================= Hello Two ======================")
+  //console.log(logo)
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <View
+        {logo && <View
           style={[
             styles.imageView,
-            {backgroundColor: isDark ? appColors.darkCardBg : appColors.white},
+            { backgroundColor: isDark ? appColors.darkCardBg : appColors.white },
           ]}>
-          <Image source={customer1} style={styles.imageStyle} />
-        </View>
+          <Image source={{ uri: `${getMediaUrl()}/provider/logo/${logo}` }} style={styles.imageStyle} />
+        </View>}
         <View style={styles.textView}>
           <Text
             style={[
               styles.name,
-              {color: isDark ? appColors.white : appColors.darkText},
+              { color: isDark ? appColors.white : appColors.darkText },
             ]}>
-            {t('profileSetting.profileName')}
+            {company_name}
           </Text>
-          <View style={[styles.row, {marginTop: 6}]}>
+          <View style={[styles.row, { marginTop: 6 }]}>
             <Email width={'20'} height={'20'} color={appColors.lightText} />
-            <Text style={styles.email}>{t('profileSetting.email')}</Text>
+            <Text style={styles.email}>{company_email}</Text>
           </View>
         </View>
       </View>

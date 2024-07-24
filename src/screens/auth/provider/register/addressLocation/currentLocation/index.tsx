@@ -16,11 +16,11 @@ import {useValues} from '../../../../../../../App';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { registerFieldActions } from '@src/store/redux/register-field-redux';
+import { mapFieldActions } from '@src/store/redux/map-address-redux';
 import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
 import Geocoder from 'react-native-geocoding';
 import Toast from 'react-native-toast-message';
-
+ 
 
 
 const AddressCurrentLocation=({route}: any) =>{
@@ -28,37 +28,42 @@ const AddressCurrentLocation=({route}: any) =>{
   const screen = route?.params?.screen;
   const dispatch = useDispatch()
   const {isDark} = useValues();
+  const [mapAddress,setMapAddress] = useState<string>('')
+  const [mapLat,setMapLat] = useState<number>(0)
+  const [mapLng, setMapLng] = useState<number>(0)
+  const navigation =  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 
-  const latitude = useSelector((state: RootState)=>state['registerProviderField'].latitude)
-  const setLatitude = (value:number)=>{
-    dispatch(registerFieldActions.setData({
-        field: 'latitude',
-        data: value,
+  const setMapAddressState = () =>{
+
+    if(mapAddress.trim() === '' || mapLat === 0 || mapLng === 0){
+        Toast.show({
+            type: 'error',
+            text1: 'ERROR',
+            text2: 'Unable to fetch address',
+        });
+        return
+    }
+
+    dispatch(mapFieldActions.setData({
+        field : 'latitude',
+        data  : mapLat,
+    }))
+
+    dispatch(mapFieldActions.setData({
+      field : 'longitude',
+      data  : mapLng,
      }))
 
-  }
-  const longitude = useSelector((state: RootState)=>state['registerProviderField'].longitude)
-  const setLongitude = (value:number)=>{
-      dispatch(registerFieldActions.setData({
-          field: 'longitude',
-          data: value,
+     dispatch(mapFieldActions.setData({
+      field : 'address',
+      data  : mapAddress,
     }))
-  }
 
-  const company_address = useSelector((state: RootState)=>state['registerProviderField'].company_address)
-  const setCompanyAddress = (value:string) =>{
-      dispatch(registerFieldActions.setData({
-        field: 'company_address',
-        data: value,
-      }))
-
-      dispatch(registerFieldErrorActions.setData({
-        field: 'company_address',
-        data: '',
-      }))
+    navigation.goBack()
 
   }
+  
 
   const getGeoLocationAddress = (lat:number,lng:number) =>{
     Geocoder.init('AIzaSyCb7XJAeWDd5AXTQpyjeYIU93Gc7CfUpVk', { language: 'en' });
@@ -68,7 +73,7 @@ const AddressCurrentLocation=({route}: any) =>{
     Geocoder.from([lat, lng])
     .then(json => {
         const addressComponent = json.results[0].formatted_address;
-        setCompanyAddress(addressComponent)
+        setMapAddress(addressComponent)
     })
     .catch(error => {
       console.error(error);
@@ -83,14 +88,13 @@ const AddressCurrentLocation=({route}: any) =>{
 
   const setCoordinatesValue = (lat:number,lng:number) =>{
    
-    setLatitude(lat)
-    setLongitude(lng)
+    setMapLat(lat)
+    setMapLng(lng)
     getGeoLocationAddress(lat,lng);
   }
   
 
-  const navigation =  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+   
   const getLocation = () => {
     const result = requestLocationPermission();
     result.then(res => {
@@ -98,8 +102,8 @@ const AddressCurrentLocation=({route}: any) =>{
        
         Geolocation.getCurrentPosition(
           position => {
-            setLatitude(position.coords.latitude);
-            setLongitude(position.coords.longitude);
+            setMapLat(position.coords.latitude);
+            setMapLng(position.coords.longitude);
             getGeoLocationAddress(position.coords.latitude,position.coords.longitude);
           },
           error => {
@@ -119,8 +123,8 @@ const AddressCurrentLocation=({route}: any) =>{
     <View style={GlobalStyle.mainView}>
 
    
-      {latitude && longitude ? (
-        <MapContainer company_address={company_address} setCoordinatesValue={setCoordinatesValue} latitude={latitude} longitude={longitude} />
+      {mapLat && mapLng ? (
+        <MapContainer company_address={mapAddress} setCoordinatesValue={setCoordinatesValue} latitude={mapLat} longitude={mapLng} />
       ) : (
         <View style={styles.centerView}>
           <ActivityIndicator color={appColors.primary} />
@@ -165,9 +169,10 @@ const AddressCurrentLocation=({route}: any) =>{
         </TouchableOpacity>
         <ServiceLocation
           screen={screen}
-          latitude={latitude}
-          longitude={longitude}
-          company_address={company_address}
+          latitude={mapLat}
+          longitude={mapLng}
+          company_address={mapAddress}
+          set_map_address={setMapAddressState}
         />
       </View>
     </View>

@@ -93,7 +93,7 @@ export const settingData: Array<settingType> = [
       {
         icon: <Logout color={appColors.error} />,
         name: 'profileSetting.logOut',
-        gotoScreen: 'Login',
+        gotoScreen: 'logoutProcess',
         darkIcon: <Logout color={appColors.error} />,
       },
     ],

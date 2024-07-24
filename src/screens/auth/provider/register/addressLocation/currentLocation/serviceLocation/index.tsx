@@ -16,7 +16,8 @@ export default function ServiceLocation({
   latitude,
   longitude,
   screen,
-  company_address
+  company_address,
+  set_map_address
 }: locationType) {
   const {isDark,t} = useValues();
   const navigation =
@@ -52,7 +53,8 @@ export default function ServiceLocation({
         additionalStyle={styles.additionalStyle}
         label={'location.confirmLocation'}
         onPress={() =>{
-          navigation.goBack()
+          set_map_address();
+           
           }
         }
         labelTextStyle={styles.labelText}

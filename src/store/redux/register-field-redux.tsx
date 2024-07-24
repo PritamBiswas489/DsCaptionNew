@@ -19,7 +19,7 @@ interface FieldState {
     provider_phone_dial_code:string;
     provider_phone:string;
     provider_password:string;
-    zone_id : DropdownItem;
+    zone_id : string;
     identity_type: DropdownItem;
     identity_number:string;
     latitude:number;
@@ -53,10 +53,7 @@ const initialState: FieldState = {
     provider_phone_dial_code:'91',
     provider_phone:'',
     provider_password:'',
-    zone_id : {
-      label: "",
-      value: ""
-    },
+    zone_id :'',
     identity_type : {
       label: "",
       value: ""

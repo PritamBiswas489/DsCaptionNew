@@ -16,7 +16,7 @@ export default function ProviderDetails() {
       ]}
       showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
-        <Text style={styles.textStyle}>3. {t('auth.providerDetails')}</Text>
+        <Text style={styles.textStyle}>3. {t('newDeveloper.providerLoginDetails')}</Text>
         <InputView />
         <View style={styles.innerView}>
           <View

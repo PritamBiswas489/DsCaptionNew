@@ -1,4 +1,5 @@
 import {View, Text, TouchableOpacity} from 'react-native';
+ 
 import React from 'react';
 import {styles} from './styles';
 import {settingType} from '../data/types';
@@ -9,7 +10,10 @@ import {RootStackParamList} from 'src/navigation/types';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useValues} from '../../../../../../../App';
 import {clearServiceMenCredential} from '@utils/functions';
-
+import { Alert } from 'react-native';
+import { deleteAuthTokens } from '@src/config/auth';
+import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
+import { useDispatch } from 'react-redux';
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
 export default function RenderItem({
@@ -21,11 +25,18 @@ export default function RenderItem({
 }) {
   const {navigate} = useNavigation<routeProps>();
   const {isDark, t} = useValues();
+  const dispatch = useDispatch()
 
-  const handleOnPress = (data: any) => {
-    data.gotoScreen === 'showModal'
-      ? clearServiceMenData()
-      : navigate(data.gotoScreen);
+  const handleOnPress = async (data: any) => {
+    if(data.gotoScreen === 'showModal'){
+      clearServiceMenData()
+    }else if(data.gotoScreen === 'logoutProcess'){
+        const response = await deleteAuthTokens(); 
+        dispatch(serviceProviderAccountDataActions.resetState());
+        navigate('Login');
+    }else{
+        navigate(data.gotoScreen)
+    }
   };
 
   const clearServiceMenData = async () => {

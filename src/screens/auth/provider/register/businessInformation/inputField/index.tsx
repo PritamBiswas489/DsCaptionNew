@@ -16,7 +16,7 @@ import { Identity } from '@utils/icons';
 import { registerFieldActions } from '@src/store/redux/register-field-redux';
 import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
 import { DropdownItem } from '@src/commonComponents/dropdownWithIcon/types';
-
+ 
 interface DataItem {
   label: string;
   value: string;
@@ -53,7 +53,7 @@ export default function InputField() {
   const [zoneList,setZoneList] = useState<DataItem[]>([]);
 
   const zone_id = useSelector((state: RootState)=>state['registerProviderField'].zone_id)
-  const setZoneId = (value:DropdownItem)=>{
+  const setZoneId = (value:string)=>{
      dispatch(registerFieldActions.setData({
       field: 'zone_id',
       data: value,
@@ -94,7 +94,9 @@ export default function InputField() {
  const errorIdentityNumber  = useSelector((state: RootState)=>state['registerProviderErrorField'].identity_number)
 
   useEffect(()=>{
+    
     if(zones!==''){
+     
       const parseZones = JSON.parse(zones)
       const loopZones: { label: string; value: string }[] = [];
       if(parseZones.length > 0){
@@ -139,7 +141,7 @@ export default function InputField() {
   };
   return (
     <View style={styles.container}>
-     <DropdownWithIcon
+     {/* <DropdownWithIcon
         icon={<Identity />}
         label="newDeveloper.SelectZone"
         data={zoneList}
@@ -148,7 +150,19 @@ export default function InputField() {
         }}
         error={errorZoneId}
         selectedValue={zone_id}
-      />
+      /> */}
+
+       <SelectionDropdown 
+            data={zoneList} 
+            value={zone_id} 
+            setValue={(value:string)=>{
+              setZoneId(value)
+            }}
+          label={t('newDeveloper.selectZone')} 
+          error={errorZoneId}
+       />
+
+
     <DropdownWithIcon
         icon={<Identity />}
         label="newDeveloper.IndentityDocumentType"

@@ -3,6 +3,7 @@ import {View, Text, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import HeaderComponent from '@otherComponent/auth/header';
 import {styles} from './styles';
 import TextInputComponent from '@otherComponent/auth/textInput';
+import PasswordInputComponent from '@otherComponent/auth/passwordInput';
 import {Email} from '@assets/icons/auth/email';
 import {Password} from '@assets/icons/auth/passwords';
 import appColors from '@theme/appColors';
@@ -20,7 +21,11 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { loginService } from '@src/services/login.service';
 import Toast from 'react-native-toast-message';
 import { setAuthTokens } from '@src/config/auth';
-
+import { useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { getAuthUserService } from '@src/services/auth.service';
+import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
+import { useDispatch } from 'react-redux';
  interface LoginResponse {
   data: any;
   status: number;
@@ -32,13 +37,20 @@ import { setAuthTokens } from '@src/config/auth';
 
  type loginProps = NativeStackNavigationProp<RootStackParamList>;
  const Login=({route}: any) =>{
-   const {navigate} = useNavigation<loginProps>();
- 
-   
+   const navigation = useNavigation<loginProps>(); 
   const [errors, setErrors] = useState({email: '', password: ''});
   const [form, setForm] = useState({email: 'dorkarbeldanga@gmail.com', password: '@Beldanga1234'});
   const [selectOptionModal, setOptionModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch()
+
+  const serviceProviderData = useSelector((state: RootState)=>state['serviceProviderAccountData'])
+
+  if(serviceProviderData?.id!==''){
+    navigation.navigate('BottomTab');
+  }
+
+
   const {
     isDark,
     isServiceManLogin,
@@ -101,7 +113,7 @@ import { setAuthTokens } from '@src/config/auth';
     const response:LoginResponse  = await loginService(data);
     if(response?.data?.response_code === 'auth_login_200'){
       
-      setIsLoading(false)
+      
       if(response?.data?.content?.is_active !==1){
          
         Toast.show({
@@ -109,16 +121,32 @@ import { setAuthTokens } from '@src/config/auth';
           text1: 'ERROR',
           text2: t('newDeveloper.accountDectivate'),
         });
+        setIsLoading(false)
       }else{
-        setAuthTokens(response?.data?.content?.token, null);
-        Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2: response?.data?.message,
-        });
-        setIsServiceManLogin(false);
-        setIsFreeLancerLogin(true);
-        navigate('BottomTab');
+        await setAuthTokens(response?.data?.content?.token, null);
+        const responseuser = await getAuthUserService()
+         if(responseuser?.data?.response_code === 'default_200' && responseuser?.data?.content?.id){
+              dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))
+              console.log("==== login fetch ============")
+              console.log(responseuser?.data?.content?.id);
+              Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2: response?.data?.message,
+              });
+              setIsServiceManLogin(false);
+              setIsLoading(false)
+              setIsFreeLancerLogin(true);
+              navigation.navigate('BottomTab');
+          }else{
+            setIsLoading(false)
+            Toast.show({
+              type: 'error',
+              text1: 'ERROR',
+              text2: t('newDeveloper.loginFailed'),
+            });
+
+          }
       }
     }else{
       setIsLoading(false)
@@ -138,7 +166,7 @@ import { setAuthTokens } from '@src/config/auth';
       const clearServiceMen = await clearServiceMenCredential();
       await setValue('isLogin', true.toString());
       if (clearServiceMen) {
-        navigate('BottomTab');
+        navigation.navigate('BottomTab');
       }
     } catch (error) {
       console.log(error);
@@ -152,7 +180,7 @@ import { setAuthTokens } from '@src/config/auth';
       await setValue('isLogin', true.toString());
       setIsServiceManLogin(true);
       setIsFreeLancerLogin(false);
-      navigate('BottomTab');
+      navigation.navigate('BottomTab');
     } catch (error) {
       console.log(error);
     }
@@ -200,7 +228,7 @@ import { setAuthTokens } from '@src/config/auth';
                 }}
                 error={errors.email}
               />
-              <TextInputComponent
+              <PasswordInputComponent
                 inputType={InputType.PASSWORD}
                 placeholder={t('introSlider.passwordPlaceholder')}
                 Icon={
@@ -222,7 +250,7 @@ import { setAuthTokens } from '@src/config/auth';
               />
               <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => navigate('ForgotPassword')}
+                onPress={() => navigation.navigate('ForgotPassword')}
                 style={styles.forgotView}>
                 <Text style={styles.forgotText}>
                   {t('auth.forgotPassword')}

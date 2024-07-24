@@ -1,15 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userAccountDataSlice from "./redux/user-account-data.redux";
+import serviceProviderAccountDataSlice from "./redux/service-provider-account-data.redux";
 import registerFieldSlice from "./redux/register-field-redux";
 import zoneDataSlice from "./redux/zone-list-redux";
 import registerFieldErrorSlice from "./redux/register-error-redux";
+import profileUpdateFieldSlice from "./redux/profile-field-redux";
+import mapFieldSlice from "./redux/map-address-redux";
+import profileUpdateErrorFieldSlice from "./redux/profile-error-redux";
 
 const store = configureStore({
     reducer: { 
-      userAccountData:userAccountDataSlice.reducer,
+      serviceProviderAccountData:serviceProviderAccountDataSlice.reducer,
       registerProviderField:registerFieldSlice.reducer,
       registerProviderErrorField:registerFieldErrorSlice.reducer,
       zoneList:zoneDataSlice.reducer,
+      profileProviderUpdateField:profileUpdateFieldSlice.reducer,
+      mapField:mapFieldSlice.reducer,
+      profileUpdateErrorField:profileUpdateErrorFieldSlice.reducer
     },
   });
   

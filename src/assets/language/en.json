@@ -839,7 +839,10 @@
             "errorProviderName":"Enter provider name",
             "errorProviderPhoneNumber":"Enter provider valid phone number",
             "errorProviderEmailAddress":"Enter provider valid email address",
-            "errorProviderPassword":"Enter 6 length password"
+            "errorProviderPassword":"Enter 8 length password",
+            "providerLoginDetails":"Provider login details",
+            "processFailed":"Process failed",
+            "selectZone":"Select Zone"
             
         }
     }

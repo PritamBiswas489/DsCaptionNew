@@ -26,6 +26,7 @@ export function ProgressStepsSlider({
   stepCount,
   setCurrentStep,
   progress,
+  processRegistration
 }: progressIndicatorProps) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -53,6 +54,9 @@ export function ProgressStepsSlider({
   }
   const phoneCountryCode = useSelector((state: RootState)=>state['registerProviderField'].company_phone_country)
   const phoneCountryDialCode = useSelector((state: RootState)=>state['registerProviderField'].company_phone_dial_code)
+  
+  
+  const company_phone_dial_code = useSelector((state: RootState)=>state['registerProviderField'].company_phone_dial_code)
   const company_phone =  useSelector((state: RootState)=>state['registerProviderField'].company_phone) 
   const set_error_company_phone = (value:string)=>{
     dispatch(registerFieldErrorActions.setData({
@@ -61,14 +65,17 @@ export function ProgressStepsSlider({
      }))
      
   }
-  const company_address =  useSelector((state: RootState)=>state['registerProviderField'].company_address) 
+  const company_address =  useSelector((state: RootState)=>state['mapField'].address) 
   const set_error_company_address = (value:string)=>{
     dispatch(registerFieldErrorActions.setData({
       field: 'company_address',
       data: value,
      }))
-     
+
   }
+
+  const latitude =  useSelector((state: RootState)=>state['mapField'].latitude) 
+  const longitude =  useSelector((state: RootState)=>state['mapField'].longitude) 
 
   const company_email =  useSelector((state: RootState)=>state['registerProviderField'].company_email) 
   const set_error_company_email = (value:string)=>{
@@ -94,6 +101,8 @@ export function ProgressStepsSlider({
       data: value,
      })) 
   }
+
+  const contact_person_dial_code = useSelector((state: RootState)=>state['registerProviderField'].contact_person_dial_code)
 
   const contact_person_phone = useSelector((state: RootState)=>state['registerProviderField'].contact_person_phone)
   const set_error_contact_person_phone = (value:string)=>{
@@ -142,9 +151,13 @@ export function ProgressStepsSlider({
      }))
   }
 
+  const identity_back_image = useSelector((state: RootState)=>state['registerProviderField'].identity_back_image)
+
   const provider_name = useSelector((state: RootState)=>state['registerProviderField'].provider_name)
   const provider_email = useSelector((state: RootState)=>state['registerProviderField'].provider_email)
+  const provider_phone_dial_code = useSelector((state: RootState)=>state['registerProviderField'].provider_phone_dial_code)
   const provider_phone = useSelector((state: RootState)=>state['registerProviderField'].provider_phone)
+  //provider name
   const set_error_provider_name = (value:string)=>{
     dispatch(registerFieldErrorActions.setData({
       field: 'provider_name',
@@ -152,7 +165,7 @@ export function ProgressStepsSlider({
      }))
   }
 
-  
+  //provider email
   const set_error_provider_email = (value:string)=>{
     dispatch(registerFieldErrorActions.setData({
       field: 'provider_email',
@@ -160,13 +173,15 @@ export function ProgressStepsSlider({
      }))
   }
 
-  
+  //provider phone
   const set_error_provider_phone = (value:string)=>{
     dispatch(registerFieldErrorActions.setData({
       field: 'provider_phone',
       data: value,
      }))
   }
+
+  //provieer password
   const provider_password = useSelector((state: RootState)=>state['registerProviderField'].provider_password)
   const set_error_provider_password = (value:string)=>{
     dispatch(registerFieldErrorActions.setData({
@@ -250,9 +265,10 @@ export function ProgressStepsSlider({
        }))
       }
       if(currentStep ===2){
+        console.log({zone_id})
         let errorSecondStep = false;
 
-        if(zone_id.value ===''){
+        if(zone_id ==='' || typeof zone_id === 'undefined'){
               set_error_zone_id(t('newDeveloper.errorZoneId'))
               errorSecondStep =  true;
         }
@@ -287,6 +303,7 @@ export function ProgressStepsSlider({
     } else if (currentStep === stepCount) {
 
       let errorFinishStep = false;
+      
        
       if(provider_name.trim() === ''){
           set_error_provider_name(t('newDeveloper.errorProviderName'))
@@ -302,14 +319,55 @@ export function ProgressStepsSlider({
           set_error_provider_email(t('newDeveloper.errorProviderEmailAddress'))
           errorFinishStep =  true;
       }
-      if(provider_password.length < 6){
+
+      if(provider_password.length < 8){
           set_error_provider_password(t('newDeveloper.errorProviderPassword'))
           errorFinishStep =  true;
       }
 
       
       if(!errorFinishStep){
-        Alert.alert('registration process will done here')
+        const formData = new FormData()
+        formData.append('contact_person_name',contact_person_name)
+        formData.append('contact_person_phone',contact_person_dial_code+contact_person_phone)
+        formData.append('contact_person_email',contact_person_email)
+        formData.append('account_first_name',provider_name.split(' ')?.[0])
+        formData.append('account_last_name',provider_name.split(' ')?.[1])
+        formData.append('zone_id',zone_id)
+        formData.append('account_email',provider_email)
+        formData.append('account_phone',provider_phone_dial_code+provider_phone)
+        formData.append('password',provider_password)
+        formData.append('confirm_password',provider_password)
+        formData.append('company_name',company_name)
+        formData.append('company_phone',company_phone_dial_code+company_phone)
+        formData.append('company_address',company_address)
+        formData.append('company_email',company_email)
+        formData.append('logo', {
+          uri:  company_logo,
+          name: 'logo.jpg', 
+          type: 'image/jpeg',
+        });
+        formData.append('identity_type',identity_type?.value)
+        formData.append('identity_number',identity_number)
+        formData.append('identity_images[]', {
+            uri:   identity_front_image,
+            name: 'identity.jpg', 
+            type: 'image/jpeg',
+         });
+         if(identity_back_image!==''){
+            formData.append('identity_images[]', {
+              uri:   identity_back_image,
+              name: 'identity.jpg', 
+              type: 'image/jpeg',
+          });
+         }
+
+         formData.append('latitude', latitude.toString())
+         formData.append('longitude',longitude.toString())
+
+        // console.log(formData);
+
+         processRegistration(formData)
       }
 
        

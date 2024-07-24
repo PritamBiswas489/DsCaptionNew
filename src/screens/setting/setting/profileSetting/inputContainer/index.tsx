@@ -6,62 +6,27 @@ import appColors from '@theme/appColors';
 import PhoneTextInput from '@otherComponent/auth/phoneTextInput';
 import {windowWidth} from '@theme/appConstant';
 import {useValues} from '../../../../../../App';
-interface textInputProps {
-  userName: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  phoneNumber: string;
-  setNumber: React.Dispatch<React.SetStateAction<string>>;
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+interface textInputProps {}
+import CompanyDetails from '../companyDetails';
 
 export default function InputContainer({
-  userName,
-  setName,
-  email,
-  setEmail,
-  phoneNumber,
-  setNumber,
+  
 }: textInputProps) {
   const {t} = useValues();
+   
+  
+  
+   
+  
+   
+   
+
+  // const profileData = useSelector((state: RootState)=>state['profileProviderUpdateField'])
   return (
     <View>
-      <TextInputComponent
-        placeholder={t('auth.useName')}
-        Icon={<Person color={appColors.lightText} />}
-        value={userName}
-        onChangeText={value => {
-          setName(value);
-        }}
-      />
-      <TextInputComponent
-        containerStyle={{marginBottom: windowWidth(2)}}
-        keyboardType="email-address"
-        placeholder={t('auth.email')}
-        Icon={<Email color={appColors.lightText} />}
-        value={email}
-        onChangeText={value => {
-          setEmail(value);
-        }}
-      />
-      <PhoneTextInput
-        phoneContent={
-          <>
-            <TextInputComponent
-              containerStyle={{marginTop: windowWidth(3)}}
-              textContainerStyle={{
-                width: windowWidth(45),
-              }}
-              placeholder={t('auth.phoneNumber')}
-              keyboardType="number-pad"
-              value={phoneNumber}
-              onChangeText={value => {
-                setNumber(value);
-              }}
-            />
-          </>
-        }
-      />
+      <CompanyDetails/>
     </View>
   );
 }

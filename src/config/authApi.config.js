@@ -4,13 +4,13 @@ import { getAuthTokens, setAuthTokens } from './auth';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { userAccountDataActions } from '../store/redux/user-account-data.redux';
+import { userAccountDataActions } from '../store/redux/service-provider-account-data.redux';
 import { getAppUrl } from './utility';
 
 const app_url =  getAppUrl();
 console.log(app_url);
 const api = axios.create({
-	baseURL: app_url + '/api',
+	baseURL: app_url + '/api/v1',
 	timeout: 15000,
 });
 
@@ -26,9 +26,10 @@ const resetStateData = ()=>{
 api.interceptors.request.use(async (config) => {
 	const {accessToken, refreshToken} = await getAuthTokens();
 	config.headers = {
-		Authorization: 'Bearer ' + accessToken,
-		refreshtoken: refreshToken,
+		'Accept': 'application/json',
+		'Authorization': 'Bearer ' + accessToken,
 	};
+	
 	return config;
 });
 

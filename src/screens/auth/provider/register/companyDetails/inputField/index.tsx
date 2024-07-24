@@ -74,7 +74,6 @@ export default function InputField() {
       field: 'company_phone_dial_code',
       data: value,
     }))
-     
  }
 
  const errorPhoneCountryDialCode = useSelector((state: RootState)=>state['registerProviderErrorField'].company_phone_dial_code)
@@ -94,13 +93,12 @@ export default function InputField() {
   }
   const errorPhoneNo = useSelector((state: RootState)=>state['registerProviderErrorField'].company_phone)
 
-  const company_address = useSelector((state: RootState)=>state['registerProviderField'].company_address)
+  const company_address = useSelector((state: RootState)=>state['mapField'].address)
 
   const errorCompanyAddress = useSelector((state: RootState)=>state['registerProviderErrorField'].company_address)
 
   const {t} = useValues();
    
-
   const image = useSelector((state: RootState)=>state['registerProviderField'].company_logo)
   const setImage = (value:string)=>{
     dispatch(registerFieldActions.setData({

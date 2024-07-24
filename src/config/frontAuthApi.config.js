@@ -3,7 +3,7 @@ import { getAuthTokens, setAuthTokens } from './auth';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { userAccountDataActions } from '../store/redux/user-account-data.redux';
+import { userAccountDataActions } from '../store/redux/service-provider-account-data.redux';
 import { getAppUrl } from './utility';
 
 const app_url =  getAppUrl();

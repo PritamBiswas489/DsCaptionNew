@@ -17,4 +17,5 @@ export interface progressIndicatorProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   progress: any;
   data?: locationType;
+  processRegistration:(data:FormData)=>void;
 }

@@ -11,6 +11,7 @@ interface FieldState {
       contact_person_email:string;
       zone_id : string;
       password:string;
+      confirm_password:string;
       logo:string;
       latitude:number;
       longitude:number;
@@ -31,6 +32,7 @@ const initialState: FieldState = {
     contact_person_email:'',
     zone_id:'',
     password:'',
+    confirm_password:'',
     logo:'',
     latitude:0,
     longitude:0

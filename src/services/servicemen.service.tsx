@@ -9,11 +9,13 @@ interface Response {
 	request?: any;
 }
 
-export const updateProfileData = async (data:FormData): Promise<Response> => {
+export const addServiceMen = async (data:any): Promise<Response> => {
+     
     try {
-		const response = await api.post('/provider/update/profile',data);
+		const response = await api.post('/provider/serviceman',data);
 		return response;
 	} catch (error:any) {
+        console.log(error)
 		return error.response;
 	}
 }

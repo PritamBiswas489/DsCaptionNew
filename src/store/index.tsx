@@ -6,6 +6,8 @@ import registerFieldErrorSlice from "./redux/register-error-redux";
 import profileUpdateFieldSlice from "./redux/profile-field-redux";
 import mapFieldSlice from "./redux/map-address-redux";
 import profileUpdateErrorFieldSlice from "./redux/profile-error-redux";
+import addServiceManFieldSlice from "./redux/add-service-man-redux";
+import addServiceManErrorFieldSlice from "./redux/add-service-man-error-redux";
 
 const store = configureStore({
     reducer: { 
@@ -15,7 +17,9 @@ const store = configureStore({
       zoneList:zoneDataSlice.reducer,
       profileProviderUpdateField:profileUpdateFieldSlice.reducer,
       mapField:mapFieldSlice.reducer,
-      profileUpdateErrorField:profileUpdateErrorFieldSlice.reducer
+      profileUpdateErrorField:profileUpdateErrorFieldSlice.reducer,
+      addServiceManField:addServiceManFieldSlice.reducer,
+      addServiceManErrorField:addServiceManErrorFieldSlice.reducer
     },
   });
   

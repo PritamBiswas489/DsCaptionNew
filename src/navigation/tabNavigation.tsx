@@ -56,8 +56,6 @@ export function BottomTab() {
 
   return (
     <View style={{flex: 1}}>
-      
-      
       <View style={{paddingBottom: windowHeight(9), flex: 1}}>
         {selected == 0 ? (
           <Home />

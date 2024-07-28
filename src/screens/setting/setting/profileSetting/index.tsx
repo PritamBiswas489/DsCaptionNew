@@ -143,6 +143,23 @@ export function UserProfileSetting() {
      }))
   }
 
+  const set_error_password = (error:string)=>{
+    dispatch(profileUpdateErrorFieldActions.setData({
+        field: 'password',
+        data: error,
+     }))
+  }
+
+  const set_error_confirm_password = (error:string)=>{
+    dispatch(profileUpdateErrorFieldActions.setData({
+        field: 'confirm_password',
+        data: error,
+     }))
+  }
+  const resetError = () =>{
+    dispatch(profileUpdateErrorFieldActions.resetState())
+  }
+
    
 
 
@@ -154,6 +171,8 @@ export function UserProfileSetting() {
          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
          let errorExist = false;
+         
+         resetError()
 
          if(updatedProfileData.company_name.trim() === ''){
               set_error_company_name(t('newDeveloper.errorCompanyName'))
@@ -194,23 +213,50 @@ export function UserProfileSetting() {
             set_error_contact_person_email(t('newDeveloper.errorContactPersonEmail'))
             errorExist =  true;
         }
+        if(updatedProfileData.password.length > 0){
+          if(updatedProfileData.password.length < 8){
+              set_error_password(t('newDeveloper.errorProviderPassword'))
+              errorExist =  true;
+
+          }
+          if(updatedProfileData.password!==updatedProfileData.confirm_password){
+              set_error_confirm_password(t('newDeveloper.confirmPasswordError'))
+              errorExist =  true;
+          }
+
+        }
 
         if(errorExist){
             return  
         }
-        
-         const requestData = {
-            'contact_person_name':updatedProfileData.contact_person_name,
-            'contact_person_phone':updatedProfileData.contact_person_phone,
-            'contact_person_email':updatedProfileData.contact_person_email,
-            'zone_ids':[updatedProfileData.zone_id],
-            'company_name':updatedProfileData.company_name,
-            'company_phone':updatedProfileData.company_phone,
-            'company_email':updatedProfileData.company_email,
-            'company_address':updatedProfileData.company_address,
-            'latitude':updatedProfileData.latitude,
-            'longitude':updatedProfileData.longitude,
-         } 
+        const formData = new FormData()
+        formData.append('_method', 'PUT'); 
+        formData.append('contact_person_name',updatedProfileData.contact_person_name)
+        formData.append('contact_person_phone',updatedProfileData.contact_person_phone)
+        formData.append('contact_person_email',updatedProfileData.contact_person_email)
+        formData.append('zone_ids[]',updatedProfileData.zone_id)
+        formData.append('company_name',updatedProfileData.company_name)
+        formData.append('company_phone',updatedProfileData.company_phone)
+        formData.append('company_email',updatedProfileData.company_email)
+        formData.append('company_address',updatedProfileData.company_address)
+        formData.append('latitude',updatedProfileData.latitude)
+        formData.append('longitude',updatedProfileData.longitude)
+       
+        if(updatedProfileData.logo!==''){
+          formData.append('logo', {
+            uri:  updatedProfileData.logo,
+            name: 'logo.jpg', 
+            type: 'image/jpeg',
+          });
+        }
+        if(updatedProfileData.password.length > 0){
+            formData.append('password',updatedProfileData.password)
+            formData.append('confirm_password',updatedProfileData.confirm_password)
+        }
+
+        // console.log(formData)
+        // return 
+
          setUpdateLoader(true)
 
          const response :{
@@ -220,8 +266,9 @@ export function UserProfileSetting() {
           headers: any;
           config: any;
           request?: any;
-        } = await updateProfileData(requestData)
+        } = await updateProfileData(formData)
 
+        console.log("============= Profile update response ===================")
         console.log(response?.data)
 
         if(response?.data?.response_code === 'default_400'){

@@ -24,7 +24,7 @@ export default function ProfileImageOptions({
         }}
         title={'auth.optionBelow'}
       />
-      <ImageOptions />
+      <ImageOptions setShowModal={setShowModal} />
     </View>
   );
 }

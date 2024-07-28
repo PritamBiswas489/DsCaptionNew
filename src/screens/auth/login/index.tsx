@@ -126,7 +126,7 @@ import { useDispatch } from 'react-redux';
         await setAuthTokens(response?.data?.content?.token, null);
         const responseuser = await getAuthUserService()
          if(responseuser?.data?.response_code === 'default_200' && responseuser?.data?.content?.id){
-              dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))
+              dispatch(serviceProviderAccountDataActions.setData(responseuser?.data?.content))
               console.log("==== login fetch ============")
               console.log(responseuser?.data?.content?.id);
               Toast.show({
@@ -137,7 +137,10 @@ import { useDispatch } from 'react-redux';
               setIsServiceManLogin(false);
               setIsLoading(false)
               setIsFreeLancerLogin(true);
-              navigation.navigate('BottomTab');
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'BottomTab' }],
+         });
           }else{
             setIsLoading(false)
             Toast.show({

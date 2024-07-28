@@ -842,8 +842,27 @@
             "errorProviderPassword":"Enter 8 length password",
             "providerLoginDetails":"Provider login details",
             "processFailed":"Process failed",
-            "selectZone":"Select Zone"
-            
+            "selectZone":"Select Zone",
+            "AccountInfo":"Account info",
+            "ChangePassword":"Change Password",
+            "ConfirmPassword":"Confirm Password",
+            "confirmPasswordError":"Confirm password should be match with password",
+            "addServiceMenFirstName":"First name",
+            "addServiceMenLastName":"Last name",
+            "addServiceMenEmail":"Email",
+            "addServiceMenPhoneNo":"Phone no.",
+            "addServiceMenIdentityType":"Identity type",
+            "addServiceMenIdentityNumber":"Identity number",
+            "addServiceMenIdentityFrontImage": "Identity front image",
+            "addServiceMenIdentityBackImage" : "Identity Back image",
+            "addServiceMenIdentityPassword" : "Password",
+            "addServiceMenFirstNameError":"Enter first name here",
+            "addServiceMenLastNameError":"Enter last name here",
+            "addServiceMenPhoneError":"Enter valid phone number",
+            "addServiceMenEmailError":"Enter valid email address",
+            "addServiceMenProfileImageError":"Select profile image"
+
+
         }
     }
 }

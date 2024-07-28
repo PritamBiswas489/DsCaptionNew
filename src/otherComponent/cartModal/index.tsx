@@ -58,7 +58,7 @@ const CartModal = ({visible, onClose, setModalVisible}: any) => {
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => {
-              setModalVisible(false), navigate('AddNewService');
+              setModalVisible(false), navigate('AddNewServiceMen');
             }}
             style={[styles.container]}>
             <View

@@ -1,22 +1,78 @@
-import {View, Image, Text, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './styles';
-import {GlobalStyle} from '@style/styles';
-import {windowHeight, windowWidth} from '@theme/appConstant';
+import { View, Image, Text, Alert, TouchableOpacity, PermissionsAndroid, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { styles } from './styles';
+import { GlobalStyle } from '@style/styles';
+import { windowHeight, windowWidth } from '@theme/appConstant';
 import {
   launchImageLibrary,
   launchCamera,
   ImagePickerResponse,
   ImageLibraryOptions,
 } from 'react-native-image-picker';
-import {gallery, camera} from '@utils/images';
-import {useValues} from '../../../../../../../App';
+import { gallery, camera } from '@utils/images';
+import { useValues } from '../../../../../../../App';
 import appColors from '@theme/appColors';
+import { useDispatch } from 'react-redux';
+import { profileUpdateFieldActions } from '@src/store/redux/profile-field-redux';
 
-export default function ImageOptions() {
+export default function ImageOptions({
+  setShowModal,
+}: {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [selectedImage, setSelectedImage] = useState('');
   const [image, setImage] = useState('');
-  const {isDark,t} = useValues();
+  const { isDark, t } = useValues();
+  const dispatch = useDispatch()
+
+  const updateProfileLogo = (image:string) =>{
+    dispatch(profileUpdateFieldActions.setData({'field':'logo',data:image})) 
+  }
+
+  useEffect(()=>{
+   // console.log("======= Image Selected From Gallery =================//")
+    if(selectedImage!==''){
+         updateProfileLogo(selectedImage)
+    }
+   // console.log(selectedImage)
+  },[selectedImage])
+
+  useEffect(()=>{
+   //  console.log("======== Image Selected From Camera ====================") 
+     if(image!==''){
+      updateProfileLogo(image)
+     }
+  },[image])
+
+  const requestCameraPermission = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs camera permission',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Camera permission granted');
+          return true;
+        } else {
+          Alert.alert('Camera permission denied');
+          return false;
+        }
+      }
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
+
+
+
   const openImagePicker = () => {
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
@@ -29,7 +85,7 @@ export default function ImageOptions() {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.errorCode) {
-        console.log('Image picker error: ', response.errorMessage);
+        Alert.alert('Image picker error: ', response.errorMessage);
       } else {
         const source: string | undefined =
           response.assets && response.assets.length > 0
@@ -37,12 +93,18 @@ export default function ImageOptions() {
             : '';
         if (source) {
           setSelectedImage(source);
+          setShowModal(false)
         }
       }
     });
   };
 
-  const handleCameraLaunch = () => {
+  const handleCameraLaunch = async () => {
+    const isCameraPermitted = await requestCameraPermission();
+    if (!isCameraPermitted) {
+      Alert.alert('Failed to lunch camera')
+      return
+    }
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
       includeBase64: false,
@@ -51,11 +113,11 @@ export default function ImageOptions() {
     };
 
     launchCamera(options, response => {
-      console.log('Response = ', response);
+      //console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled camera');
       } else if (response.errorCode) {
-        console.log('Camera Error: ', response.errorMessage);
+        Alert.alert('Camera Error: ', response.errorMessage);
       } else {
         // Process the captured image
         let imageUri: string | undefined =
@@ -63,6 +125,7 @@ export default function ImageOptions() {
             ? response.assets?.[0]?.uri
             : '';
         imageUri && setImage(imageUri);
+        setShowModal(false)
       }
     });
   };
@@ -71,27 +134,12 @@ export default function ImageOptions() {
     <View
       style={[
         styles.container,
-        {backgroundColor: isDark ? appColors.darkTheme : appColors.boxBg},
+        { backgroundColor: isDark ? appColors.darkTheme : appColors.boxBg },
       ]}>
-      <View style={styles.innerContainer}>
-        {selectedImage ? (
+      <TouchableOpacity activeOpacity={0.9} onPress={() => openImagePicker()}>
+        <View style={styles.innerContainer}>
           <>
-            <Image
-              source={{uri: selectedImage}}
-              style={[
-                styles.image,
-                {
-                  height: windowHeight(5),
-                  width: windowHeight(5),
-                  borderRadius: windowHeight(3),
-                },
-              ]}
-            />
-          </>
-        ) : (
-          <>
-            <TouchableOpacity
-              activeOpacity={0.9}
+            <View
               style={[
                 styles.imageView,
                 {
@@ -100,44 +148,30 @@ export default function ImageOptions() {
                     : appColors.white,
                   borderColor: isDark ? appColors.darkBorder : appColors.border,
                 },
-              ]}
-              onPress={() => openImagePicker()}>
+              ]}>
               <Image source={gallery} style={styles.image} />
-            </TouchableOpacity>
+            </View>
+
+            <Text
+              style={[
+                styles.name,
+                { color: isDark ? appColors.white : appColors.darkText },
+              ]}>
+              {t('profileSetting.chooseGallery')}
+            </Text>
+
           </>
-        )}
-        <Text
-          style={[
-            styles.name,
-            {color: isDark ? appColors.white : appColors.darkText},
-          ]}>
-          {t('profileSetting.chooseGallery')}
-        </Text>
-      </View>
+        </View>
+      </TouchableOpacity>
       <View
         style={[
           GlobalStyle.horizontalLine,
-          {marginBottom: windowWidth(4)},
+          { marginBottom: windowWidth(4) },
         ]}></View>
-      <View style={styles.innerContainer}>
-        {image ? (
+      <TouchableOpacity activeOpacity={0.9} onPress={() => handleCameraLaunch()}>
+        <View style={styles.innerContainer}>
           <>
-            <Image
-              source={{uri: image}}
-              style={[
-                styles.image,
-                {
-                  height: windowHeight(5),
-                  width: windowHeight(5),
-                  borderRadius: windowHeight(3),
-                },
-              ]}
-            />
-          </>
-        ) : (
-          <>
-            <TouchableOpacity
-              activeOpacity={0.9}
+            <View
               style={[
                 styles.imageView,
                 {
@@ -147,19 +181,20 @@ export default function ImageOptions() {
                   borderColor: isDark ? appColors.darkBorder : appColors.border,
                 },
               ]}
-              onPress={() => handleCameraLaunch()}>
+            >
               <Image source={camera} style={styles.image} />
-            </TouchableOpacity>
+            </View>
+            <Text
+              style={[
+                styles.name,
+                { color: isDark ? appColors.white : appColors.darkText },
+              ]}>
+              {t('profileSetting.openCamera')}
+            </Text>
+
           </>
-        )}
-        <Text
-          style={[
-            styles.name,
-            {color: isDark ? appColors.white : appColors.darkText},
-          ]}>
-          {t('profileSetting.openCamera')}
-        </Text>
-      </View>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }

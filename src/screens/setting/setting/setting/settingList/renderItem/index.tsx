@@ -23,7 +23,7 @@ export default function RenderItem({
   item: settingType;
   setModalVisible: React.Dispatch<React.SetStateAction<Boolean>>;
 }) {
-  const {navigate} = useNavigation<routeProps>();
+  const {replace, navigate} = useNavigation<routeProps>();
   const {isDark, t} = useValues();
   const dispatch = useDispatch()
 
@@ -33,7 +33,7 @@ export default function RenderItem({
     }else if(data.gotoScreen === 'logoutProcess'){
         const response = await deleteAuthTokens(); 
         dispatch(serviceProviderAccountDataActions.resetState());
-        navigate('Login');
+        replace('AuthNavigation');
     }else{
         navigate(data.gotoScreen)
     }

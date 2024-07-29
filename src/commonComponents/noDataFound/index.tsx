@@ -58,7 +58,7 @@ export default function NoDataFound({
         <View style={styles.blankView}></View>
         <View>
           <Image source={image} style={styles.image} />
-          <View style={styles.imageContainer}>
+          {infoImage && <View style={styles.imageContainer}>
             <View style={styles.innerImageContainer}>
               <Animated.Image
                 source={infoImage}
@@ -74,7 +74,8 @@ export default function NoDataFound({
               source={noValue}
               style={styles.imageStyle}
             />
-          </View>
+          </View>}
+          
         </View>
         <View style={{height: windowHeight(2)}}></View>
         <Text

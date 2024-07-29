@@ -1,7 +1,7 @@
 //export {default as SplashScreen} from './SplashScreen';
 
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Easing, View} from 'react-native';
+import {Alert, Animated, Easing, View} from 'react-native';
 import {splashLogo2} from '@utils/images';
 import appColors from '@theme/appColors';
 import {styles} from './styles';
@@ -12,7 +12,10 @@ import {getValue, setValue} from '@utils/localstorage';
 import {useTranslation} from 'react-i18next';
 import {useValues} from '../../../App';
 import {getServiceMenCredentials} from '@utils/functions';
-
+import Spinner from 'react-native-loading-spinner-overlay';
+import { getAuthUserService } from '@src/services/auth.service';
+import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
+import { useDispatch } from 'react-redux';
 type navigation = NativeStackNavigationProp<RootStackParamList>;
 
 const SplashScreen = () => {
@@ -26,6 +29,9 @@ const SplashScreen = () => {
   const {i18n} = useTranslation();
   const {setCurrSymbol, setCurrValue, setIsServiceManLogin, setIsDark} =
     useValues();
+
+  const [checkingLoader,setCheckingLoader] = useState(false);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     getLanguageCode();
@@ -101,6 +107,18 @@ const SplashScreen = () => {
     outputRange: ['50deg', '0deg'],
   });
 
+  const checkuser = async () =>{
+    setCheckingLoader(true)
+    const response = await getAuthUserService()
+    if(response?.data?.response_code === 'default_200' && response?.data?.content?.id){
+       dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))
+       replace('BottomTab');
+    } else{
+       replace('IntroSlider');
+    }
+    setCheckingLoader(false)
+  }
+
   const animate = () => {
     setTimeout(() => {
       setBackgroundColor(appColors.darkText);
@@ -108,7 +126,10 @@ const SplashScreen = () => {
       setTimeout(() => {
         zoomIn().start(() => {
           zoomOut().start(() => {
-            replace('IntroSlider');
+           // replace('IntroSlider');
+           //Alert.alert('Can Checking Here which page to redirect')
+           
+           checkuser()
           });
         });
       }, 10);
@@ -145,6 +166,13 @@ const SplashScreen = () => {
         ]}
         resizeMode={'contain'}
       />
+      <Spinner
+            visible={checkingLoader}
+            textContent={''}
+            
+            indicatorStyle={styles.spinnerStyle}
+            textStyle={{ color: '#FFF' }}
+          />
     </View>
   );
 }

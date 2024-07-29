@@ -4,7 +4,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const SkeletonLoader: React.FC = () => {
   return (
-    <View>
+    <View style={{marginTop:10}}>
       <SkeletonPlaceholder borderRadius={4}>
         <SkeletonPlaceholder.Item
           flexDirection="row"

@@ -9,14 +9,19 @@ import appColors from '@theme/appColors';
 import {DropdownWithIcon} from '@commonComponents/dropdownWithIcon';
 import {dropDownType} from './data/types';
 import {windowHeight, windowWidth} from '@theme/appConstant';
+import { useSelector } from 'react-redux';
+import { RootState  } from '@src/store';
 
 const RatingSection=()=> {
   const [ratings, setRatings] = useState<dropDownType | undefined>();
   const {isDark,t} = useValues();
+  const {
+    averageRating
+  } = useSelector((state: RootState)=>state['reviewsDataField'])
   return (
     <View>
        <View style={styles.ratingContainer}>
-        <Text style={styles.rating}>4.5 /5</Text>
+        <Text style={styles.rating}>{averageRating}/5</Text>
         <Text
           style={[
             styles.ratingText,
@@ -26,8 +31,8 @@ const RatingSection=()=> {
         </Text>
       </View>
       <View style={styles.mainContainer}>
-        <CircularProgress />
-        <View style={styles.row}>
+        {/* <CircularProgress /> */}
+        {/* <View style={styles.row}>
           <Text
             style={[
               GlobalStyle.title,
@@ -50,7 +55,7 @@ const RatingSection=()=> {
               ]}
             />
           </View>
-        </View>
+        </View> */}
         <View style={styles.blankView}></View>
       </View> 
     </View>

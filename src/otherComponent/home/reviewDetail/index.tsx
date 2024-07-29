@@ -1,15 +1,17 @@
 import React from 'react';
-import {View, Text, FlatList, Image} from 'react-native';
-import {styles} from './styles';
-import {Star} from '@utils/icons';
-import {reviewData} from './data';
-import {ReviewType} from './data/types';
-import {useValues} from '../../../../App';
+import { View, Text, FlatList, Image } from 'react-native';
+import { styles } from './styles';
+import { Star } from '@utils/icons';
+import { reviewData } from './data';
+import { ReviewType } from './data/types';
+import { useValues } from '../../../../App';
 import appColors from '@theme/appColors';
-import {windowHeight} from '@theme/appConstant';
+import { windowHeight } from '@theme/appConstant';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+ 
 
-export function ReviewDetail({data}: {data?: ReviewType[]}) {
-  const {isDark,t} = useValues();
+export function ReviewDetail({ data }: { data?: ReviewType[] }) {
+  const { isDark, t } = useValues();
   return (
     <View
       style={[
@@ -23,21 +25,22 @@ export function ReviewDetail({data}: {data?: ReviewType[]}) {
       <FlatList
         data={data ? data : reviewData}
         showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => (
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
           <View>
             <View style={styles.providerContainer}>
               <View style={[styles.row]}>
-                <Image source={item.user} style={styles.userImg} />
+                {/* <Image source={item.user} style={styles.userImg} /> */}
                 <View style={styles.textContainer}>
                   <Text
                     style={[
                       styles.textStyle,
-                      {color: isDark ? appColors.white : appColors.darkText},
+                      { color: isDark ? appColors.white : appColors.darkText },
                     ]}>
-                    {t(item.name)}
+                    {t(item.userName)}
                   </Text>
                   <Text style={styles.content}>
-                    {item.time} {t('reviews.minAgo')}
+                    {item.timing} 
                   </Text>
                 </View>
               </View>
@@ -46,7 +49,7 @@ export function ReviewDetail({data}: {data?: ReviewType[]}) {
                 <Text
                   style={[
                     styles.providerRating,
-                    {color: isDark ? appColors.white : appColors.darkText},
+                    { color: isDark ? appColors.white : appColors.darkText },
                   ]}>
                   {item.rating}
                 </Text>
@@ -55,14 +58,14 @@ export function ReviewDetail({data}: {data?: ReviewType[]}) {
             <Text
               style={[
                 styles.review,
-                {color: isDark ? appColors.lightText : appColors.darkText},
+                { color: isDark ? appColors.lightText : appColors.darkText },
               ]}>
-              {t(item.review)}
+              {t(item.reviewText)}
             </Text>
-            {item.serviceName && (
+            {item.servicename && (
               <View style={styles.row}>
                 <Text style={styles.service}>{t('packages.service')}:</Text>
-                <Text style={styles.name}>{t(item.serviceName)}</Text>
+                <Text style={styles.name}>{  t(item.servicename) }</Text>
               </View>
             )}
           </View>
@@ -71,7 +74,7 @@ export function ReviewDetail({data}: {data?: ReviewType[]}) {
           <View
             style={[
               styles.horizontalLine,
-              {borderColor: isDark ? appColors.darkBorder : appColors.border},
+              { borderColor: isDark ? appColors.darkBorder : appColors.border },
             ]}></View>
         )}
       />

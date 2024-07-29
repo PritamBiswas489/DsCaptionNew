@@ -8,6 +8,8 @@ import mapFieldSlice from "./redux/map-address-redux";
 import profileUpdateErrorFieldSlice from "./redux/profile-error-redux";
 import addServiceManFieldSlice from "./redux/add-service-man-redux";
 import addServiceManErrorFieldSlice from "./redux/add-service-man-error-redux";
+import bankDetailsSlice from "./redux/bank-details-redux";
+import reviewsDataSlice from "./redux/reviews-list-redux";
 
 const store = configureStore({
     reducer: { 
@@ -19,7 +21,9 @@ const store = configureStore({
       mapField:mapFieldSlice.reducer,
       profileUpdateErrorField:profileUpdateErrorFieldSlice.reducer,
       addServiceManField:addServiceManFieldSlice.reducer,
-      addServiceManErrorField:addServiceManErrorFieldSlice.reducer
+      addServiceManErrorField:addServiceManErrorFieldSlice.reducer,
+      bankDetailsField:bankDetailsSlice.reducer,
+      reviewsDataField:reviewsDataSlice.reducer
     },
   });
   

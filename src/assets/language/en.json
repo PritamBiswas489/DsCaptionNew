@@ -860,7 +860,11 @@
             "addServiceMenLastNameError":"Enter last name here",
             "addServiceMenPhoneError":"Enter valid phone number",
             "addServiceMenEmailError":"Enter valid email address",
-            "addServiceMenProfileImageError":"Select profile image"
+            "addServiceMenProfileImageError":"Select profile image",
+            "bankRoutingNumber":"Routing number",
+            "loadMore":"Load more",
+            "noReviewsFound":"No reviews found",
+            "noReviewsFoundContent":"Sorry reviews found for you in our record."
 
 
         }

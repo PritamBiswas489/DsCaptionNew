@@ -13,4 +13,11 @@ export const styles = StyleSheet.create({
     height: '80%',
     resizeMode: 'contain',
   },
+  spinnerStyle: {
+    position: 'absolute', // Ensures the spinner is positioned absolutely
+    top: '50%', // Adjust to your desired position
+    left: '50%', // Adjust to your desired position
+    marginTop: 80, // Half of spinner height to center it vertically
+    marginLeft: -25, // Half of spinner width to center it horizontally
+  },
 });

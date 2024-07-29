@@ -1,10 +1,11 @@
 import {ImageSourcePropType} from 'react-native';
 
 export type ReviewType = {
-  user: ImageSourcePropType;
-  name: string;
-  time: string;
-  review: string;
-  rating: string;
-  serviceName?: string;
+  id: string;
+  userName: string;
+  userImage: string;
+  timing: string;
+  reviewText: string;
+  rating: string;  // Assuming rating is a number, adjust if it's a string
+  servicename:string
 };

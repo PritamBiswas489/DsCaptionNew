@@ -81,5 +81,6 @@ export const styles = StyleSheet.create({
     fontFamily: appFonts.NunitoSemiBold,
     fontSize: fontSizes.FONT4,
     marginTop: windowHeight(2),
+    width: windowWidth(70),
   },
 });

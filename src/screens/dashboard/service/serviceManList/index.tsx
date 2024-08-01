@@ -1,4 +1,5 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, Alert } from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view';
 import React, {useState} from 'react';
 import {GlobalStyle} from '@style/styles';
 import HeaderView from '@otherComponent/headerWithSearch';
@@ -13,6 +14,7 @@ import appColors from '@theme/appColors';
 import {windowWidth} from '@theme/appConstant';
 import {DropdownWithIcon} from '@commonComponents/dropdownWithIcon';
 import {filterType} from './data/types';
+import { getSericeMenList } from '@src/services/profile.service';
 
 type props = NativeStackNavigationProp<RootStackParamList>;
 
@@ -21,6 +23,7 @@ export function ServiceMenList() {
   const {navigate} = useNavigation<props>();
   const {isDark,t} = useValues();
   //navigate('AddNewServiceMen')
+ 
 
   return (
     <ScrollView
@@ -34,23 +37,6 @@ export function ServiceMenList() {
         title="servicemen.servicemenList"
         gotoScreen={async () => navigate('AddNewServiceMen')}
       />
-      <View style={styles.row}>
-        <Text style={styles.title}>{t('servicemen.filterBy')}</Text>
-        <View>
-          <DropdownWithIcon
-            data={filterData}
-            label={'servicemen.allServicemen'}
-            onSelect={setExperience}
-            dropdownStyle={styles.dropdown}
-            overlayStyle={GlobalStyle.overlayStyle}
-            iconStyle={GlobalStyle.iconStyle}
-            dropdownOptionStyle={[
-              GlobalStyle.dropdownOptionStyle,
-              {width: windowWidth(50)},
-            ]}
-          />
-        </View>
-      </View>
       <View style={styles.blankView} />
       <ActiveServiceMen data={serviceMenListData} />
     </ScrollView>

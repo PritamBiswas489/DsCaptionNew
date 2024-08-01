@@ -125,3 +125,5 @@ export const votingCard = require('../assets/images/setting/votingCard.png');
 export const packageServiceBg = require('../assets/images/setting/packageServiceBg.png');
 export const packageService = require('../assets/images/setting/service.png');
 export const packageService1 = require('../assets/images/setting/service1.png');
+export const femaleDefault = require('../assets/images/default/male.png');
+export const maleDefault = require('../assets/images/default/female.png');

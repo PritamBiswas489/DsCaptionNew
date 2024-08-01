@@ -8,7 +8,8 @@ import { useValues } from '../../../../App';
 import appColors from '@theme/appColors';
 import { windowHeight } from '@theme/appConstant';
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
- 
+import { maleDefault, femaleDefault } from '@src/utils/images';
+
 
 export function ReviewDetail({ data }: { data?: ReviewType[] }) {
   const { isDark, t } = useValues();
@@ -26,11 +27,13 @@ export function ReviewDetail({ data }: { data?: ReviewType[] }) {
         data={data ? data : reviewData}
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <View>
+        renderItem={({ item }) => {
+          const defaultImageValue = item.gender !== 'female' ? femaleDefault : maleDefault
+
+          return <View>
             <View style={styles.providerContainer}>
               <View style={[styles.row]}>
-                {/* <Image source={item.user} style={styles.userImg} /> */}
+                {item.userImage ? <Image source={{ uri: item.userImage }} style={styles.userImg} /> : <Image source={defaultImageValue} style={styles.userImg} />}
                 <View style={styles.textContainer}>
                   <Text
                     style={[
@@ -40,7 +43,7 @@ export function ReviewDetail({ data }: { data?: ReviewType[] }) {
                     {t(item.userName)}
                   </Text>
                   <Text style={styles.content}>
-                    {item.timing} 
+                    {item.timing}
                   </Text>
                 </View>
               </View>
@@ -65,11 +68,11 @@ export function ReviewDetail({ data }: { data?: ReviewType[] }) {
             {item.servicename && (
               <View style={styles.row}>
                 <Text style={styles.service}>{t('packages.service')}:</Text>
-                <Text style={styles.name}>{  t(item.servicename) }</Text>
+                <Text style={styles.name}>{t(item.servicename)}</Text>
               </View>
             )}
           </View>
-        )}
+        }}
         ItemSeparatorComponent={() => (
           <View
             style={[

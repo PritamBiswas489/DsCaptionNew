@@ -7,5 +7,6 @@ export type ReviewType = {
   timing: string;
   reviewText: string;
   rating: string;  // Assuming rating is a number, adjust if it's a string
-  servicename:string
+  servicename:string,
+  gender:string
 };

@@ -7,6 +7,7 @@ interface Review {
     reviewText: string;
     rating: string;  // Assuming rating is a number, adjust if it's a string
     servicename:string;
+    gender:string;
 }
 interface ReviewsState {
      data: Review[];

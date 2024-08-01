@@ -47,3 +47,12 @@ export const getReviewList = async(queryParam:string): Promise<Response> => {
 	}
 
 }
+export const getSericeMenList = async(queryParam:string): Promise<Response> => {
+	try {
+		const response = await api.get(`/provider/serviceman${queryParam}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}

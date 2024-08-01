@@ -18,6 +18,7 @@ import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import NoDataFound from '@src/commonComponents/noDataFound';
 import {noValue, wifi, notification} from '@utils/images';
 import { timeAgo } from '@src/config/utility';
+import { getMediaUrl } from '@src/config/utility';
 
 
 interface Response {
@@ -36,7 +37,8 @@ interface Review {
   timing: string;
   reviewText: string;
   rating: string;  // Assuming rating is a number, adjust if it's a string
-  servicename:string
+  servicename:string,
+  gender:string
 }
 
 export function Reviews() {
@@ -83,16 +85,27 @@ export function Reviews() {
     if (data?.data?.content?.reviews?.data) {
       const d:Review[] = []
       data?.data?.content?.reviews?.data.forEach((reviewD:any,reviewindex:number)=>{
+        //console.log( reviewD?.customer?.id)
         const id = reviewD?.id
         const userName = reviewD?.customer?.first_name ? reviewD?.customer?.first_name : 'Unknown'
-        const userImage = 'dsd'
+        
+        let userImage = ''
+        if(reviewD?.customer?.profile_image !=='default.png'){
+           userImage = `${getMediaUrl()}/user/profile_image/${reviewD?.customer?.profile_image}`
+        }
+         
         const timing = timeAgo(reviewD?.created_at)
         const reviewText = reviewD?.review_comment
         const rating = reviewD?.review_rating+'.0'
-        const servicename = reviewD?.booking?.detail?.[0]?.service_name
-        console.log(servicename)
-        const assignData:Review = {id,userName,reviewText,rating,userImage,timing,servicename}
-        d.push(assignData)
+        let concatenatedServiceNames = reviewD?.booking?.detail?.map((service: { service_name: string; })  => service.service_name).join(", ");
+        const servicename = concatenatedServiceNames
+        const gender = reviewD?.customer?.gender
+        //console.log(servicename)
+        const assignData:Review = {id,userName,reviewText,rating,userImage,timing,servicename,gender}
+       
+        if(userName !== 'Unknown'){
+          d.push(assignData)
+        }
       })
       dispatch(reviewsDataActions.addReviews(d))
     }

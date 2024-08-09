@@ -7,6 +7,7 @@ import {
   AddNewAddress,
   AddNewService,
   AddNewServiceMen,
+  EditServiceMen,
   BlogDetail,
   Categories,
   Earnings,
@@ -112,6 +113,10 @@ export default function MyStack() {
             <RootStack.Screen
               name="AddNewServiceMen"
               component={AddNewServiceMen}
+            />
+            <RootStack.Screen
+              name="EditServiceMen"
+              component={EditServiceMen}
             />
             <RootStack.Screen name="AddNewAddress" component={AddNewAddress} />
             <RootStack.Screen name="Categories" component={Categories} />

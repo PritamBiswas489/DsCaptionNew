@@ -1,19 +1,46 @@
-import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import React, {memo} from 'react';
+import {View, TouchableOpacity, Alert} from 'react-native';
+import {  useState } from 'react';
 import {Plus, Search} from '@utils/icons';
 import Header from '@commonComponents/header';
-import {SearchBar} from '@otherComponent/home';
+import SearchBar from '../home/searchBar';
 import appColors from '@theme/appColors';
 import {useValues} from '../../../App';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { serviceMenDataAction } from '@src/store/redux/servicemen-list';
+import { serviceMenSearchFieldActions } from '@src/store/redux/servicemen-search-field';
 
-export default function HeaderView({
+const  HeaderView =  ({
   title,
   gotoScreen,
+  setSearchValue,
+  setclickSearchButton
 }: {
   title: string;
-  gotoScreen: () => {};
-}) {
+  gotoScreen: any;
+  setSearchValue:(value:string)=>void
+  setclickSearchButton:(value:boolean)=>void
+
+}) => {
   const {isDark} = useValues();
+
+  const {
+    searchValue 
+  } = useSelector((state: RootState) => state['serviceMenSearchField'])
+
+  const handleSetSearchValue = () =>{
+    if(searchValue.trim()!==''){
+      setSearchValue(searchValue)
+    }else{
+      setSearchValue('none')
+    }
+   
+    setclickSearchButton(true)
+  } 
+ 
+
+//  console.log("=========== header rendering =======================")
   return (
     <View>
       <Header
@@ -28,11 +55,13 @@ export default function HeaderView({
         }
         gotoScreen={gotoScreen}
         content={
-          <TouchableOpacity activeOpacity={0.9} onPress={() => {}}>
-            <SearchBar searchIcon={<Search />} />
+          <TouchableOpacity activeOpacity={0.9} onPress={handleSetSearchValue}>
+            <SearchBar handleSetSearchValue={handleSetSearchValue} searchIcon={<Search />} />
           </TouchableOpacity>
         }
       />
     </View>
   );
 }
+
+export default memo(HeaderView)

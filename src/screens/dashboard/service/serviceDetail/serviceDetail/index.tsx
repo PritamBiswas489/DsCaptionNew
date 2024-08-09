@@ -1,4 +1,4 @@
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {Delete, Edit} from '@utils/icons';
 import {GlobalStyle} from '@style/styles';
@@ -18,12 +18,16 @@ import {RootStackParamList} from 'src/navigation/types';
 import {useValues} from '../../../../../../App';
 import {Detail} from './detail';
 
+
 type ReviewRouteProps = NativeStackNavigationProp<RootStackParamList>;
+
+
 
 export function ServiceDetail() {
   const [address, setAddress] = useState<number[]>([]);
   const {navigate} = useNavigation<ReviewRouteProps>();
   const {isDark} = useValues();
+
   return (
     <View
       style={[

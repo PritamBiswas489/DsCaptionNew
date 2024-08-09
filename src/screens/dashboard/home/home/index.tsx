@@ -1,5 +1,5 @@
-import {ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import { ScrollView } from 'react-native-virtualized-view';
+import React, {useEffect, useState} from 'react';
 import {Chat, Notification} from '@utils/icons';
 import Header from '@commonComponents/header';
 import {GlobalStyle} from '@style/styles';
@@ -25,19 +25,68 @@ import {Provider} from '@screens/dashboard/serviceMan/home';
 import {ServiceMenDashBoard} from '@screens/dashboard/serviceMan/home';
 import {ServiceMen} from './serviceMen';
 import {ProviderLogin} from './provider';
+import { Alert } from 'react-native';
+import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
+ 
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+ 
+import { loadServiceMenData } from '@src/services/load.servicemen';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
+interface Response {
+  data: any;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+  request?: any;
+}
+
+
 export function Home() {
+  
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [cancelBookingModal, setCancelBookingModal] = useState(false);
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
   const {navigate} = useNavigation<navigationProp>();
   const {isDark, isServiceManLogin} = useValues();
+  const [showSkeletonLoader,setSkeletonLoader] = useState(true)
+  const [processLoadServicemen,setProcessLoadeServicemen] = useState(false)
 
+  const {
+    data: ServiceMenList,
+    offsetPageUrl,
+    limit,
+    isFirstTimeLoading,
+    isNoMoreData,
+  } = useSelector((state: RootState) => state['serviceMenDataField'])
+
+  const dispatch = useDispatch()
+ 
+  const loadData = async () =>{
+     const queryParams = `${offsetPageUrl}&limit=${limit}&status=active`
+     await loadServiceMenData(queryParams,dispatch)
+     setProcessLoadeServicemen(false)
+  }
+  useEffect(()=>{
+    if(ServiceMenList.length === 0){
+        setProcessLoadeServicemen(true)
+        loadData()
+    }
+  },[ServiceMenList])
+  
+ 
   const filterModalVisible = () => {
     setShowWalletModal(true);
   };
+
+  useEffect(()=>{
+    if(!processLoadServicemen){
+         setSkeletonLoader(false)
+    }
+  },[processLoadServicemen])
 
   return (
     <ScrollView
@@ -46,7 +95,10 @@ export function Home() {
         {backgroundColor: isDark ? appColors.darkTheme : appColors.white},
       ]}
       showsVerticalScrollIndicator={false}>
-      <Header
+      {showSkeletonLoader && <SkeletonLoader/> }
+
+      {!showSkeletonLoader && <>
+        <Header
         showBackArrow={false}
         title={'bottomTab.home'}
         trailIcon={
@@ -114,6 +166,8 @@ export function Home() {
         }}
         onButton1Click={() => setAcceptBookingModal(false)}
       />
+      </>}
+      
     </ScrollView>
   );
 }

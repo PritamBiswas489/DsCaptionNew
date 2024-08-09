@@ -47,7 +47,7 @@ export const getReviewList = async(queryParam:string): Promise<Response> => {
 	}
 
 }
-export const getSericeMenList = async(queryParam:string): Promise<Response> => {
+export const getServiceMenList = async(queryParam:string): Promise<Response> => {
 	try {
 		const response = await api.get(`/provider/serviceman${queryParam}`);
 		return response;
@@ -55,4 +55,40 @@ export const getSericeMenList = async(queryParam:string): Promise<Response> => {
 		return error.response;
 	}
 
+}
+export const deleteServiceMenRequest = async(serviceMenId:string): Promise<Response> => {
+	try {
+		const response = await api.delete(`/provider/serviceman/delete?serviceman_id[]=${serviceMenId}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+export const getServiceMenDetails = async(serviceMenId:string): Promise<Response> => {
+	try {
+		const response = await api.get(`/provider/serviceman/${serviceMenId}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+export const updateServiceMenProfileDetails = async(formData:FormData, serviceMenId:string): Promise<Response> => {
+	formData.append('_method','PUT')
+	try {
+		const response = await api.post(`/provider/serviceman/${serviceMenId}`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+export const changeStatusServiceMen = async (formData:FormData): Promise<Response> => {
+	formData.append('_method','PUT')
+	try {
+		const response = await api.post(`/provider/serviceman/status/update`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
 }

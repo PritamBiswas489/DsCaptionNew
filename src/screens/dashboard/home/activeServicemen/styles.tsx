@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
     fontSize: fontSizes.FONT3HALF,
   },
   containerView: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     width: windowWidth(18),
     justifyContent: 'space-between',
   },

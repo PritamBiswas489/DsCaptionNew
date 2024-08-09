@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   TextInput,
   TouchableOpacity,
   GestureResponderEvent,
+  Alert,
 } from 'react-native';
 import {styles} from './styles';
 import appColors from '@theme/appColors';
@@ -11,16 +12,36 @@ import {Filter} from '@assets/icons/home/filter';
 import {GlobalStyle} from '@style/styles';
 import {useValues} from '../../../../App';
 import {searchType} from './types';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { serviceMenSearchFieldActions } from '@src/store/redux/servicemen-search-field';
+ 
 
-export function SearchBar({
+const  SearchBar = ({
   containerStyle,
   inputContainerStyle,
   showFilter,
   gotoScreen,
   searchIcon,
   textInputSize,
-}: searchType) {
+  handleSetSearchValue
+   
+   
+}: searchType)=> {
   const {isDark,t} = useValues();
+  const dispatch = useDispatch()
+
+  const {
+    searchValue 
+  } = useSelector((state: RootState) => state['serviceMenSearchField'])
+
+   const setValue2 = (value:string)=>{
+    dispatch(serviceMenSearchFieldActions.setData({
+      field: 'searchValue',
+      data: value
+    }))
+     
+  }
 
   return (
     <View
@@ -47,6 +68,15 @@ export function SearchBar({
             color: isDark ? appColors.white : appColors.darkText,
           },
         ]}
+        value={searchValue}
+        
+        onChangeText={value => {
+          setValue2(value);
+          
+        }}
+        onSubmitEditing={()=>{
+          handleSetSearchValue()
+        }}
       />
       {showFilter && (
         <View style={styles.rowContainer}>
@@ -54,7 +84,9 @@ export function SearchBar({
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={
-              gotoScreen as unknown as (event: GestureResponderEvent) => void
+              ()=>{
+                Alert.alert('dsdd  d sdsddsdsdsdd')
+              }
             }>
             <Filter />
           </TouchableOpacity>
@@ -63,3 +95,4 @@ export function SearchBar({
     </View>
   );
 }
+export default memo(SearchBar)

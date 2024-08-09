@@ -1,30 +1,79 @@
-import React from 'react';
-import {View, Text, FlatList, Image, TouchableOpacity, Alert} from 'react-native';
-import {styles} from './styles';
-import {serviceMenListData} from './data';
-import {Call, Email} from '@utils/icons';
+import React, {useState} from 'react';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
+import { styles } from './styles';
+import { serviceMenListData } from './data';
+import { Call, Email } from '@utils/icons';
 import appColors from '@theme/appColors';
-import {windowHeight} from '@theme/appConstant';
-import {serviceMenType} from './data/types';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from 'src/navigation/types';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useValues} from '../../../../../App';
+import { windowHeight } from '@theme/appConstant';
+import { serviceMenType } from './data/types';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'src/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useValues } from '../../../../../App';
+import { maleDefault, femaleDefault } from '@src/utils/images';
+import ActionMenuServiceMen from '../../service/actionMenuServiceMen';
+import { serviceMenDataAction } from '@src/store/redux/servicemen-list';
+import { useDispatch } from 'react-redux';
+import { deleteServiceMenRequest, changeStatusServiceMen } from '@src/services/profile.service';
+import { getMediaUrl } from '@src/config/utility';
+import SwitchContainer from '@src/otherComponent/switchContainer';
+export function ActiveServiceMen({ data }: { data?: serviceMenType[] }) {
 
-export function ActiveServiceMen({data}: {data?: serviceMenType[]}) {
-  
-  const {isDark,t} = useValues();
+  const { isDark, t } = useValues();
+  const dispatch = useDispatch()
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleNavigateToDetailsPage = (serviceMenId: string) => {
+    navigation.navigate('ServiceMenDetail', {
+      id: serviceMenId
+    })
+  }
+  const deleteServiceMen = (serviceMenId: string) => {
+    dispatch(serviceMenDataAction.deleteServiceMenById(serviceMenId))
+    deleteServiceMenRequest(serviceMenId)
+  }
+  const editServiceMen = (serviceMenId: string) => {
+    navigation.navigate('EditServiceMen', {
+      id: serviceMenId
+    })
+  }
+  const toggleSwitch = (serviceMenId:string,status:number)=>{
+    Alert.alert(
+      'Confirmation',
+      t('newDeveloper.ChangeServiceAlert'),
+      [
+          {
+              text: 'Cancel',
+              style: 'cancel',
+          },
+          {
+              text: 'OK',
+              onPress: () => {
+                dispatch(serviceMenDataAction.changeStatusServiceMenDetails({
+                  id:serviceMenId,
+                  status:status === 1 ? 0 : 1
+                }))
+                const formData  =  new FormData()
+                formData.append('serviceman_id[]',serviceMenId)
+                changeStatusServiceMen(formData)
+              },
+          },
+      ],
+      { cancelable: false }
+  );
+    
+  }
+
   return (
     <View>
       <FlatList
-        contentContainerStyle={{paddingBottom: windowHeight(2)}}
+        contentContainerStyle={{ paddingBottom: windowHeight(2) }}
         data={data ? data : serviceMenListData}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ServiceMenDetail')}
-            activeOpacity={0.9}
+        renderItem={({ item }) => {
+          const defaultImageValue = item.gender !== 'female' ? femaleDefault : maleDefault
+          return <View
+
             style={[
               styles.container,
               {
@@ -33,74 +82,37 @@ export function ActiveServiceMen({data}: {data?: serviceMenType[]}) {
               },
             ]}>
             <View style={styles.rowContainer}>
-              <Image source={item.image} style={styles.image} />
+              {item.profile_image ? <Image source={{
+                uri: `${getMediaUrl()}/serviceman/profile/${item.profile_image}`
+              }} style={styles.image} /> : <Image source={defaultImageValue} style={styles.image} />}
               <View style={styles.textContainer}>
                 <Text
                   style={[
                     styles.name,
-                    {color: isDark ? appColors.white : appColors.darkText},
+                    { color: isDark ? appColors.white : appColors.darkText },
                   ]}>
-                  {t(item.name)}
+                  {item.first_name + ' ' + item.last_name}
+
                 </Text>
-                {item.service && (
-                  <Text style={styles.service}>{t(item.service)}</Text>
-                )}
-                {item.sinceYear && (
-                  <Text style={styles.member}>
-                    {t('serviceMen.memberSince')} :{' '}
-                    <Text>{item.sinceYear}</Text>
-                  </Text>
-                )}
-                {item.experience && (
-                  <Text style={[styles.member, {marginTop: windowHeight(3)}]}>
-                    {t('servicemen.experience')}:{' '}
-                    <Text>
-                      {item.experience} {t('auth.year')}
-                    </Text>
-                  </Text>
-                )}
+
+                <Text style={styles.member}>
+                  <Text>{item.phone}</Text>
+                </Text>
+
               </View>
             </View>
             <View>
               <View style={styles.containerView}>
-                <View
-                  style={[
-                    styles.mainView,
-                    {
-                      backgroundColor: isDark
-                        ? appColors.darkCard
-                        : appColors.border,
-                    },
-                  ]}>
-                  <Call
-                    strokewidth={'7'}
-                    color={isDark ? appColors.white : appColors.darkText}
-                    height={'15'}
-                    width={'17'}
-                  />
-                </View>
-                <View
-                  style={[
-                    styles.mainView,
-                    {
-                      backgroundColor: isDark
-                        ? appColors.darkCard
-                        : appColors.border,
-                    },
-                  ]}>
-                  <Email
-                    height={'18'}
-                    width={'18'}
-                    color={isDark ? appColors.white : appColors.darkText}
-                  />
-                </View>
-              </View>
-              <View style={styles.messageContainer}>
-                <Text style={styles.message}>{t('serviceMen.message')}</Text>
+
+                <ActionMenuServiceMen editServiceMen={editServiceMen} deleteServiceMen={deleteServiceMen} handleNavigateToDetailsPage={handleNavigateToDetailsPage} item={item} />
+                <SwitchContainer
+                  toggleDarkSwitch={() => { toggleSwitch(item.id,item.is_active) }}
+                  switchOn={item.is_active === 1 ? true : false}
+                />
               </View>
             </View>
-          </TouchableOpacity>
-        )}
+          </View>
+        }}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </View>

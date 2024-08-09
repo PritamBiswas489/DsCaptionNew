@@ -1,12 +1,13 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
-import {styles} from './styles';
-import {Email, Call} from '@utils/icons';
+import { styles } from './styles';
+import { Email, Call, Identity } from '@utils/icons';
 import appColors from '@theme/appColors';
-import {windowWidth} from '@theme/appConstant';
-import {useValues} from '../../../../../../../App';
-export default function Info() {
-  const {t, isDark} = useValues();
+import { windowWidth } from '@theme/appConstant';
+import { useValues } from '../../../../../../../App';
+import { ServiceMenDetailsInterface } from '@src/interfaces/serviceMenDetailsInterface';
+export default function Info({ details }: { details: ServiceMenDetailsInterface }) {
+  const { t, isDark } = useValues();
   return (
     <View
       style={[
@@ -19,7 +20,7 @@ export default function Info() {
       <Text
         style={[
           styles.heading,
-          {color: isDark ? appColors.white : appColors.darkText},
+          { color: isDark ? appColors.white : appColors.darkText },
         ]}>
         {t('providerDetail.personalInfo')} :
       </Text>
@@ -32,12 +33,12 @@ export default function Info() {
         <Text
           style={[
             styles.titleStyle,
-            {color: isDark ? appColors.white : appColors.darkText},
+            { color: isDark ? appColors.white : appColors.darkText },
           ]}>
           {t('providerDetail.mail')}
         </Text>
-        <View style={[styles.verticalLine, {right: windowWidth(2)}]}></View>
-        <Text style={styles.content}>{t('serviceManDetails.email')}</Text>
+        <View style={[styles.verticalLine, { right: windowWidth(2) }]}></View>
+        <Text style={styles.content}>{details?.email}</Text>
       </View>
       <View style={styles.row}>
         <Call
@@ -48,12 +49,51 @@ export default function Info() {
         <Text
           style={[
             styles.titleStyle,
-            {color: isDark ? appColors.white : appColors.darkText},
+            { color: isDark ? appColors.white : appColors.darkText },
           ]}>
           {t('providerDetail.call')}
         </Text>
         <View style={styles.verticalLine}></View>
-        <Text style={styles.content}>+1 236 236 5653</Text>
+        <Text style={styles.content}>{details?.phone}</Text>
+      </View>
+
+      <View style={styles.row}>
+        <Identity
+          height={'20'}
+          width={'19'}
+          color={isDark ? appColors.white : appColors.darkText}
+        />
+        <Text
+          style={[
+            styles.titleStyle,
+            { color: isDark ? appColors.white : appColors.darkText },
+          ]}>
+          {t('newDeveloper.identitytype')}
+        </Text>
+        <View style={styles.verticalLine}></View>
+        <Text style={styles.content}>
+          {details?.identification_type === 'driving_license' && t('identityDetails.driving_license')}
+          {details?.identification_type === 'trade_license'   && t('identityDetails.trade_license')}
+          {details?.identification_type === 'nid'             && t('identityDetails.nid')}
+          {details?.identification_type === 'passport'        && t('identityDetails.passport')}
+        </Text>
+      </View>
+
+      <View style={styles.row}>
+        <Identity
+          height={'20'}
+          width={'19'}
+          color={isDark ? appColors.white : appColors.darkText}
+        />
+        <Text
+          style={[
+            styles.titleStyle,
+            { color: isDark ? appColors.white : appColors.darkText },
+          ]}>
+          {t('newDeveloper.identitynumber')}
+        </Text>
+        <View style={styles.verticalLine}></View>
+        <Text style={styles.content}>{details?.identification_number}</Text>
       </View>
     </View>
   );

@@ -10,6 +10,9 @@ import addServiceManFieldSlice from "./redux/add-service-man-redux";
 import addServiceManErrorFieldSlice from "./redux/add-service-man-error-redux";
 import bankDetailsSlice from "./redux/bank-details-redux";
 import reviewsDataSlice from "./redux/reviews-list-redux";
+import serviceMenDataSlice from "./redux/servicemen-list";
+import ServiceMenSearchFieldSlice from "./redux/servicemen-search-field";
+import serviceMenDetailsSlice from "./redux/servicemen-details-redux";
 
 const store = configureStore({
     reducer: { 
@@ -23,7 +26,10 @@ const store = configureStore({
       addServiceManField:addServiceManFieldSlice.reducer,
       addServiceManErrorField:addServiceManErrorFieldSlice.reducer,
       bankDetailsField:bankDetailsSlice.reducer,
-      reviewsDataField:reviewsDataSlice.reducer
+      reviewsDataField:reviewsDataSlice.reducer,
+      serviceMenDataField:serviceMenDataSlice.reducer,
+      serviceMenSearchField:ServiceMenSearchFieldSlice.reducer,
+      serviceMenDetailsField:serviceMenDetailsSlice.reducer
     },
   });
   

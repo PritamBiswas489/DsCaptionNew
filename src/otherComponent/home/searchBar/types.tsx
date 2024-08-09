@@ -8,4 +8,7 @@ export type searchType = {
   gotoScreen?: (props: FormEvent<HTMLFormElement> | undefined) => void;
   searchIcon: React.ReactNode;
   textInputSize?: number;
+  handleSetSearchValue:()=>void
+   
+   
 };

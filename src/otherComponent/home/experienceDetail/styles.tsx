@@ -16,8 +16,8 @@ export const styles = StyleSheet.create({
     marginHorizontal: windowWidth(5),
   },
   mainContainer: {
-    marginHorizontal: windowHeight(2.6),
-    marginTop: windowHeight(2),
+     marginHorizontal: windowHeight(2.6),
+     marginTop: windowHeight(2),
   },
   textStyle: {
     color: appColors.darkText,

@@ -864,9 +864,27 @@
             "bankRoutingNumber":"Routing number",
             "loadMore":"Load more",
             "noReviewsFound":"No reviews found",
-            "noReviewsFoundContent":"Sorry reviews found for you in our record."
-
-
+            "noReviewsFoundContent":"Sorry reviews found for you in our record.",
+            "noServiceMenFound":"No servicemen found",
+            "noServiceFoundContent":"Sorry servicemen registered by you.",
+            "PreviewServicemenDetails" : "Preview Servicemen Details",
+            "DeleteServiceDetails" : "Delete Service Details",
+            "EditServicemenDetails" : "Edit Servicemen Details",
+            "CallServicemen":"Call Servicemen",
+            "EmailServicemen":"Email Servicemen",
+            "ChatwithServicemen":"Chat with Servicemen",
+            "DeleteServiceMen":"Do you want to delete servicemen?",
+            "OnGoingServices":"Ongoing",
+            "CompletedServices":"Completed",
+            "CanceledServices":"Cancelled",
+            "services":"services",
+            "identitytype":"Identity type",
+            "identitynumber":"Identity number",
+            "noServiceMenDetailsFound":"Servicemen details not found",
+            "noServiceMenDetailsFoundContent":"Sorry servicemen details not found",
+            "editServiceMen":"Edit serviceman",
+            "updateServiceMen":"Update serviceman",
+            "ChangeServiceAlert":"Are you sure change the status of the service men?"
         }
     }
 }

@@ -22,16 +22,7 @@ export default function Experience({
   const {isDark} = useValues();
   return (
     <View style={[styles.row, containerStyle]}>
-      <View
-        style={[
-          styles.innerContainer,
-          {
-            backgroundColor: isDark ? appColors.darkTheme : appColors.white,
-            borderColor: isDark ? appColors.darkBorder : appColors.border,
-          },
-        ]}>
-        {icon}
-      </View>
+      
       <View style={styles.mainView}>
         <Text
           style={[GlobalStyle.content, {fontFamily: appFonts.NunitoMedium}]}>
@@ -42,7 +33,7 @@ export default function Experience({
             GlobalStyle.title,
             {color: isDark ? appColors.white : appColors.darkText},
           ]}>
-          {totalExperience} {services}
+          {totalExperience}  
         </Text>
       </View>
     </View>

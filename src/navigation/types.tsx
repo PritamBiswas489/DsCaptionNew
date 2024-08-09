@@ -1,6 +1,8 @@
 import {ImageSourcePropType} from 'react-native';
 import {Float} from 'react-native/Libraries/Types/CodegenTypes';
 
+ 
+
 export type newAddressProp = {
   addressData: any;
 };
@@ -110,10 +112,11 @@ export type RootStackParamList = {
   Categories: undefined;
   ServiceMenList: undefined;
   AddNewServiceMen: undefined;
+  EditServiceMen: {id:string};
   LatestBlog: undefined;
   BlogDetail: BlogDetailScreenProp;
   PopularServiceView: undefined;
-  ServiceMenDetail: undefined;
+  ServiceMenDetail: {id:string};
   Booking: undefined;
   PendingBooking: undefined;
   OngoingBooking: OngoingBookingProp | undefined;

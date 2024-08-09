@@ -1,44 +1,148 @@
-import {View, Text, Alert } from 'react-native';
+import { View, Text, Alert, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
-import React, {useState} from 'react';
-import {GlobalStyle} from '@style/styles';
+import React, { useState, useEffect, useId } from 'react';
+import { GlobalStyle } from '@style/styles';
 import HeaderView from '@otherComponent/headerWithSearch';
-import {styles} from './styles';
-import {filterData, serviceMenListData} from './data';
-import {ActiveServiceMen} from '@screens/dashboard/home';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/navigation/types';
-import {useValues} from '../../../../../App';
+import { styles } from './styles';
+import { filterData, serviceMenListData } from './data';
+import { ActiveServiceMen } from '@screens/dashboard/home';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from 'src/navigation/types';
+import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
-import {windowWidth} from '@theme/appConstant';
-import {DropdownWithIcon} from '@commonComponents/dropdownWithIcon';
-import {filterType} from './data/types';
-import { getSericeMenList } from '@src/services/profile.service';
+ 
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { serviceMenDataAction } from '@src/store/redux/servicemen-list';
+import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
+import { noValue, wifi, notification } from '@utils/images';
+import NoDataFound from '@src/commonComponents/noDataFound';
+import { windowHeight } from '@theme/appConstant';
+import GradientBtn from '@commonComponents/gradientBtn';
+ 
+import { encodeToBase64 } from '@src/config/utility';
+import { loadServiceMenData } from '@src/services/load.servicemen';
+ 
 
 type props = NativeStackNavigationProp<RootStackParamList>;
 
 export function ServiceMenList() {
-  const [experience, setExperience] = useState<filterType | null>();
-  const {navigate} = useNavigation<props>();
-  const {isDark,t} = useValues();
-  //navigate('AddNewServiceMen')
- 
+  const { navigate } = useNavigation<props>();
+  const { isDark, t } = useValues();
+  const dispatch = useDispatch()
+   
+  const [searchVal, setSearchVal] = useState('')
+
+  const {
+    data: ServiceMenList,
+    offsetPageUrl,
+    limit,
+    isFirstTimeLoading,
+    isNoMoreData,
+  } = useSelector((state: RootState) => state['serviceMenDataField'])
+
+  const getSearchParam = (searchVal:string) => {
+    //console.log( searchVal.trim() !== '' ? `&string=${(encodeToBase64(searchVal))}` : '')
+    return searchVal.trim() !== '' &&  searchVal.trim() !=='none' ? `&string=${(encodeToBase64(searchVal))}` : '';
+  };
+
+  const [queryParams, setQueryParams] = useState(`${offsetPageUrl}&limit=${limit}&status=active${getSearchParam(searchVal)}`)
+  const [clickLoadMore, setClickLoadMore] = useState(false)
+  const [clickSeachButton, setclickSearchButton] = useState(false)
+
+  const loadData =  (async () => {
+    // Function to load data from API
+    //console.log(queryParams)
+    try {
+      await loadServiceMenData(queryParams,dispatch)
+    } catch (error) {
+      console.error('Error fetching service men list:', error);
+    } finally {
+      setClickLoadMore(false);
+      dispatch(serviceMenDataAction.setData({
+        field: 'isFirstTimeLoading',
+        data: false
+      }));
+    }
+  } );
+
+
+  useEffect(() => {
+    if (isFirstTimeLoading || clickLoadMore) {
+      loadData()
+    }
+  }, [queryParams, isFirstTimeLoading, clickLoadMore])
+
+  useEffect(() => {
+    //console.log({isFirstTimeLoading,clickSeachButton})
+    if (!isFirstTimeLoading && clickSeachButton) {
+        dispatch(serviceMenDataAction.setData({field:'data',data:[]}))
+        dispatch(serviceMenDataAction.setData({field:'isFirstTimeLoading',data:true}))
+        dispatch(serviceMenDataAction.setData({field:'isNoMoreData',data:true}))
+        setQueryParams(`?offset=1&limit=${limit}&status=active${getSearchParam(searchVal)}`)
+        setclickSearchButton(false)
+    }
+  }, [searchVal])
+
+
+  useEffect(() => {
+    // console.log('========= user effect service men list ==================')
+   // console.log(ServiceMenList)
+  }, [ServiceMenList])
+
+  const loadMoreDataLoading = () => {
+    setClickLoadMore(true)
+    setQueryParams(`${offsetPageUrl}&limit=${limit}&status=active${getSearchParam(searchVal)}`)
+  }
+  const refreshServiceMenData = () => {
+    dispatch(serviceMenDataAction.resetState())
+  }
+  const gotoScreen = React.useCallback(() => {
+    navigate('AddNewServiceMen');
+  }, [navigate]);
+
 
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={[
         GlobalStyle.mainView,
-        {backgroundColor: isDark ? appColors.darkCard : appColors.white},
+        { backgroundColor: isDark ? appColors.darkCard : appColors.white },
       ]}
       contentContainerStyle={styles.contentContainerStyle}>
       <HeaderView
         title="servicemen.servicemenList"
-        gotoScreen={async () => navigate('AddNewServiceMen')}
+        setSearchValue={setSearchVal}
+        setclickSearchButton={setclickSearchButton}
+        gotoScreen={gotoScreen}
+
       />
       <View style={styles.blankView} />
-      <ActiveServiceMen data={serviceMenListData} />
+      {isFirstTimeLoading && <SkeletonLoader />}
+      {!isFirstTimeLoading && ServiceMenList.length === 0 && <NoDataFound
+        headerTitle="newDeveloper.noServiceMenFound"
+        image={noValue}
+        infoImage={undefined}
+        title="newDeveloper.noServiceMenFound"
+        content="newDeveloper.noServiceFoundContent"
+        gradiantBtn={
+          <GradientBtn
+            additionalStyle={{ bottom: windowHeight(2) }}
+            label={'common.refresh'}
+            onPress={refreshServiceMenData}
+          />
+        }
+      />}
+      {!isFirstTimeLoading && ServiceMenList.length > 0 && <>
+        <ActiveServiceMen data={ServiceMenList} />
+        {clickLoadMore && <ActivityIndicator />}
+        {!isNoMoreData && !clickLoadMore && <GradientBtn
+          additionalStyle={{}}
+          label={'newDeveloper.loadMore'}
+          onPress={loadMoreDataLoading}
+        />}
+      </>}
     </ScrollView>
   );
 }

@@ -8,8 +8,20 @@ import {ExperienceDetail} from '@otherComponent/home';
 import {windowWidth} from '@theme/appConstant';
 import {useValues} from '../../../../../../../App';
 import appColors from '@theme/appColors';
-export default function Profile() {
+import { ServiceMenDetailsInterface } from '@src/interfaces/serviceMenDetailsInterface';
+import { maleDefault, femaleDefault } from '@src/utils/images';
+import { getMediaUrl } from '@src/config/utility';
+
+export default function Profile({details}:{details:ServiceMenDetailsInterface}) {
   const {t, isDark} = useValues();
+  const defaultImageValue = details.gender !== 'female' ? femaleDefault : maleDefault
+  let profilePic = ''
+   if(details.profile_image!==''){
+    profilePic = `${getMediaUrl()}/serviceman/profile/${details.profile_image}`
+   }else{
+    profilePic = defaultImageValue
+   }
+    
   return (
     <View style={styles.container}>
       <View
@@ -19,42 +31,21 @@ export default function Profile() {
         ]}
       />
       <View style={styles.profileContainer}>
-        <Image source={person} style={styles.personImg} />
-        <View style={[styles.row, {bottom: 20}]}>
+        <Image source={{uri:profilePic}} style={styles.personImg} />
+        <View style={[styles.row, {bottom: 10}]}>
           <Text
             style={[
               GlobalStyle.title,
               {color: isDark ? appColors.white : appColors.darkText},
             ]}>
-            {t('providerDetail.username')}
+            {`${details.first_name} ${details.last_name}`}
           </Text>
-          <View style={styles.iconContainer}>
-            <Verify />
-          </View>
-        </View>
-        <View style={[styles.row, {marginTop: 6, bottom: 12}]}>
-          <Star width={'18'} />
-          <Star width={'18'} />
-          <Star width={'18'} />
-          <Star width={'18'} />
-          <StarIcon />
-          <Text
-            style={[
-              styles.review,
-              {color: isDark ? appColors.white : appColors.darkText},
-            ]}>
-            {' '}
-            3.8 {t('reviews.reviews')} (50){' '}
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Location />
-          <Text style={styles.address}>{t('serviceManDetails.address')}</Text>
         </View>
       </View>
       <ExperienceDetail
-        contentStyle={{width: windowWidth(90), marginTop: 8}}
+        contentStyle={{width: windowWidth(90), marginTop: 2}}
         providerContent={'serviceManDetails.detail'}
+        details={details}
       />
     </View>
   );

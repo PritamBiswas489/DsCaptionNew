@@ -13,6 +13,9 @@ import reviewsDataSlice from "./redux/reviews-list-redux";
 import serviceMenDataSlice from "./redux/servicemen-list";
 import ServiceMenSearchFieldSlice from "./redux/servicemen-search-field";
 import serviceMenDetailsSlice from "./redux/servicemen-details-redux";
+import serviceCategoriesDataSlice from "./redux/service-category-redux";
+import serviceSubCategoriesSlice from "./redux/service-sub-category-redux";
+import servicesSlice from "./redux/service-redux";
 
 const store = configureStore({
     reducer: { 
@@ -29,7 +32,10 @@ const store = configureStore({
       reviewsDataField:reviewsDataSlice.reducer,
       serviceMenDataField:serviceMenDataSlice.reducer,
       serviceMenSearchField:ServiceMenSearchFieldSlice.reducer,
-      serviceMenDetailsField:serviceMenDetailsSlice.reducer
+      serviceMenDetailsField:serviceMenDetailsSlice.reducer,
+      serviceCategories : serviceCategoriesDataSlice.reducer,
+      serviceSubCategories : serviceSubCategoriesSlice.reducer,
+      servicesData : servicesSlice.reducer
     },
   });
   

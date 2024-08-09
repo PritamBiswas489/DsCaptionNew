@@ -1,9 +1,9 @@
 import {subCategoryType} from '../data/types';
-
+import { SubCategoriesInterface } from '@src/interfaces/subCategoriesInterface';
 export type itemType = {
-  selectedCategory: number;
-  setCategory: React.Dispatch<React.SetStateAction<number>>;
-  item: subCategoryType;
+  selectedCategory: string;
+  setCategory: (value:string)=>void;
+  item: SubCategoriesInterface;
   index: number;
-  scrollIndex: any;
+  flatListRef: any;
 };

@@ -1,4 +1,4 @@
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Alert} from 'react-native';
 import React from 'react';
 import RenderItem from './renderItem';
 import {styles} from './styles';
@@ -12,6 +12,9 @@ export function PopularService({
   itemSeparator,
   contentContainerStyle,
 }: dataType) {
+
+  
+
   const toggleSwitch = (index: number) => {
     const newServices = [...data];
     newServices[index].status = !newServices[index].status;

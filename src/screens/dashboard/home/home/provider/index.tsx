@@ -19,7 +19,7 @@ export function ProviderLogin() {
   const { navigate } = useNavigation<navigationProp>();
   const { isFreelancerLogin } = useValues();
   const [activeServiceMenList,setActiveServiceMenList] = useState<serviceMenType[]>()
-
+  
   const {
     data: ServiceMenList,
   } = useSelector((state: RootState) => state['serviceMenDataField'])
@@ -31,14 +31,12 @@ export function ProviderLogin() {
   },[ServiceMenList])
 
   useEffect(()=>{
-    // console.log("============ activeServiceMenList =================r")
-    // console.log(activeServiceMenList)
   },[activeServiceMenList])
 
   return (
     <View>
       <HeadingRow
-        gotoScreen={() => navigate('PopularServiceView')}
+        gotoScreen={() => navigate('ServiceList')}
         title={'home.popularService'}
         content={'home.viewAll'}
       />

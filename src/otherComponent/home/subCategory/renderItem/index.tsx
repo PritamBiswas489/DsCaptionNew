@@ -1,5 +1,5 @@
 import {View, Text, FlatList, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {styles} from './styles';
 import appColors from '@theme/appColors';
 import {itemType} from './types';
@@ -10,20 +10,30 @@ export default function RenderItem({
   setCategory,
   item,
   index,
-  scrollIndex,
+  flatListRef,
 }: itemType) {
   const {isDark,t} = useValues();
+  console.log("======== selected =============")
+  console.log(item)
+
+  const scrollToIndex = (index: number) => {
+    flatListRef.current?.scrollToIndex({index:index, animated: true});
+  };
+
+   
+
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={() => {
-        setCategory(index), scrollIndex;
+        setCategory(item.id)
+        scrollToIndex(index)
       }}
       style={[
         styles.textContainer,
         {
           backgroundColor:
-            selectedCategory === index
+          selectedCategory === item.id
               ? appColors.selectedCategory
               : isDark
               ? appColors.darkTheme
@@ -35,7 +45,7 @@ export default function RenderItem({
           styles.textStyle,
           {
             color:
-              selectedCategory === index
+            selectedCategory === item.id
                 ? appColors.primary
                 : appColors.lightText,
           },

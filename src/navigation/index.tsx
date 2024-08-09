@@ -99,17 +99,27 @@ export default function MyStack() {
               name="EmptyNotification"
               component={EmptyNotification}
             />
-             <RootStack.Screen name="Notification" component={Notification} />
-            <RootStack.Screen name="ServiceList" component={ServiceList} />
+            <RootStack.Screen name="Notification"  component={Notification} />
+            {/* Service list */}
+            <RootStack.Screen name="ServiceList"   component={ServiceList} />
+            {/* Service details */}
             <RootStack.Screen name="ServiceDetail" component={ServiceDetail} />
-            <RootStack.Screen name="LatestBlog" component={LatestBlog} />
-            <RootStack.Screen name="BlogDetail" component={BlogDetail} />
+            <RootStack.Screen name="LatestBlog"    component={LatestBlog} />
+            <RootStack.Screen name="BlogDetail"    component={BlogDetail} />
             <RootStack.Screen
               name="ServiceMenDetail"
               component={ServiceMenDetail}
             />
             <RootStack.Screen name="Reviews" component={Reviews} />
+            {/* Add new service */}
             <RootStack.Screen name="AddNewService" component={AddNewService} />
+
+            {/* Popular service view */}
+            <RootStack.Screen
+              name="PopularServiceView"
+              component={PopularServiceView}
+            /> 
+
             <RootStack.Screen
               name="AddNewServiceMen"
               component={AddNewServiceMen}
@@ -124,10 +134,6 @@ export default function MyStack() {
               name="ServiceMenList"
               component={ServiceMenList}
             />
-            <RootStack.Screen
-              name="PopularServiceView"
-              component={PopularServiceView}
-            /> 
 
              <RootStack.Screen
               name="AcceptedBooking"

@@ -1,26 +1,37 @@
 import {View, FlatList} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {subCategoryData} from './data/data';
 import {styles} from './styles';
 import {categoryType} from './data/types';
 import RenderItem from './renderItem';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
 
-export default function SubCategory({
-  selectedCategory,
-  setCategory,
-}: categoryType) {
+export default function SubCategory({}) {
   const flatListRef = useRef<FlatList>(null);
+  const [onLoad,SetOnload] = useState(false);
 
-  const scrollToIndex = (index: number) => {
-    flatListRef.current?.scrollToIndex({index, animated: true});
-  };
+  
+  const [selectedCategory,setCategory]  = useState('')
 
+  const {
+     
+    selected:ServiceSubCategories
+  } = useSelector((state: RootState) => state['serviceSubCategories'])
+
+  console.log("============ selected ==============")
+  console.log(ServiceSubCategories)
+
+  useEffect(()=>{
+    SetOnload(true)
+  },[ServiceSubCategories])
+ 
   return (
     <View>
       <FlatList
         ref={flatListRef}
         contentContainerStyle={styles.mainContainer}
-        data={subCategoryData}
+        data={ServiceSubCategories.subcategories}
         renderItem={({index, item}) => {
           return (
             <RenderItem
@@ -28,7 +39,7 @@ export default function SubCategory({
               setCategory={setCategory}
               item={item}
               index={index}
-              scrollIndex={scrollToIndex(index)}
+              flatListRef={flatListRef}
             />
           );
         }}

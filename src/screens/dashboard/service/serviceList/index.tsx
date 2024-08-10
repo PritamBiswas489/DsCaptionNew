@@ -1,4 +1,4 @@
-import { Text, View, Alert } from 'react-native';
+import { Text, View, Alert, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '@style/styles';
@@ -8,7 +8,7 @@ import { styles } from './styles';
 import HomeCategory from '@otherComponent/home/homeCategory';
 import appColors from '@theme/appColors';
 import SubCategory from '@otherComponent/home/subCategory';
-import { PopularService } from '@screens/dashboard/home';
+import { ServiceListing } from '@screens/dashboard/home';
 import { serviceListData } from './data/data';
 import { useValues } from '../../../../../App';
 import { useNavigation } from '@react-navigation/native';
@@ -54,6 +54,8 @@ export function ServiceList() {
     offsetPageUrl,
     limit
   } = useSelector((state: RootState) => state['serviceCategories'])
+
+  
 
   
 
@@ -127,14 +129,16 @@ export function ServiceList() {
             </View>
           }
         />
-        <SubCategory />
+        <SubCategory /> 
+        
         <View style={styles.blankView} />
-        <PopularService
+         <ServiceListing
           data={popularService}
           setData={setPopularService}
           providerImageStyle={styles.providerImageStyle}
           itemSeparator={styles.itemSeparator}
-        />
+        /> 
+       
       </>}
 
     </ScrollView>

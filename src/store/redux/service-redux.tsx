@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ServiceInterface } from "@src/interfaces/serviceInterface";
 
-
 interface ServicesState {
     data: {subCategoryId:string,services:ServiceInterface[]}[];
     selected:{subCategoryId:string,services:ServiceInterface[]}
     offsetPageUrl: string;
     limit: number,
+    loading:boolean
 }
 
 interface SetDataPayload {
@@ -20,6 +20,7 @@ const initialState: ServicesState = {
     selected:{subCategoryId:'',services:[]},
     offsetPageUrl: '?offset=1',
     limit: 200,
+    loading:true
 };
 
 const servicesSlice = createSlice({

@@ -5,6 +5,7 @@ interface CategoriesState {
     data: CategoriesInterface[];
     offsetPageUrl: string;
     limit: number,
+    loading:boolean
 }
 
 interface SetDataPayload {
@@ -15,6 +16,7 @@ const initialState: CategoriesState = {
     data: [],
     offsetPageUrl: '?offset=1',
     limit: 200,
+    loading:true
 }
 
 const serviceCategoriesDataSlice = createSlice({

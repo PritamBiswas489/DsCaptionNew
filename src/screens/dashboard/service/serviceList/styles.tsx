@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: windowWidth(2),
   },
   providerImageStyle: {
-    width: windowWidth(82),
+    width: windowWidth(95),
   },
   itemSeparator: {
     paddingTop: windowWidth(6),

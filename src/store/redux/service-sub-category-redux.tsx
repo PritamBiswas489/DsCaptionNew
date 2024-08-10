@@ -6,6 +6,7 @@ interface ServiceSubCategoriesState {
     selected:{categoryId:string,subcategories:SubCategoriesInterface[]}
     offsetPageUrl: string;
     limit: number,
+    loading:boolean,
 }
 
 interface SetDataPayload {
@@ -18,6 +19,7 @@ const initialState: ServiceSubCategoriesState = {
     selected:{categoryId:'',subcategories:[]},
     offsetPageUrl: '?offset=1',
     limit: 200,
+    loading:true
 };
 
 const serviceSubCategoriesSlice = createSlice({

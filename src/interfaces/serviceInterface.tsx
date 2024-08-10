@@ -7,5 +7,6 @@ export interface ServiceInterface {
     thumbnail:string;
     order_count:string;
     avg_rating:number;
-    min_bidding_price:number     
+    min_bidding_price:number,
+    category:string    
 }

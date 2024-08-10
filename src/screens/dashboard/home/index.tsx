@@ -4,6 +4,7 @@ export * from './blogList';
 export * from './dashBoard';
 export * from './home';
 export * from './popularService';
+export * from './ServiceListing';
 export * from './staticsDetail';
 export * from './history';
 export * from './dashBoard/earnings';

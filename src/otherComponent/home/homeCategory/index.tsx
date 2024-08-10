@@ -12,6 +12,7 @@ import { serviceSubCategoriesActions } from '@src/store/redux/service-sub-catego
 import {  getSubCategories } from '@src/services/services-service';
 import { SubCategoriesInterface } from '@src/interfaces/subCategoriesInterface';
 import { limitWords } from '@src/config/utility';
+import { serviceActions } from '@src/store/redux/service-redux';
 
 import {
   AcRepair,
@@ -63,13 +64,18 @@ export default function HomeCategory({
         
         dispatch(serviceSubCategoriesActions.addServiceSubCategories({id:selectedCategory,subcategories:formattedData}))
         dispatch(serviceSubCategoriesActions.setData({field:'selected',data:{id:selectedCategory,subcategories:formattedData}}))
+        
       }
     }
+    dispatch(serviceSubCategoriesActions.setData({field:'loading',data:false}))
      
   }
 
   useEffect(() => {
     if (selectedCategory !== '') {
+      dispatch(serviceSubCategoriesActions.setData({field:'loading',data:true}))
+      dispatch(serviceActions.setData({field:'loading',data:true}))
+      
       const checkExisting = ServiceSubCategories.find(elementDet => elementDet.categoryId === selectedCategory);
       if(!checkExisting){
          loadServiceSubCategories();
@@ -77,6 +83,7 @@ export default function HomeCategory({
         console.log("======= Checking existing =================")
         console.log(checkExisting)
         dispatch(serviceSubCategoriesActions.setData({field:'selected',data:{id:selectedCategory,subcategories:checkExisting.subcategories}}))
+        dispatch(serviceSubCategoriesActions.setData({field:'loading',data:false}))
       }
     }
   }, [selectedCategory])

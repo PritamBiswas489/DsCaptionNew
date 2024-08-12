@@ -7,6 +7,8 @@ import appColors from '@theme/appColors';
 import {useValues} from '../../../../../App';
 import {windowWidth} from '@theme/appConstant';
 import {ServiceDescription} from './description';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
 
 export default function ServiceContentView({
   isShowPrice,
@@ -15,6 +17,11 @@ export default function ServiceContentView({
 }) {
   const {currSymbol, currValue,t} = useValues();
 
+  const {
+    selected:selectedDetailsData
+  } = useSelector((state: RootState) => state['serviceDetailsData'])
+
+
   return (
     <View>
       <View style={styles.contentView}>
@@ -22,38 +29,42 @@ export default function ServiceContentView({
           <View style={styles.rowContainer}>
             <View style={styles.row}>
               <Text style={[GlobalStyle.title, styles.titleStyle]}>
-                {t('serviceDetail.category')}
+                {selectedDetailsData?.name}
               </Text>
               <View style={styles.verticalLine}></View>
-              <Star height={'18'} />
-              <Text style={[GlobalStyle.content, styles.rating]}>3.0</Text>
+              
             </View>
-            {isShowPrice && (
-              <Text
-                style={[
-                  GlobalStyle.title,
-                  styles.titleStyle,
-                  {color: appColors.primary},
-                ]}>
-                {' '}
-                {currSymbol}
-                {currValue * 15.26}
-              </Text>
-            )}
+             
           </View>
         </View>
-        <Text style={styles.content}>{t('home.acRepair')}</Text>
+        <View style={styles.row}>
+        <Text style={styles.content}>{selectedDetailsData?.category}</Text>
+        {selectedDetailsData?.avg_rating > 0 && <Text style={styles.contentRating}> <Star height={'18'} /> {selectedDetailsData?.avg_rating.toFixed(1)}</Text>}
+       <Text
+         style={[
+           GlobalStyle.title,
+           styles.titleStyle,
+           styles.priceStyle,
+           {color: appColors.primary},
+         ]}>
+         {' '}
+         {currSymbol}
+         {parseFloat(selectedDetailsData.min_bidding_price).toFixed(2)}
+       </Text>
+
+        </View>
+        
       </View>
       <View style={GlobalStyle.mainContainer}>
         <ServiceDescription />
-        <View style={[styles.row, styles.containerStyle]}>
+        {/* <View style={[styles.row, styles.containerStyle]}>
           <View
             style={[
               GlobalStyle.dot,
               {marginTop: windowWidth(3), marginHorizontal: windowWidth(2)},
             ]}></View>
           <Text style={styles.content}>{t('serviceDetail.detail')}</Text>
-        </View>
+        </View> */}
       </View>
     </View>
   );

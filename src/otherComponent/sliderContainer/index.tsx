@@ -3,6 +3,9 @@ import {View, FlatList, Image, Dimensions} from 'react-native';
 import {styles} from './styles';
 import PaginationContainer from './paginationContainer';
 import {windowHeight, windowWidth} from '@theme/appConstant';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { getMediaUrl } from '@src/config/utility';
 var currentIndex: number = 0;
 
 export default function SliderContainer({data}: {data: any}) {
@@ -12,24 +15,26 @@ export default function SliderContainer({data}: {data: any}) {
     setCurrentIndex(index);
   };
   const width = Dimensions.get('screen').width;
+
+  const {
+    selected:selectedDetailsData
+  } = useSelector((state: RootState) => state['serviceDetailsData'])
+   const images = [];
+  if(selectedDetailsData?.cover_image!=''){
+       images.push(`${getMediaUrl()}/service/${selectedDetailsData.cover_image}`)
+  }
+
   return (
-    data.length > 0 && (
+    images.length > 0 && (
       <View style={styles.container}>
         <FlatList
           contentContainerStyle={styles.contentContainerStyle}
-          data={data}
+          data={images}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => (
             <View>
-              {item.image ? (
-                <Image
-                  source={item.image}
-                  style={[styles.bannerBg, {borderRadius: windowWidth(2)}]}
-                />
-              ) : (
-                <Image source={{uri: item}} style={styles.bannerBg} />
-              )}
+              <Image source={{uri: item}} style={styles.bannerBg} />
             </View>
           )}
           onScroll={e => {
@@ -40,14 +45,14 @@ export default function SliderContainer({data}: {data: any}) {
             getIndex(current);
           }}
         />
-        <PaginationContainer
+        {/* <PaginationContainer
           activeDotStyle={styles.activeDotStyle}
           borderStyle={{borderWidth: 0}}
           inActiveDotStyle={styles.inActiveDotStyle}
           currentIndex={currentIndex}
           data={data}
           containerStyle={{marginTop: windowHeight(2)}}
-        />
+        /> */}
       </View>
     )
   );

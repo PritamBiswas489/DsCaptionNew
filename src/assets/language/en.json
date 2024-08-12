@@ -884,7 +884,10 @@
             "noServiceMenDetailsFoundContent":"Sorry servicemen details not found",
             "editServiceMen":"Edit serviceman",
             "updateServiceMen":"Update serviceman",
-            "ChangeServiceAlert":"Are you sure change the status of the service men?"
+            "ChangeServiceAlert":"Are you sure change the status of the service men?",
+            "noServiceFound":"No service found",
+            "noServiceDetailsFoundContent":"Service details not found",
+            "clickHere":"Click here"
         }
     }
 }

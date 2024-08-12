@@ -103,7 +103,7 @@ export type RootStackParamList = {
   Notification: undefined;
   EmptyNotification: undefined;
   ServiceList: undefined;
-  ServiceDetail: undefined;
+  ServiceDetail: {id:string};
   LocationList: undefined;
   AddNewAddress: newAddressProp;
   FreelancerDetail: undefined;
@@ -154,4 +154,5 @@ export type RootStackParamList = {
   ProviderInfo: undefined;
   FreeLancerDetails: undefined;
   LoaderScreen: undefined;
+  CoverLocationList:{zone:string[]}
 };

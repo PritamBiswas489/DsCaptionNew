@@ -47,6 +47,19 @@ export const styles = StyleSheet.create({
     fontFamily: appFonts.NunitoMedium,
     color: appColors.lightText,
   },
+  contentRating:{
+    fontSize: fontSizes.FONT4,
+    top: 4,
+    fontFamily: appFonts.NunitoMedium,
+    color: appColors.lightText,
+    marginLeft:10,
+
+  },
+  priceStyle:{
+    top: 4,
+    marginLeft:100,
+    
+  },
   containerStyle: {
     marginTop: windowWidth(4),
     alignItems: 'center',

@@ -29,7 +29,9 @@ export default function RenderItem({
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={() => navigate('ServiceDetail')}
+      onPress={() => navigate('ServiceDetail',{
+        id: item.id
+      })}
       style={[
         styles.providerBg,
         {

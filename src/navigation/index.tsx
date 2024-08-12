@@ -54,7 +54,8 @@ import {
   CommissionDetail,
   ChatHistory,
   Booking,
-  AddressCurrentLocation
+  AddressCurrentLocation,
+  CoverLocationList
 
 } from '../screens';
 import {MultipleServiceMenList} from '@otherComponent/booking/bookingDetail/multipleServiceMenList';
@@ -129,6 +130,9 @@ export default function MyStack() {
               component={EditServiceMen}
             />
             <RootStack.Screen name="AddNewAddress" component={AddNewAddress} />
+            <RootStack.Screen name="CoverLocationList" component={CoverLocationList} />
+
+            
             <RootStack.Screen name="Categories" component={Categories} />
             <RootStack.Screen
               name="ServiceMenList"

@@ -8,7 +8,7 @@ interface Response {
     config: any;
     request?: any;
 }
-// get catgories 
+// get categroies 
 export const getCategories = async (queryParam: string): Promise<Response> => {
     try {
         const response = await api.get(`/provider/category${queryParam}`);
@@ -31,6 +31,16 @@ export const getSubCategories = async (queryParam: string): Promise<Response> =>
 export const getServices = async (queryParam: string): Promise<Response> => {
     try {
         const response = await api.get(`/provider/service/data/sub-category-wise${queryParam}`);
+        return response;
+    } catch (error: any) {
+        return error.response;
+    }
+}
+
+//get service details
+export const getServiceDetails = async (serviceId:string): Promise<Response> => {
+    try {
+        const response = await api.get(`/provider/service/${serviceId}`);
         return response;
     } catch (error: any) {
         return error.response;

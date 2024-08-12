@@ -22,7 +22,7 @@ const initialContextVal = {
 export const ThemeContext = createContext<ThemeContextType>(initialContextVal);
 
 const App: React.FC = () => {
-  const [currSymbol, setCurrSymbol] = useState('$');
+  const [currSymbol, setCurrSymbol] = useState('₹');
   const [currValue, setCurrValue] = useState(1);
   const [isDark, setIsDark] = useState(false);
   const [isServiceManLogin, setIsServiceManLogin] = useState(false);

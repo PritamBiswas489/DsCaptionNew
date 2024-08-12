@@ -14,7 +14,7 @@ export function Detail() {
   return (
     <View>
       <ServiceContentView isShowPrice={true} />
-      <View style={[GlobalStyle.mainContainer, {marginTop: windowWidth(2)}]}>
+      {/* <View style={[GlobalStyle.mainContainer, {marginTop: windowWidth(2)}]}>
         <TextRow
           title={'serviceDetail.timeDuration'}
           content={t('serviceDetail.45min')}
@@ -72,7 +72,7 @@ export function Detail() {
             fontFamily: appFonts.NunitoSemiBold,
           }}
         />
-      </View>
+      </View> */}
     </View>
   );
 }

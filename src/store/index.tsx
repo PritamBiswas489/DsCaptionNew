@@ -16,6 +16,7 @@ import serviceMenDetailsSlice from "./redux/servicemen-details-redux";
 import serviceCategoriesDataSlice from "./redux/service-category-redux";
 import serviceSubCategoriesSlice from "./redux/service-sub-category-redux";
 import servicesSlice from "./redux/service-redux";
+import serviceDetailsSlice from "./redux/service-details-redux";
 
 const store = configureStore({
     reducer: { 
@@ -35,7 +36,8 @@ const store = configureStore({
       serviceMenDetailsField:serviceMenDetailsSlice.reducer,
       serviceCategories : serviceCategoriesDataSlice.reducer,
       serviceSubCategories : serviceSubCategoriesSlice.reducer,
-      servicesData : servicesSlice.reducer
+      servicesData : servicesSlice.reducer,
+      serviceDetailsData:serviceDetailsSlice.reducer
     },
   });
   

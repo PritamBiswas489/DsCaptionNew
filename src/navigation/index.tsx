@@ -18,6 +18,7 @@ import {
   Reviews,
   ServiceDetail,
   ServiceList,
+  MySubscriptions,
   ServiceMenList,
   PopularServiceView,
   ServiceMenDetail,
@@ -120,6 +121,14 @@ export default function MyStack() {
               name="PopularServiceView"
               component={PopularServiceView}
             /> 
+
+            <RootStack.Screen
+              name="MySubscriptions"
+              component={MySubscriptions}
+            /> 
+
+
+
 
             <RootStack.Screen
               name="AddNewServiceMen"

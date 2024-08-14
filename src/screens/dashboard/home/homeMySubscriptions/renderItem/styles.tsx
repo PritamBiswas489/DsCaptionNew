@@ -18,9 +18,9 @@ export const styles = StyleSheet.create({
     paddingBottom: windowHeight(2),
   },
   providerImg: {
-    height: windowHeight(15),
-    width: windowWidth(55),
-    resizeMode: 'cover',
+    height: windowHeight(11),
+    width: windowWidth(30),
+    resizeMode: 'stretch',
   },
   providerRow: {
     flexDirection: 'row',
@@ -66,5 +66,4 @@ export const styles = StyleSheet.create({
     borderRadius: windowWidth(2),
     paddingBottom: windowWidth(3),
   },
-
 });

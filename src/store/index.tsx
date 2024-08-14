@@ -17,6 +17,7 @@ import serviceCategoriesDataSlice from "./redux/service-category-redux";
 import serviceSubCategoriesSlice from "./redux/service-sub-category-redux";
 import servicesSlice from "./redux/service-redux";
 import serviceDetailsSlice from "./redux/service-details-redux";
+import mySubscriptionsSlice from "./redux/my-subscriptions-redux";
 
 const store = configureStore({
     reducer: { 
@@ -37,7 +38,8 @@ const store = configureStore({
       serviceCategories : serviceCategoriesDataSlice.reducer,
       serviceSubCategories : serviceSubCategoriesSlice.reducer,
       servicesData : servicesSlice.reducer,
-      serviceDetailsData:serviceDetailsSlice.reducer
+      serviceDetailsData:serviceDetailsSlice.reducer,
+      mysubscriptionsData:mySubscriptionsSlice.reducer
     },
   });
   

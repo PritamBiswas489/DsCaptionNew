@@ -59,11 +59,13 @@ export default function HomeCategory({
         const formattedData: SubCategoriesInterface[] = response.data.content.data.map((serviceData: any) => ({
           id: serviceData?.id,
           name: serviceData?.name,
-          image: serviceData?.image
+          image: serviceData?.image,
+          is_subscribed:serviceData?.is_subscribed
+          
         }))
         
         dispatch(serviceSubCategoriesActions.addServiceSubCategories({id:selectedCategory,subcategories:formattedData}))
-        dispatch(serviceSubCategoriesActions.setData({field:'selected',data:{id:selectedCategory,subcategories:formattedData}}))
+        dispatch(serviceSubCategoriesActions.setData({field:'selected',data:{categoryId:selectedCategory,subcategories:formattedData}}))
         
       }
     }
@@ -82,7 +84,7 @@ export default function HomeCategory({
       } else{
         console.log("======= Checking existing =================")
         console.log(checkExisting)
-        dispatch(serviceSubCategoriesActions.setData({field:'selected',data:{id:selectedCategory,subcategories:checkExisting.subcategories}}))
+        dispatch(serviceSubCategoriesActions.setData({field:'selected',data:{categoryId:selectedCategory,subcategories:checkExisting.subcategories}}))
         dispatch(serviceSubCategoriesActions.setData({field:'loading',data:false}))
       }
     }

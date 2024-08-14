@@ -11,9 +11,10 @@ import {
   ActiveWallet,
   ActiveBooking,
   Plus,
+  Services
 } from '@utils/icons';
 import appColors from '../theme/appColors';
-import {Home, Wallet, Setting, Booking} from '../screens/index';
+import {Home, Wallet, Setting, Booking, ServiceList} from '../screens/index';
 import {View,Text} from 'react-native';
 import CartModal from '@otherComponent/cartModal';
 import {windowHeight} from '@theme/appConstant';
@@ -36,9 +37,9 @@ export function BottomTab() {
     },
     {name: '', activeIcon: <Plus />, tabBarIcon: <Plus />},
     {
-      name: 'bottomTab.wallet',
-      activeIcon: <ActiveWallet />,
-      tabBarIcon: <WalletIcon />,
+      name: 'newDeveloper.ServiceList',
+      activeIcon: <Services />,
+      tabBarIcon: <Services />,
     },
     {
       name: 'bottomTab.setting',
@@ -62,7 +63,7 @@ export function BottomTab() {
         ) : selected == 1 ? (
           <Booking />
         ) : selected == 3 ? (
-          <Wallet />
+          <ServiceList />
         ) : (
           <Setting />
         )}

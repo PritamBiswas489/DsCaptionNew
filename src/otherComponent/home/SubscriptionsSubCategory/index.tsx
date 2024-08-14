@@ -1,4 +1,4 @@
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Alert} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {subCategoryData} from './data/data';
 import {styles} from './styles';
@@ -11,7 +11,9 @@ import { serviceActions } from '@src/store/redux/service-redux';
 import { ServiceInterface } from '@src/interfaces/serviceInterface';
 import { ActivityIndicator } from 'react-native';
 import { SubCategoriesInterface } from '@src/interfaces/subCategoriesInterface';
- 
+import { MySubscriptionInterface } from '@src/interfaces/mySubscriptionInterface';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from 'src/navigation/types';
 
 interface Response {
   data: any;
@@ -22,33 +24,67 @@ interface Response {
   request?: any;
 }
 
+type MysubscriptionRouteProp = RouteProp<RootStackParamList, 'ServiceDetail'>;
 
-export default function SubCategory({}) {
+export default function SubscriptionsSubCategory({}) {
   const flatListRef = useRef<FlatList>(null);
-  const [selectedSubCategory,setSubCategory]  = useState<SubCategoriesInterface>()
+  const [selectedSubCategory,setSubCategory]  = useState<MySubscriptionInterface>()
   const dispatch = useDispatch()
+  const route = useRoute<MysubscriptionRouteProp>();
+  const { id: subCategoryIdFromParam } = route.params;
 
+  //mysubscription data
   const {
-    selected:ServiceSubCategories,
-    loading:ServiceSubCategoriesLoading,
-  } = useSelector((state: RootState) => state['serviceSubCategories'])
+    data:ServiceSubCategories,
+  } = useSelector((state: RootState) => state['mysubscriptionsData'])
 
+  //service data
   const {
     data:Services
   } = useSelector((state: RootState) => state['servicesData'])
 
+  const [subcategories,setsubcategories] = useState([...ServiceSubCategories])  
+
  
   useEffect(()=>{
-     if(ServiceSubCategories?.subcategories){
-        const firstSubCategory = ServiceSubCategories.subcategories.slice(0,1)
-        setSubCategory(firstSubCategory?.[0])
+     if(ServiceSubCategories){
+         let hasSelectedCategory  = false;
+         if(subCategoryIdFromParam){
+            const checkCatExist = ServiceSubCategories.filter(ele=>ele.subCategoryId === subCategoryIdFromParam)
+            if(checkCatExist){
+              setSubCategory(checkCatExist?.[0])
+              hasSelectedCategory =  true
+            }
+         }
+
+         if(!hasSelectedCategory){
+              const firstSubCategory = ServiceSubCategories.slice(0,1)
+              setSubCategory(firstSubCategory?.[0])
+         }
+       
      }
   },[ServiceSubCategories])
+
+
+  useEffect(()=>{
+    if(selectedSubCategory){
+      const indexToMove = subcategories.findIndex(subcat => subcat.subCategoryId === selectedSubCategory.subCategoryId);
+      if (indexToMove !== -1) {
+        // Remove the object from its current position
+        const [objectToMove] = subcategories.splice(indexToMove, 1);
+        // Insert the object at the start of the array
+        subcategories.unshift(objectToMove);
+      }
+
+    }
+
+  },[selectedSubCategory])
  
   const loadingServices = async () =>{
-     const queryParam = `?limit=200&offset=1&sub_category_id=${selectedSubCategory?.id}`
+     const queryParam = `?limit=200&offset=1&sub_category_id=${selectedSubCategory?.subCategoryId}`
      const response:Response = await getServices(queryParam)
      if (response?.data?.content?.data) {
+      //console.log(response?.data?.content?.data)
       const services = response?.data?.content?.data
       if (services.length > 0) {
               const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) => ({
@@ -64,14 +100,14 @@ export default function SubCategory({}) {
                 category:serviceData?.category?.name,
               }))
 
-              // console.log("=============== checking formatted data =========")
-              // console.log(formattedData)
-              if(selectedSubCategory?.id){
-                dispatch(serviceActions.addServices({id:selectedSubCategory?.id,services:formattedData}))
+              //console.log("=============== checking formatted data =========")
+             //console.log(formattedData)
+              if(selectedSubCategory?.subCategoryId){
+                dispatch(serviceActions.addServices({id:selectedSubCategory?.subCategoryId,services:formattedData}))
                 dispatch(serviceActions.setData({
                   field:'selected',data:{
-                    subCategoryId:selectedSubCategory?.id,
-                    isSubscribed:selectedSubCategory.is_subscribed,
+                    subCategoryId:selectedSubCategory?.subCategoryId,
+                    isSubscribed:selectedSubCategory.isSubscribed,
                     services:formattedData}}))
 
               }
@@ -85,18 +121,17 @@ export default function SubCategory({}) {
   useEffect(()=>{
     if(selectedSubCategory){
       dispatch(serviceActions.setData({field:'loading',data:true}))
-       const checkExisting = Services.find(elementDet => elementDet.subCategoryId === selectedSubCategory.id);  
+       const checkExisting = Services.find(elementDet => elementDet.subCategoryId === selectedSubCategory.subCategoryId);  
        if(!checkExisting){
           loadingServices()   
        } else{
         dispatch(serviceActions.setData({field:'selected',data:{
-          subCategoryId:selectedSubCategory.id,
-          isSubscribed:selectedSubCategory.is_subscribed,  
+          subCategoryId:selectedSubCategory.subCategoryId,
+          isSubscribed:selectedSubCategory.isSubscribed,  
           services:checkExisting.services}}))
           dispatch(serviceActions.setData({field:'loading',data:false}))
        }   
     }
-
   },[selectedSubCategory])
 
 
@@ -104,11 +139,11 @@ export default function SubCategory({}) {
  
   return (
     <View>
-    {ServiceSubCategoriesLoading && <ActivityIndicator style={{marginTop:10}}/> }  
-    {!ServiceSubCategoriesLoading && <FlatList
+    <FlatList
         ref={flatListRef}
+        keyExtractor={item=>item.id}
         contentContainerStyle={styles.mainContainer}
-        data={ServiceSubCategories.subcategories}
+        data={subcategories}
         renderItem={({index, item}) => {
           return (
             <RenderItem
@@ -122,7 +157,7 @@ export default function SubCategory({}) {
         }}
         horizontal
         showsHorizontalScrollIndicator={false}
-      />}
+      />
     </View>
   );
 }

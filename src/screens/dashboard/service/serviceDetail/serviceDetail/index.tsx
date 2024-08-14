@@ -78,7 +78,7 @@ export function ServiceDetail() {
         is_active: response?.data?.content?.is_active,
         rating_count: response?.data?.content?.rating_count,
         avg_rating: response?.data?.content?.avg_rating,
-        min_bidding_price: response?.data?.content?.min_bidding_price,
+        min_bidding_price: response?.data?.content?.variations?.[0]?.price,
         category: response?.data?.content?.category?.name,
         zone: zoneList
       }

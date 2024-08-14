@@ -7,3 +7,4 @@ export * from './serviceManList';
 export * from './addNewServiceMen';
 export * from './editServiceMen';
 export * from './popularService';
+export * from './mySubscriptions';

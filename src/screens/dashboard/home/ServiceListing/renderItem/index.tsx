@@ -12,8 +12,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import appColors from '@theme/appColors';
-import { getMediaUrl } from '@src/config/utility';
-import { limitWords } from '@src/config/utility';
+import { getMediaUrl, limitWords } from '@src/config/utility';
+
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
@@ -26,88 +26,90 @@ export default function RenderItem({
   const { currSymbol, currValue } = useValues();
   const { isDark, t } = useValues();
   const { navigate } = useNavigation<routeProps>();
+  
   return (
-    <TouchableOpacity
-      activeOpacity={0.9}
-      onPress={() => navigate('ServiceDetail',{
-        id: item.id
-      })}
-      style={[
-        styles.providerBg,
-        {
-          backgroundColor: isDark ? appColors.darkCardBg : appColors.white,
-          borderColor: isDark ? appColors.darkBorder : appColors.border,
-        },
-      ]}>
-     {item.cover_image && <Image
-        source={{uri:`${getMediaUrl()}/service/${item.cover_image}`}}
-        style={[styles.providerImg, providerImageStyle]}
-      />} 
-      <View style={styles.providerRow}>
-        <Text
-          style={[
-            styles.textStyle,
-            { color: isDark ? appColors.white : appColors.darkText },
-          ]}>
-          {limitWords(item.name,3)}
-        </Text>
-        <Text
-          style={[
-            styles.textStyle,
-            {
-              fontFamily: appFonts.NunitoExtraBold,
-              fontSize: fontSizes.FONT4HALF,
-              color: isDark ? appColors.white : appColors.darkText,
-            },
-          ]}>
-          {' '}
-          {currSymbol}
-          {currValue * item.min_bidding_price}
-        </Text>
-      </View>
-      <View style={[styles.providerRow, { marginTop: windowWidth(2) }]}>
-        <View style={styles.row}>
-          <Booked width={'16'} height={'20'} />
-          <Text style={styles.totalBooked}>
-            {' '}
-            {item.order_count}
-            {t('home.booked')}
-          </Text>
-        </View>
-        {item.avg_rating > 0 && <View style={styles.row}>
-          <Star height={'13'} width={'12'} />
-          <Text
-            style={[
-              styles.rate,
-              { color: isDark ? appColors.white : appColors.darkText },
-            ]}>
-            {item.avg_rating}
-          </Text>
-        </View>}
-      </View>
-      <View
+    <View style={{ flex: 1 }}>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => navigate('ServiceDetail', { id: item.id })}
         style={[
-          styles.categoryView,
-          { backgroundColor: isDark ? appColors.darkTheme : appColors.boxBg },
+          styles.providerBg,
+          {
+            backgroundColor: isDark ? appColors.darkCardBg : appColors.white,
+            borderColor: isDark ? appColors.darkBorder : appColors.border,
+          },
         ]}>
+        {item.cover_image && (
+          <Image
+            source={{ uri: `${getMediaUrl()}/service/${item.cover_image}` }}
+            style={[styles.providerImg, providerImageStyle]}
+          />
+        )}
         <View style={styles.providerRow}>
-          <Text style={styles.totalBooked}>{t('home.category')}</Text>
           <Text
             style={[
               styles.textStyle,
               { color: isDark ? appColors.white : appColors.darkText },
             ]}>
-            {t(item.category)}
+            {limitWords(item.name, 3)}
+          </Text>
+          <Text
+            style={[
+              styles.textStyle,
+              {
+                fontFamily: appFonts.NunitoExtraBold,
+                fontSize: fontSizes.FONT4HALF,
+                color: isDark ? appColors.white : appColors.darkText,
+              },
+            ]}>
+            {' '}
+            {currSymbol}
+            {currValue * item.min_bidding_price}
           </Text>
         </View>
-        {/* <View style={[styles.providerRow, {marginTop: windowWidth(0.6)}]}>
-          <Text style={styles.totalBooked}>{t('packages.activeStatus')}</Text>
-          <SwitchContainer
-            toggleDarkSwitch={() => toggleSwitch(index)}
-            switchOn={item.status}
-          />
-        </View> */}
-      </View>
-    </TouchableOpacity>
+        <View style={[styles.providerRow, { marginTop: windowWidth(2) }]}>
+          <View style={styles.row}>
+            <Booked width={'16'} height={'20'} />
+            <Text style={styles.totalBooked}>
+              {' '}
+              {item.order_count}
+              {t('home.booked')}
+            </Text>
+          </View>
+          {item.avg_rating > 0 && (
+            <View style={styles.row}>
+              <Star height={'13'} width={'12'} />
+              <Text
+                style={[
+                  styles.rate,
+                  { color: isDark ? appColors.white : appColors.darkText },
+                ]}>
+                {item.avg_rating.toFixed(1)}
+              </Text>
+            </View>
+          )}
+        </View>
+        <View
+          style={[
+            styles.categoryView,
+            { backgroundColor: isDark ? appColors.darkTheme : appColors.boxBg },
+          ]}>
+          <View style={styles.providerRow}>
+            <Text style={styles.totalBooked}>{t('home.category')}</Text>
+            <Text
+              style={[
+                styles.textStyle,
+                { color: isDark ? appColors.white : appColors.darkText },
+              ]}>
+              {t(item.category)}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+      
+    
+    </View>
   );
 }
+
+ 

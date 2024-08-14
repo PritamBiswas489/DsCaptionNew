@@ -50,7 +50,7 @@ export default function RenderItem({
                 : appColors.lightText,
           },
         ]}>
-        {t(item.name)}
+        {t(item.subCategoryName)}
       </Text>
     </TouchableOpacity>
   );

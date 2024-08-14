@@ -11,6 +11,7 @@ import { useValues } from '../../../../../../App';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { serviceMenType } from '../../activeServicemen/data/types';
+import { HomeMySubscriptions } from '../../homeMySubscriptions';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -24,6 +25,8 @@ export function ProviderLogin() {
     data: ServiceMenList,
   } = useSelector((state: RootState) => state['serviceMenDataField'])
 
+  
+
   useEffect(()=>{
      if(ServiceMenList.length > 0){
         setActiveServiceMenList(ServiceMenList.slice(0,4))
@@ -36,11 +39,11 @@ export function ProviderLogin() {
   return (
     <View>
       <HeadingRow
-        gotoScreen={() => navigate('ServiceList')}
-        title={'home.popularService'}
+        gotoScreen={() => navigate('MySubscriptions',{id:undefined})}
+        title={'newDeveloper.MySubscriptions'}
         content={'home.viewAll'}
       />
-      <PopularService
+      <HomeMySubscriptions
         data={popularService}
         setData={setPopularService}
         isHorizontal={true}

@@ -887,7 +887,14 @@
             "ChangeServiceAlert":"Are you sure change the status of the service men?",
             "noServiceFound":"No service found",
             "noServiceDetailsFoundContent":"Service details not found",
-            "clickHere":"Click here"
+            "clickHere":"Click here",
+            "Subscribe":"Subscribe",
+            "Unsubscribe":"Unsubscribe",
+            "ServiceList":"Services",
+            "MySubscriptions":"My Subscriptions",
+            "NoSubscriptionFound":"No Subscription found",
+            "NoSubscriptionFoundContent":"No service subscribed by you"
+            
         }
     }
 }

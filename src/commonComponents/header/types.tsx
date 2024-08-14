@@ -14,4 +14,5 @@ export type headerTypes = {
   containerStyle?: ViewStyle;
   showSearchBar?: boolean;
   searchContainerStyle?: ViewStyle;
+  subscribeServiceBtn?:React.ReactNode;
 };

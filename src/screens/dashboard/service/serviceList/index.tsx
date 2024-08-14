@@ -1,4 +1,4 @@
-import { Text, View, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '@style/styles';
@@ -20,6 +20,8 @@ import { getCategories, getSubCategories } from '@src/services/services-service'
 import { CategoriesInterface } from "@src/interfaces/categoriesInterface";
 import { serviceCategoriesDataActions } from '@src/store/redux/service-category-redux';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SubscribeBtn } from './subscribeBtn';
 
 
 
@@ -39,14 +41,14 @@ type routeProps = NativeStackNavigationProp<RootStackParamList>;
 // service list 
 export function ServiceList() {
   const [selectedCategory, setSelectedCategory] = useState('');
-  
+
   const [popularService, setPopularService] = useState(serviceListData);
   const { isDark, t } = useValues();
   const [showSearchBar, setSearchBar] = useState<boolean>();
   const { navigate } = useNavigation<routeProps>();
   const dispatch = useDispatch()
   const [loadingCategories, setLoadingCategories] = useState(true)
-  
+
   const [loadingSkeleton, setLoadingSkeleton] = useState(true)
 
   const {
@@ -55,92 +57,103 @@ export function ServiceList() {
     limit
   } = useSelector((state: RootState) => state['serviceCategories'])
 
-  
 
-  
+
+
 
   //============== load service categories ==========================// 
   const loadServiceCategories = async () => {
     if (ServiceCategories.length === 0) {
-        const response: Response = await getCategories(`${offsetPageUrl}&limit=${limit}`)
-        if (response?.data?.content?.data) {
-          const catData = response?.data?.content?.data
-          if (catData.length > 0) {
-            const formattedData: CategoriesInterface[] = response.data.content.data.map((serviceData: any) => ({
-              id: serviceData?.id,
-              name: serviceData?.name,
-              image: serviceData?.image
-            }))
-            dispatch(serviceCategoriesDataActions.addCategories(formattedData))
-          }
+      const response: Response = await getCategories(`${offsetPageUrl}&limit=${limit}`)
+      if (response?.data?.content?.data) {
+        const catData = response?.data?.content?.data
+        if (catData.length > 0) {
+          const formattedData: CategoriesInterface[] = response.data.content.data.map((serviceData: any) => ({
+            id: serviceData?.id,
+            name: serviceData?.name,
+            image: serviceData?.image
+          }))
+          dispatch(serviceCategoriesDataActions.setData({field:'data',data:formattedData}))
         }
+      }
     }
     //stop categories loader
     setLoadingCategories(false)
   }
 
-  
+
   useEffect(() => {
     loadServiceCategories()
   }, [ServiceCategories])
 
- 
 
-  useEffect(()=>{
-     
-    if(!loadingCategories ){
+
+  useEffect(() => {
+    if (!loadingCategories) {
       setLoadingSkeleton(false)
     }
-  },[loadingCategories])
+  }, [loadingCategories])
 
- 
+
 
   return (
-    <ScrollView
-      style={[
-        GlobalStyle.mainView,
-        { backgroundColor: isDark ? appColors.darkCard : appColors.white },
-      ]}>
-      {loadingSkeleton && <SkeletonLoader />}
-      {!loadingSkeleton && <>
-        <Header
-          title={'serviceList.title'}
-          trailIcon={
-            <Search color={isDark ? appColors.white : appColors.lightText} />
-          }
-          trailIcon1={
-            <Plus color={isDark ? appColors.white : appColors.darkText} />
-          }
-          onTrailIcon={() => navigate('AddNewService')}
-          showBackArrow={true}
-          gotoScreen={() => setSearchBar(!showSearchBar)}
-          showSearchBar={showSearchBar}
-          searchContainerStyle={styles.searchContainer}
-          content={
-            <View style={styles.contentView}>
-              <Text
-                style={[
-                  styles.titleStyle,
-                  { color: isDark ? appColors.white : appColors.darkText },
-                ]}>
-                {t('serviceList.categories')}
-              </Text>
-              <HomeCategory  serviceCategories={ServiceCategories} />
-            </View>
-          }
-        />
-        <SubCategory /> 
-        
-        <View style={styles.blankView} />
-         <ServiceListing
-          data={popularService}
-          setData={setPopularService}
-          providerImageStyle={styles.providerImageStyle}
-          itemSeparator={styles.itemSeparator}
-        /> 
-       
-      </>}
+    <>
+      <ScrollView
+        style={[
+          GlobalStyle.mainView,
+          { backgroundColor: isDark ? appColors.darkCard : appColors.white },
+        ]}>
+        {loadingSkeleton && <SkeletonLoader />}
+        {!loadingSkeleton && <>
+          <Header
+            title={'serviceList.title'}
+            trailIcon={
+              <Search color={isDark ? appColors.white : appColors.lightText} />
+            }
+            trailIcon1={
+              <Plus color={isDark ? appColors.white : appColors.darkText} />
+            }
+            subscribeServiceBtn={<SubscribeBtn
+              subscribeText={t('newDeveloper.Subscribe')}
+              unsubscribeText={t('newDeveloper.Unsubscribe')}
 
-    </ScrollView>
+            />}
+            onTrailIcon={() => navigate('AddNewService')}
+            showBackArrow={false}
+            gotoScreen={() => setSearchBar(!showSearchBar)}
+            showSearchBar={showSearchBar}
+            searchContainerStyle={styles.searchContainer}
+            content={
+              <View style={styles.contentView}>
+                <Text
+                  style={[
+                    styles.titleStyle,
+                    { color: isDark ? appColors.white : appColors.darkText },
+                  ]}>
+                  {t('serviceList.categories')}
+                </Text>
+                <HomeCategory serviceCategories={ServiceCategories} />
+              </View>
+            }
+          />
+          <SubCategory />
+
+          <View style={styles.blankView} />
+          <ServiceListing
+            data={popularService}
+            setData={setPopularService}
+            providerImageStyle={styles.providerImageStyle}
+            itemSeparator={styles.itemSeparator}
+          />
+          {/* Floating Subscribe Button */}
+
+
+        </>}
+
+      </ScrollView>
+
+
+
+    </>
   );
 }

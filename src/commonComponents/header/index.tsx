@@ -14,7 +14,8 @@ import {headerTypes} from './types';
 import {windowWidth} from '@theme/appConstant';
 import {useValues} from '../../../App';
 import appColors from '@theme/appColors';
-import {SearchBar} from '@otherComponent/home';
+ 
+import { SubscribeBtn } from '@src/screens/dashboard/service/serviceList/subscribeBtn';
 
 export default function Header({
   title,
@@ -29,6 +30,7 @@ export default function Header({
   containerStyle,
   showSearchBar,
   searchContainerStyle,
+  subscribeServiceBtn
 }: headerTypes) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -67,10 +69,11 @@ export default function Header({
             </TouchableOpacity>
           )}
           {showSearchBar ? (
-            <SearchBar
-              containerStyle={[styles.containerStyle, searchContainerStyle]}
-              searchIcon={<Search />}
-            />
+            // <SearchBar
+            //   containerStyle={[styles.containerStyle, searchContainerStyle]}
+            //   searchIcon={<Search />}
+            // />
+            ''
           ) : (
             <Text
               style={[
@@ -103,6 +106,7 @@ export default function Header({
               {trailIcon}
             </TouchableOpacity>
           )} */}
+        {subscribeServiceBtn}
           {trailIcon1 && (
             <TouchableOpacity
               onPress={
@@ -122,6 +126,7 @@ export default function Header({
               {trailIcon1 && trailIcon1}
             </TouchableOpacity>
           )}
+         
         </View>
       </View>
       {content && content}

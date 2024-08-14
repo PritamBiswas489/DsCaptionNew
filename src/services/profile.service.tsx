@@ -92,3 +92,19 @@ export const changeStatusServiceMen = async (formData:FormData): Promise<Respons
 		return error.response;
 	}
 }
+export const updateSubscriptionStatusBySubCategoryId = async (subCategoryid:string) :Promise<Response> => {
+	try {
+		const response = await api.post(`/provider/service/update-subscription?sub_category_id[]=${subCategoryid}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+export const fetchMySubscriptions = async (queryParams:string) :Promise<Response> => {
+	try {
+		const response = await api.get(`/provider/subscribed/sub-categories${queryParams}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

@@ -116,6 +116,7 @@ export type RootStackParamList = {
   LatestBlog: undefined;
   BlogDetail: BlogDetailScreenProp;
   PopularServiceView: undefined;
+  MySubscriptions:{id:string|undefined};
   ServiceMenDetail: {id:string};
   Booking: undefined;
   PendingBooking: undefined;

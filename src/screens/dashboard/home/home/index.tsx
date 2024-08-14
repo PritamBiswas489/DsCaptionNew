@@ -32,6 +32,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
  
 import { loadServiceMenData } from '@src/services/load.servicemen';
+import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
+import { mySubscriptionsAction } from '@src/store/redux/my-subscriptions-redux';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -54,6 +56,8 @@ export function Home() {
   const {isDark, isServiceManLogin} = useValues();
   const [showSkeletonLoader,setSkeletonLoader] = useState(true)
   const [processLoadServicemen,setProcessLoadeServicemen] = useState(false)
+  const [processLoadMySubscription, setProcessLoadMySubscription ] =  useState(false)
+
 
   const {
     data: ServiceMenList,
@@ -62,6 +66,11 @@ export function Home() {
     isFirstTimeLoading,
     isNoMoreData,
   } = useSelector((state: RootState) => state['serviceMenDataField'])
+
+  const {
+     
+    needRefresh:needRefreshMySubscriptionData 
+  } = useSelector((state: RootState) => state['mysubscriptionsData'])
 
   const dispatch = useDispatch()
  
@@ -76,17 +85,30 @@ export function Home() {
         loadData()
     }
   },[ServiceMenList])
-  
- 
+
+  const loadmySubscriptionData = async ()=>{
+    setProcessLoadMySubscription(true)
+    await loadMySubscriptionFunc(dispatch,'?limit=200&offset=1')
+    setProcessLoadMySubscription(false)
+    dispatch(mySubscriptionsAction.setData({field:'needRefresh',data:false}))
+  }
+  useEffect(() => {
+    if(needRefreshMySubscriptionData){
+        loadmySubscriptionData()
+    } 
+  }, [needRefreshMySubscriptionData])
+
   const filterModalVisible = () => {
     setShowWalletModal(true);
   };
 
   useEffect(()=>{
-    if(!processLoadServicemen){
+    if(!processLoadServicemen && !processLoadMySubscription){
          setSkeletonLoader(false)
-    }
+    } 
   },[processLoadServicemen])
+
+   
 
   return (
     <ScrollView

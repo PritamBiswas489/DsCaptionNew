@@ -5,8 +5,8 @@ import {styles} from './styles';
 import {dataType} from './data/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { ActivityIndicator } from 'react-native';
-export function ServiceListing({
+
+export function HomeMySubscriptions({
   data,
   setData,
   isHorizontal,
@@ -16,10 +16,10 @@ export function ServiceListing({
 }: dataType) {
 
   const {
-    selected:Services,
-    loading:servicesLoader
-  } = useSelector((state: RootState) => state['servicesData'])
+    data:MySubscriptionDataHome,
+  } = useSelector((state: RootState) => state['mysubscriptionsData'])
 
+   
 
   const toggleSwitch = (index: number) => {
     const newServices = [...data];
@@ -29,10 +29,9 @@ export function ServiceListing({
 
   return (
     <View>
-      {servicesLoader && <ActivityIndicator style={{marginTop:10}}/> }  
-     {!servicesLoader && <FlatList
+      <FlatList
         contentContainerStyle={[styles.containerStyle, contentContainerStyle]}
-        data={Services.services}
+        data={MySubscriptionDataHome}
         horizontal={isHorizontal ? isHorizontal : false}
         showsHorizontalScrollIndicator={false}
         renderItem={({item, index}) => (
@@ -46,7 +45,7 @@ export function ServiceListing({
         ItemSeparatorComponent={() => (
           <View style={[styles.itemSeparator, itemSeparator]}></View>
         )}
-      />} 
+      />
     </View>
   );
 }

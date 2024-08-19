@@ -1,58 +1,68 @@
-import {ScrollView, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {GlobalStyle} from '@style/styles';
-import {Notification, Search, BookingFilterIcon} from '@utils/icons';
+import { TouchableOpacity, View, Alert, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view';
+import React, { useEffect, useState } from 'react';
+import { GlobalStyle } from '@style/styles';
+import { Notification, Search, BookingFilterIcon } from '@utils/icons';
 import Header from '@commonComponents/header';
-import {SearchBar} from '@otherComponent/home';
 import BookingList from './allBooking/bookingList';
-import {allBookingsData, BookingData} from './data/data';
-import AllBookingFilter from './allBooking/allBookingFilter';
+import { allBookingsData, BookingData } from './data/data';
+ 
 import CommonModal from '@commonComponents/commonModal';
 import CancelBooking from '@otherComponent/booking/cancelBooking';
-import {windowHeight} from '@theme/appConstant';
+import { windowHeight } from '@theme/appConstant';
 import ModalComponent from '@commonComponents/modal';
-import {acceptBooking} from '@utils/images';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from 'src/navigation/types';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { acceptBooking } from '@utils/images';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'src/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import BookingFilter from './bookingFilter';
-import {CalenderModal} from '@otherComponent/calenderModal';
-import {CategoriesModal} from '@otherComponent/index';
+import { CalenderModal } from '@otherComponent/calenderModal';
+import { CategoriesModal } from '@otherComponent/index';
 import appColors from '@theme/appColors';
-import {useValues} from '../../../App';
+import { useValues } from '../../../App';
+ 
+import StatusFilter from './statusFilter';
+import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { bookingSearchFieldActions } from '@src/store/redux/booking-search-field';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
+
+
 export function Booking() {
+  const dispatch = useDispatch()
   const [cancelBookingModal, setCancelBookingModal] = useState(false);
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showSearchModal, setSearchModal] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<number[]>([]);
-
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [isStartDate, setIsStartDate] = useState(true);
   const [showDatePicker, setDatePicker] = useState(false);
-
-  const {isDark, isServiceManLogin} = useValues();
+  const { isDark, isServiceManLogin } = useValues();
 
   const filterModalVisible = () => {
     setShowModal(true);
   };
-
   const searchModalVisible = () => {
     setSearchModal(true);
   };
 
-  const {navigate} = useNavigation<routeProps>();
+  //handle scroll function 
+  const handleScrollProcessing = (event: NativeSyntheticEvent<NativeScrollEvent>) =>{
+    const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+    if (layoutMeasurement.height + contentOffset.y >= contentSize.height - 20) {
+     // dispatch(bookingSearchFieldActions.setData({field:'offset',data:offsetData+1}))
+     
+    }
+  }
+
+  const { navigate } = useNavigation<routeProps>();
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={GlobalStyle.contentContainerStyle}
-      style={[
-        GlobalStyle.mainView,
-        {backgroundColor: isDark ? appColors.darkTheme : appColors.white},
-      ]}>
+    <View style={styles.container}>
       <Header
         showBackArrow={false}
         title={'booking.booking'}
@@ -62,27 +72,40 @@ export function Booking() {
           />
         }
         trailIcon1={
-          <Notification color={isDark ? appColors.white : appColors.darkText} />
+          <Icon name='refresh' size={26} color={isDark ? appColors.white : appColors.darkText} />
         }
         gotoScreen={() => setShowModal(true)}
-        onTrailIcon={() => navigate('EmptyNotification')}
-        content={
-          <TouchableOpacity activeOpacity={0.9} onPress={() => {}}>
-            <SearchBar searchIcon={<Search />} />
-          </TouchableOpacity>
-        }
+        onTrailIcon={() => dispatch(bookingSearchFieldActions.setData({field:'refreshData',data:true}))}
+        content={''}
       />
-      {!isServiceManLogin ? (
-        <AllBookingFilter />
-      ) : (
+      <View style={styles.fixedFilter}>
+        <StatusFilter />
+      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          GlobalStyle.contentContainerStyle,
+
+        ]}
+        style={[
+          GlobalStyle.mainView,
+          {
+            backgroundColor: isDark ? appColors.darkTheme : appColors.white,
+          },
+        ]}
+         
+      >
+        {/* Booking list and other components */}
         <View style={GlobalStyle.blankView} />
-      )}
-      <BookingList
-        setAcceptBookingModal={setAcceptBookingModal}
-        setCancelBookingModal={setCancelBookingModal}
-        containerStyle={{marginVertical: 0}}
-        data={isServiceManLogin ? allBookingsData : BookingData}
-      />
+        <BookingList
+          setAcceptBookingModal={setAcceptBookingModal}
+          setCancelBookingModal={setCancelBookingModal}
+          containerStyle={{ marginVertical: 0 }}
+          data={isServiceManLogin ? allBookingsData : BookingData}
+        />
+        <View style={GlobalStyle.blankView} />
+      </ScrollView>
+
       {showModal && (
         <CommonModal
           modal={
@@ -101,7 +124,6 @@ export function Booking() {
           visibleModal={filterModalVisible}
         />
       )}
-
       {showSearchModal && (
         <CommonModal
           modal={
@@ -116,7 +138,6 @@ export function Booking() {
           visibleModal={searchModalVisible}
         />
       )}
-
       <CommonModal
         modal={
           <CalenderModal
@@ -155,13 +176,31 @@ export function Booking() {
             placeHolder={'booking.refuseBooking'}
             title={'booking.refuseBookingPlaceholder'}
             setShowModal={setCancelBookingModal}
-            textInputContainer={{height: windowHeight(18)}}
+            textInputContainer={{ height: windowHeight(18) }}
             onSubmitClick={() => setCancelBookingModal(false)}
           />
         }
         showModal={cancelBookingModal}
         visibleModal={() => setCancelBookingModal(true)}
       />
-    </ScrollView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  fixedFilter: {
+    top: 0,
+    width: '100%',
+    zIndex: 1,
+    backgroundColor: appColors.white,
+    paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3
+  },
+});

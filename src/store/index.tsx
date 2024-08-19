@@ -18,6 +18,14 @@ import serviceSubCategoriesSlice from "./redux/service-sub-category-redux";
 import servicesSlice from "./redux/service-redux";
 import serviceDetailsSlice from "./redux/service-details-redux";
 import mySubscriptionsSlice from "./redux/my-subscriptions-redux";
+import bookingSearchFieldSlice from "./redux/booking-search-field";
+import allListingSlice from "./redux/all-listing-redux";
+import pendingListingSlice from "./redux/pending-listing-redux";
+import acceptedListingSlice from "./redux/accepted.listing-redux";
+import ongoingListingSlice from "./redux/ongoing-listing-redux";
+import completedListingSlice from "./redux/completed-listing-redux";
+import canceledListingSlice from "./redux/canceled-listing-redux";
+
 
 const store = configureStore({
     reducer: { 
@@ -39,7 +47,16 @@ const store = configureStore({
       serviceSubCategories : serviceSubCategoriesSlice.reducer,
       servicesData : servicesSlice.reducer,
       serviceDetailsData:serviceDetailsSlice.reducer,
-      mysubscriptionsData:mySubscriptionsSlice.reducer
+      mysubscriptionsData:mySubscriptionsSlice.reducer,  
+      bookingSearchField:bookingSearchFieldSlice.reducer,
+      allListingSearch: allListingSlice.reducer,
+      pendingListingSearch:pendingListingSlice.reducer,
+      acceptedListingSearch:acceptedListingSlice.reducer,
+      ongoingListingSearch:ongoingListingSlice.reducer,
+      completedListingSearch:completedListingSlice.reducer,
+      cancelListingSearch:canceledListingSlice.reducer
+
+
     },
   });
   

@@ -893,7 +893,19 @@
             "ServiceList":"Services",
             "MySubscriptions":"My Subscriptions",
             "NoSubscriptionFound":"No Subscription found",
-            "NoSubscriptionFoundContent":"No service subscribed by you"
+            "NoSubscriptionFoundContent":"No service subscribed by you",
+            "all":"All",
+            "pending":"Pending",
+            "accepted":"Accepted",
+            "ongoing":"Ongoing",
+            "completed":"Completed",
+            "canceled":"Canceled",
+            "noBookingFound":"No bookings found",
+            "noBookingFoundContent":"No bookings found for this status",
+            "bookingDate":"Booking date",
+            "scheduleDate":"Scheduled date"
+
+
             
         }
     }

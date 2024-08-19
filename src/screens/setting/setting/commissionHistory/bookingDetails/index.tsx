@@ -1,4 +1,4 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, Alert} from 'react-native';
 import React from 'react';
 import Header from '@commonComponents/header';
 import {GlobalStyle} from '@style/styles';
@@ -15,6 +15,7 @@ import appColors from '@theme/appColors';
 import {ServiceMenDetail} from '@otherComponent/booking/bookingDetail/description/serviceMenDetail';
 
 export function BookingDetails() {
+  Alert.alert('Booking details')
   const {isDark,t} = useValues();
   return (
     <ScrollView

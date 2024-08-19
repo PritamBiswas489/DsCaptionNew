@@ -18,6 +18,7 @@ export const loadMySubscriptionFunc = async (dispatch:AppDispatch, queryParams:s
       if (mySubscriptionData.length > 0) {
         const formattedData: MySubscriptionInterface[] = response.data.content.data.map((subscriptionData: any) => ({
           id: subscriptionData?.id,
+          categoryId:subscriptionData?.category_id,
           subCategoryId: subscriptionData?.sub_category_id,
           isSubscribed: subscriptionData?.is_subscribed,
           subCategoryName: subscriptionData?.sub_category?.name,

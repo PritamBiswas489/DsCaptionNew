@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     elevation: 0.5,
     paddingVertical: windowWidth(5),
     paddingTop: windowHeight(3),
+    
   },
   rowContainer: {
     flexDirection: 'row',

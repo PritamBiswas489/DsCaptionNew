@@ -144,12 +144,12 @@ export function Home() {
         content={'home.viewAll'}
         gotoScreen={() => navigate('Booking')}
       />
-      <BookingList
+      {/* <BookingList
         setAcceptBookingModal={setAcceptBookingModal}
         setCancelBookingModal={setCancelBookingModal}
         containerStyle={{marginVertical: 0}}
         data={BookingData}
-      />
+      /> */}
       <StaticsDetail />
       {isServiceManLogin ? <ServiceMen /> : <ProviderLogin />}
       <BlogView />

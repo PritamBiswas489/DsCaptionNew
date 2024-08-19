@@ -1,4 +1,5 @@
 import {ImageSourcePropType, ImageStyle, TextStyle} from 'react-native';
+import { BookingListingInterface } from '@src/interfaces/bookingListingInterface';
 export type ServiceTypes = {
   serviceImage: ImageSourcePropType;
   serviceName: string;
@@ -10,7 +11,7 @@ export type ServiceTypes = {
 };
 
 export interface ServiceItemsProps {
-  item: ServiceTypes;
+  item: BookingListingInterface;
   imageStyle?: ImageStyle;
   priceStyle?: TextStyle;
   textStyle?: TextStyle;

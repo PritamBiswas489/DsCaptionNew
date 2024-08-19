@@ -5,8 +5,10 @@ import {windowHeight, windowWidth} from '@theme/appConstant';
 import {BookingType} from '@screens/booking/data/types';
 import {useValues} from '../../../../../../App';
 import appColors from '@theme/appColors';
+import { BookingListingInterface } from '@src/interfaces/bookingListingInterface';
+import { timeformatting, timeformatting2 } from '@src/config/utility';
 
-export default function ItemView({item}: {item: BookingType}) {
+export default function ItemView({item}: {item: BookingListingInterface}) {
   const {isDark,t} = useValues();
 
   return (
@@ -15,19 +17,19 @@ export default function ItemView({item}: {item: BookingType}) {
         style={[
           styles.innerContainer,
           {
-            width: windowWidth(49),
+            width: windowWidth(40),
             backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
             borderColor: isDark ? appColors.darkBorder : appColors.border,
           },
         ]}>
-        <Text style={styles.title}>{t('customTime.dateTime')}</Text>
+        <Text style={styles.title}>{t('newDeveloper.bookingDate')}</Text>
         <View style={styles.row}>
           <Text
             style={[
               styles.textStyle,
               {color: isDark ? appColors.white : appColors.darkText},
             ]}>
-            {t(item.date)} {t('customTime.at')} {item.time && t(item.time)}
+            {timeformatting(item.createdAt)}
           </Text>
         </View>
       </View>
@@ -35,18 +37,19 @@ export default function ItemView({item}: {item: BookingType}) {
         style={[
           styles.innerContainer,
           {
+            width: windowWidth(40),
             marginHorizontal: windowHeight(1.2),
             backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
             borderColor: isDark ? appColors.darkBorder : appColors.border,
           },
         ]}>
-        <Text style={styles.title}>{t('serviceManDetails.serviceMan')}</Text>
+        <Text style={styles.title}>{t('newDeveloper.scheduleDate')}</Text>
         <Text
           style={[
             styles.textStyle,
             {color: isDark ? appColors.white : appColors.darkText},
           ]}>
-          {item.totalServiceMan} {t('customTime.serviceManRequires')}
+          {timeformatting2(item.serviceSchedule)}
         </Text>
       </View>
     </View>

@@ -119,11 +119,11 @@ export type RootStackParamList = {
   MySubscriptions:{id:string|undefined};
   ServiceMenDetail: {id:string};
   Booking: undefined;
-  PendingBooking: undefined;
-  OngoingBooking: OngoingBookingProp | undefined;
-  AcceptedBooking: undefined;
-  CompletedBooking: serviceProofProp;
-  CancelledBooking: undefined;
+  PendingBooking: {id:string};
+  OngoingBooking: {id:string};
+  AcceptedBooking: {id:string};
+  CompletedBooking: {id:string};
+  CancelledBooking: {id:string};
   AssignedBooking: undefined;
   PendingApproval: undefined;
   HoldBooking: undefined;

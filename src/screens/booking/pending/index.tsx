@@ -1,5 +1,6 @@
-import {View, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import {View, Alert} from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view';
+import React, {useEffect, useState} from 'react';
 import {GlobalStyle} from '@style/styles';
 import {BookingDetail} from '@otherComponent/index';
 import {styles} from './styles';
@@ -18,16 +19,28 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from 'src/navigation/types';
 import {useValues} from '../../../../App';
 import appColors from '@theme/appColors';
+import { loadBookingDetails } from '@src/services/load.booking.service';
+import { useDispatch } from 'react-redux';
 
 export function PendingBooking({route}: any) {
   const [bookStatusModal, setBookStatusModal] = useState(false);
   const [cancelBookingModal, setCancelBookingModal] = useState(false);
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
-
+  const [bookingId,setBookingId] = useState(route.params.id)
   const {isDark} = useValues();
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    loadBookingDetails('5fec0cd0-c332-4567-9130-1c9a64db9141', dispatch)
+  },[bookingId])
+
+
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+
+
   return (
     <>
       <ScrollView
@@ -91,7 +104,7 @@ export function PendingBooking({route}: any) {
           button1Label={'booking.yes'}
           onButtonClick={() => {
             setAcceptBookingModal(false)
-            navigation.navigate('AcceptedBooking')
+            navigation.navigate('AcceptedBooking',{id:bookingId})
           }}
           onButton1Click={() => setAcceptBookingModal(false)}
         />

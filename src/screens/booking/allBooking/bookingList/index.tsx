@@ -16,6 +16,7 @@ import { getBookings } from '@src/services/booking.service';
 import { searchStatusArray } from '@src/config/utility';
 import { SearchBookingInterface } from '@src/interfaces/searchBookingInterface';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader'; 
+
 import {
   NoteContainer,
   CustomerItems,
@@ -118,6 +119,7 @@ export default function BookingList({
         if(bookingData.length > 0){
               const formattedData:BookingListingInterface[] = bookingData.map((bkData:any,bkIndex:number)=>{
               return {
+                id:bkData?.id,
                 readableId: bkData?.readable_id,
                 bookingStatus: bkData?.booking_status,
                 totalBookingAmount: bkData?.total_booking_amount,
@@ -230,20 +232,19 @@ export default function BookingList({
               activeOpacity={0.9}
               onPress={() =>{
                 if(item.bookingStatus === 'pending'){
-                   Alert.alert('Redirect to Pending page')
+                  navigate('PendingBooking',{id:item.id})
                 }
                 if(item.bookingStatus === 'accepted'){
-                   Alert.alert('Redirect to Accepted page')
+                  navigate('AcceptedBooking', {id:item.id})
                 }
                 if(item.bookingStatus === 'ongoing'){
-
-                   Alert.alert('Redirect to ongoing page')
+                  navigate('OngoingBooking',{id:item.id})
                 }
                 if(item.bookingStatus === 'completed'){
-                  Alert.alert('Redirect to completed page')
+                  navigate('CompletedBooking',{id:item.id})
                 }
                 if(item.bookingStatus === 'canceled'){
-                  Alert.alert('Redirect to canceled page')
+                  navigate('CancelledBooking',{id:item.id})
                 }
                 // navigate(item.gotoScreen, {bookingData: item})
               } 

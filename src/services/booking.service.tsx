@@ -17,3 +17,12 @@ export const getBookings = async (formData: FormData): Promise<Response> => {
         return error.response;
     }
 }
+
+export const getBookingDetails = async (bookingId:string):Promise<Response>=>{
+    try {
+        const response = await api.get(`/provider/booking/${bookingId}`);
+        return response;
+    } catch (error: any) {
+        return error.response;
+    }
+}

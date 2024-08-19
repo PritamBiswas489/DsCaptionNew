@@ -29,7 +29,7 @@ export default function ServiceContentView({
           <View style={styles.rowContainer}>
             <View style={styles.row}>
               <Text style={[GlobalStyle.title, styles.titleStyle]}>
-                {selectedDetailsData?.name}
+                asasss
               </Text>
               <View style={styles.verticalLine}></View>
               
@@ -38,7 +38,7 @@ export default function ServiceContentView({
           </View>
         </View>
         <View style={styles.row}>
-        <Text style={styles.content}>{selectedDetailsData?.category}</Text>
+        <Text style={styles.content}>zxzxzx</Text>
         {selectedDetailsData?.avg_rating > 0 && <Text style={styles.contentRating}> <Star height={'18'} /> {selectedDetailsData?.avg_rating.toFixed(1)}</Text>}
        <Text
          style={[
@@ -49,7 +49,7 @@ export default function ServiceContentView({
          ]}>
          {' '}
          {currSymbol}
-         {parseFloat(selectedDetailsData.min_bidding_price).toFixed(2)}
+         {parseFloat('200').toFixed(2)}
        </Text>
 
         </View>

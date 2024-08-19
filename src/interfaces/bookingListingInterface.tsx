@@ -1,4 +1,5 @@
 export interface BookingListingInterface {
+    id:string;
     readableId:string;
     bookingStatus:string;
     totalBookingAmount: number;

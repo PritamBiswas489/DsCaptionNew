@@ -3,7 +3,8 @@ import { BookingDetailsInterface } from "@src/interfaces/bookingDetailsInterface
 
 
 interface BookingDetailsState {
-    data: {id:string,details:BookingDetailsInterface}[]
+    data: {id:string,details:BookingDetailsInterface}[],
+    updateData:boolean
 }
 
 interface SetDataPayload {
@@ -13,6 +14,7 @@ interface SetDataPayload {
 
 const initialState: BookingDetailsState = {
     data: [],
+    updateData:false
 };
 
 const bookingDetailsSlice = createSlice({
@@ -28,6 +30,19 @@ const bookingDetailsSlice = createSlice({
         addBookingDetailsArr(state, action: PayloadAction<BookingDetailsInterface>) {
             state.data.push({id:action.payload.id,details:action.payload});
         },
+        updateBookingDetails(state, action: PayloadAction<BookingDetailsInterface>) {
+            const details = action.payload;
+            const index = state.data.findIndex(serviceMan => serviceMan.id === details.id);
+            if (index !== -1) {
+                state.data[index].details = {
+                    ...state.data[index].details,
+                    ...details,
+                };
+            }else{
+               state.data.push({id:action.payload.id,details:action.payload});
+            }
+        },
+        
     }
 });
 

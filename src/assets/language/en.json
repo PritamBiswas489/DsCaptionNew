@@ -283,6 +283,7 @@
             "complete": "Complete",
             "addCharges": "Add charges",
             "completeBooking": "Complete booking",
+            "completedBooking": "Completed booking",
             "paymentDetail": "Payment details",
             "serviceProof": "Add service proof",
             "writeDetail": "Write details",
@@ -290,6 +291,7 @@
             "proof": "Service Proof",
             "editProof": "Edit proof",
             "cancelledBooking": "Cancelled booking",
+            "canceledBooking": "Cancelled booking",
             "reason": "Reason",
             "canceledNote": "Servicemen is not available",
             "holdNote": "Take a break to have a lunch.",
@@ -303,7 +305,8 @@
             "cancel": "Yes, Cancel",
             "startDate": "Start date",
             "endDate": "End date",
-            "done": "Done"
+            "done": "Done",
+            "pendingBooking": "Pending Booking"
         },
         "blogArr": {
             "title": "Switchboard an a electri...",
@@ -903,10 +906,32 @@
             "noBookingFound":"No bookings found",
             "noBookingFoundContent":"No bookings found for this status",
             "bookingDate":"Booking date",
-            "scheduleDate":"Scheduled date"
-
-
-            
+            "scheduleDate":"Scheduled date",
+            "noBookingDetails":"No booking details found",
+            "noBookingDetailsFound":"No booking details found in record",
+            "serviceAddress":"Location",
+            "bookingStatus":"Booking status",
+            "couponDiscount":"Coupon Discount",
+            "serviceDiscount":"Service discount",
+            "serviceTax":"Service tax",
+            "bookingDetails":"Booking Details", 
+            "BookingPlacedBy":"Booking placed by",
+            "BookingAcceptedBy":"Booking accepted by",
+            "BookingOngoingBy":"Booking ongoing by",
+            "BookingCompletedBy":"Booking completed by",
+            "BookingCanceledBy":"Booking cancelled by" ,
+            "PaymentStatus": "Payment status",
+            "PaymentUpaid":"Unpaid",
+            "PaymentPaid":"Paid",
+            "PaymentMethod":"Payment method",
+            "AcceptBookingRequest":"Accept Booking Request",
+            "downloadInvoice": "Download invoice",
+            "viewOnMap":"View on map",
+            "editBooking":"Edit booking",
+            "paymentStatus":"Payment status",
+            "paymentstatusfieldtext":"Switch off mean unpaid and Switch on mean paid",
+            "updateBooking":"Update booking",
+            "changescheduledate":"Change schedule date"
         }
     }
 }

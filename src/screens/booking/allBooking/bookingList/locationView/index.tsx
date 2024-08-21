@@ -1,13 +1,14 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
-import {styles} from './styles';
-import {windowHeight, windowWidth} from '@theme/appConstant';
-import {BookingType} from '@screens/booking/data/types';
-import {useValues} from '../../../../../../App';
+import { styles } from './styles';
+import { windowHeight, windowWidth } from '@theme/appConstant';
+import { BookingType } from '@screens/booking/data/types';
+import { useValues } from '../../../../../../App';
 import appColors from '@theme/appColors';
+import { BookingListingInterface } from '@src/interfaces/bookingListingInterface';
 
-export default function LocationView({item}: {item: BookingType}) {
-  const {isDark,t} = useValues();
+export default function LocationView({ item }: { item: BookingListingInterface }) {
+  const { isDark, t } = useValues();
   return (
     <View style={styles.dateContainer}>
       <View
@@ -21,13 +22,13 @@ export default function LocationView({item}: {item: BookingType}) {
         ]}>
         <Text style={styles.title}>{t('customTime.location')}</Text>
         <View style={styles.row}>
-          {item.location && (
+          {item.serviceAddress && (
             <Text
               style={[
                 styles.textStyle,
-                {color: isDark ? appColors.white : appColors.darkText},
+                { color: isDark ? appColors.white : appColors.darkText },
               ]}>
-              {t(item.location)}
+              {t(item.serviceAddress)}
             </Text>
           )}
         </View>
@@ -42,11 +43,7 @@ export default function LocationView({item}: {item: BookingType}) {
           },
         ]}>
         <Text style={styles.title}>{t('booking.payment')}</Text>
-        {item.isPartialPaid ? (
-          <Text style={styles.text}>{t('booking.partialPaid')}</Text>
-        ) : item.isAdvance ? (
-          <Text style={styles.text}>{t('booking.paidAdvance')}</Text>
-        ) : item.isPaid ? (
+        {item.isPaid ? (
           <Text style={styles.text}>{t('wallet.paid')}</Text>
         ) : (
           <Text style={styles.text}>{t('booking.notPaid')}</Text>

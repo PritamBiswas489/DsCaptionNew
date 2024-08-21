@@ -12,8 +12,7 @@ import { getMediaUrl } from '@src/config/utility';
 export function CustomerItems({ item }: { item: BookingListingInterface }) {
   const { isDark, t } = useValues();
   const defaultImageValue = item.customerGender !== 'female' ? femaleDefault : maleDefault
-
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.row}>

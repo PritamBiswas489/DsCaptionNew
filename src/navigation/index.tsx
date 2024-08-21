@@ -55,6 +55,7 @@ import {
   CommissionDetail,
   ChatHistory,
   Booking,
+  EditBooking,
   AddressCurrentLocation,
   CoverLocationList
 
@@ -94,6 +95,8 @@ export default function MyStack() {
             />
             
             <RootStack.Screen name="Booking" component={Booking} />
+
+            <RootStack.Screen name="EditBooking" component={EditBooking} />
             <RootStack.Screen name="BottomTab" component={BottomTab} />
             <RootStack.Screen name="Earnings" component={Earnings} />
             <RootStack.Screen name="History" component={History} />

@@ -1,20 +1,20 @@
-import {View} from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import StatusView from './statusView';
-import {windowWidth} from '@theme/appConstant';
-import {styles} from './styles';
-import {GlobalStyle} from '@style/styles';
+import { windowWidth } from '@theme/appConstant';
+import { styles } from './styles';
+import { GlobalStyle } from '@style/styles';
 import BillSummary from '../billSummary';
-import {ServiceContent} from '@otherComponent/home';
-import {descriptionType} from './data/types';
+import { ServiceContent } from '@otherComponent/home';
+import { descriptionType } from './data/types';
 import ChargesDetail from '@otherComponent/booking/chargesDetail';
-import {ReviewsSection} from './reviewsSection';
-import {ServiceMenDetail} from './serviceMenDetail';
-import {CustomerDetail} from './customerDetail';
-import {ProviderDetail} from './providerDetail';
-import {PaymentSummary} from './paymentSummary';
+import { ReviewsSection } from './reviewsSection';
+import { ServiceMenDetail } from './serviceMenDetail';
+import { CustomerDetail } from './customerDetail';
+import { ProviderDetail } from './providerDetail';
+import { PaymentSummary } from './paymentSummary';
 import ServiceProofDetails from '../serviceProofDetails';
-import {useValues} from '../../../../../App';
+import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
 
 export function Description({
@@ -26,13 +26,14 @@ export function Description({
   showChargesDetail,
   serviceProof,
 }: descriptionType) {
-  const {isDark, isServiceManLogin} = useValues();
+  const { isDark, isServiceManLogin } = useValues();
 
   return (
     <View>
       <View style={styles.container}>
-        <StatusView setBookingStatus={setBookingStatus} />
-        <ServiceContent bookingStatus={bookingStatus} />
+        <StatusView item={item} setBookingStatus={setBookingStatus} />
+        <ServiceContent item={item} bookingStatus={bookingStatus} />
+
         <View
           style={[
             GlobalStyle.horizontalLine,
@@ -43,26 +44,23 @@ export function Description({
             },
           ]}
         />
-        {!isServiceManLogin && bookingStatus === 'completedBooking' && (
-          <ProviderDetail />
-        )}
 
-        {item?.customers || extraCharges ? (
-          <CustomerDetail item={item} contactOptions={contactOptions} />
-        ) : null}
-
-        {!isServiceManLogin &&
-          (item?.serviceMans || extraCharges ? (
-            <ServiceMenDetail item={item} contactOptions={contactOptions} />
-          ) : null)}
       </View>
-      <BillSummary extraCharges={extraCharges} />
+      <BillSummary bookingDetails={item} />
+
+      <View style={styles.container}>
+        {item.serviceman_id && <ServiceMenDetail bookingDetails={item} />}
+        {item.customer_id && <CustomerDetail bookingDetails={item} />}
+        {item.provider_id && <ProviderDetail bookingDetails={item} />}
+
+
+      </View>
       {extraCharges && showChargesDetail && (
         <ChargesDetail extraCharges={extraCharges} />
       )}
-      {bookingStatus === 'completedBooking' && <PaymentSummary />}
-      {serviceProof && <ServiceProofDetails serviceProof={serviceProof} />}
-      <ReviewsSection />
+      {/* {bookingStatus === 'completedBooking' && <PaymentSummary />}
+      {serviceProof && <ServiceProofDetails serviceProof={serviceProof} />} */}
+      {/* <ReviewsSection /> */}
     </View>
   );
 }

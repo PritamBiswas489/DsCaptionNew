@@ -1,14 +1,14 @@
-import {View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
-import {styles} from './styles';
-import {Star, LeftArrow} from '@utils/icons';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from 'src/navigation/types';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {SocialView} from '../socialView';
-import {cardType} from './types';
+import { styles } from './styles';
+import { Star, LeftArrow } from '@utils/icons';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'src/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SocialView } from '../socialView';
+import { cardType } from './types';
 import appColors from '@theme/appColors';
-import {useValues} from '../../../../../App';
+import { useValues } from '../../../../../App';
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
@@ -17,8 +17,8 @@ export function CardContainer({
   contactOptions,
   containerStyle,
 }: cardType) {
-  const {navigate} = useNavigation<routeProps>();
-  const {isDark,t} = useValues();
+  const { navigate } = useNavigation<routeProps>();
+  const { isDark, t } = useValues();
   return (
     <View>
       {data && (
@@ -26,10 +26,10 @@ export function CardContainer({
           <FlatList
             data={data}
             showsHorizontalScrollIndicator={false}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => {}}
+                onPress={() => { }}
                 style={[
                   styles.container,
                   containerStyle,
@@ -45,10 +45,15 @@ export function CardContainer({
                 <View style={styles.providerContainer}>
                   <View style={styles.row}>
                     {item?.image && (
-                      <Image source={item?.image} style={styles.userImg} />
+                      <Image source={{ uri: item?.image }} style={styles.userImg} />
                     )}
+
+                    {!item?.image && item.defaultImageValue && (
+                      <Image source={item.defaultImageValue} style={styles.userImg} />
+                    )}
+
                     <View style={styles.containerView}>
-                      <View style={{flexDirection: 'row'}}>
+                      <View style={{ flexDirection: 'row' }}>
                         <Text
                           style={[
                             styles.textStyle,
@@ -56,8 +61,8 @@ export function CardContainer({
                               color: isDark
                                 ? appColors.white
                                 : isDark
-                                ? appColors.white
-                                : appColors.darkText,
+                                  ? appColors.white
+                                  : appColors.darkText,
                             },
                           ]}>
                           {t(item.name)}
@@ -89,7 +94,7 @@ export function CardContainer({
                   {item?.showArrow && (
                     <TouchableOpacity
                       activeOpacity={0.9}
-                      onPress={() => navigate('ServiceMenDetail')}>
+                      onPress={() => { }}>
                       <LeftArrow strokeWidth={'1.4'} />
                     </TouchableOpacity>
                   )}

@@ -17,7 +17,7 @@ export const getBookings = async (formData: FormData): Promise<Response> => {
         return error.response;
     }
 }
-
+//get booking details
 export const getBookingDetails = async (bookingId:string):Promise<Response>=>{
     try {
         const response = await api.get(`/provider/booking/${bookingId}`);
@@ -25,4 +25,14 @@ export const getBookingDetails = async (bookingId:string):Promise<Response>=>{
     } catch (error: any) {
         return error.response;
     }
+}
+//update booking status
+export const updateBookingStatus = async (bookingId:string,data:FormData):Promise<Response>=>{
+    data.append('_method','PUT')
+    try {
+		const response = await api.post(`/provider/booking/status-update/${bookingId}`,data);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
 }

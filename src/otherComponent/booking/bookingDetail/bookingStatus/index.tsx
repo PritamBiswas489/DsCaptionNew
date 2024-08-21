@@ -6,10 +6,13 @@ import {Header} from './header';
 import StepIndicator from './stepIndicator';
 import {useValues} from '../../../../../App';
 import appColors from '@theme/appColors';
+import { BookingDetailsInterface } from '@src/interfaces/bookingDetailsInterface';
 
 export function BookingStatus({
+  bookingDetails,
   setShowModal,
 }: {
+  bookingDetails:BookingDetailsInterface
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const {isDark} = useValues();
@@ -25,8 +28,8 @@ export function BookingStatus({
         }}
         title={'bookingStatus.bookingStatus'}
       />
-      <Header />
-      <StepIndicator />
+      <Header bookingDetails={bookingDetails} />
+      <StepIndicator bookingDetails={bookingDetails} />
     </View>
   );
 }

@@ -135,6 +135,11 @@ export default function BookingList({
                 customerEmail: bkData?.customer?.email,
                 customerGender: bkData?.customer?.gender,
                 customerProfileImage: bkData?.customer?.profile_image,
+                serviceAddress:bkData?.service_address?.address,
+                hasServiceMen: bkData?.serviceman?.id  ?  true : false, 
+                servicemenName: bkData?.serviceman?.id ? bkData?.serviceman?.user?.first_name+ ' '+bkData?.serviceman?.user?.last_name : '',
+                servicemenProfileImage: bkData?.serviceman?.id ? bkData?.serviceman?.user?.profile_image : '',
+                servicemenGender: bkData?.serviceman?.id ? bkData?.serviceman?.user?.gender: '',
               }
            })
            const dtt = [...searchData]
@@ -181,6 +186,7 @@ export default function BookingList({
   useEffect(() => {
     
     if (firstTimeLoading || clickLoadMore) {
+       
         handleGetBookings();
     }
   }, [selectedBookingStatus, offsetData, , firstTimeLoading, clickLoadMore]);
@@ -231,22 +237,7 @@ export default function BookingList({
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() =>{
-                if(item.bookingStatus === 'pending'){
-                  navigate('PendingBooking',{id:item.id})
-                }
-                if(item.bookingStatus === 'accepted'){
-                  navigate('AcceptedBooking', {id:item.id})
-                }
-                if(item.bookingStatus === 'ongoing'){
-                  navigate('OngoingBooking',{id:item.id})
-                }
-                if(item.bookingStatus === 'completed'){
-                  navigate('CompletedBooking',{id:item.id})
-                }
-                if(item.bookingStatus === 'canceled'){
-                  navigate('CancelledBooking',{id:item.id})
-                }
-                // navigate(item.gotoScreen, {bookingData: item})
+                navigate('CompletedBooking',{id:item.id})
               } 
             }
               style={[
@@ -270,7 +261,7 @@ export default function BookingList({
                   textStyle={styles.textStyle}
                 />
                 <ItemView item={item} />
-                {/* {item.location && (
+                {item.serviceAddress && (
                   <>
                     <LocationView item={item} />
                     <View
@@ -284,21 +275,17 @@ export default function BookingList({
                       ]}
                     />
                   </>
-                )} */}
+                )}
                  <View style={styles.innerContainer}>
                  <CustomerItems item={item} />
-                  {/* {item.serviceMans &&
-                    item.serviceMans.map((serviceMan, index) => (
-                      <>
+                   {item.hasServiceMen && <>
                         <DashLine />
-                        <ServiceManItems
-                          index={index}
-                          item={serviceMan}
-                          length={item.serviceMans?.length}
-                          showMore={showMoreServiceMans}
+                        <ServiceManItems   item={item}
+                         
                         />
-                      </>
-                    ))} */}
+                      </>}
+                      
+                     
                 </View>
                {/* {item.isAssigned === true && (
                   <NoteContainer

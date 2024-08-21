@@ -7,6 +7,7 @@ export * from './dashboard/chatHistory';
 export * from './auth/loader';
 
 export * from './booking';
+export * from './booking/editBooking'
 export * from './booking/allBooking/allBookingFilter';
 export * from './booking/allBooking/bookingList';
 export * from './booking/accepted';

@@ -34,6 +34,7 @@ export interface BookingServiceProviderInterface {
     contactPersonName: string,
     contactPersonPhone: string,
     contactPersonEmail: string,
+    avg_rating:number
 }
 
 export interface BookingServiceServicemenInterface {
@@ -41,6 +42,7 @@ export interface BookingServiceServicemenInterface {
     phone:string;
     gender:string;
     profileImage:string;
+    
 }
 export interface BookingServiceStatusHistories {
     booking_status:string;

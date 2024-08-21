@@ -42,7 +42,7 @@ export function BillRow({
           </TouchableOpacity>
         )}
       </View>
-      {price ? (
+      {price || price === 0 ? (
         <Text
           style={[
             styles.price,
@@ -60,7 +60,7 @@ export function BillRow({
           {showPlus && <Text style={styles.price}>+</Text>}
           {showMinus && <Text style={styles.minus}>-</Text>}
           {currSymbol}
-          {(currValue * price).toFixed(2)}
+          {(price).toFixed(2)}
         </Text>
       ) : (
         <Text

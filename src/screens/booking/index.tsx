@@ -166,7 +166,7 @@ export function Booking() {
         button1Label={'booking.yes'}
         onButtonClick={() => {
           setAcceptBookingModal(false);
-          navigate('AcceptedBooking');
+        
         }}
         onButton1Click={() => setAcceptBookingModal(false)}
       />

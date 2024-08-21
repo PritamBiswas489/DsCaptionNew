@@ -4,11 +4,14 @@ import {styles} from './styles';
 import {LeftArrow} from '@utils/icons';
 import {useValues} from '../../../../../../App';
 import appColors from '@theme/appColors';
+import { BookingDetailsInterface } from '@src/interfaces/bookingDetailsInterface';
 
 export default function StatusView({
-  setBookingStatus,
+    item:bookingDetails,
+    setBookingStatus,
 }: {
-  setBookingStatus: React.Dispatch<React.SetStateAction<boolean>>;
+    item:BookingDetailsInterface,
+    setBookingStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const {isDark,t} = useValues();
   return (
@@ -19,7 +22,7 @@ export default function StatusView({
             styles.bookingId,
             {color: isDark ? appColors.white : appColors.darkText},
           ]}>
-          #5963
+          #{bookingDetails.readable_id}
         </Text>
         <View style={styles.rowContainer}>
           <TouchableOpacity

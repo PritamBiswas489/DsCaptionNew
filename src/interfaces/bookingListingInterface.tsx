@@ -15,4 +15,10 @@ export interface BookingListingInterface {
     customerEmail:string;
     customerGender:string;
     customerProfileImage:string;
+    serviceAddress:string | null;
+    hasServiceMen:boolean;
+    servicemenName:string;
+    servicemenProfileImage:string;
+    servicemenGender:string;
+
 }

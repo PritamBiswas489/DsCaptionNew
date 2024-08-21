@@ -1,9 +1,8 @@
  
 import React from "react";
 import { getBookingDetails } from "./booking.service";
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@src/store';
-import { bookingDetailsAction } from "@src/store/redux/booking-details-redux";
+
+
 import { 
     BookingServiceListInterface,
     BookingServiceAddressInterface,
@@ -23,9 +22,10 @@ interface Response {
         request?: any;
 }
 
-export const loadBookingDetails = async (bookingId:string,dispatch:AppDispatch) =>{
+export const loadBookingDetails = async (bookingId:string) =>{
     const response: Response = await getBookingDetails(bookingId);
-    if (response.data.content) {
+     
+    if (response.data.content?.id) {
        const bookingDetail = response.data.content
             const servicesList:BookingServiceListInterface[] = bookingDetail.detail.map((serviceDetail:any)=>{
                     return {
@@ -64,12 +64,13 @@ export const loadBookingDetails = async (bookingId:string,dispatch:AppDispatch) 
                         contactPersonName: bookingDetail?.provider?.contact_person_name ? bookingDetail?.provider?.contact_person_name : '',
                         contactPersonPhone: bookingDetail?.provider?.contact_person_phone ? bookingDetail?.provider?.contact_person_phone  : '' ,
                         contactPersonEmail: bookingDetail?.provider?.contact_person_email ? bookingDetail?.provider?.contact_person_email : '',
+                        avg_rating:bookingDetail?.provider?.avg_rating
             }
             
             const serviceMeninfo:BookingServiceServicemenInterface = {
-                    name:bookingDetail?.serviceman?.user?.first_name ? bookingDetail?.serviceman?.user?.first_name :  '',
-                    phone:bookingDetail?.serviceman?.user?.last_name ? bookingDetail?.serviceman?.user?.last_name :  '',
-                    gender:bookingDetail?.serviceman?.user?.phone ? bookingDetail?.serviceman?.user?.phone :  '',
+                    name:bookingDetail?.serviceman?.user?.first_name ? bookingDetail?.serviceman?.user?.first_name+ ' ' +(bookingDetail?.serviceman?.user?.last_name?? '') :  '',
+                    phone:bookingDetail?.serviceman?.user?.phone ? bookingDetail?.serviceman?.user?.phone  :  '',
+                    gender:bookingDetail?.serviceman?.user?.gender ? bookingDetail?.serviceman?.user?.gender :  '',
                     profileImage:bookingDetail?.serviceman?.user?.profile_image ? bookingDetail?.serviceman?.user?.profile_image :  '',
             }
 
@@ -110,8 +111,11 @@ export const loadBookingDetails = async (bookingId:string,dispatch:AppDispatch) 
              }
             //  console.log("================= formatted ======================")
             //  console.log(formattedData)
-            dispatch(bookingDetailsAction.addBookingDetailsArr(formattedData))
+            //dispatch(bookingDetailsAction.addBookingDetailsArr(formattedData))
+            return formattedData
+        
     }
+    return {}
 
 }
     

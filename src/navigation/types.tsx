@@ -155,5 +155,6 @@ export type RootStackParamList = {
   ProviderInfo: undefined;
   FreeLancerDetails: undefined;
   LoaderScreen: undefined;
-  CoverLocationList:{zone:string[]}
+  CoverLocationList:{zone:string[]};
+  EditBooking:undefined;
 };

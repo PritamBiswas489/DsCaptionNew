@@ -1,6 +1,7 @@
 import {BookingType} from '@screens/booking/data/types';
 import {ImageSourcePropType} from 'react-native';
 import {Float} from 'react-native/Libraries/Types/CodegenTypes';
+import { BookingDetailsInterface } from '@src/interfaces/bookingDetailsInterface';
 
 export type customerType = {
   image: ImageSourcePropType;
@@ -16,7 +17,7 @@ export type ServicemenType = {
 };
 
 export type descriptionType = {
-  item: BookingType;
+  item: BookingDetailsInterface;
   setBookingStatus: React.Dispatch<React.SetStateAction<boolean>>;
   bookingStatus?: string;
   contactOptions?: boolean;

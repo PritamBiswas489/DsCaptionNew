@@ -1,29 +1,89 @@
-import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
-import {orderTrackerData} from './data';
-import {labels} from './data';
-import {styles} from './styles';
+import { orderTrackerData } from './data';
+import { labels } from './data';
+import { styles } from './styles';
 import appColors from '@theme/appColors';
 import appFonts from '@theme/appFonts';
-import {useValues} from '../../../../../../App';
+import { useValues } from '../../../../../../App';
+import { BookingDetailsInterface } from '@src/interfaces/bookingDetailsInterface';
+import { timeformatting } from '@src/config/utility';
 
-export default function StepIndicatorComponent() {
+export default function StepIndicatorComponent({ bookingDetails }: { bookingDetails: BookingDetailsInterface }) {
+
   const [currentPage, setCurrentPage] = useState(0);
   const icons = [''];
-  const {isDark,t} = useValues();
+  const { isDark, t } = useValues();
+
+  const statusArray: any = []
+  const labelData = [];
+  let id = 0
+
+  if (bookingDetails.statusHistories.length > 0) {
+    const r_status = [...bookingDetails.statusHistories].reverse()
+
+    r_status.forEach((arrValue, arrIndex) => {
+
+      if (arrValue.booking_status === 'ongoing') {
+        statusArray.push({
+          id: id,
+          label: timeformatting(arrValue.created_at),
+          status: t('newDeveloper.BookingOngoingBy') + ' ' + bookingDetails.providerInfo.companyName
+        })
+        labelData.push('ongoing status')
+
+      }
+      if (arrValue.booking_status === 'accepted') {
+        statusArray.push({
+          id: id,
+          label: timeformatting(arrValue.created_at),
+          status: t('newDeveloper.BookingAcceptedBy') + ' ' + bookingDetails.providerInfo.companyName
+        })
+        labelData.push('accepted status')
+
+      }
+      if (arrValue.booking_status === 'completed') {
+        statusArray.push({
+          id: id,
+          label: timeformatting(arrValue.created_at),
+          status: t('newDeveloper.BookingCompletedBy') + ' ' + bookingDetails.providerInfo.companyName
+        })
+        labelData.push('completed status')
+      }
+      if (arrValue.booking_status === 'canceled') {
+        statusArray.push({
+          id: id,
+          label: timeformatting(arrValue.created_at),
+          status: t('newDeveloper.BookingCanceledBy') + ' ' + bookingDetails.providerInfo.companyName
+        })
+        labelData.push('canceled status')
+      }
+      id++
+
+    })
+
+  }
+
+  statusArray.push({
+    id: id,
+    label: timeformatting(bookingDetails.created_at),
+    status: t('newDeveloper.BookingPlacedBy') + ' ' + bookingDetails.customerInfo.firstName ?? ' ' + ' ' + bookingDetails.customerInfo.lastName ?? ''
+  })
+  labelData.push('created status')
+
   return (
     <View>
       <View style={styles.container}>
         <View>
           <StepIndicator
             customStyles={stepIndicatorStyles}
-            stepCount={5}
+            stepCount={labelData.length}
             direction="vertical"
             currentPosition={currentPage}
-            labels={labels}
-            renderStepIndicator={({position}) => icons[position]}
-            renderLabel={({position}) => {
+            labels={labelData}
+            renderStepIndicator={({ position }) => icons[position]}
+            renderLabel={({ position }) => {
               const isActive = position === currentPage;
               const labelColor = isActive
                 ? isDark
@@ -43,7 +103,7 @@ export default function StepIndicatorComponent() {
                           : appFonts.NunitoRegular,
                       },
                     ]}>
-                    {t(orderTrackerData[position].label)}
+                    {t(statusArray[position].label)}
                   </Text>
                   <Text
                     style={[
@@ -55,7 +115,7 @@ export default function StepIndicatorComponent() {
                           : appFonts.NunitoRegular,
                       },
                     ]}>
-                    {t(orderTrackerData[position].status)}
+                    {t(statusArray[position].status)}
                   </Text>
                 </View>
               );

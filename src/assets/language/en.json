@@ -931,7 +931,10 @@
             "paymentStatus":"Payment status",
             "paymentstatusfieldtext":"Switch off mean unpaid and Switch on mean paid",
             "updateBooking":"Update booking",
-            "changescheduledate":"Change schedule date"
+            "changescheduledate":"Change schedule date",
+            "addServiceMen":"Assign Serviceman" ,
+            "changestatus":"Change status",
+            "AddServiceInCart":"Add service"
         }
     }
 }

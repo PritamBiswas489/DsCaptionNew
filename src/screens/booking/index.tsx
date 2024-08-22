@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Alert, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Alert, StyleSheet, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '@style/styles';
@@ -27,6 +27,7 @@ import { bookingSearchFieldActions } from '@src/store/redux/booking-search-field
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { searchStatusArray } from '@src/config/utility';
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
@@ -43,6 +44,17 @@ export function Booking() {
   const [isStartDate, setIsStartDate] = useState(true);
   const [showDatePicker, setDatePicker] = useState(false);
   const { isDark, isServiceManLogin } = useValues();
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+   
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(bookingSearchFieldActions.setData({field:'refreshData',data:true}))
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   const filterModalVisible = () => {
     setShowModal(true);
@@ -82,6 +94,7 @@ export function Booking() {
         <StatusFilter />
       </View>
       <ScrollView
+      refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           GlobalStyle.contentContainerStyle,

@@ -1,4 +1,4 @@
-import {ScrollView, View} from 'react-native';
+import {ScrollView, View, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {GlobalStyle} from '@style/styles';
 import Header from '@commonComponents/header';
@@ -38,7 +38,7 @@ export function EditBooking() {
       
       <GradientBtn
         label="newDeveloper.updateBooking"
-        onPress={() => {}}
+        onPress={() => { Alert.alert('')}}
         additionalStyle={{
           marginHorizontal: windowWidth(5),
           marginTop: windowHeight(3),

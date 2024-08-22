@@ -55,10 +55,7 @@ export default function InputField() {
   const [companyAddress,setCompanyAddress] = useState<string>(companyAddr)
 
   const zoneID = useSelector((state: RootState)=>state['serviceProviderAccountData'].zone_id)
-  const [companyZone,setCompanyZone] = useState<string>(zoneID)
-  const setCompanyZoneId = (value:DropdownItem)=> {
-       setCompanyZone(value?.value)
-  }
+  
 
   //=====================  changing company address  ================================================//
   const re_company_address =  useSelector((state: RootState)=>state['mapField'].address) 
@@ -130,15 +127,7 @@ export default function InputField() {
       }
     ))
   }
-  //company zone
-  const dispatchCompanyZone = () =>{
-    dispatch(profileUpdateFieldActions.setData(
-      {
-        field:'zone_id',
-        data:companyZone
-      }
-    ))
-  }
+  
 
   useEffect(()=>{
       dispatchCompanyName()  
@@ -152,9 +141,7 @@ export default function InputField() {
       dispatchCompanyPhone()  
   },[companyPhone])
 
-  useEffect(()=>{
-      dispatchCompanyZone()
-  },[companyZone])
+ 
 
   const errorCompany        = useSelector((state: RootState)=>state['profileUpdateErrorField'].company_name) //company name
   const errorPhoneNo        = useSelector((state: RootState)=>state['profileUpdateErrorField'].company_phone) //company phone
@@ -166,7 +153,22 @@ export default function InputField() {
 
   const zones = useSelector((state: RootState)=>state['zoneList'].zones)
   const [zoneList,setZoneList] = useState<DataItem[]>([]);
-  const [selectedZone,setSelectedZone] = useState<string>(companyZone);
+  const [selectedZone,setSelectedZone] = useState<string>(zoneID);
+
+  //company zone
+  const dispatchCompanyZone = () =>{
+      
+    dispatch(profileUpdateFieldActions.setData(
+      {
+        field:'zone_id',
+        data:selectedZone
+      }
+    ))
+  }
+
+  useEffect(()=>{
+    dispatchCompanyZone()
+},[selectedZone])
    
   useEffect(()=>{
     if(zones!==''){

@@ -41,6 +41,7 @@ export * from '@assets/icons/home/star';
 export * from '@assets/icons/home/filter';
 export * from '@assets/icons/home/Calendar';
 export * from '@assets/icons/home/plus';
+export * from '@assets/icons/home/minus';
 export * from '@assets/icons/home/amount';
 export * from '@assets/icons/home/commission';
 export * from '@assets/icons/home/discount';

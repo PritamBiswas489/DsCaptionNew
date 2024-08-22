@@ -1,4 +1,4 @@
-import { View, Alert, Pressable } from 'react-native';
+import { View, Alert, Pressable, RefreshControl} from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useState, useEffect } from 'react';
 import { styles } from './styles';
@@ -52,12 +52,22 @@ export function CompletedBooking({ route }: any) {
   const { isDark } = useValues();
   const statusArray = searchStatusArray()
 
-
   const details = route?.params?.serviceProofData?.details;
   const serviceTitle = route?.params?.serviceProofData?.serviceTitle;
   const image = route?.params?.serviceProofData?.image;
 
   const [skeletonLoaderProcess, setSkeletonLoaderProcess] = useState(true)
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+   
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(bookingDetailsAction.setData({field:'updateData',data:true}))
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   const [bookingId, setBookingId] = useState(route.params.id)
   const dispatch = useDispatch()
@@ -143,6 +153,7 @@ export function CompletedBooking({ route }: any) {
       {!skeletonLoaderProcess && detailBookingDetails?.id && <>
         <ScrollView
           showsVerticalScrollIndicator={false}
+          refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           style={[
             GlobalStyle.mainView,
             { backgroundColor: isDark ? appColors.darkTheme : appColors.white },

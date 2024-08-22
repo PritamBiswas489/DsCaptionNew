@@ -19,13 +19,13 @@ export  const  loadServiceMenData = async (queryParams:string,dispatch:AppDispat
       // Handle response data and update Redux state
       dispatch(serviceMenDataAction.setData({
         field: 'offsetPageUrl',
-        data: response.data.content.next_page_url || ''
+        data: response?.data?.content?.next_page_url || ''
       }));
       dispatch(serviceMenDataAction.setData({
         field: 'isNoMoreData',
-        data: !response.data.content.next_page_url
+        data: !response?.data?.content?.next_page_url
       }));
-      if (response.data.content.data) {
+      if (response?.data?.content?.data) {
         const formattedData: ServiceMenInterface[] = response.data.content.data.map((serviceMenData: any) => ({
           id: serviceMenData.serviceman.id,
           user_id: serviceMenData.serviceman.user_id,

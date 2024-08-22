@@ -39,6 +39,7 @@ export function UserProfileSetting() {
 
   const updatedProfileData = useSelector((state: RootState)=>state['profileProviderUpdateField'])
 
+  //console.log(updatedProfileData)
 
   let zoneList = []; 
   if(zones!=''){
@@ -229,6 +230,7 @@ export function UserProfileSetting() {
         if(errorExist){
             return  
         }
+        
         const formData = new FormData()
         formData.append('_method', 'PUT'); 
         formData.append('contact_person_name',updatedProfileData.contact_person_name)

@@ -34,6 +34,7 @@ import { RootState, AppDispatch } from '@src/store';
 import { loadServiceMenData } from '@src/services/load.servicemen';
 import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
 import { mySubscriptionsAction } from '@src/store/redux/my-subscriptions-redux';
+import { serviceMenDataAction } from '@src/store/redux/servicemen-list';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -78,13 +79,17 @@ export function Home() {
      const queryParams = `${offsetPageUrl}&limit=${limit}&status=active`
      await loadServiceMenData(queryParams,dispatch)
      setProcessLoadeServicemen(false)
+     dispatch(serviceMenDataAction.setData({
+      field: 'isFirstTimeLoading',
+      data: false
+    }));
   }
   useEffect(()=>{
-    if(ServiceMenList.length === 0){
-        setProcessLoadeServicemen(true)
-        loadData()
-    }
-  },[ServiceMenList])
+    // if(ServiceMenList.length === 0){
+    //     setProcessLoadeServicemen(true)
+    //     loadData()
+    // }
+  },[])
 
   const loadmySubscriptionData = async ()=>{
     setProcessLoadMySubscription(true)
@@ -184,7 +189,7 @@ export function Home() {
         button1Label={'booking.yes'}
         onButtonClick={() => {
           setAcceptBookingModal(false)
-          navigate('AcceptedBooking')
+          // navigate('AcceptedBooking')
         }}
         onButton1Click={() => setAcceptBookingModal(false)}
       />

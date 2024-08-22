@@ -1,0 +1,100 @@
+import React from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Plus, Minus  } from '@utils/icons'; // Assuming Minus is imported for decreasing quantity
+
+interface CartItemProps {
+  imageUrl: string;
+  serviceName: string;
+  variantName: string;
+  price: string;
+  quantity: number;
+  onIncrease: () => void;
+  onDecrease: () => void;
+}
+
+const CartItemPanel = ({
+  imageUrl,
+  serviceName,
+  variantName,
+  price,
+  quantity,
+  onIncrease,
+  onDecrease,
+}: CartItemProps) => {
+  return (
+    <View style={styles.cartItemContainer}>
+      <Image source={{ uri: imageUrl }} style={styles.cartItemImage} />
+      <View style={styles.cartItemDetails}>
+        <Text style={styles.serviceName}>ddsdsd{serviceName}</Text>
+        <Text style={styles.variantName}>{variantName}</Text>
+        <Text style={styles.price}>{price}</Text>
+      </View>
+      <View style={styles.cartItemActions}>
+        <TouchableOpacity onPress={onDecrease} style={styles.cartButton}>
+          <Plus width={16} height={16} />
+        </TouchableOpacity>
+        <Text style={styles.quantity}>{quantity}</Text>
+        <TouchableOpacity onPress={onIncrease} style={styles.cartButton}>
+          <Minus width={16} height={16} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default CartItemPanel;
+
+export const styles = StyleSheet.create({
+  cartItemContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    marginVertical: 10,
+    alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    margin:20
+  },
+  cartItemImage: {
+    width: 60,
+    height: 60,
+    //borderRadius: 30,
+    marginRight: 15,
+  },
+  cartItemDetails: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  serviceName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000', // Ensure the color is set to a visible one
+  },
+  variantName: {
+    fontSize: 14,
+    color: '#000', // Ensure the color is set to a visible one
+    marginVertical: 2,
+  },
+  price: {
+    fontSize: 14,
+    color: '#333',
+  },
+  cartItemActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cartButton: {
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: '#ddd',
+  },
+  quantity: {
+    marginHorizontal: 10,
+    fontSize: 16,
+    color: '#333',
+  },
+});

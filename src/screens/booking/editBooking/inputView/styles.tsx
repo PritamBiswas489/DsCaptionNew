@@ -58,4 +58,23 @@ export const styles = StyleSheet.create({
     width: windowWidth(30),
     right: windowWidth(2),
   },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#007BFF', // Button background color
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginVertical: 10, // Space above and below the button
+    width: windowWidth(50), // Adjust width as needed
+    alignSelf: 'center', // Center button horizontally
+  },
+
+  addButtonText: {
+    color: '#fff', // Text color
+    fontSize: 16, // Adjust font size as needed
+    marginLeft: 8, // Space between icon and text
+    fontWeight: 'bold',
+  },
 });

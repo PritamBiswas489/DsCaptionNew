@@ -2,16 +2,16 @@ import { View, Text, Alert, ActivityIndicator, RefreshControl } from 'react-nati
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useState, useEffect, useId } from 'react';
 import { GlobalStyle } from '@style/styles';
-import HeaderView from '@otherComponent/headerWithSearch';
+import CancelHeader from '@commonComponents/cancelHeader';
 import { styles } from './styles';
 import { filterData, serviceMenListData } from './data';
-import { ActiveServiceMen } from '@screens/dashboard/home';
+import { DetailsServiceMen } from './DetailsServicemen';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
-import { useValues } from '../../../../../App';
+import { useValues } from '../../../App';
 import appColors from '@theme/appColors';
- 
+
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { serviceMenDataAction } from '@src/store/redux/servicemen-list';
@@ -20,27 +20,27 @@ import { noValue, wifi, notification } from '@utils/images';
 import NoDataFound from '@src/commonComponents/noDataFound';
 import { windowHeight } from '@theme/appConstant';
 import GradientBtn from '@commonComponents/gradientBtn';
- 
+
 import { encodeToBase64 } from '@src/config/utility';
 import { loadServiceMenData } from '@src/services/load.servicemen';
- 
+import Header from '@commonComponents/header';
+
 
 type props = NativeStackNavigationProp<RootStackParamList>;
 
-export function ServiceMenList() {
+export function FormServiceMenList({ setServiceMenModal }: { setServiceMenModal: (value: boolean) => void }) {
   const { navigate } = useNavigation<props>();
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
-   
+
   const [searchVal, setSearchVal] = useState('')
 
   const [refreshing, setRefreshing] = React.useState(false);
- 
-  const getSearchParam = (searchVal:string) => {
-    //console.log( searchVal.trim() !== '' ? `&string=${(encodeToBase64(searchVal))}` : '')
-    return searchVal.trim() !== '' &&  searchVal.trim() !=='none' ? `&string=${(encodeToBase64(searchVal))}` : '';
+
+  const getSearchParam = (searchVal: string) => {
+    return searchVal.trim() !== '' && searchVal.trim() !== 'none' ? `&string=${(encodeToBase64(searchVal))}` : '';
   };
- 
+
   const {
     data: ServiceMenList,
     offsetPageUrl,
@@ -53,8 +53,8 @@ export function ServiceMenList() {
   const [clickLoadMore, setClickLoadMore] = useState(false)
   const [clickSeachButton, setclickSearchButton] = useState(false)
 
-  
-  function reset(){
+
+  function reset() {
     dispatch(serviceMenDataAction.resetState())
     setQueryParams(`?offset=1&limit=${limit}&status=active${getSearchParam(searchVal)}`)
   }
@@ -66,11 +66,10 @@ export function ServiceMenList() {
     }, 1000);
   }, []);
 
-  
 
-  const loadData =  (async () => {
+  const loadData = (async () => {
     try {
-      await loadServiceMenData(queryParams,dispatch)
+      await loadServiceMenData(queryParams, dispatch)
     } catch (error) {
       console.error('Error fetching service men list:', error);
     } finally {
@@ -80,7 +79,7 @@ export function ServiceMenList() {
         data: false
       }));
     }
-  } );
+  });
 
 
   useEffect(() => {
@@ -90,17 +89,14 @@ export function ServiceMenList() {
   }, [queryParams, isFirstTimeLoading, clickLoadMore])
 
   useEffect(() => {
+    //console.log({isFirstTimeLoading,clickSeachButton})
     if (!isFirstTimeLoading && clickSeachButton) {
-         reset()
-        setclickSearchButton(false)
+      reset()
+      setclickSearchButton(false)
     }
   }, [searchVal])
 
 
-  useEffect(() => {
-    // console.log('========= user effect service men list ==================')
-   // console.log(ServiceMenList)
-  }, [ServiceMenList])
 
   const loadMoreDataLoading = () => {
     setClickLoadMore(true)
@@ -110,51 +106,56 @@ export function ServiceMenList() {
     dispatch(serviceMenDataAction.resetState())
   }
   const gotoScreen = React.useCallback(() => {
-    navigate('AddNewServiceMen');
+    setServiceMenModal(false)
   }, [navigate]);
 
 
   return (
-    <ScrollView
-      refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      showsVerticalScrollIndicator={false}
-      style={[
-        GlobalStyle.mainView,
-        { backgroundColor: isDark ? appColors.darkCard : appColors.white },
-      ]}
-      contentContainerStyle={styles.contentContainerStyle}>
-      <HeaderView
-        title="servicemen.servicemenList"
-        setSearchValue={setSearchVal}
-        setclickSearchButton={setclickSearchButton}
-        gotoScreen={gotoScreen}
-
-      />
-      <View style={styles.blankView} />
-      {isFirstTimeLoading && <SkeletonLoader />}
-      {!isFirstTimeLoading && ServiceMenList.length === 0 && <NoDataFound
-        headerTitle="newDeveloper.noServiceMenFound"
-        image={noValue}
-        infoImage={undefined}
-        title="newDeveloper.noServiceMenFound"
-        content="newDeveloper.noServiceFoundContent"
-        gradiantBtn={
-          <GradientBtn
-            additionalStyle={{ bottom: windowHeight(2) }}
-            label={'common.refresh'}
-            onPress={refreshServiceMenData}
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        style={[
+          GlobalStyle.mainView,
+          { backgroundColor: isDark ? appColors.darkCard : appColors.white },
+        ]}
+        contentContainerStyle={styles.contentContainerStyle}>
+        <View style={{ paddingTop: 20 }}>
+          <CancelHeader
+            title={t('servicemen.servicemenList')}
+            gotoScreen={() => {
+              setServiceMenModal(false);
+            }}
           />
-        }
-      />}
-      {!isFirstTimeLoading && ServiceMenList.length > 0 && <>
-        <ActiveServiceMen data={ServiceMenList} />
-        {clickLoadMore && <ActivityIndicator />}
-        {!isNoMoreData && !clickLoadMore && <GradientBtn
-          additionalStyle={{}}
-          label={'newDeveloper.loadMore'}
-          onPress={loadMoreDataLoading}
+        </View>
+
+        <View style={styles.blankView} />
+        {isFirstTimeLoading && <SkeletonLoader />}
+        {!isFirstTimeLoading && ServiceMenList.length === 0 && <NoDataFound
+          headerTitle="newDeveloper.noServiceMenFound"
+          image={noValue}
+          infoImage={undefined}
+          title="newDeveloper.noServiceMenFound"
+          content="newDeveloper.noServiceFoundContent"
+          gradiantBtn={
+            <GradientBtn
+              additionalStyle={{ bottom: windowHeight(2) }}
+              label={'common.refresh'}
+              onPress={refreshServiceMenData}
+            />
+          }
         />}
-      </>}
-    </ScrollView>
+        {!isFirstTimeLoading && ServiceMenList.length > 0 && <>
+          <DetailsServiceMen data={ServiceMenList} />
+          {clickLoadMore && <ActivityIndicator />}
+          {!isNoMoreData && !clickLoadMore && <GradientBtn
+            additionalStyle={{}}
+            label={'newDeveloper.loadMore'}
+            onPress={loadMoreDataLoading}
+          />}
+        </>}
+      </ScrollView>
+
+    </>
   );
 }

@@ -31,7 +31,7 @@ export default function SubscriptionsSubCategory({}) {
   const [selectedSubCategory,setSubCategory]  = useState<MySubscriptionInterface>()
   const dispatch = useDispatch()
   const route = useRoute<MysubscriptionRouteProp>();
-  const { id: subCategoryIdFromParam } = route.params;
+  const { id: subCategoryIdFromParam }:{id:string | undefined} = route?.params ?? {id:''};
 
   //mysubscription data
   const {
@@ -45,7 +45,6 @@ export default function SubscriptionsSubCategory({}) {
 
   const [subcategories,setsubcategories] = useState([...ServiceSubCategories])  
 
- 
   useEffect(()=>{
      if(ServiceSubCategories){
          let hasSelectedCategory  = false;
@@ -69,16 +68,14 @@ export default function SubscriptionsSubCategory({}) {
   useEffect(()=>{
     if(selectedSubCategory){
       const indexToMove = subcategories.findIndex(subcat => subcat.subCategoryId === selectedSubCategory.subCategoryId);
-      if (indexToMove !== -1) {
+      if (indexToMove !== -1 && subCategoryIdFromParam) {
         // Remove the object from its current position
         const [objectToMove] = subcategories.splice(indexToMove, 1);
         // Insert the object at the start of the array
         subcategories.unshift(objectToMove);
       }
-
     }
-
-  },[selectedSubCategory])
+  },[selectedSubCategory, subCategoryIdFromParam])
  
   const loadingServices = async () =>{
      const queryParam = `?limit=200&offset=1&sub_category_id=${selectedSubCategory?.subCategoryId}`

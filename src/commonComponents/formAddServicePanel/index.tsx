@@ -3,12 +3,12 @@ import { ScrollView } from 'react-native-virtualized-view';
 import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '@style/styles';
 import CancelHeader from '@commonComponents/cancelHeader';
-import { Plus, Search } from '@utils/icons';
+ 
 import { styles } from './styles';
 
 import appColors from '@theme/appColors';
 
-import { ServiceListing } from '@screens/dashboard/home';
+ 
 import { serviceListData } from './data/data';
 import { useValues } from '../../../App';
 import { useNavigation } from '@react-navigation/native';
@@ -17,20 +17,13 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 
-import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
-import { mySubscriptionsAction } from '@src/store/redux/my-subscriptions-redux';
-
-import NoDataFound from '@src/commonComponents/noDataFound';
-import SubscriptionsSubCategory from '@src/otherComponent/home/SubscriptionsSubCategory';
-import { noValue, wifi, notification } from '@utils/images';
-import GradientBtn from '@commonComponents/gradientBtn';
-import { windowHeight } from '@theme/appConstant';
-
-import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
+ 
 import { FormServiceListing } from './ServiceListing';
 import { getServices } from '@src/services/services-service';
 import { serviceFormActions } from '@src/store/redux/service-form-redux';
-import { ServiceInterface } from '@src/interfaces/serviceInterface';
+import { ServiceInterface, ServiceVariantInterface } from '@src/interfaces/serviceInterface';
+import CommonModal from '@commonComponents/commonModal';
+import { FormAddVariantPanel } from '../formAddVariantPanel';
 
 
 //?limit=10&offset=1&id=20abbb9f-af1c-489e-968f-e9b0a8c4ea3b
@@ -48,15 +41,32 @@ interface Response {
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
 
-export function FormAddServicePanel({ setShowAddServiceModal }: { setShowAddServiceModal: (value: boolean) => void }) {
+export function FormAddServicePanel({subCategoryId, setShowAddServiceModal }: {subCategoryId:string |null, setShowAddServiceModal: (value: boolean) => void }) {
   const [popularService, setPopularService] = useState(serviceListData);
   const { isDark, t } = useValues();
 
   const { navigate, goBack: goBackToPreviousScreen } = useNavigation<routeProps>();
   const dispatch = useDispatch()
-  const [selectedSubCategory,setSubCategory]  = useState('ac2879b0-684b-400b-931e-954febbcf3fc')
+  const [selectedSubCategory,setSubCategory]  = useState(subCategoryId)
 
-  const [loadingSkeleton, setLoadingSkeleton] = useState(false)
+  
+
+  const [showAddServiceVariantModal, setShowAddServiceVariantModal] = useState<boolean>(false);
+
+   
+  const [selectedServiceVariants,setSelectedServiceVariants] = useState<ServiceInterface>({
+    id: '',
+    name: '',
+    short_description: '',
+    description: '',
+    cover_image: '',
+    thumbnail: '',
+    order_count: '',
+    avg_rating: 0,
+    min_bidding_price: 0,
+    category: '',
+    variants:[]
+  })
 
     const {
     data:Services
@@ -70,18 +80,32 @@ export function FormAddServicePanel({ setShowAddServiceModal }: { setShowAddServ
      //console.log(response?.data?.content?.data)
      const services = response?.data?.content?.data
      if (services.length > 0) {
-             const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) => ({
-               id: serviceData?.id,
-               name: serviceData?.name,
-               short_description: serviceData?.short_description,
-               description: serviceData?.description,
-               cover_image: serviceData?.cover_image,
-               thumbnail: serviceData?.thumbnail,
-               order_count: serviceData?.order_count,
-               avg_rating: serviceData?.avg_rating,
-               min_bidding_price: serviceData?.variations?.[0]?.price,
-               category:serviceData?.category?.name,
-             }))
+             const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) =>{
+                   const variants:ServiceVariantInterface[] = serviceData?.variations.map((vData:ServiceVariantInterface,vIndex:number)=>{
+                          return {
+                            id: vData.id,
+                            variant: vData.variant,
+                            variant_key: vData.variant_key,
+                            service_id: vData.service_id,
+                            price: vData.price,
+                          }
+                   }); 
+                   
+
+                   return {
+                    id: serviceData?.id,
+                    name: serviceData?.name,
+                    short_description: serviceData?.short_description,
+                    description: serviceData?.description,
+                    cover_image: serviceData?.cover_image,
+                    thumbnail: serviceData?.thumbnail,
+                    order_count: serviceData?.order_count,
+                    avg_rating: serviceData?.avg_rating,
+                    min_bidding_price: serviceData?.variations?.[0]?.price,
+                    category:serviceData?.category?.name,
+                    variants:variants
+                  }
+             })
 
              console.log("=============== checking formatted data =========")
             console.log(formattedData)
@@ -113,6 +137,14 @@ export function FormAddServicePanel({ setShowAddServiceModal }: { setShowAddServ
    }
  },[selectedSubCategory])
 
+    useEffect(()=>{
+      console.log("==================== selectedServiceVariants =============================")
+        if(selectedServiceVariants?.id){
+          
+          setShowAddServiceVariantModal(true)
+        }
+    },[selectedServiceVariants])
+
   return (
     <>
       <ScrollView
@@ -134,8 +166,20 @@ export function FormAddServicePanel({ setShowAddServiceModal }: { setShowAddServ
               setData={setPopularService}
               providerImageStyle={styles.providerImageStyle}
               itemSeparator={styles.itemSeparator}
+              selectedServiceVariants={selectedServiceVariants}
+              setSelectedServiceVariants={setSelectedServiceVariants}
             />
       </ScrollView>
+      <CommonModal
+        modal={
+          <FormAddVariantPanel
+          selectedServiceVariants={selectedServiceVariants} 
+          setSelectedServiceVariants={setSelectedServiceVariants} 
+          setShowAddServiceVariantModal={setShowAddServiceVariantModal} />
+        }
+        showModal={showAddServiceVariantModal}
+        visibleModal={() => { }}
+      />
 
     </>
   );

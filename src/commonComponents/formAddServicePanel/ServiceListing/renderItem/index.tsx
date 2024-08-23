@@ -21,7 +21,10 @@ export default function RenderItem({
   item,
   index,
   toggleSwitch,
+  
   providerImageStyle,
+  selectedServiceVariants,
+  setSelectedServiceVariants
 }: popularServiceType) {
   const { currSymbol, currValue } = useValues();
   const { isDark, t } = useValues();
@@ -31,9 +34,10 @@ export default function RenderItem({
     <View style={{ flex: 1 }}>
       <TouchableOpacity
         activeOpacity={0.9}
-        onPress={() => 
-          Alert.alert('select service for edit booking')
-          //item.id
+        onPress={() =>{
+              setSelectedServiceVariants(item)
+
+          }
         }
         style={[
           styles.providerBg,

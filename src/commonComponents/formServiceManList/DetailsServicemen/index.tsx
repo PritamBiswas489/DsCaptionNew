@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import { styles } from './styles';
 import { serviceMenListData } from './data';
@@ -17,12 +17,38 @@ import { useDispatch } from 'react-redux';
 import { deleteServiceMenRequest, changeStatusServiceMen } from '@src/services/profile.service';
 import { getMediaUrl } from '@src/config/utility';
 import SwitchContainer from '@src/otherComponent/switchContainer';
-export function DetailsServiceMen({ data }: { data?: serviceMenType[] }) {
+export function DetailsServiceMen({ data, setServiceMan,setServiceMenModal }: {
+  data?: serviceMenType[],
+  setServiceMan: (value: { serviceManid: string; serviceManName: string }) => void,
+  setServiceMenModal:(value:boolean)=>void
 
+}) {
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleSetServiceMen = (item: serviceMenType) => {
+    Alert.alert(
+      "Confirmation", // Title of the alert
+      t('newDeveloper.AssignServicemanConfirmMsg'), // Message
+      [
+        {
+          text: "Cancel",  
+          onPress: () => console.log("Cancel Pressed"), // Action when Cancel is pressed
+          style: "cancel", 
+        },
+        {
+          text: "Confirm",  
+          onPress: () => {
+            setServiceMan({serviceManid:item.id,serviceManName:`${item.first_name} ${item.last_name}`})
+            setServiceMenModal(false)
+          },  
+        },
+      ],
+      { cancelable: false } 
+    );
+  }
 
   return (
     <View>
@@ -31,7 +57,7 @@ export function DetailsServiceMen({ data }: { data?: serviceMenType[] }) {
         data={data ? data : serviceMenListData}
         renderItem={({ item }) => {
           const defaultImageValue = item.gender !== 'female' ? femaleDefault : maleDefault
-          return <TouchableOpacity onPress={()=>Alert.alert('Select service men for edit booking and also for add service men for booking')}
+          return <TouchableOpacity onPress={() => handleSetServiceMen(item)}
 
             style={[
               styles.container,

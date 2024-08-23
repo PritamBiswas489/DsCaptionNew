@@ -264,8 +264,9 @@ export function CompletedBooking({ route }: any) {
       {!skeletonLoaderProcess && detailBookingDetails?.id && (detailBookingDetails?.booking_status === 'ongoing' || detailBookingDetails?.booking_status === 'accepted') &&
         <>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: windowHeight(2) }}>
-            <Pressable onPress={() => { 
-                navigate('EditBooking')
+            <Pressable onPress={() => {
+                //  console.log(detailBookingDetails) 
+                navigate('EditBooking', {id : detailBookingDetails?.id})
             }}>
               <Icon name="pencil-outline" size={30} color={isDark ? appColors.white : appColors.black} />
             </Pressable>

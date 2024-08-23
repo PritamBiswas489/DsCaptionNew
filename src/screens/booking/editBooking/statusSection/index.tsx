@@ -4,11 +4,13 @@ import {styles} from './styles';
 import SwitchContainer from '@otherComponent/switchContainer';
 import {useValues} from '../../../../../App';
 import appColors from '@theme/appColors';
+import { BookingDetailsInterface } from '@src/interfaces/bookingDetailsInterface';
 
-export default function StatusSection() {
-  const [status, setStatus] = useState(false);
+export default function StatusSection(
+  {paymentStatus,setPaymentStatus}:{paymentStatus:boolean,setPaymentStatus:(value:boolean)=>void}) {
+   
   const toggleSwitch = () => {
-    setStatus(prevStatus => !prevStatus);
+    setPaymentStatus(!paymentStatus);
   };
   const {isDark,t} = useValues();
   return (
@@ -30,7 +32,7 @@ export default function StatusSection() {
             ]}>
             {t('newDeveloper.paymentStatus')}
           </Text>
-          <SwitchContainer toggleDarkSwitch={toggleSwitch} switchOn={status} />
+          <SwitchContainer toggleDarkSwitch={toggleSwitch} switchOn={paymentStatus} />
         </View>
         <Text style={styles.statusNote}>{t('newDeveloper.paymentstatusfieldtext')}</Text>
       </View>

@@ -23,7 +23,7 @@ export function CalenderModal({
   };
 
   const openStartDatePicker = (date: string) => {
-    const formattedDate = moment(date).format('DD/MM/YY');
+    const formattedDate = moment(date).format('YY-MM-DD');
     handleStartDate(formattedDate);
   };
 
@@ -32,7 +32,7 @@ export function CalenderModal({
   };
 
   const openEndDatePicker = (date: string) => {
-    const formattedDate = moment(date).format('DD/MM/YY');
+    const formattedDate = moment(date).format('YY-MM-DD');
     handleEndDate(formattedDate);
   };
 

@@ -934,7 +934,12 @@
             "changescheduledate":"Change schedule date",
             "addServiceMen":"Assign Serviceman" ,
             "changestatus":"Change status",
-            "AddServiceInCart":"Add service"
+            "AddServiceInCart":"Add service",
+            "ServiceMan":"Serviceman",
+            "AssignServicemanConfirmMsg":"Are you sure assign this serviceman for this booking?",
+            "Scheduletext":"Schedule",
+            "Cantremoveitemmessge":"Can't remove.Booking need atlist one service.",
+             
         }
     }
 }

@@ -14,6 +14,7 @@ import { SubCategoriesInterface } from '@src/interfaces/subCategoriesInterface';
 import { MySubscriptionInterface } from '@src/interfaces/mySubscriptionInterface';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from 'src/navigation/types';
+import { ServiceVariantInterface } from '@src/interfaces/serviceInterface';
 
 interface Response {
   data: any;
@@ -84,7 +85,19 @@ export default function SubscriptionsSubCategory({}) {
       //console.log(response?.data?.content?.data)
       const services = response?.data?.content?.data
       if (services.length > 0) {
-              const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) => ({
+        const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) =>{
+          const variants:ServiceVariantInterface[] = serviceData?.variations.map((vData:ServiceVariantInterface,vIndex:number)=>{
+             return {
+               id: vData.id,
+               variant: vData.variant,
+               variant_key: vData.variant_key,
+               service_id: vData.service_id,
+               price: vData.price,
+             }
+          }); 
+           
+          
+                return {
                 id: serviceData?.id,
                 name: serviceData?.name,
                 short_description: serviceData?.short_description,
@@ -95,7 +108,9 @@ export default function SubscriptionsSubCategory({}) {
                 avg_rating: serviceData?.avg_rating,
                 min_bidding_price: serviceData?.variations?.[0]?.price,
                 category:serviceData?.category?.name,
-              }))
+                variants:variants
+              }
+          })
 
               //console.log("=============== checking formatted data =========")
              //console.log(formattedData)

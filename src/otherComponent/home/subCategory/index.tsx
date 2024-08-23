@@ -11,6 +11,7 @@ import { serviceActions } from '@src/store/redux/service-redux';
 import { ServiceInterface } from '@src/interfaces/serviceInterface';
 import { ActivityIndicator } from 'react-native';
 import { SubCategoriesInterface } from '@src/interfaces/subCategoriesInterface';
+import { ServiceVariantInterface } from '@src/interfaces/serviceInterface';
  
 
 interface Response {
@@ -51,7 +52,18 @@ export default function SubCategory({}) {
      if (response?.data?.content?.data) {
       const services = response?.data?.content?.data
       if (services.length > 0) {
-              const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) => ({
+        const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) =>{
+          const variants:ServiceVariantInterface[] = serviceData?.variations.map((vData:ServiceVariantInterface,vIndex:number)=>{
+             return {
+               id: vData.id,
+               variant: vData.variant,
+               variant_key: vData.variant_key,
+               service_id: vData.service_id,
+               price: vData.price,
+             }
+          }); 
+           
+                return {
                 id: serviceData?.id,
                 name: serviceData?.name,
                 short_description: serviceData?.short_description,
@@ -62,7 +74,9 @@ export default function SubCategory({}) {
                 avg_rating: serviceData?.avg_rating,
                 min_bidding_price: serviceData?.variations?.[0]?.price,
                 category:serviceData?.category?.name,
-              }))
+                variants:variants
+              }
+          })
 
               // console.log("=============== checking formatted data =========")
               // console.log(formattedData)

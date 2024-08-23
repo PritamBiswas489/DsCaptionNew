@@ -94,8 +94,8 @@ export default function BookingList({
         formData.append('limit', limitData);
         formData.append('offset', offsetData);
         formData.append('booking_status', selectedBookingStatus);
-        formData.append('from_date', fromDate);
-        formData.append('to_date', toDate);
+        // formData.append('from_date', fromDate);
+        // formData.append('to_date', toDate);
         
         const response: Response = await getBookings(formData);
         const bookingData = response?.data?.content?.bookings?.data;

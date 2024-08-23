@@ -2,15 +2,17 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Plus, Minus  } from '@utils/icons'; // Assuming Minus is imported for decreasing quantity
-
+import { useValues } from '../../../App';
 interface CartItemProps {
   imageUrl: string;
   serviceName: string;
   variantName: string;
   price: string;
   quantity: number;
+  serviceId:string;
   onIncrease: () => void;
   onDecrease: () => void;
+  variantKey: string
 }
 
 const CartItemPanel = ({
@@ -22,20 +24,22 @@ const CartItemPanel = ({
   onIncrease,
   onDecrease,
 }: CartItemProps) => {
+  const {currSymbol} = useValues()
   return (
     <View style={styles.cartItemContainer}>
-      <Image source={{ uri: imageUrl }} style={styles.cartItemImage} />
+     {imageUrl && <Image source={{ uri: imageUrl }} style={styles.cartItemImage} />} 
       <View style={styles.cartItemDetails}>
-        <Text style={styles.serviceName}>ddsdsd{serviceName}</Text>
+        <Text style={styles.serviceName}>{serviceName}</Text>
         <Text style={styles.variantName}>{variantName}</Text>
-        <Text style={styles.price}>{price}</Text>
+        <Text style={styles.price}>{currSymbol}{price}</Text>
       </View>
       <View style={styles.cartItemActions}>
-        <TouchableOpacity onPress={onDecrease} style={styles.cartButton}>
+        <TouchableOpacity onPress={onIncrease} style={styles.cartButton}>
           <Plus width={16} height={16} />
         </TouchableOpacity>
         <Text style={styles.quantity}>{quantity}</Text>
-        <TouchableOpacity onPress={onIncrease} style={styles.cartButton}>
+        
+        <TouchableOpacity onPress={onDecrease} style={styles.cartButton}>
           <Minus width={16} height={16} />
         </TouchableOpacity>
       </View>

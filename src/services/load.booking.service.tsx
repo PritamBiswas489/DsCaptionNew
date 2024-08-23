@@ -29,11 +29,14 @@ export const loadBookingDetails = async (bookingId:string) =>{
        const bookingDetail = response.data.content
             const servicesList:BookingServiceListInterface[] = bookingDetail.detail.map((serviceDetail:any)=>{
                     return {
+                            serviceId:serviceDetail.service_id,
+                            variantKey:serviceDetail.variant_key,
                             serviceName: serviceDetail?.service_name,
                             serviceUnitCost: serviceDetail?.service_cost,
                             serviceQuantity: serviceDetail?.quantity,
                             serviceTotalCost:serviceDetail?.total_cost,
-                            serviceImage: serviceDetail?.service?.thumbnail,
+                            serviceImage: serviceDetail?.service?.cover_image,
+                            servicethumbnail:serviceDetail?.service?.thumbnail,
                     }
             }) 
             const serviceAddress:BookingServiceAddressInterface = {
@@ -85,6 +88,8 @@ export const loadBookingDetails = async (bookingId:string) =>{
                     readable_id: bookingDetail?.readable_id,
                     customer_id: bookingDetail?.customer_id,
                     provider_id: bookingDetail?.provider_id,
+                    category_id:bookingDetail?.category_id,
+                    sub_category_id:bookingDetail?.sub_category_id,
                     serviceman_id: bookingDetail?.serviceman_id,
                     booking_status: bookingDetail?.booking_status,
                     is_paid:bookingDetail?.is_paid,

@@ -1,3 +1,4 @@
+import { ServiceInterface } from '@src/interfaces/serviceInterface';
 import {ImageSourcePropType, ViewStyle} from 'react-native';
 import {Float} from 'react-native/Libraries/Types/CodegenTypes';
 
@@ -17,7 +18,9 @@ export type dataType = {
   isHorizontal?: boolean;
   providerImageStyle?: imageProps;
   itemSeparator?: ViewStyle;
-  contentContainerStyle?:ViewStyle
+  contentContainerStyle?:ViewStyle,
+  selectedServiceVariants:ServiceInterface,
+  setSelectedServiceVariants:(value:ServiceInterface)=>void
 };
 
 export type imageProps = {

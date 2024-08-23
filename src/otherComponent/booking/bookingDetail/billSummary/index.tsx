@@ -30,7 +30,7 @@ export default function BillSummary({ bookingDetails }: { bookingDetails: Bookin
           },
         ]}>
         {bookingDetails.servicesList.map((serviceDet: BookingServiceListInterface, serviceindex: number) => {
-          return <BillRow key={`se${serviceindex}`} title={`${limitWords(serviceDet.serviceName, 3)} X ${serviceDet.serviceQuantity}`} price={serviceDet.serviceTotalCost} />
+            return <BillRow key={`se${serviceindex}`} title={`${limitWords(serviceDet.variantKey, 3)} X ${serviceDet.serviceQuantity}`} price={serviceDet.serviceTotalCost} />
         })}
         <BillRow
           title="newDeveloper.serviceDiscount"

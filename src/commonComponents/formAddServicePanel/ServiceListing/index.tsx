@@ -13,12 +13,16 @@ export function FormServiceListing({
   providerImageStyle,
   itemSeparator,
   contentContainerStyle,
+  selectedServiceVariants,
+  setSelectedServiceVariants
 }: dataType) {
 
   const {
     selected:Services,
     loading:servicesLoader
   } = useSelector((state: RootState) => state['servicesFormData'])
+
+ 
 
 
   const toggleSwitch = (index: number) => {
@@ -41,6 +45,8 @@ export function FormServiceListing({
             index={index}
             toggleSwitch={toggleSwitch}
             providerImageStyle={providerImageStyle}
+            selectedServiceVariants={selectedServiceVariants}
+            setSelectedServiceVariants={setSelectedServiceVariants}
           />
         )}
         ItemSeparatorComponent={() => (

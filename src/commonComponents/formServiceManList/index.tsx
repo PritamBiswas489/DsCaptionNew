@@ -28,7 +28,13 @@ import Header from '@commonComponents/header';
 
 type props = NativeStackNavigationProp<RootStackParamList>;
 
-export function FormServiceMenList({ setServiceMenModal }: { setServiceMenModal: (value: boolean) => void }) {
+export function FormServiceMenList(
+  { setServiceMenModal,
+    setServiceMan 
+  }: { 
+    setServiceMenModal: (value: boolean) => void ,
+    setServiceMan: (value: { serviceManid: string; serviceManName: string }) => void
+  }) {
   const { navigate } = useNavigation<props>();
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
@@ -146,7 +152,7 @@ export function FormServiceMenList({ setServiceMenModal }: { setServiceMenModal:
           }
         />}
         {!isFirstTimeLoading && ServiceMenList.length > 0 && <>
-          <DetailsServiceMen data={ServiceMenList} />
+          <DetailsServiceMen setServiceMenModal={setServiceMenModal} setServiceMan={setServiceMan} data={ServiceMenList} />
           {clickLoadMore && <ActivityIndicator />}
           {!isNoMoreData && !clickLoadMore && <GradientBtn
             additionalStyle={{}}

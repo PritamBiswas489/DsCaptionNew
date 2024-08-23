@@ -1,9 +1,13 @@
 export interface BookingServiceListInterface {
+    serviceId:string;
+    variantKey:string;
     serviceName: string;
     serviceUnitCost: number;
     serviceQuantity: number;
     serviceTotalCost: number;
     serviceImage: string;
+    servicethumbnail:string;
+    
 }
 
 export interface BookingServiceAddressInterface {
@@ -55,6 +59,8 @@ export interface BookingDetailsInterface {
     customer_id: string | null;
     provider_id: string | null;
     serviceman_id: string | null;
+    category_id:string | null;
+    sub_category_id:string | null;
     booking_status: string;
     is_paid: number;
     payment_method: string;

@@ -41,7 +41,23 @@ interface Response {
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
 
-export function FormAddServicePanel({subCategoryId, setShowAddServiceModal }: {subCategoryId:string |null, setShowAddServiceModal: (value: boolean) => void }) {
+export function FormAddServicePanel({
+  subCategoryId, 
+  setShowAddServiceModal,
+  handleUpdateCartItems:updateCartItems
+
+}: {
+  subCategoryId:string |null, 
+  setShowAddServiceModal: (value: boolean) => void,
+  handleUpdateCartItems:(value:{
+    serviceId:string,
+    variantKey:string,
+    price:string,
+    serviceName:string,
+    serviceCoverImage:string,
+    serviceThumbnail:string
+ }[])=>void
+}) {
   const [popularService, setPopularService] = useState(serviceListData);
   const { isDark, t } = useValues();
 
@@ -145,6 +161,18 @@ export function FormAddServicePanel({subCategoryId, setShowAddServiceModal }: {s
         }
     },[selectedServiceVariants])
 
+    const handleUpdateCartItems = (variants:{
+      serviceId:string,
+      variantKey:string,
+      price:string,
+      serviceName:string,
+      serviceCoverImage:string,
+      serviceThumbnail:string
+   }[]) =>{
+        updateCartItems(variants)
+        setShowAddServiceVariantModal(false)
+    }
+
   return (
     <>
       <ScrollView
@@ -175,7 +203,9 @@ export function FormAddServicePanel({subCategoryId, setShowAddServiceModal }: {s
           <FormAddVariantPanel
           selectedServiceVariants={selectedServiceVariants} 
           setSelectedServiceVariants={setSelectedServiceVariants} 
-          setShowAddServiceVariantModal={setShowAddServiceVariantModal} />
+          setShowAddServiceVariantModal={setShowAddServiceVariantModal}
+          handleUpdateCartItems={handleUpdateCartItems}
+          />
         }
         showModal={showAddServiceVariantModal}
         visibleModal={() => { }}

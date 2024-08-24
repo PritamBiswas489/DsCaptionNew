@@ -49,7 +49,8 @@ export default function InputView(
     setScheduleDate,
     serviceCartItems,
     setServiceCartitems,
-    subCategoryId
+    subCategoryId,
+    handleUpdateCartItems:updateCartItems
   }: {
     bookingStatus: string,
     setBookingStatus: (value: string) => void,
@@ -59,7 +60,15 @@ export default function InputView(
     setScheduleDate:(value:string)=>void,
     serviceCartItems:BookingServiceListInterface[],
     setServiceCartitems: (value:BookingServiceListInterface[])=>void,
-    subCategoryId:string | null
+    subCategoryId:string | null,
+    handleUpdateCartItems:(value:{
+      serviceId:string,
+      variantKey:string,
+      price:string,
+      serviceName:string,
+      serviceCoverImage:string,
+      serviceThumbnail:string
+   }[])=>void,
   } 
   ) {
   
@@ -79,6 +88,18 @@ export default function InputView(
   const handleBookingStatus = useCallback((data:DropdownItem) =>{
        setBookingStatus(data.value)
   },[])
+
+  const handleUpdateCartItems = (variants:{
+    serviceId:string,
+    variantKey:string,
+    price:string,
+    serviceName:string,
+    serviceCoverImage:string,
+    serviceThumbnail:string
+ }[]) =>{
+      updateCartItems(variants)
+      setShowAddServiceModal(false)
+  }
 
  
    
@@ -130,7 +151,7 @@ export default function InputView(
       />
        <CommonModal
         modal={
-          <FormAddServicePanel subCategoryId={subCategoryId} setShowAddServiceModal={setShowAddServiceModal} />
+          <FormAddServicePanel  handleUpdateCartItems={handleUpdateCartItems} subCategoryId={subCategoryId} setShowAddServiceModal={setShowAddServiceModal} />
         }
         showModal={showAddServiceModal}
         visibleModal={() => { }}

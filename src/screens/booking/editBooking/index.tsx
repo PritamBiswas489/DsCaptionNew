@@ -15,13 +15,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { BookingDetailsInterface, BookingServiceListInterface } from '@src/interfaces/bookingDetailsInterface';
-
+import Toast from 'react-native-toast-message';
+ 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
 export function EditBooking({ route }: any) {
   const [images, setSelectedImage] = useState<string[]>([]);
   const [detailBookingDetails, setDetailsBookingDetails] = useState<BookingDetailsInterface>()
-  const { isDark } = useValues();
+  const { isDark, t } = useValues();
   const { data: BookingDetailsState, updateData: needExstingUpdateData } = useSelector((state: RootState) => state['bookingDetails'])
   const { id: bookingId } = route?.params
   useEffect(() => {
@@ -50,6 +51,41 @@ export function EditBooking({ route }: any) {
       setServiceCartitems([...detailBookingDetails.servicesList]);
     }
   }, [detailBookingDetails])
+
+
+  const handleUpdateCartItems = (variants:{
+    serviceId:string,
+    variantKey:string,
+    price:string,
+    serviceName:string,
+    serviceCoverImage:string,
+    serviceThumbnail:string
+ }[])=>{
+      // console.log(variants)
+      
+      variants.forEach((variantData,variantIndex)=>{
+        const check = serviceCartItems.find(ele=>(ele.serviceId === variantData.serviceId && ele.variantKey === variantData.variantKey))
+        if(check?.serviceId){
+          Toast.show({
+            type: 'error',
+            text1: 'ERROR',
+            text2: t('newDeveloper.serviceVariantAllReadyExist'),
+          });
+        } else{
+          setServiceCartitems(prev=>[...prev,{
+            serviceId:variantData.serviceId,
+            variantKey:variantData.variantKey,
+            serviceName: variantData.serviceName,
+            serviceUnitCost: parseFloat(variantData.price),
+            serviceQuantity: 1,
+            serviceTotalCost: parseFloat(variantData.price),
+            serviceImage: variantData.serviceCoverImage,
+            servicethumbnail:variantData.serviceThumbnail,
+          }])
+        }
+      })
+      
+  }
 
   useEffect(()=>{
       console.log(serviceCartItems)
@@ -85,6 +121,7 @@ export function EditBooking({ route }: any) {
         serviceCartItems={serviceCartItems}
         setServiceCartitems={setServiceCartitems}
         subCategoryId={detailBookingDetails.sub_category_id}
+        handleUpdateCartItems={handleUpdateCartItems}
         />
         <GradientBtn
           label="newDeveloper.updateBooking"

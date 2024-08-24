@@ -939,6 +939,8 @@
             "AssignServicemanConfirmMsg":"Are you sure assign this serviceman for this booking?",
             "Scheduletext":"Schedule",
             "Cantremoveitemmessge":"Can't remove.Booking need atlist one service.",
+            "SelectVariants":"Select variants",
+            "serviceVariantAllReadyExist":"One of selected Service variant all ready exist in booking"
              
         }
     }

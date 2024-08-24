@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -7,22 +7,51 @@ import { useValues } from '../../../App';
 interface CartItemProps {
   variantName: string;
   price: string;
-  
   serviceId: string;
-  onSelect: (selected: boolean) => void; // Function to handle checkbox selection
-  isSelected: boolean; // Prop to determine if the checkbox is selected
   variantKey: string;
+  handleAddToVariantsAfterSelect: (value: {
+    serviceId: string,
+    variantKey: string,
+    price: string,
+    remove: boolean
+  }) => void,
+  choosenVariants:{
+    serviceId: string,
+    variantKey: string,
+    price: string,
+  }[]
 }
 
 const ServiceItemVariantPanel = ({
   variantName,
   price,
   serviceId,
-  onSelect,
-  isSelected,
-  variantKey
+  variantKey,
+  handleAddToVariantsAfterSelect,
+  choosenVariants 
 }: CartItemProps) => {
+  // console.log("ccc")
+  //  console.log(choosenVariants.find(ele=>ele.variantKey ===variantKey))
   const { currSymbol } = useValues();
+  const [isSelected, onSelect] = useState(choosenVariants.find(ele=>ele.variantKey ===variantKey)?.serviceId ?  true: false)
+  useEffect(() => {
+    // console.log({isSelected})
+    if (isSelected) {
+      handleAddToVariantsAfterSelect({
+        serviceId: serviceId,
+        variantKey: variantKey,
+        price: price,
+        remove: false
+      })
+    } else {
+      handleAddToVariantsAfterSelect({
+        serviceId: serviceId,
+        variantKey: variantKey,
+        price: price,
+        remove: true
+      })
+    }
+  }, [isSelected])
   return (
     <View style={styles.cartItemContainer}>
       <View>

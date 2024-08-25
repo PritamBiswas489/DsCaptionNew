@@ -169,12 +169,13 @@ export default function InputView(
           quantity={cartItem.serviceQuantity}
           serviceId={cartItem.serviceId}
           variantKey={cartItem.variantKey}
+          serviceCartItems={serviceCartItems}
           onIncrease={()=>{
               const updatedItems = serviceCartItems.map((item:BookingServiceListInterface,itemIndex:number)=>{
                    if(item.serviceId === cartItem.serviceId){
                        const dd = {...item}
                        const qty = dd.serviceQuantity + 1
-                       console.log({qty})
+                      //  console.log({qty})
                        dd.serviceQuantity = qty;
                        dd.serviceTotalCost = dd.serviceUnitCost * qty
                       //console.log("=========== item ======================")
@@ -192,11 +193,11 @@ export default function InputView(
                   if(item.serviceId === cartItem.serviceId){
                       const dd = {...item}
                       const qty = dd.serviceQuantity -1  
-                      console.log({qty})
+                      // console.log({qty})
                       dd.serviceQuantity = qty;
                       dd.serviceTotalCost = dd.serviceUnitCost * qty
-                      console.log("=========== item ======================")
-                      console.log(dd)
+                      // console.log("=========== item ======================")
+                      // console.log(dd)
                       return dd
                   }else{
                     return item

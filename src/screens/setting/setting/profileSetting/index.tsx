@@ -38,7 +38,7 @@ export function UserProfileSetting() {
   const {zones} = useSelector((state: RootState)=>state['zoneList'])
 
   const updatedProfileData = useSelector((state: RootState)=>state['profileProviderUpdateField'])
-
+  // console.log(updatedProfileData.zone_id)
   //console.log(updatedProfileData)
 
   let zoneList = []; 

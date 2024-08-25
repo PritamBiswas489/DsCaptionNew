@@ -123,8 +123,8 @@ export function FormAddServicePanel({
                   }
              })
 
-             console.log("=============== checking formatted data =========")
-            console.log(formattedData)
+            //  console.log("=============== checking formatted data =========")
+            // console.log(formattedData)
              if(selectedSubCategory){
                dispatch(serviceFormActions.addServices({id:selectedSubCategory,services:formattedData}))
                dispatch(serviceFormActions.setData({
@@ -154,7 +154,7 @@ export function FormAddServicePanel({
  },[selectedSubCategory])
 
     useEffect(()=>{
-      console.log("==================== selectedServiceVariants =============================")
+      // console.log("==================== selectedServiceVariants =============================")
         if(selectedServiceVariants?.id){
           
           setShowAddServiceVariantModal(true)

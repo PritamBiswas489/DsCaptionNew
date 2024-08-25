@@ -1,18 +1,20 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { Plus, Minus  } from '@utils/icons'; // Assuming Minus is imported for decreasing quantity
+import { Plus, Minus, Delete } from '@utils/icons'; // Assuming Minus is imported for decreasing quantity
 import { useValues } from '../../../App';
+import { BookingServiceListInterface } from '@src/interfaces/bookingDetailsInterface';
 interface CartItemProps {
   imageUrl: string;
   serviceName: string;
   variantName: string;
   price: string;
   quantity: number;
-  serviceId:string;
+  serviceId: string;
   onIncrease: () => void;
   onDecrease: () => void;
-  variantKey: string
+  variantKey: string;
+  serviceCartItems:BookingServiceListInterface[]
 }
 
 const CartItemPanel = ({
@@ -23,25 +25,31 @@ const CartItemPanel = ({
   quantity,
   onIncrease,
   onDecrease,
+  serviceCartItems
 }: CartItemProps) => {
-  const {currSymbol} = useValues()
+  const { currSymbol } = useValues()
   return (
     <View style={styles.cartItemContainer}>
-     {imageUrl && <Image source={{ uri: imageUrl }} style={styles.cartItemImage} />} 
+      {imageUrl && <Image source={{ uri: imageUrl }} style={styles.cartItemImage} />}
       <View style={styles.cartItemDetails}>
         <Text style={styles.serviceName}>{serviceName}</Text>
         <Text style={styles.variantName}>{variantName}</Text>
         <Text style={styles.price}>{currSymbol}{price}</Text>
       </View>
       <View style={styles.cartItemActions}>
+        {quantity === 1 && serviceCartItems.length > 1 && <TouchableOpacity onPress={onDecrease} style={styles.cartButton}>
+           <Delete width={16} height={16} />
+        </TouchableOpacity> }
+
+        {quantity > 1  &&<TouchableOpacity onPress={onDecrease} style={styles.cartButton}>
+            <Minus width={16} height={16} />
+        </TouchableOpacity>}
+        
+        <Text style={styles.quantity}>{quantity}</Text>
         <TouchableOpacity onPress={onIncrease} style={styles.cartButton}>
           <Plus width={16} height={16} />
         </TouchableOpacity>
-        <Text style={styles.quantity}>{quantity}</Text>
-        
-        <TouchableOpacity onPress={onDecrease} style={styles.cartButton}>
-          <Minus width={16} height={16} />
-        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -61,7 +69,7 @@ export const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 10,
-    margin:20
+    margin: 20
   },
   cartItemImage: {
     width: 60,
@@ -94,8 +102,9 @@ export const styles = StyleSheet.create({
   cartButton: {
     padding: 5,
     borderRadius: 5,
-    backgroundColor: '#ddd',
+    backgroundColor: 'orange',
   },
+  
   quantity: {
     marginHorizontal: 10,
     fontSize: 16,

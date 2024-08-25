@@ -36,3 +36,12 @@ export const updateBookingStatus = async (bookingId:string,data:FormData):Promis
 		return error.response;
 	}
 }
+export const updateBooking = async (formData: FormData): Promise<Response> => {
+    formData.append('_method','PUT')
+    try {
+		const response = await api.post(`/provider/booking/service/edit/update-booking`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

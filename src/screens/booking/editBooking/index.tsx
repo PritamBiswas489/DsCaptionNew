@@ -2,8 +2,6 @@ import { ScrollView, View, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
-import SliderContainer from '@otherComponent/sliderContainer';
-import AddNewImageSection from './addNewImage';
 import { windowHeight, windowWidth } from '@theme/appConstant';
 import InputView from './inputView';
 import StatusSection from './statusSection';
@@ -87,7 +85,7 @@ export function EditBooking({ route }: any) {
         formData.append('serviceman_id', serviceMan.serviceManid)
       }
       formData.append('service_schedule', scheduleDate)
-      formData.append('zone_id', 'a396fa72-91f2-47d9-9e2f-a17144457bdd')
+      formData.append('zone_id', profileDt?.zone_id)
       formData.append('booking_status', bookingStatus)
 
       // console.log(serviceCartItems)

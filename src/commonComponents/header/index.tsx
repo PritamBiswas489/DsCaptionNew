@@ -85,7 +85,7 @@ export default function Header({
           )}
         </View>
         <View style={styles.rowView}>
-          {/* {trailIcon && (
+          {trailIcon && (
             <TouchableOpacity
               onPress={
                 gotoScreen as unknown as (event: GestureResponderEvent) => void
@@ -105,7 +105,7 @@ export default function Header({
               ]}>
               {trailIcon}
             </TouchableOpacity>
-          )} */}
+          )}
         {subscribeServiceBtn}
           {trailIcon1 && (
             <TouchableOpacity

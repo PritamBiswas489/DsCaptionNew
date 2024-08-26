@@ -1,4 +1,5 @@
-import { View } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Modal } from 'react-native';
+import { useState } from 'react';
 import React from 'react';
 import StatusView from './statusView';
 import { windowWidth } from '@theme/appConstant';
@@ -16,6 +17,7 @@ import { PaymentSummary } from './paymentSummary';
 import ServiceProofDetails from '../serviceProofDetails';
 import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
+import { getMediaUrl } from '@src/config/utility';
 
 export function Description({
   item,
@@ -25,8 +27,13 @@ export function Description({
   extraCharges,
   showChargesDetail,
   serviceProof,
+  setmodalImage,
+  setImageProofModal
 }: descriptionType) {
-  const { isDark, isServiceManLogin } = useValues();
+  const { isDark, isServiceManLogin, t } = useValues();
+
+  const [image, setImage] = useState<string>(''); // Manage image state here
+  const [modalVisible, setModalVisible] = useState(false); // Manage modal visibility
 
   return (
     <View>
@@ -58,9 +65,35 @@ export function Description({
       {extraCharges && showChargesDetail && (
         <ChargesDetail extraCharges={extraCharges} />
       )}
+
+
       {/* {bookingStatus === 'completedBooking' && <PaymentSummary />}
       {serviceProof && <ServiceProofDetails serviceProof={serviceProof} />} */}
       {/* <ReviewsSection /> */}
+      {item.evidence_photos && <><View style={[styles.icontainer]}>
+        <Text style={{ color: isDark ? appColors.white : appColors.darkText, fontWeight: 'bold', marginBottom: 10 }}>{t('booking.proof')}</Text>
+        {item.evidence_photos.map((evphoto) => {
+          return (<TouchableOpacity onPress={() => {
+            if(evphoto){
+              setmodalImage(`${getMediaUrl()}/booking/evidence/${evphoto}`)
+              setImageProofModal(true)
+            }
+            
+            // setModalVisible(true)
+          }}><View
+            style={[
+              styles.imageContainer,
+              { borderColor: isDark ? appColors.darkBorder : appColors.border },
+            ]}>
+              <Image source={{ uri: `${getMediaUrl()}/booking/evidence/${evphoto}` }} style={styles.image} />
+            </View></TouchableOpacity>)
+
+        })}
+      </View>
+
+      </>
+      }
+
     </View>
   );
 }

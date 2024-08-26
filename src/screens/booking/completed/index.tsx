@@ -1,4 +1,4 @@
-import { View, Alert, Pressable, RefreshControl} from 'react-native';
+import { View, Alert, Pressable, RefreshControl, Image, Modal, TouchableOpacity, Text } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useState, useEffect } from 'react';
 import { styles } from './styles';
@@ -22,11 +22,16 @@ import { windowHeight } from '@theme/appConstant';
 import CommonModal from '@commonComponents/commonModal';
 import ModalComponent from '@commonComponents/modal';
 import { acceptBooking } from '@utils/images';
-import { updateBookingStatus } from '@src/services/booking.service';
+import { updateBookingStatus, updateScheduleDate } from '@src/services/booking.service';
 import Toast from 'react-native-toast-message';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { searchStatusArray } from '@src/config/utility';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { FormServiceMenList } from '@src/commonComponents/formServiceManList';
+import { assignServiceMan } from '@src/services/booking.service';
+import DateTimeSelector from '@src/commonComponents/dateTimeSelectPicker';
+import { FormStatusChangePanel } from '@src/commonComponents/formStatusChangePanel';
+
 import {
 
   BookingStatus,
@@ -60,10 +65,26 @@ export function CompletedBooking({ route }: any) {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-   
+
+  const [showServiceMenModal, setServiceMenModal] = useState<boolean>(false);
+  const [serviceMan, setServiceMan] =
+    useState<{ serviceManid: string, serviceManName: string }>({ serviceManid: '', serviceManName: '' })
+
+
+  const [showDatePicker, setDatePicker] = useState<boolean>(false);
+  const [scheduleDate, setScheduleDate] = useState<string>('')
+
+
+  const [showStatusModal, setStatusModal] = useState<boolean>(false);
+
+  const [modalImage,setmodalImage] = useState<string>('')
+  const [showImageProofModal, setImageProofModal] = useState<boolean>(false);
+
+
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    dispatch(bookingDetailsAction.setData({field:'updateData',data:true}))
+    dispatch(bookingDetailsAction.setData({ field: 'updateData', data: true }))
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -75,11 +96,13 @@ export function CompletedBooking({ route }: any) {
   const [detailBookingDetails, setDetailsBookingDetails] = useState<BookingDetailsInterface>()
 
   const setData = async () => {
+    // console.log(bookingId)
     const checkExisting = BookingDetailsState.find(elementDet => elementDet.id === bookingId);
     if (checkExisting?.id && !needExstingUpdateData) {
       // console.log("==================== Existing ==========================")
       setDetailsBookingDetails(checkExisting.details)
     } else {
+
       const response: any = await loadBookingDetails(bookingId);
       if (response?.id) {
         if (!needExstingUpdateData!) {
@@ -129,7 +152,7 @@ export function CompletedBooking({ route }: any) {
   }
 
   useEffect(() => {
-    //console.log(detailBookingDetails)
+    // console.log(detailBookingDetails?.evidence_photos)
   }, [detailBookingDetails])
 
   useEffect(() => {
@@ -143,6 +166,76 @@ export function CompletedBooking({ route }: any) {
     }
   }, [needExstingUpdateData])
 
+  //handle assign serive man for booking
+  const handleAssignServiceManForBooking = async () => {
+    if (detailBookingDetails?.id) {
+      setProcessingSpinner(true)
+      const formData = new FormData()
+      formData.append('serviceman_id', serviceMan?.serviceManid)
+      const response: Response = await assignServiceMan(detailBookingDetails?.id, formData)
+      if (response?.data?.response_code === 'serviceman_assign_success_200') {
+        Toast.show({
+          type: 'success',
+          text1: 'SUCCESS',
+          text2: response.data.message,
+        });
+        dispatch(bookingDetailsAction.setData({ field: 'updateData', data: true }))
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'ERROR',
+          text2: response.data.message,
+        });
+      }
+      setServiceMan({ serviceManid: '', serviceManName: '' })
+      setProcessingSpinner(false)
+    } else {
+      Alert.alert('Process failed.Try again later')
+    }
+
+  }
+
+
+  const handleUpdateScheduleDate = async () => {
+    if (detailBookingDetails?.id) {
+      setProcessingSpinner(true)
+      const formData = new FormData()
+      formData.append('schedule', scheduleDate)
+      const response: Response = await updateScheduleDate(detailBookingDetails?.id, formData)
+      if (response?.data?.response_code === 'service_schedule_update_200') {
+        Toast.show({
+          type: 'success',
+          text1: 'SUCCESS',
+          text2: response.data.message,
+        });
+        dispatch(bookingDetailsAction.setData({ field: 'updateData', data: true }))
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'ERROR',
+          text2: response.data.message,
+        });
+      }
+      setScheduleDate('')
+      setProcessingSpinner(false)
+    } else {
+      Alert.alert('Process failed.Try again later')
+    }
+  }
+
+  useEffect(() => {
+    if (serviceMan?.serviceManid) {
+      handleAssignServiceManForBooking()
+    }
+  }, [serviceMan])
+
+
+  useEffect(() => {
+    if (scheduleDate !== '') {
+      handleUpdateScheduleDate()
+    }
+  }, [scheduleDate])
+
   return (
     <View
       style={[
@@ -153,7 +246,7 @@ export function CompletedBooking({ route }: any) {
       {!skeletonLoaderProcess && detailBookingDetails?.id && <>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           style={[
             GlobalStyle.mainView,
             { backgroundColor: isDark ? appColors.darkTheme : appColors.white },
@@ -182,15 +275,57 @@ export function CompletedBooking({ route }: any) {
                 bookingStatus="completedBooking"
                 extraCharges={extraCharges}
                 serviceProof={route?.params?.serviceProofData}
+                setmodalImage={setmodalImage}
+                setImageProofModal={setImageProofModal}
               />
             </View>
           </View>
         </ScrollView>
+        <CommonModal modal={
+          <View style={styles.modalContainer}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => { setImageProofModal(false) }}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+           {modalImage && <Image source={{ uri: modalImage }} style={styles.modalImage} />} 
+          </View>
+
+        }
+          showModal={showImageProofModal}
+          visibleModal={() => { }}
+        />
+
         <CommonModal
           modal={<BookingStatus bookingDetails={detailBookingDetails} setShowModal={setBookStatusModal} />}
           showModal={bookStatusModal}
           visibleModal={() => setBookStatusModal(true)}
         />
+        <CommonModal
+          modal={
+            <FormServiceMenList
+              setServiceMenModal={setServiceMenModal}
+              setServiceMan={setServiceMan}
+            />
+          }
+          showModal={showServiceMenModal}
+          visibleModal={() => { }}
+        />
+        {showDatePicker && <DateTimeSelector
+          setDatePicker={setDatePicker}
+          setScheduleDate={setScheduleDate}
+        />}
+
+
+        <CommonModal
+          modal={
+            <FormStatusChangePanel
+              setStatusModal={setStatusModal}
+              bookingId={detailBookingDetails?.id}
+            />
+          }
+          showModal={showStatusModal}
+          visibleModal={() => { }}
+        />
+
         {/* <View style={styles.buttonContainer}>
           <GradientBtn
             label="booking.serviceProof"
@@ -265,15 +400,17 @@ export function CompletedBooking({ route }: any) {
         <>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: windowHeight(2) }}>
             <Pressable onPress={() => {
-                //  console.log(detailBookingDetails) 
-                navigate('EditBooking', {id : detailBookingDetails?.id})
+              navigate('EditBooking', { id: detailBookingDetails?.id })
             }}>
               <Icon name="pencil-outline" size={30} color={isDark ? appColors.white : appColors.black} />
             </Pressable>
-            <Pressable onPress={() => { Alert.alert('Change booking status') }}>
+            <Pressable onPress={() => { setDatePicker(true) }}>
+              <Icon name="calendar-outline" size={30} color={isDark ? appColors.white : appColors.black} />
+            </Pressable>
+            <Pressable onPress={() => { setStatusModal(true) }}>
               <Icon name="sync-outline" size={30} color={isDark ? appColors.white : appColors.black} />
             </Pressable>
-            <Pressable onPress={() => { Alert.alert('Assign servicemen') }}>
+            <Pressable onPress={() => { setServiceMenModal(true) }}>
               <Icon name="person-outline" size={30} color={isDark ? appColors.white : appColors.black} />
             </Pressable>
           </View>

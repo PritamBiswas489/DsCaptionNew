@@ -78,11 +78,11 @@ export function Booking() {
       <Header
         showBackArrow={false}
         title={'booking.booking'}
-        trailIcon={
-          <BookingFilterIcon
-            color={isDark ? appColors.white : appColors.darkText}
-          />
-        }
+        // trailIcon={
+        //   <BookingFilterIcon
+        //     color={isDark ? appColors.white : appColors.darkText}
+        //   />
+        // }
         trailIcon1={
           <Icon name='refresh' size={26} color={isDark ? appColors.white : appColors.darkText} />
         }

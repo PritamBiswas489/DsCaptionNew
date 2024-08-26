@@ -2,7 +2,7 @@ import { View, Text, Alert, ActivityIndicator, RefreshControl } from 'react-nati
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useState, useEffect, useId } from 'react';
 import { GlobalStyle } from '@style/styles';
-import CancelHeader from '@commonComponents/cancelHeader';
+import HeaderView from '@otherComponent/headerWithSearch';
 import { styles } from './styles';
 import { filterData, serviceMenListData } from './data';
 import { DetailsServiceMen } from './DetailsServicemen';
@@ -24,6 +24,7 @@ import GradientBtn from '@commonComponents/gradientBtn';
 import { encodeToBase64 } from '@src/config/utility';
 import { loadServiceMenData } from '@src/services/load.servicemen';
 import Header from '@commonComponents/header';
+import {Cross} from '@utils/icons';
 
 
 type props = NativeStackNavigationProp<RootStackParamList>;
@@ -126,14 +127,21 @@ export function FormServiceMenList(
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}
         contentContainerStyle={styles.contentContainerStyle}>
-        <View style={{ paddingTop: 20 }}>
-          <CancelHeader
-            title={t('servicemen.servicemenList')}
-            gotoScreen={() => {
-              setServiceMenModal(false);
-            }}
-          />
-        </View>
+         
+        <HeaderView
+        title="servicemen.servicemenList"
+        setSearchValue={setSearchVal}
+        setclickSearchButton={setclickSearchButton}
+        trailIcon={
+          <Cross color={isDark ? appColors.white : appColors.darkText} />
+        }
+        gotoScreen={() => {
+          //Alert.alert('sdsdsd')
+          setServiceMenModal(false);
+          return;
+        }}
+
+      />
 
         <View style={styles.blankView} />
         {isFirstTimeLoading && <SkeletonLoader />}

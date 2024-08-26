@@ -107,6 +107,7 @@ export const loadBookingDetails = async (bookingId:string) =>{
                     additional_campaign_discount_amount: bookingDetail?.additional_campaign_discount_amount,
                     service_schedule: bookingDetail?.service_schedule,
                     created_at: bookingDetail?.created_at,
+                    evidence_photos:bookingDetail?.evidence_photos,
                     servicesList,
                     serviceAddress,
                     customerInfo,

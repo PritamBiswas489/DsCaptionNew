@@ -45,3 +45,23 @@ export const updateBooking = async (formData: FormData): Promise<Response> => {
 		return error.response;
 	}
 }
+
+export const assignServiceMan = async (bookingId:string, formData:FormData): Promise<Response> => {
+    formData.append('_method','PUT')
+    try {
+		const response = await api.post(`/provider/booking/assign-serviceman/${bookingId}`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+export const updateScheduleDate = async (bookingId:string, formData:FormData): Promise<Response> => {
+    formData.append('_method','PUT')
+    try {
+		const response = await api.post(`/provider/booking/schedule-update/${bookingId}`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

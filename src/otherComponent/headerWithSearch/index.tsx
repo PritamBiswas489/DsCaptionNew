@@ -15,12 +15,14 @@ const  HeaderView =  ({
   title,
   gotoScreen,
   setSearchValue,
-  setclickSearchButton
+  setclickSearchButton,
+  trailIcon
 }: {
-  title: string;
-  gotoScreen: any;
-  setSearchValue:(value:string)=>void
-  setclickSearchButton:(value:boolean)=>void
+  title: string,
+  gotoScreen: any,
+  setSearchValue:(value:string)=>void,
+  setclickSearchButton:(value:boolean)=>void,
+  trailIcon?: React.ReactNode
 
 }) => {
   const {isDark} = useValues();
@@ -44,14 +46,15 @@ const  HeaderView =  ({
   return (
     <View>
       <Header
-        showBackArrow={true}
+        showBackArrow={false}
         title={title}
         trailIcon={
-          <Plus
-            color={isDark ? appColors.white : appColors.darkText}
-            height={'20'}
-            width={'20'}
-          />
+          trailIcon
+          // <Plus
+          //   color={isDark ? appColors.white : appColors.darkText}
+          //   height={'20'}
+          //   width={'20'}
+          // />
         }
         gotoScreen={gotoScreen}
         content={

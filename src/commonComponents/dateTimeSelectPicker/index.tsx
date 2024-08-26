@@ -70,9 +70,31 @@ export default function DateTimeSelector({
                     text2: t('Schedule time must after current time'),
                   });
             }else{
-                console.log("====== Update current time =======")
-                console.log(`${selectedDate} ${selectedTime}`)
-                setScheduleDate(`${selectedDate} ${selectedTime}`)
+
+                Alert.alert(
+                    "Confirmation", // Title of the alert
+                    t('newDeveloper.SetScheduleTimeConfirmation'), // Message
+                    [
+                      {
+                        text: "Cancel",  
+                        onPress: () => console.log("Cancel Pressed"), // Action when Cancel is pressed
+                        style: "cancel", 
+                      },
+                      {
+                        text: "Confirm",  
+                        onPress: () => {
+                            // console.log("====== Update current time =======")
+                            // console.log(`${selectedDate} ${selectedTime}`)
+                            setScheduleDate(`${selectedDate} ${selectedTime}`)
+                        },  
+                      },
+                    ],
+                    { cancelable: false } 
+                  );
+
+
+
+               
                
             }
             

@@ -940,7 +940,15 @@
             "Scheduletext":"Schedule",
             "Cantremoveitemmessge":"Can't remove.Booking need atlist one service.",
             "SelectVariants":"Select variants",
-            "serviceVariantAllReadyExist":"One of selected Service variant all ready exist in booking"
+            "serviceVariantAllReadyExist":"One of selected Service variant all ready exist in booking",
+            "SetScheduleTimeConfirmation":"Are you sure set this time as new schedule time?",
+            "UpdateStatus":"Update status",
+            "RequestOtp": "Request for OTP",
+            "UploadCompletedImages":"Upload Completed Images",
+            "EnterOtpHere":"Enter OTP here",
+            "verifyOtp":"Verify OTP",
+            "CollectOtpFromCustomer":"Collect OTP from customer"
+            
              
         }
     }

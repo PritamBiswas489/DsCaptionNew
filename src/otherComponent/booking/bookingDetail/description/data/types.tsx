@@ -24,6 +24,8 @@ export type descriptionType = {
   extraCharges?: extraChargeType | any;
   showChargesDetail?: boolean;
   serviceProof?: any;
+  setmodalImage:(value:string)=>void;
+  setImageProofModal:(value:boolean)=>void;
 };
 
 export type extraChargeType = {

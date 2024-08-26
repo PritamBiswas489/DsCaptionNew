@@ -46,4 +46,30 @@ export const styles = StyleSheet.create({
   statusContainer: {
     backgroundColor: appColors.lightGreen,
   },
+  closeButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Dim background
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  modalImage: {
+    width: '100%', // Adjust as needed
+    height: '70%', // Adjust as needed
+    borderRadius: 10,
+    resizeMode:'contain'
+  },
 });

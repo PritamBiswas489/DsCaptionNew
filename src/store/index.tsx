@@ -27,6 +27,8 @@ import completedListingSlice from "./redux/completed-listing-redux";
 import canceledListingSlice from "./redux/canceled-listing-redux";
 import bookingDetailsSlice from "./redux/booking-details-redux";
 import servicesFormSlice from "./redux/service-form-redux";
+import configAppSlice from "./redux/config-redux";
+import homeDataSlice from "./redux/home-data-redux";
 
 
 const store = configureStore({
@@ -58,7 +60,9 @@ const store = configureStore({
       completedListingSearch:completedListingSlice.reducer,
       cancelListingSearch:canceledListingSlice.reducer,
       bookingDetails:bookingDetailsSlice.reducer,
-      servicesFormData:servicesFormSlice.reducer
+      servicesFormData:servicesFormSlice.reducer,
+      providerAppConfig:configAppSlice.reducer,
+      homeData:homeDataSlice.reducer,
     },
   });
   

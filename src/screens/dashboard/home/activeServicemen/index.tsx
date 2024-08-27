@@ -17,6 +17,8 @@ import { useDispatch } from 'react-redux';
 import { deleteServiceMenRequest, changeStatusServiceMen } from '@src/services/profile.service';
 import { getMediaUrl } from '@src/config/utility';
 import SwitchContainer from '@src/otherComponent/switchContainer';
+
+
 export function ActiveServiceMen({ data }: { data?: serviceMenType[] }) {
 
   const { isDark, t } = useValues();
@@ -67,9 +69,10 @@ export function ActiveServiceMen({ data }: { data?: serviceMenType[] }) {
 
   return (
     <View>
-      <FlatList
+    
+      {data && <FlatList
         contentContainerStyle={{ paddingBottom: windowHeight(2) }}
-        data={data ? data : serviceMenListData}
+        data={data}
         renderItem={({ item }) => {
           const defaultImageValue = item.gender !== 'female' ? femaleDefault : maleDefault
           return <View
@@ -114,7 +117,7 @@ export function ActiveServiceMen({ data }: { data?: serviceMenType[] }) {
           </View>
         }}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      />}
     </View>
   );
 }

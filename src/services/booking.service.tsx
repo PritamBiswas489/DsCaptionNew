@@ -65,3 +65,18 @@ export const updateScheduleDate = async (bookingId:string, formData:FormData): P
 		return error.response;
 	}
 }
+
+export const sendOtpNotification = async (bookingId:string): Promise<Response> => {
+     
+    try {
+		const response = await api.get(`/provider/booking/opt/notification-send`,{params:{
+            booking_id : bookingId
+        }});
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}
+
+ 

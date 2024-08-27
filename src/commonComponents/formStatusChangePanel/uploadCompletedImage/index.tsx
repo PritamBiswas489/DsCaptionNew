@@ -40,7 +40,7 @@ export default function UploadCompletedImage(
 
 
         {selectedCompletedImages.map((imagePath: string, imageindex: number) => {
-          return <View style={styles.mainView}>
+          return <View key={`selectedimagesproof-${imageindex}`} style={styles.mainView}>
             
             <View style={[styles.mainContainer, { backgroundColor: isDark ? appColors.darkText : appColors.white }]}>
             

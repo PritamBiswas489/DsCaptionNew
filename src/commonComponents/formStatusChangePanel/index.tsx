@@ -23,6 +23,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import { bookingDetailsAction } from '@src/store/redux/booking-details-redux';
 import { searchStatusArray } from '@src/config/utility';
+import { sendOtpNotification } from '@src/services/booking.service';
 
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
@@ -53,6 +54,8 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
   const [showServiceProofUploadOptions, setServiceProofUploadOption] = useState(false)
   const [selectedCompletedImages, setSeletedCompletedImages] = useState<string[]>([])
 
+  const [booking_otp,setBookingOtp] = useState<string>('')
+
   const [showServiceProofOtp, setServiceProofOtp] = useState(false)
 
   const [processingSpinner, setProcessingSpinner] = useState(false)
@@ -69,6 +72,7 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
 
   useEffect(() => {
     if (bookingStatus === 'completed') {
+      setBookingOtp('')
       setServiceProofUploadOption(true)
     } else {
       setServiceProofUploadOption(false)
@@ -99,10 +103,10 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
     const updatedImage = selectedCompletedImages.filter((ele, eleIndex) => selectedindex !== eleIndex)
     setSeletedCompletedImages([...updatedImage])
   }
-
-  //send otp for confirmation
+  //send otp for confirmation to customer mobile 
   const handleSendOtpForConfirmation = async () => {
-    console.log("Send otp for confirmation")
+    const response:Response = await sendOtpNotification(bookingId)
+    console.log(response.data)
   }
   const handleUpdateStatusBooking = async () => {
     setProcessingSpinner(true)
@@ -117,10 +121,13 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
         });
       })
     }
+    if(bookingStatus === 'completed'){
+      formData.append('booking_otp',booking_otp)
+    }
 
     const response: Response = await updateBookingStatus(bookingId, formData)
 
-    console.log(response.data)
+    // console.log(response.data)
 
     if (response.data.response_code === 'status_update_success_200') {
             Toast.show({
@@ -191,7 +198,7 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
               deleteUploadServiceProofImage={deleteUploadServiceProofImage}
             />
           }
-          {bookingStatus === '' ?
+          {bookingStatus === 'completed' && booking_otp === ''  ?
             <GradientBtn
               label="newDeveloper.RequestOtp"
               onPress={() => {
@@ -230,7 +237,11 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
       />
       }
       {bookingStatus === 'completed' && <CommonModal
-        modal={<CompleteServiceOtpPanel setShowModal={setServiceProofOtp} />}
+        modal={<CompleteServiceOtpPanel 
+          handleSendOtpForConfirmation={handleSendOtpForConfirmation}
+          setShowModal={setServiceProofOtp}
+          setBookingOtp={setBookingOtp}
+          />}
         showModal={showServiceProofOtp}
         visibleModal={handleModalServiceProofOtpModal}
       />}

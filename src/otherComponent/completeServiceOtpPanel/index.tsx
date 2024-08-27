@@ -1,5 +1,5 @@
-import { View, StyleSheet, Alert,Text } from 'react-native';
-import React from 'react';
+import { View, StyleSheet, Alert, Text } from 'react-native';
+import React, { useState } from 'react';
 import { GlobalStyle } from '@style/styles';
 import CancelHeader from '@commonComponents/cancelHeader';
 import { useValues } from '../../../App';
@@ -10,11 +10,28 @@ import GradientBtn from '@src/commonComponents/gradientBtn';
 
 //Complete service otp panel
 export default function CompleteServiceOtpPanel({
-    setShowModal
+    setShowModal,
+    handleSendOtpForConfirmation,
+    setBookingOtp
 }: {
-    setShowModal: (value: boolean) => void
+    setShowModal: (value: boolean) => void,
+    handleSendOtpForConfirmation: () => void,
+    setBookingOtp: (value: string) => void
 }) {
     const { t, isDark } = useValues()
+    const [otp, setOtp] = useState<string>('');
+
+    const handleOtpChange = (otp: string) => {
+        setOtp(otp);
+    };
+    const getOtpValue = () => {
+        if(otp.length < 6){
+            Alert.alert(t('newDeveloper.otpLengthError'))
+            return;
+        }
+        setBookingOtp(otp)
+    };
+
     return (
         <View
             style={[
@@ -31,7 +48,10 @@ export default function CompleteServiceOtpPanel({
             <View style={styles.paddingBottom}>
                 <View style={styles.margin}>
                     <OTPTextInput
+
+                        handleTextChange={handleOtpChange}
                         inputCount={6}
+
                         textInputStyle={{
                             color: isDark ? appColors.white : appColors.darkText,
                             ...styles.otpTextInput,
@@ -41,15 +61,16 @@ export default function CompleteServiceOtpPanel({
                         }}
                     />
                 </View>
-                 <Text style={{ color: isDark ? appColors.white : appColors.darkText, fontWeight:'bold' }}>{t('newDeveloper.CollectOtpFromCustomer')}</Text>
+                <Text style={{ color: isDark ? appColors.white : appColors.darkText, fontWeight: 'bold' }}>{t('newDeveloper.CollectOtpFromCustomer')}</Text>
                 <GradientBtn
-                    label={t('newDeveloper.verifyOtp')}
-                    onPress={() => { 
-                        Alert.alert('Verify OTP')   
+                    label={t('newDeveloper.SubmitOtp')}
+                    onPress={() => {
+                        getOtpValue()
                         setShowModal(false);
                     }}
                     authText={'auth.resendCode'}
-                    
+                    gotoScreen={handleSendOtpForConfirmation}
+
                 />
             </View>
         </View>
@@ -63,7 +84,7 @@ const styles = StyleSheet.create({
     },
     paddingBottom: {
         paddingBottom: windowHeight(2.6),
-        
+
     },
     margin: {
         paddingHorizontal: windowWidth(4),

@@ -27,6 +27,7 @@ export default function WeeklySection({
       {data.map((item, index) => (
         <TouchableOpacity
           activeOpacity={0.9}
+          key={index}
           onPress={() => setActiveItem(index)}
           style={[
             styles.activeStyle,

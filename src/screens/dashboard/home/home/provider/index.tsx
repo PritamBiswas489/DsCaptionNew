@@ -12,34 +12,28 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { serviceMenType } from '../../activeServicemen/data/types';
 import { HomeMySubscriptions } from '../../homeMySubscriptions';
+import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export function ProviderLogin() {
   const [popularService, setPopularService] = useState(initialPopularService);
   const { navigate } = useNavigation<navigationProp>();
-  const { isFreelancerLogin } = useValues();
-  const [activeServiceMenList,setActiveServiceMenList] = useState<serviceMenType[]>()
-  
+  const { isFreelancerLogin, t } = useValues();
+
+
   const {
-    data: ServiceMenList,
-  } = useSelector((state: RootState) => state['serviceMenDataField'])
+    serviceMenData: ServiceMenList,
+  } = useSelector((state: RootState) => state['homeData'])
 
-  
 
-  useEffect(()=>{
-     if(ServiceMenList.length > 0){
-        setActiveServiceMenList(ServiceMenList.slice(0,4))
-     }
-  },[ServiceMenList])
 
-  useEffect(()=>{
-  },[activeServiceMenList])
+
 
   return (
     <View>
       <HeadingRow
-        gotoScreen={() => navigate('MySubscriptions',{id:undefined})}
+        gotoScreen={() => navigate('MySubscriptions', { id: undefined })}
         title={'newDeveloper.MySubscriptions'}
         content={'home.viewAll'}
       />
@@ -57,7 +51,8 @@ export function ProviderLogin() {
             content={'home.viewAll'}
             gotoScreen={() => navigate('ServiceMenList')}
           />
-         {activeServiceMenList && <ActiveServiceMen data={activeServiceMenList} />} 
+          {!ServiceMenList && <HomeNoFataFound message={t('newDeveloper.homeServiceMenFound')} />}
+          {ServiceMenList && <ActiveServiceMen data={ServiceMenList} />}
         </>
       )}
     </View>

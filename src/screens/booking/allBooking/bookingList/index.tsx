@@ -96,6 +96,17 @@ export default function BookingList({
         formData.append('booking_status', selectedBookingStatus);
         // formData.append('from_date', fromDate);
         // formData.append('to_date', toDate);
+
+        // if(selectedBookingStatus === 'pending'){
+        //   if(categoriesId){
+        //     formData.append('category_ids[]', categoriesId);
+        //   }
+        //   if(subCategoriesId){
+        //     formData.append('sub_category_ids[]', subCategoriesId);
+        //   }
+        // }
+
+         
         
         const response: Response = await getBookings(formData);
         const bookingData = response?.data?.content?.bookings?.data;

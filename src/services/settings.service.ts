@@ -28,3 +28,13 @@ export const getZoneList = async (): Promise<Response> => {
     return error.response;
   }
 };
+
+export const getProviderConfig = async () : Promise<Response> => {
+  try {
+    const response = await api.get<Response>('/provider/config');
+    return response;
+  } catch (error:any) {
+    return error.response;
+  }
+
+}

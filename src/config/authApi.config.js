@@ -37,6 +37,7 @@ api.interceptors.request.use(async (config) => {
 			
 		};
 	}
+    // console.log(config.headers)
 	const fullRequestUrl = `${config.baseURL}${config.url}`;
 	console.log('Request URL:', fullRequestUrl);
 	

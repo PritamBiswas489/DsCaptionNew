@@ -5,6 +5,8 @@ import {styles} from './styles';
 import {dataType} from './data/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
+import { useValues } from '../../../../../App';
+import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
 
 export function HomeMySubscriptions({
   data,
@@ -19,7 +21,7 @@ export function HomeMySubscriptions({
     data:MySubscriptionDataHome,
   } = useSelector((state: RootState) => state['mysubscriptionsData'])
 
-   
+   const {t} = useValues()
 
   const toggleSwitch = (index: number) => {
     const newServices = [...data];
@@ -29,11 +31,12 @@ export function HomeMySubscriptions({
 
   return (
     <View>
-      <FlatList
+      {MySubscriptionDataHome.length === 0  && <HomeNoFataFound message={t('newDeveloper.homeNoSubscriptionFound')}/>}
+      {MySubscriptionDataHome.length > 0  &&  <FlatList
         contentContainerStyle={[styles.containerStyle, contentContainerStyle]}
         data={MySubscriptionDataHome}
         horizontal={isHorizontal ? isHorizontal : false}
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator={true}
         renderItem={({item, index}) => (
           <RenderItem
             item={item}
@@ -45,7 +48,8 @@ export function HomeMySubscriptions({
         ItemSeparatorComponent={() => (
           <View style={[styles.itemSeparator, itemSeparator]}></View>
         )}
-      />
+      />}
+      
     </View>
   );
 }

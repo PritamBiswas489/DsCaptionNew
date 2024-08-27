@@ -16,6 +16,9 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { getAuthUserService } from '@src/services/auth.service';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 import { useDispatch } from 'react-redux';
+import { getProviderConfig } from '@src/services/settings.service';
+import { configAppActions } from '@src/store/redux/config-redux';
+
 type navigation = NativeStackNavigationProp<RootStackParamList>;
 
 const SplashScreen = () => {
@@ -100,8 +103,6 @@ const SplashScreen = () => {
     });
   };
 
-  
-
   const interpolatedValue = scaleValue.interpolate({
     inputRange: [0.5, 0.5],
     outputRange: ['50deg', '0deg'],
@@ -109,6 +110,15 @@ const SplashScreen = () => {
 
   const checkuser = async () =>{
     setCheckingLoader(true)
+    const responseProviderConfig = await getProviderConfig();
+    if(responseProviderConfig?.data?.content?.base_url){
+        dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
+    }else{
+        Alert.alert('Unable to load app.restart the app')
+        setCheckingLoader(false)
+        return
+    }
+
     const response = await getAuthUserService()
     if(response?.data?.response_code === 'default_200' && response?.data?.content?.id){
        dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))

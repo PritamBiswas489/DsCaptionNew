@@ -1,8 +1,9 @@
  
 import React from "react";
-import { getBookingDetails } from "./booking.service";
-
-
+import { getBookingDetails, getBookings } from "./booking.service";
+import { RootState, AppDispatch } from '@src/store';
+import { BookingListingInterface } from "@src/interfaces/bookingListingInterface";
+import { homeDataActions } from "@src/store/redux/home-data-redux";
 import { 
     BookingServiceListInterface,
     BookingServiceAddressInterface,
@@ -124,4 +125,40 @@ export const loadBookingDetails = async (bookingId:string) =>{
     return {}
 
 }
-    
+export const homeBookingList = async (dispatch:AppDispatch) =>{
+        const formData = new FormData();
+        formData.append('limit', 20);
+        formData.append('offset', 1);
+        formData.append('booking_status', 'all');
+        const response: Response = await getBookings(formData);
+        const bookingData = response?.data?.content?.bookings?.data;
+
+        if(bookingData.length > 0){
+                const formattedData:BookingListingInterface[] = bookingData.map((bkData:any,bkIndex:number)=>{
+                return {
+                  id:bkData?.id,
+                  readableId: bkData?.readable_id,
+                  bookingStatus: bkData?.booking_status,
+                  totalBookingAmount: bkData?.total_booking_amount,
+                  serviceSchedule:bkData?.service_schedule,
+                  createdAt:bkData?.created_at,
+                  isChecked: bkData?.is_checked,
+                  isGuest: bkData?.is_guest,
+                  isPaid: bkData?.is_paid,
+                  isVerified: bkData?.is_verified,
+                  subCategoryName: bkData?.sub_category?.name,
+                  subCategoryImage:bkData?.sub_category?.image,
+                  customerName: bkData?.customer?.first_name,
+                  customerEmail: bkData?.customer?.email,
+                  customerGender: bkData?.customer?.gender,
+                  customerProfileImage: bkData?.customer?.profile_image,
+                  serviceAddress:bkData?.service_address?.address,
+                  hasServiceMen: bkData?.serviceman?.id  ?  true : false, 
+                  servicemenName: bkData?.serviceman?.id ? bkData?.serviceman?.user?.first_name+ ' '+bkData?.serviceman?.user?.last_name : '',
+                  servicemenProfileImage: bkData?.serviceman?.id ? bkData?.serviceman?.user?.profile_image : '',
+                  servicemenGender: bkData?.serviceman?.id ? bkData?.serviceman?.user?.gender: '',
+                }
+             })
+             dispatch(homeDataActions.setData({field:'bookingList',data:formattedData}));
+          }
+}

@@ -124,10 +124,12 @@ export function ServiceMenList() {
       ]}
       contentContainerStyle={styles.contentContainerStyle}>
       <HeaderView
+      showBackArrow ={true}
         title="servicemen.servicemenList"
         setSearchValue={setSearchVal}
         setclickSearchButton={setclickSearchButton}
         gotoScreen={gotoScreen}
+        
 
       />
       <View style={styles.blankView} />

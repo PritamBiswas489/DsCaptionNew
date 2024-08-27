@@ -22,6 +22,8 @@ interface SetDataPayload {
     data: string | number | boolean|DropdownItem;
 }
 
+
+
 const initialState: FieldState = {
     company_name: '',
     company_phone:'',

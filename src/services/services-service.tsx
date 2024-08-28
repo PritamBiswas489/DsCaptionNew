@@ -46,3 +46,13 @@ export const getServiceDetails = async (serviceId:string): Promise<Response> => 
         return error.response;
     }
 }
+
+export const addServiceSubCategory = async(formData:FormData): Promise<Response> => {
+    try {
+		const response = await api.post('/provider/sub-category/create',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}

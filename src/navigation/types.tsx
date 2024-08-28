@@ -100,6 +100,7 @@ export type RootStackParamList = {
   Earnings: undefined;
   History: undefined;
   AddNewService: undefined;
+  AddNewServiceSubCategory: undefined;
   Notification: undefined;
   EmptyNotification: undefined;
   ServiceList: undefined;

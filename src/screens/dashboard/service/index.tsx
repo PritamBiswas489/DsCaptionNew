@@ -1,4 +1,5 @@
 export * from './addNewService';
+export * from './addNewServiceSubCategory'
 export * from './locationList';
 export * from './coverLocationList'
 export * from './serviceDetail';

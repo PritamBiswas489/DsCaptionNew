@@ -48,16 +48,16 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
 
   return (
     <View style={styles.container}>
-      {label && (
+      {/* {label && (
         <Text style={[styles.label,  { color: 'black' }]}>
           {label}
         </Text>
-      )}
+      )} */}
 
       <TouchableOpacity onPress={() => setIsModalVisible(true)}>
         <View style={pickerSelectStyles.inputContainer}>
           <Text style={value ? styles.selectedTextStyle : styles.placeholderStyle}>
-            {value ? data.find(item => item.value === value)?.label : label}
+            {value ? label+ ':   '+ data.find(item => item.value === value)?.label : label}
           </Text>
           <Icon name="arrow-drop-down" size={24} color="gray" />
         </View>

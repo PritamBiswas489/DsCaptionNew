@@ -845,7 +845,7 @@
             "errorProviderPassword":"Enter 8 length password",
             "providerLoginDetails":"Provider login details",
             "processFailed":"Process failed",
-            "selectZone":"Select Zone",
+            "selectZone":"Zone",
             "AccountInfo":"Account info",
             "ChangePassword":"Change Password",
             "ConfirmPassword":"Confirm Password",
@@ -952,9 +952,19 @@
             "otpLengthError":"Enter 6 length OTP",
             "homeNoSubscriptionFound": "No subscription found.Subscribe services from bottom services tab",
             "homeServiceMenFound":"No serviceman registered by you.Register new serviceman from bottom plus add button.",
-            "homeNoBookingFoundMessage":"No recent booking found based on your subscribed services."
+            "homeNoBookingFoundMessage":"No recent booking found based on your subscribed services.",
+            "addNewSubcategory":"Add new subcategory",
+            "addSubCategory":"Add Subcategory",
+            "subCategoryName":"Subcategory name",
+            "subCategoryShortDescription":"Short description",
+            "uploadSubcategoryImage":"Upload subcategory image",
+            "parentCategory":"Parent category",
+            "Selectparentcategory":"Select parent category",
+            "Entercategoryname":"Enter category name",
+            "Entershortdescription":"Enter short description",
+            "Selectimageforcategory":"Select image for category",
+            "Noservicesfoundforthissubcategory":"No services found for this subcategory"
             
-             
         }
     }
 }

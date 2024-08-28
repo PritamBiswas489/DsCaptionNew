@@ -1,4 +1,4 @@
-import { Text, View, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, View, Alert, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '@style/styles';
@@ -22,6 +22,8 @@ import { serviceCategoriesDataActions } from '@src/store/redux/service-category-
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SubscribeBtn } from './subscribeBtn';
+import { serviceSubCategoriesActions } from '@src/store/redux/service-sub-category-redux';
+import { serviceActions } from '@src/store/redux/service-redux';
 
 
 
@@ -51,6 +53,8 @@ export function ServiceList() {
 
   const [loadingSkeleton, setLoadingSkeleton] = useState(true)
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
   const {
     data: ServiceCategories,
     offsetPageUrl,
@@ -59,7 +63,15 @@ export function ServiceList() {
 
 
 
-
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(serviceCategoriesDataActions.resetState())
+    dispatch(serviceSubCategoriesActions.resetState())
+    dispatch(serviceActions.resetState())
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   //============== load service categories ==========================// 
   const loadServiceCategories = async () => {
@@ -99,6 +111,7 @@ export function ServiceList() {
   return (
     <>
       <ScrollView
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         style={[
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
@@ -107,9 +120,9 @@ export function ServiceList() {
         {!loadingSkeleton && <>
           <Header
             title={'serviceList.title'}
-            trailIcon={
-              <Search color={isDark ? appColors.white : appColors.lightText} />
-            }
+            // trailIcon={
+            //   <Search color={isDark ? appColors.white : appColors.lightText} />
+            // }
             trailIcon1={
               <Plus color={isDark ? appColors.white : appColors.darkText} />
             }

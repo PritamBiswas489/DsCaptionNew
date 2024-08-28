@@ -6,6 +6,8 @@ import {dataType} from './data/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { ActivityIndicator } from 'react-native';
+import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
+import { useValues } from '../../../../../App';
 export function ServiceListing({
   data,
   setData,
@@ -27,10 +29,12 @@ export function ServiceListing({
     setData(newServices);
   };
 
+  const {t} = useValues()
+
   return (
     <View>
       {servicesLoader && <ActivityIndicator style={{marginTop:10}}/> }  
-     {!servicesLoader && <FlatList
+     {!servicesLoader && Services.services.length > 0 && <FlatList
         contentContainerStyle={[styles.containerStyle, contentContainerStyle]}
         data={Services.services}
         horizontal={isHorizontal ? isHorizontal : false}
@@ -47,6 +51,7 @@ export function ServiceListing({
           <View style={[styles.itemSeparator, itemSeparator]}></View>
         )}
       />} 
+      {!servicesLoader && Services.services.length === 0 && <HomeNoFataFound message={t('newDeveloper.Noservicesfoundforthissubcategory')}/>}
     </View>
   );
 }

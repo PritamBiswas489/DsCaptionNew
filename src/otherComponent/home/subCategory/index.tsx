@@ -51,6 +51,8 @@ export default function SubCategory({}) {
      const response:Response = await getServices(queryParam)
      if (response?.data?.content?.data) {
       const services = response?.data?.content?.data
+      console.log("=========== services =================================")
+      console.log(services)
       if (services.length > 0) {
         const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) =>{
           const variants:ServiceVariantInterface[] = serviceData?.variations.map((vData:ServiceVariantInterface,vIndex:number)=>{
@@ -91,6 +93,16 @@ export default function SubCategory({}) {
               }
              
               
+      }else{
+        if(selectedSubCategory?.id){
+          dispatch(serviceActions.addServices({id:selectedSubCategory?.id,services:[]}))
+          dispatch(serviceActions.setData({
+            field:'selected',data:{
+              subCategoryId:selectedSubCategory?.id,
+              isSubscribed:selectedSubCategory.is_subscribed,
+              services:[]}}))
+
+        }
       }
     }
     dispatch(serviceActions.setData({field:'loading',data:false}))

@@ -12,6 +12,7 @@ import {useValues} from '../../../../../App';
 import appColors from '@theme/appColors';
 
 export function AddNewService() {
+  
   const [images, setSelectedImage] = useState<string[]>([]);
   const {isDark} = useValues();
   return (

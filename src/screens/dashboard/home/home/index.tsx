@@ -33,10 +33,8 @@ import { RootState, AppDispatch } from '@src/store';
 
 import { homeloadServiceMenData } from '@src/services/load.servicemen';
 import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
-import { mySubscriptionsAction } from '@src/store/redux/my-subscriptions-redux';
-import { serviceMenDataAction } from '@src/store/redux/servicemen-list';
+
 import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
-import { homeDataActions } from '@src/store/redux/home-data-redux';
 import { homeBookingList } from '@src/services/load.booking.service';
 import HomeBookingList from '@src/commonComponents/homeBookingList';
 
@@ -58,8 +56,7 @@ export function Home() {
   const { navigate } = useNavigation<navigationProp>();
   const { isDark, isServiceManLogin, t } = useValues();
   const [showSkeletonLoader, setSkeletonLoader] = useState(true)
-  const [processLoadServicemen, setProcessLoadeServicemen] = useState(false)
-  const [processLoadMySubscription, setProcessLoadMySubscription] = useState(false)
+ 
   const [refreshing, setRefreshing] = React.useState(false);
   const [servicemenNeedFresh, setServicemenNeedFresh] = useState(true)
   const [subscriptionFresh, setSubscriptionFresh] = useState(true)

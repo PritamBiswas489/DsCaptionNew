@@ -7,10 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { DashLine } from '@commonComponents/dashLIne';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@src/store';
-import { ViewStyle,  NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { ViewStyle } from 'react-native';
+
 import {
   NoteContainer,
   CustomerItems,

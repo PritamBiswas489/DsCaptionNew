@@ -6,6 +6,7 @@ import {BottomTab} from './tabNavigation';
 import {
   AddNewAddress,
   AddNewService,
+  AddNewServiceSubCategory,
   AddNewServiceMen,
   EditServiceMen,
   BlogDetail,
@@ -118,6 +119,10 @@ export default function MyStack() {
             <RootStack.Screen name="Reviews" component={Reviews} />
             {/* Add new service */}
             <RootStack.Screen name="AddNewService" component={AddNewService} />
+            {/* Add new Service SubCategory */}
+            <RootStack.Screen name="AddNewServiceSubCategory" component={AddNewServiceSubCategory} />
+
+            
 
             {/* Popular service view */}
             <RootStack.Screen

@@ -2,7 +2,6 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
 import {windowHeight, windowWidth} from '@theme/appConstant';
-import {BookingType} from '@screens/booking/data/types';
 import {useValues} from '../../../../App';
 import appColors from '@theme/appColors';
 import { BookingListingInterface } from '@src/interfaces/bookingListingInterface';

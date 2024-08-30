@@ -147,7 +147,7 @@ export function Home() {
           trailIcon1={
             <Notification color={isDark ? appColors.white : appColors.darkText} />
           }
-          onTrailIcon={() => navigate('EmptyNotification')}
+          onTrailIcon={() => navigate('Notification')}
         />
         {isServiceManLogin && <Provider />}
         <TotalBalance onPress={() => setShowWalletModal(true)} />
@@ -165,7 +165,7 @@ export function Home() {
         <HomeBookingList data={bookingList} />
         <StaticsDetail />
         {isServiceManLogin ? <ServiceMen /> : <ProviderLogin />}
-        <BlogView />
+        {/* <BlogView /> */}
         <CommonModal
           modal={<WalletModal setShowWalletModal={setShowWalletModal} />}
           showModal={showWalletModal}

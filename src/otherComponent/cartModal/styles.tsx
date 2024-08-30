@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: appColors.white,
-    paddingHorizontal: windowWidth(5),
+    paddingHorizontal: windowWidth(10),
     paddingVertical: windowWidth(4),
     borderRadius: 10,
     elevation: 5,
@@ -41,5 +41,11 @@ export const styles = StyleSheet.create({
 
   separator: {
     height: windowWidth(3),
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
   },
 });

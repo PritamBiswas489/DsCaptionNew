@@ -27,9 +27,11 @@ export default function AuthNavigation() {
       <RootStack.Screen name="SplashScreen" component={SplashScreen} />
       <RootStack.Screen name="IntroSlider" component={IntroSlider} />
       <RootStack.Screen name="Login" component={Login} />
+      {/***** * forget password panel *******/}
       <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <RootStack.Screen name="VerifyOtp" component={VerifyOtp} />
       <RootStack.Screen name="ResetPassword" component={ResetPassword} />
+      {/******* end of forget password panel ********/}
       <RootStack.Screen name="Register" component={Register} />
       <RootStack.Screen name="CompanyLocation" component={CompanyLocation} />
       <RootStack.Screen name="ProviderDetails" component={ProviderDetails} />

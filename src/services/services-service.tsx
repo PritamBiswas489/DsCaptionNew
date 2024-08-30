@@ -56,3 +56,12 @@ export const addServiceSubCategory = async(formData:FormData): Promise<Response>
 	}
 
 }
+
+export const addNewServiceByProvider = async(formData:FormData): Promise<Response> => {
+    try {
+		const response = await api.post('/provider/service/create',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

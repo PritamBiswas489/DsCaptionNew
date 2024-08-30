@@ -107,6 +107,7 @@ export * from '@assets/icons/booking/bookingFilter';
 
 export * from '@assets/icons/setting/appSetting';
 export * from '@assets/icons/setting/bank';
+export * from '@assets/icons/setting/tags';
 export * from '@assets/icons/setting/logout';
 export * from '@assets/icons/setting/package';
 export * from '@assets/icons/setting/review';

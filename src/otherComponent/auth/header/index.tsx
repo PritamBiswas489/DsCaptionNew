@@ -81,7 +81,7 @@ export default function Header({
   return (
     <View>
       <View style={styles.headerRow}>
-        <View style={[styles.textContainer, containerStyle]}>
+        {/* <View style={[styles.textContainer, containerStyle]}>
           <View style={styles.rowContainer}>
             {showBack && (
               <TouchableOpacity
@@ -107,7 +107,7 @@ export default function Header({
             )}
             <Image source={isDark ? darkLogo : logo} style={styles.logoStyle} />
           </View>
-        </View>
+        </View> */}
         <View style={styles.row}>
           <Animated.Image
             source={isDark ? darkLeaf2 : loginLeaf}

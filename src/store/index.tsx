@@ -29,6 +29,8 @@ import bookingDetailsSlice from "./redux/booking-details-redux";
 import servicesFormSlice from "./redux/service-form-redux";
 import configAppSlice from "./redux/config-redux";
 import homeDataSlice from "./redux/home-data-redux";
+import notificationListSlice from "./redux/notifications-data-redux";
+import forgetPasswordSlice from "./redux/forgetpassword-redux";
 
 
 const store = configureStore({
@@ -63,6 +65,8 @@ const store = configureStore({
       servicesFormData:servicesFormSlice.reducer,
       providerAppConfig:configAppSlice.reducer,
       homeData:homeDataSlice.reducer,
+      notificationsData:notificationListSlice.reducer,
+      forgetPassword:forgetPasswordSlice.reducer
     },
   });
   

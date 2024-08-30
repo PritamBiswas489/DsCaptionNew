@@ -1,6 +1,6 @@
-import {View} from 'react-native';
-import React, {useState} from 'react';
-import {styles} from './styles';
+import { View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { styles } from './styles';
 import TextInputComponent from '@otherComponent/auth/textInput';
 import {
   ServiceName,
@@ -13,166 +13,227 @@ import {
   Amount,
   Discount,
   ReceiptDiscount,
+  Tags
+
 } from '@utils/icons';
-import {windowHeight, windowWidth} from '@theme/appConstant';
-import {categoryData, locationData} from '../data/data';
-import CommissionSection from './commissionSection';
-import {serviceTimeData} from '../data/data';
-import RadioButton from '@otherComponent/radioButton';
-import {taxData} from '../data/data';
-import {DropdownWithIcon} from '@commonComponents/dropdownWithIcon';
-import {dropDownType} from './types';
-import {GlobalStyle} from '@style/styles';
-import {useValues} from '../../../../../../App';
-export default function InputView() {
-  const [serviceName, setServiceName] = useState('');
-  const [category, setCategory] = useState<dropDownType | undefined>();
-  const [subCategory, setSubCategory] = useState<dropDownType | undefined>();
-  const [description, setDescription] = useState('');
-  const [experience, setExperience] = useState('');
-  const [serviceTime, setServiceTime] = useState<dropDownType | undefined>();
-  const [amount, setAmount] = useState('');
-  const [discount, setDiscount] = useState('');
-  const [tax, setTax] = useState<dropDownType | undefined>();
-  const [featuredPoints, setFeaturePoints] = useState('');
-  const [key, setKey] = useState(0);
-  const [serviceMen, setServiceMen] = useState('');
-  const [location, setLocation] = useState<dropDownType | undefined>();
-  const {t} = useValues();
+import { windowHeight, windowWidth } from '@theme/appConstant';
+import { useValues } from '../../../../../../App';
+import UploadContainerView from '@src/otherComponent/auth/uploadContainer';
+import { ImageLibraryOptions } from 'react-native-image-picker';
+import { handleImagePicker } from '@src/utils/functions';
+import VariantInput from '@src/otherComponent/variantInput';
+import { CategoriesInterface } from '@src/interfaces/categoriesInterface';
+import SelectionDropdown from '@src/otherComponent/selectionDropdown';
+import { SubCategoriesInterface } from '@src/interfaces/subCategoriesInterface';
+
+interface DataItem {
+  label: string;
+  value: string;
+}
+
+
+export default function InputView({
+  serviceName,
+  setServiceName,
+  shortDescription,
+  setShortDescription,
+  description,
+  setDescription,
+  taxAmt,
+  setTaxAmt,
+  minBidAmt,
+  setMinBidAmt,
+  tags,
+  setTags,
+  thumbnailImage,
+  setThumbnailImage,
+  serviceVariants,
+  setServiceVariants,
+  parentCategories,
+  selectedParentCategory,
+  setSelectedParentCategory,
+  subcategories,
+  selectedSubCategory,
+  setSelectedSubCategory
+}: {
+  serviceName: string,
+  setServiceName: (value: string) => void,
+  shortDescription: string,
+  setShortDescription: (value: string) => void,
+  description: string,
+  setDescription: (value: string) => void,
+  taxAmt: string,
+  setTaxAmt: (amt: string) => void,
+  minBidAmt: string,
+  setMinBidAmt: (amt: string) => void,
+  tags: string,
+  setTags: (value: string) => void,
+  thumbnailImage: string,
+  setThumbnailImage: (value: string) => void,
+  serviceVariants:{ name: string, price: string }[],
+  setServiceVariants:(value:{ name: string, price: string }[])=>void,
+  parentCategories: CategoriesInterface[],
+  selectedParentCategory: string,
+  setSelectedParentCategory: (value: string) => void,
+  subcategories:SubCategoriesInterface[],
+  selectedSubCategory: string,
+  setSelectedSubCategory: (value: string) => void,
+}) {
+  const { t } = useValues();
+  const [categoryList, setCategoryList] = useState<DataItem[]>([]);
+  const [subCategoryList, setSubCategoryList] = useState<DataItem[]>([]);
+
+  interface Response {
+    data: any;
+    status: number;
+    statusText: string;
+    headers: any;
+    config: any;
+    request?: any;
+  }
+
+  const openImageFront = () => {
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+    handleImagePicker(options, (imageUri: string) => {
+      setThumbnailImage(imageUri);
+    });
+  };
+  useEffect(() => {
+    if (parentCategories) {
+      const loopZones: { label: string; value: string }[] = [];
+      if (parentCategories.length > 0) {
+        parentCategories.forEach((arr: { name: string, id: string }, index: number) => {
+          loopZones.push({ label: arr.name, value: arr.id });
+        })
+        setCategoryList(loopZones)
+      }
+    }
+  }, [parentCategories])
+
+  useEffect(() => {
+    if (subcategories) {
+      const loopZones: { label: string; value: string }[] = [];
+      if (subcategories.length > 0) {
+        subcategories.forEach((arr: { name: string, id: string }, index: number) => {
+          loopZones.push({ label: arr.name, value: arr.id });
+        })
+        setSubCategoryList(loopZones)
+      }
+    }
+  }, [subcategories])
+  //=============== Get SubCategory Listing =========================//
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
+      {/* service name */}
       <TextInputComponent
-        placeholder={t('auth.companyName')}
+        placeholder={t('newDeveloper.AddServiceFieldServiceName')}
         Icon={<ServiceName />}
         value={serviceName}
         onChangeText={value => {
           setServiceName(value);
         }}
       />
-      <DropdownWithIcon
-        icon={<HomeIcon height={'18'} width={'18'} />}
-        label="addNewService.selectCategory"
-        data={categoryData}
-        onSelect={setCategory}
+      {/* Select category panel */}
+
+      <SelectionDropdown
+        data={categoryList}
+        value={selectedParentCategory}
+        setValue={(value: string) => {
+          setSelectedParentCategory(value)
+        }}
+        label={t('newDeveloper.parentCategory')}
+        error={''}
+      />
+      {/* Select subcategory panel */}
+      <SelectionDropdown
+        data={subCategoryList}
+        value={selectedSubCategory}
+        setValue={(value: string) => {
+          setSelectedSubCategory(value)
+        }}
+        label={t('newDeveloper.AddServiceFieldSubCategory')}
+        error={''}
       />
 
-      <DropdownWithIcon
+      {/* AddServiceFieldSubCategory */}
+       
+      {/* <DropdownWithIcon
         icon={<SubCategory />}
         label="addNewService.subCategory"
         data={categoryData}
         onSelect={setSubCategory}
-      />
-      <CommissionSection />
+      /> */}
+
+      {/* service short description */}
       <TextInputComponent
-        placeholder={t('addNewService.description')}
+        placeholder={t('newDeveloper.AddServiceShortDescription')}
+        Icon={<Notes />}
+        value={shortDescription}
+        onChangeText={value => {
+          setShortDescription(value);
+        }}
+        containerStyle={{ marginBottom: windowHeight(0) }}
+        multiline={true}
+        inputStyle={styles.inputStyle}
+      />
+      {/* service description */}
+      <TextInputComponent
+        placeholder={t('newDeveloper.AddServiceDescription')}
         Icon={<Notes />}
         value={description}
         onChangeText={value => {
           setDescription(value);
         }}
-        containerStyle={{marginBottom: windowHeight(0)}}
+        containerStyle={{ marginBottom: windowHeight(0) }}
         multiline={true}
         inputStyle={styles.inputStyle}
       />
-
-      <View style={styles.row}>
-        <TextInputComponent
-          inputStyle={styles.containerView}
-          placeholder={t('addNewService.serviceTime')}
-          Icon={<Experience />}
-          value={experience}
-          onChangeText={value => {
-            setExperience(value);
-          }}
-          textContainerStyle={styles.textContainerStyle}
-          containerStyle={{marginTop: windowWidth(2)}}
-        />
-
-        <DropdownWithIcon
-          icon={<Location />}
-          data={serviceTimeData}
-          label={'addNewService.hour'}
-          onSelect={setServiceTime}
-          dropdownStyle={[GlobalStyle.dropdown, {paddingLeft: windowWidth(3)}]}
-          overlayStyle={GlobalStyle.overlayStyle}
-          iconStyle={GlobalStyle.iconStyle}
-          dropdownOptionStyle={GlobalStyle.dropdownOptionStyle}
-        />
-      </View>
-      <DropdownWithIcon
-        icon={<Location />}
-        label="addNewService.availableLocation"
-        data={locationData}
-        onSelect={setLocation}
-      />
+      {/* service tax amount */}
       <TextInputComponent
-        placeholder={t('addNewService.numberServicemen')}
-        Icon={<ServiceMen />}
-        value={serviceMen}
+        keyboardType='number-pad'
+        placeholder={t('newDeveloper.AddServiceTaxAmount')}
+        Icon={<Amount />}
+        value={taxAmt}
         onChangeText={value => {
-          setServiceMen(value);
+          setTaxAmt(value);
         }}
-      />
-      <View style={styles.container}>
-        <RadioButton
-          title={'addNewService.onlyPrice'}
-          setKey={setKey}
-          selectCategory={0}
-          currentKey={key}
-        />
-        <RadioButton
-          title={'addNewService.priceDiscount'}
-          setKey={setKey}
-          selectCategory={1}
-          currentKey={key}
-        />
-      </View>
-      <View style={styles.row}>
-        <TextInputComponent
-          inputStyle={styles.inputContainer}
-          placeholder={t('addNewService.amount')}
-          Icon={<Amount />}
-          value={amount}
-          onChangeText={value => {
-            setAmount(value);
-          }}
-          textContainerStyle={styles.textInput}
-        />
-        {key == 1 && (
-          <TextInputComponent
-            containerStyle={{marginHorizontal: windowWidth(0)}}
-            inputStyle={styles.inputContainer}
-            placeholder={t('addNewService.addDiscount')}
-            Icon={<Discount />}
-            value={discount}
-            onChangeText={value => {
-              setDiscount(value);
-            }}
-            textContainerStyle={styles.textInput}
-          />
-        )}
-      </View>
-      <DropdownWithIcon
-        icon={<ReceiptDiscount />}
-        label="addNewService.selectTaxType"
-        data={taxData}
-        onSelect={setTax}
-      />
 
-      <TextInputComponent
-        placeholder={t('addNewService.featuredPoints')}
-        Icon={<Notes />}
-        value={featuredPoints}
-        onChangeText={value => {
-          setFeaturePoints(value);
-        }}
-        containerStyle={{
-          marginBottom: windowHeight(0),
-          marginTop: windowHeight(3),
-        }}
-        multiline={true}
-        inputStyle={styles.inputView}
       />
+      {/* service minimum bid amount */}
+      <TextInputComponent
+        keyboardType='number-pad'
+        placeholder={t('newDeveloper.AddServiceMinbidAmt')}
+        Icon={<Amount />}
+        value={minBidAmt}
+        onChangeText={value => {
+          setMinBidAmt(value);
+        }}
+      />
+      {/* service tags field  */}
+      <TextInputComponent
+        placeholder={t('newDeveloper.AddServicetags')}
+        Icon={<Tags />}
+        value={tags}
+        onChangeText={value => {
+          setTags(value);
+        }}
+      />
+      {/* service thubnail image  */}
+      <UploadContainerView
+        title={'newDeveloper.AddServiceUploadThumbnailImage'}
+        onPress={openImageFront}
+        image={thumbnailImage}
+        setImage={setThumbnailImage}
+        error={''}
+      />
+      <VariantInput serviceVariants={serviceVariants} setServiceVariants={setServiceVariants}/>
+
     </View>
   );
 }

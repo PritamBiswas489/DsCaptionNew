@@ -10,6 +10,7 @@ export const notificationList: Array<NotificationListType> = [
     content: 'notificationArr.content6',
     icon: <Clock color={appColors.primary} />,
     notificationStatus: false,
+    image: servicePerson,
     person: person,
   },
   {
@@ -18,6 +19,7 @@ export const notificationList: Array<NotificationListType> = [
     content: 'notificationArr.content7',
     icon: <Alert />,
     notificationStatus: false,
+    image: servicePerson,
     person: person1,
   },
   {
@@ -25,6 +27,7 @@ export const notificationList: Array<NotificationListType> = [
     time: 'notificationArr.time',
     content: 'notificationArr.content1',
     icon: <NewImage />,
+    image: servicePerson,
     notificationStatus: true,
   },
   {

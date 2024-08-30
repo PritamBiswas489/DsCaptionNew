@@ -11,24 +11,11 @@ import {handleImagePicker} from '@utils/functions';
 import {ImageLibraryOptions} from 'react-native-image-picker';
 import {useValues} from '../../../../../../App';
 
-export default function AddNewImageSection({setSelectedImage}: imageType) {
-  const [image, setImage] = useState<string | null>('');
+export default function AddNewImageSection({image,setSelectedImage}: imageType) {
+  
   const {isDark,t} = useValues();
 
-  const openImagePicker = () => {
-    ImagePicker.openPicker({
-      multiple: true,
-      mediaType: 'photo',
-    })
-      .then(images => {
-        const uris = images.map(image => image.path);
-        setSelectedImage(uris);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
-
+  
   const openImage = () => {
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
@@ -38,33 +25,13 @@ export default function AddNewImageSection({setSelectedImage}: imageType) {
     };
 
     handleImagePicker(options, (imageUri: string) => {
-      setImage(imageUri);
+      setSelectedImage(imageUri);
     });
   };
 
   return (
     <View style={styles.mainView}>
-      <View style={styles.row}>
-        <View>
-          <Text
-            style={[
-              styles.textStyle,
-              {color: isDark ? appColors.white : appColors.darkText},
-            ]}>
-            {t('addNewService.serviceImage')}
-          </Text>
-          <Text style={[styles.text, {fontSize: fontSizes.FONT3HALF}]}>
-            {t('addNewService.maxSize')} :{' '}
-            <Text>2 {t('addNewService.mb')}</Text>
-          </Text>
-        </View>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => openImagePicker()}
-          style={styles.containerView}>
-          <Plus />
-        </TouchableOpacity>
-      </View>
+      
       {image ? (
         <TouchableOpacity
           activeOpacity={0.7}
@@ -82,7 +49,7 @@ export default function AddNewImageSection({setSelectedImage}: imageType) {
               styles.text,
               {color: appColors.primary, textDecorationLine: 'underline'},
             ]}>
-            {t('addNewService.selectThumbnail')}
+            {t('newDeveloper.ServiceAddConverImage')}
           </Text>
           <Arrow height={'12'} width={'16'} color={appColors.primary} />
         </TouchableOpacity>

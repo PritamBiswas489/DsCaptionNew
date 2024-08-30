@@ -376,4 +376,29 @@ export function timeformatting2(timestamp){
 		return formattedOutput
 
 }
+export function datetimeArr(timestamp){
+  // Convert to a Date object
+  const date = new Date(timestamp);
+
+  // Extracting day, month, year, hour, and minute
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  const year = date.getUTCFullYear();
+  let hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  // Formatting the output
+   return {
+    day,
+    month,
+    year,
+    hours,
+    minutes,
+    ampm
+   }
+
+}
 export function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }

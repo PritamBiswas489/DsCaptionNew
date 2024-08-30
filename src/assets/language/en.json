@@ -963,8 +963,33 @@
             "Entercategoryname":"Enter category name",
             "Entershortdescription":"Enter short description",
             "Selectimageforcategory":"Select image for category",
-            "Noservicesfoundforthissubcategory":"No services found for this subcategory"
-            
+            "Noservicesfoundforthissubcategory":"No services found for this subcategory",
+            "ServiceAddConverImage":"Select cover image",
+            "AddServiceFieldServiceName":"Service name",
+            "AddServiceFieldCategory":"Category",
+            "AddServiceFieldSubCategory":"Sub category",
+            "AddServiceUploadThumbnailImage":"Upload service thumbnail image",
+            "AddServiceTaxAmount":"Tax",
+            "AddServiceMinbidAmt":"Minimum bid amount",
+            "AddServicetags":"Tags (',' comma separator)",
+            "AddServiceShortDescription":"Short description",
+            "AddServiceDescription":"Description",
+            "AddServiceVariantName":"Variant name",
+            "AddServiceVariantPrice":"Variant price",
+            "VariantName":"Variant Name",
+            "VariantPrice":"Variant Price",
+            "ErrorEnterCoverImage":"Select cover image",
+            "ErrorEnterServiceName":"Valid service name required",
+            "ErrorSelectedCategory":"Select category",
+            "ErrorSelectSubCategory":"Sub category required",
+            "ErrorSelectThumbnailImage":"Select service thumbnail image",
+            "ErrorCorrectBidAmount":"Enter correct bid amount",
+            "ErrorShortDescription":"Enter short description",
+            "ErrorDescription":"Enter Description",
+            "ErrorVariant":"Service need atlist one variant with price",
+            "Invalidphonenumber":"Invalid phone number",
+            "Invalidemailaddress":"Invalid email address"
+
         }
     }
 }

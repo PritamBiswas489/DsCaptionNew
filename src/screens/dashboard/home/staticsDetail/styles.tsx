@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     paddingBottom: windowHeight(3),
     borderColor: appColors.border,
     borderWidth: 1,
-    marginTop: windowHeight(4),
+    // marginTop: windowHeight(1),
   },
   title: {
     color: appColors.darkText,

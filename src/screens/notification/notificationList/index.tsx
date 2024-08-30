@@ -1,20 +1,23 @@
 import React from 'react';
-import {View, Text, FlatList, Image} from 'react-native';
-import {styles} from '../styles';
-import {notificationList} from './data';
+import { View, Text, FlatList, Image } from 'react-native';
+import { styles } from '../styles';
+import { notificationList } from './data';
 import appColors from '@theme/appColors';
 import appFonts from '@theme/appFonts';
-import {GlobalStyle} from '@style/styles';
-import {useValues} from '../../../../App';
+import { GlobalStyle } from '@style/styles';
+import { useValues } from '../../../../App';
+import { NotificationsInterface } from '@src/interfaces/notificationsInterface';
+import { getMediaUrl } from '@src/config/utility';
 
-export default function NotificationList() {
-  const {isDark,t} = useValues();
+
+export default function NotificationList({ listing: notificationList }: { listing: NotificationsInterface[] }) {
+  const { isDark, t } = useValues();
   return (
     <View>
       <FlatList
         data={notificationList}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View>
             <View style={styles.containerStyle}>
               <View>
@@ -23,27 +26,23 @@ export default function NotificationList() {
                     style={[
                       styles.title,
                       {
-                        color: item.notificationStatus
-                          ? isDark
-                            ? appColors.white
-                            : appColors.lightText
-                          : isDark
+                        color: isDark
                           ? appColors.white
                           : appColors.darkText,
-                        fontFamily: item.notificationStatus
-                          ? appFonts.NunitoSemiBold
-                          : appFonts.NunitoBold,
+                        fontFamily: appFonts.NunitoBold,
                       },
                     ]}>
                     {t(item.title)}
                   </Text>
+
+
+                </View>
+                <View style={styles.row}>
                   <View
                     style={[
                       styles.dot,
                       {
-                        backgroundColor: item.notificationStatus
-                          ? appColors.lightText
-                          : isDark
+                        backgroundColor: isDark
                           ? appColors.white
                           : appColors.darkText,
                       },
@@ -52,15 +51,14 @@ export default function NotificationList() {
                     style={[
                       styles.time,
                       {
-                        color: item.notificationStatus
-                          ? appColors.lightText
-                          : isDark
+                        color: isDark
                           ? appColors.white
                           : appColors.darkText,
                       },
                     ]}>
-                    {t(item.time)}
+                    {(item.date)}   {item.time}
                   </Text>
+
                 </View>
 
                 <View>
@@ -68,36 +66,18 @@ export default function NotificationList() {
                     style={[
                       styles.content,
                       {
-                        color: item.notificationStatus
-                          ? appColors.lightText
-                          : isDark
+                        color: isDark
                           ? appColors.white
                           : appColors.darkText,
                       },
                     ]}>
-                    {t(item.content)}
+                    {t(item.description)}
                   </Text>
-                  {item.image && (
-                    <Image source={item.image} style={styles.image} />
+                  {item.cover_image && (
+                    <Image source={{ uri: `${getMediaUrl()}/push-notification/${item.cover_image}` }} style={styles.image} />
                   )}
                 </View>
               </View>
-
-              {item.person ? (
-                <Image source={item.person} style={styles.person} />
-              ) : (
-                <View
-                  style={[
-                    styles.circleView,
-                    {
-                      backgroundColor: isDark
-                        ? appColors.darkCardBg
-                        : appColors.white,
-                    },
-                  ]}>
-                  {item.icon}
-                </View>
-              )}
             </View>
           </View>
         )}
@@ -105,7 +85,7 @@ export default function NotificationList() {
           <View
             style={[
               GlobalStyle.horizontalLine,
-              {borderColor: isDark ? appColors.darkBorder : appColors.border},
+              { borderColor: isDark ? appColors.darkBorder : appColors.border },
             ]}></View>
         )}
       />

@@ -1,3 +1,4 @@
 export type imageType = {
-  setSelectedImage: React.Dispatch<React.SetStateAction<string[]>>;
+  image:string;
+  setSelectedImage: React.Dispatch<React.SetStateAction<string>>;
 };

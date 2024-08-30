@@ -18,12 +18,14 @@ import {Home, Wallet, Setting, Booking, ServiceList} from '../screens/index';
 import {View,Text} from 'react-native';
 import CartModal from '@otherComponent/cartModal';
 import {windowHeight} from '@theme/appConstant';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Tab = createBottomTabNavigator();
 
 export function BottomTab() {
   const [selected, setSelected] = useState<number>(0);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [processingSpinner, setProcessingLoader] = useState(false)
   const tabData = [
     {
       name: 'bottomTab.home',
@@ -52,7 +54,13 @@ export function BottomTab() {
     if (key != 2) {
       setSelected(key);
     }
-    key == 2 && setModalVisible(!modalVisible);
+    if(key === 2) {
+      setProcessingLoader(true)
+      setModalVisible(!modalVisible);
+      setTimeout(() => {
+        setProcessingLoader(false)
+      }, 300); // 2-second delay to simulate loading
+    } 
   };
 
   return (
@@ -76,6 +84,11 @@ export function BottomTab() {
           setModalVisible(false);
         }}
       /> 
+       <Spinner
+        visible={processingSpinner}
+        textContent={'Processing.....'}
+        textStyle={{ color: '#FFF' }}
+      />
     </View>
   );
 }

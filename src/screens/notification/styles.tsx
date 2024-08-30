@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     color: appColors.darkText,
     fontFamily: appFonts.NunitoMedium,
     fontSize: windowWidth(3.6),
-    width: windowWidth(66),
+    width: windowWidth(80),
     marginTop: windowHeight(0.8),
   },
   circleView: {
@@ -60,8 +60,8 @@ export const styles = StyleSheet.create({
     marginTop: windowHeight(1),
   },
   image: {
-    height: windowHeight(7),
-    width: windowWidth(14),
+    height: windowHeight(20),
+    width: windowWidth(30),
     resizeMode: 'contain',
     marginTop: windowHeight(1.2),
   },

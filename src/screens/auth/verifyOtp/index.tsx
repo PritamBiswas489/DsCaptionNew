@@ -59,7 +59,7 @@ const VerifyOtp=()=> {
               label={t('auth.verifySignIn')}
               onPress={onOtpClick}
               authText={'auth.resendCode'}
-              gotoScreen={() => {}}
+              gotoScreen={() => navigate('ForgotPassword')}
             />
           </View>
         }

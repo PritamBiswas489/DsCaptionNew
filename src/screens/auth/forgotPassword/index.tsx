@@ -119,6 +119,9 @@ const ForgotPassword = () => {
           text1: 'success',
           text2: response?.data?.message,
         });
+        // console.log("========= otp number ============")
+        // console.log(response?.data?.content?.otp)
+        dispatch(forgetPasswordAction.setData({ field: 'otp', data: response?.data?.content?.otp }))
         navigate('VerifyOtp');
       }else{
         setprocessingSpinner(false)

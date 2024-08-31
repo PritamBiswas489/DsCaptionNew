@@ -8,19 +8,19 @@ interface ForgetPasswordInterface {
     phone:string;
     identity_type:string;
     otp:string;
-    password:string;
-    confirm_password:string;
+    enteredOtp:string
+    
 }
 
 const initialState: ForgetPasswordInterface = {
    email:'',
    phoneCountryCode:'IN',
    phoneDialCode:'91',
-   phone:'9064302010',
+   phone:'',
    identity_type:'',
    otp:'',
-   password:'',
-   confirm_password:''
+   enteredOtp:'',
+   
 };
 interface SetDataPayload {
     field: keyof ForgetPasswordInterface;

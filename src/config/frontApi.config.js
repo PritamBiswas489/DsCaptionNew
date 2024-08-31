@@ -9,8 +9,15 @@ const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
 	const fullRequestUrl = `${config.baseURL}${config.url}`;
+    // console.log(config.method)
+	// if(config.method!=='get'){
+    //     console.log('sdsd')
+	// 	config.headers = {
+	// 		'Content-Type': 'multipart/form-data',
+	// 	};
+	// }
+	 
 	console.log('Request URL:', fullRequestUrl);
-	
 	return config;
 });
 

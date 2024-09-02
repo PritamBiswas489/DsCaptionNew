@@ -1,24 +1,24 @@
 //export {default as SplashScreen} from './SplashScreen';
 
-import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Animated, Easing, View} from 'react-native';
-import {splashLogo2} from '@utils/images';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Animated, Easing, View } from 'react-native';
+import { splashLogo2 } from '@utils/images';
 import appColors from '@theme/appColors';
-import {styles} from './styles';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/navigation/types';
-import {getValue, setValue} from '@utils/localstorage';
-import {useTranslation} from 'react-i18next';
-import {useValues} from '../../../App';
-import {getServiceMenCredentials} from '@utils/functions';
+import { styles } from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from 'src/navigation/types';
+import { getValue, setValue } from '@utils/localstorage';
+import { useTranslation } from 'react-i18next';
+import { useValues } from '../../../App';
+import { getServiceMenCredentials } from '@utils/functions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { getAuthUserService } from '@src/services/auth.service';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 import { useDispatch } from 'react-redux';
-import { getProviderConfig } from '@src/services/settings.service';
+import { getProviderConfig, getPagesContent } from '@src/services/settings.service';
 import { configAppActions } from '@src/store/redux/config-redux';
-
+import { contentPagesActions } from '@src/store/redux/content-pages-redux';
 type navigation = NativeStackNavigationProp<RootStackParamList>;
 
 const SplashScreen = () => {
@@ -28,12 +28,12 @@ const SplashScreen = () => {
   const [backgroundColor, setBackgroundColor] = useState(appColors.darkText);
   const animations = new Animated.Value(0);
   const data = [appColors.darkText, appColors.primary, appColors.darkText];
-  const {replace} = useNavigation<navigation>();
-  const {i18n} = useTranslation();
-  const {setCurrSymbol, setCurrValue, setIsServiceManLogin, setIsDark} =
+  const { replace } = useNavigation<navigation>();
+  const { i18n } = useTranslation();
+  const { setCurrSymbol, setCurrValue, setIsServiceManLogin, setIsDark } =
     useValues();
 
-  const [checkingLoader,setCheckingLoader] = useState(false);
+  const [checkingLoader, setCheckingLoader] = useState(false);
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -108,23 +108,53 @@ const SplashScreen = () => {
     outputRange: ['50deg', '0deg'],
   });
 
-  const checkuser = async () =>{
+  const checkuser = async () => {
     setCheckingLoader(true)
     const responseProviderConfig = await getProviderConfig();
-    if(responseProviderConfig?.data?.content?.base_url){
-        dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
-    }else{
-        Alert.alert('Unable to load app.restart the app')
-        setCheckingLoader(false)
-        return
+    if (responseProviderConfig?.data?.content?.base_url) {
+      dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
+    } else {
+      Alert.alert('Unable to load app.restart the app')
+      setCheckingLoader(false)
+      return
     }
 
+    const contentConfig = await getPagesContent()
+
+    if (contentConfig?.data?.content) {
+      // console.log("================ hello =======================")
+
+      Object.keys(contentConfig?.data?.content).forEach((key: string) => {
+        // console.log(contentConfig?.data?.content[key]?.value)
+        if (key === 'about_us') {
+          dispatch(contentPagesActions.setData({ 'field': 'about_us', data: contentConfig?.data?.content[key]?.value }))
+        }
+        if (key === 'terms_and_conditions') {
+          dispatch(contentPagesActions.setData({ 'field': 'terms_and_conditions', data: contentConfig?.data?.content[key]?.value }))
+        }
+        if (key === 'refund_policy') {
+          dispatch(contentPagesActions.setData({ 'field': 'refund_policy', data: contentConfig?.data?.content[key]?.value }))
+        }
+        if (key === 'return_policy') {
+          dispatch(contentPagesActions.setData({ 'field': 'return_policy', data: contentConfig?.data?.content[key]?.value }))
+        }
+        if (key === 'cancellation_policy') {
+          dispatch(contentPagesActions.setData({ 'field': 'cancellation_policy', data: contentConfig?.data?.content[key]?.value }))
+        }
+        if (key === 'privacy_policy') {
+          dispatch(contentPagesActions.setData({ 'field': 'privacy_policy', data: contentConfig?.data?.content[key]?.value }))
+        }
+      })
+
+    }
+    
+
     const response = await getAuthUserService()
-    if(response?.data?.response_code === 'default_200' && response?.data?.content?.id){
-       dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))
-       replace('BottomTab');
-    } else{
-       replace('IntroSlider');
+    if (response?.data?.response_code === 'default_200' && response?.data?.content?.id) {
+      dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))
+      replace('BottomTab');
+    } else {
+      replace('IntroSlider');
     }
     setCheckingLoader(false)
   }
@@ -136,10 +166,10 @@ const SplashScreen = () => {
       setTimeout(() => {
         zoomIn().start(() => {
           zoomOut().start(() => {
-           // replace('IntroSlider');
-           //Alert.alert('Can Checking Here which page to redirect')
-           
-           checkuser()
+            // replace('IntroSlider');
+            //Alert.alert('Can Checking Here which page to redirect')
+
+            checkuser()
           });
         });
       }, 10);
@@ -158,14 +188,15 @@ const SplashScreen = () => {
     animate();
   }, [1000]);
 
-  let transformArray = [{scale: scaleValue}];
+  let transformArray = [{ scale: scaleValue }];
 
   if (currentIndex === 1) {
-    transformArray.push({rotate: interpolatedValue});
+    //@ts-ignore
+    transformArray.push({ rotate: interpolatedValue });
   }
 
   return (
-    <View style={[styles.container, {backgroundColor: backgroundColor}]}>
+    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
       <Animated.Image
         source={images[currentIndex]}
         style={[
@@ -177,12 +208,12 @@ const SplashScreen = () => {
         resizeMode={'contain'}
       />
       <Spinner
-            visible={checkingLoader}
-            textContent={''}
-            
-            indicatorStyle={styles.spinnerStyle}
-            textStyle={{ color: '#FFF' }}
-          />
+        visible={checkingLoader}
+        textContent={''}
+
+        indicatorStyle={styles.spinnerStyle}
+        textStyle={{ color: '#FFF' }}
+      />
     </View>
   );
 }

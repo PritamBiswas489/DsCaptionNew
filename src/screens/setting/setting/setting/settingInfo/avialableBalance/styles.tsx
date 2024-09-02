@@ -13,6 +13,17 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: windowWidth(4),
   },
+  linearGradient: {
+    flexDirection: 'row',  // Arrange children in a row
+    alignItems: 'center',  // Align items vertically in the center
+    justifyContent: 'space-between',  // Distribute space evenly between the children
+    padding: 4,
+    borderRadius: 8,
+  },
+  itemContainer: {
+    flex: 1,  // Ensure each item takes up equal space
+    alignItems: 'center',  // Center align text horizontally
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -21,7 +32,7 @@ export const styles = StyleSheet.create({
   title: {
     color: appColors.white,
     fontFamily: appFonts.NunitoRegular,
-    fontSize: fontSizes.FONT4,
+    fontSize: fontSizes.FONT3,
   },
   price: {
     color: appColors.white,
@@ -29,7 +40,8 @@ export const styles = StyleSheet.create({
     fontSize: fontSizes.FONT4HALF,
   },
   containerStyle: {
-    bottom: windowHeight(3),
+    marginBottom: windowHeight(1),
+    marginTop: windowHeight(1),
   },
   textStyle: {
     color: appColors.white,

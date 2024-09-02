@@ -11,10 +11,12 @@ import {
   ActiveWallet,
   ActiveBooking,
   Plus,
-  Services
+  Services,
+  MenuIcon,
+  ActiveMenuIcon
 } from '@utils/icons';
 import appColors from '../theme/appColors';
-import {Home, Wallet, Setting, Booking, ServiceList} from '../screens/index';
+import {Home, Wallet, Setting, Booking, ServiceList, MoreMenus} from '../screens/index';
 import {View,Text} from 'react-native';
 import CartModal from '@otherComponent/cartModal';
 import {windowHeight} from '@theme/appConstant';
@@ -44,9 +46,9 @@ export function BottomTab() {
       tabBarIcon: <Services />,
     },
     {
-      name: 'bottomTab.setting',
-      activeIcon: <ActiveSetting />,
-      tabBarIcon: <SettingIcon />,
+      name: 'newDeveloper.moreMenuText',
+      activeIcon: <ActiveMenuIcon />,
+      tabBarIcon: <MenuIcon />,
     },
   ];
 
@@ -73,7 +75,7 @@ export function BottomTab() {
         ) : selected == 3 ? (
           <ServiceList />
         ) : (
-          <Setting />
+          <MoreMenus />
         )}
       </View>
       <MyTabBar onPress={onPress} selected={selected} tabData={tabData} />

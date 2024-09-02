@@ -5,8 +5,11 @@ import { ServiceMenInterface } from "@src/interfaces/serviceMenInteface";
 interface HomeDataStateInterface {
     serviceMenData:ServiceMenInterface[];
     serviceMenLimit:number;
+    loadServiceMen:boolean;
     bookingList:BookingListingInterface[];
     bookingListLimit:number;
+    loadBookingList:boolean;
+    loadSubsScriptionList:boolean    
 }
 
 
@@ -19,7 +22,10 @@ const initialState: HomeDataStateInterface = {
     serviceMenData: [],
     serviceMenLimit:5,
     bookingList:[],
-    bookingListLimit:5
+    bookingListLimit:5,
+    loadServiceMen:true,
+    loadBookingList:true,
+    loadSubsScriptionList:true
     
 };
 

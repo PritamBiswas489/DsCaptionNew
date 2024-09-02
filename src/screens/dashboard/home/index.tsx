@@ -8,3 +8,5 @@ export * from './ServiceListing';
 export * from './staticsDetail';
 export * from './history';
 export * from './dashBoard/earnings';
+export * from './MoreMenus';
+export * from './ContentPages';

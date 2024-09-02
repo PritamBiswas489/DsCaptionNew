@@ -39,10 +39,10 @@ export function ServiceDetail() {
           </View>
         </View>
       </View>
-      <ExperienceDetail
+      {/* <ExperienceDetail
         contentStyle={{width: windowWidth(90), marginTop: 8}}
         providerContent={'serviceManDetails.detail'}
-      />
+      /> */}
     </View>
   );
 }

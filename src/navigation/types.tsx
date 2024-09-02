@@ -158,4 +158,7 @@ export type RootStackParamList = {
   LoaderScreen: undefined;
   CoverLocationList:{zone:string[]};
   EditBooking:{id:string};
+  MoreMenus:undefined;
+  ProfileSettings:undefined;
+  ContentPages:{content_key:string}
 };

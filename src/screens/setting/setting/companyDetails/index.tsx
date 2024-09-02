@@ -31,7 +31,7 @@ export function CompanyDetail({route}: {route: any}) {
       showsVerticalScrollIndicator={false}>
       <Header showBackArrow={true} title="auth.companyDetails" />
       <ServiceDetail />
-      <Info />
+      <Info /> 
       <View
         style={[
           GlobalStyle.dashLine,
@@ -47,10 +47,10 @@ export function CompanyDetail({route}: {route: any}) {
         }
         titleStyle={styles.title}
       />
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         <ServiceRange />
       </View>
-      <LocationList data={locationData ? locationData : addressData} />
+      <LocationList data={locationData ? locationData : addressData} /> */}
     </ScrollView>
   );
 }

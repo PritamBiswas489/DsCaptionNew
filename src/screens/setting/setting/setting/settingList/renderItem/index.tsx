@@ -19,9 +19,11 @@ type routeProps = NativeStackNavigationProp<RootStackParamList>;
 export default function RenderItem({
   item,
   setModalVisible,
+  setCommissionModal,
 }: {
   item: settingType;
   setModalVisible: React.Dispatch<React.SetStateAction<Boolean>>;
+  setCommissionModal:React.Dispatch<React.SetStateAction<Boolean>>;
 }) {
   const {replace, navigate} = useNavigation<routeProps>();
   const {isDark, t} = useValues();
@@ -34,6 +36,8 @@ export default function RenderItem({
         const response = await deleteAuthTokens(); 
         dispatch(serviceProviderAccountDataActions.resetState());
         replace('AuthNavigation');
+    }else if(data.gotoScreen === 'CommissionModal'){
+      setCommissionModal(true)
     }else{
         navigate(data.gotoScreen)
     }
@@ -67,7 +71,7 @@ export default function RenderItem({
           ]}
         />
       )}
-      <Text
+      {/* <Text
         style={[
           styles.title,
           {
@@ -81,7 +85,7 @@ export default function RenderItem({
           },
         ]}>
         {t(item.title)}
-      </Text>
+      </Text> */}
 
       {item.data.map(data => (
         <View

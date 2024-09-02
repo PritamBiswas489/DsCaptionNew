@@ -38,3 +38,13 @@ export const getProviderConfig = async () : Promise<Response> => {
   }
 
 }
+
+export const getPagesContent = async () : Promise<Response> => {
+  try {
+    const response = await api.get<Response>('/customer/config/pages');
+    return response;
+  } catch (error:any) {
+    return error.response;
+  }
+
+}

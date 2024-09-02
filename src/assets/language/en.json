@@ -988,7 +988,33 @@
             "ErrorDescription":"Enter Description",
             "ErrorVariant":"Service need atlist one variant with price",
             "Invalidphonenumber":"Invalid phone number",
-            "Invalidemailaddress":"Invalid email address"
+            "Invalidemailaddress":"Invalid email address",
+            "moreMenuText":"More",
+            "moreMenuHeading":"More Menus",
+            "moreMenuProfile":"Profile",
+            "moreMenuMysubscriptions":"My subscriptions",
+            "moreMenuChat":"Chat",
+            "moreMenuSettings":"Settings",
+            "moreMenuWithdrawlist":"Withdraw list",
+            "moreMenuReports":"Reports",
+            "moreMenuAboutus":"About us",
+            "moreMenuPrivacyPolicy":"Privacy Policy",
+            "moreMenuTermsandconditions":"Terms and conditions",
+            "moreMenuRefundsPolicy":"Refunds Policy",
+            "moreMenuLogout":"Logout",
+            "about_us":"About us",
+            "terms_and_conditions":"Terms and conditions",
+            "refund_policy":"Refund policy",
+            "return_policy":"Return policy",
+            "cancellation_policy":"Cancellation policy",
+            "privacy_policy":"Privacy policy",
+            "editProfileMenu":"Edit Profile",
+            "reviewsMenu":"Reviews",
+            "bankMenu":"Bank Information",
+            "PercentageText":"Percentage",
+            "PercentageContent":"Currently you are using default commission"
+
+
 
         }
     }

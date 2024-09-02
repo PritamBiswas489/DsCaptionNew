@@ -31,6 +31,7 @@ import configAppSlice from "./redux/config-redux";
 import homeDataSlice from "./redux/home-data-redux";
 import notificationListSlice from "./redux/notifications-data-redux";
 import forgetPasswordSlice from "./redux/forgetpassword-redux";
+import contentPagesSlice from "./redux/content-pages-redux";
 
 
 const store = configureStore({
@@ -66,7 +67,8 @@ const store = configureStore({
       providerAppConfig:configAppSlice.reducer,
       homeData:homeDataSlice.reducer,
       notificationsData:notificationListSlice.reducer,
-      forgetPassword:forgetPasswordSlice.reducer
+      forgetPassword:forgetPasswordSlice.reducer,
+      contentPages:contentPagesSlice.reducer
     },
   });
   

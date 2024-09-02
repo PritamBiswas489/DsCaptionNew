@@ -29,6 +29,8 @@ export * from '@assets/icons/bottomTab/setting';
 export * from '@assets/icons/bottomTab/wallet';
 export * from '@assets/icons/bottomTab/newService';
 export * from '@assets/icons/bottomTab/newServiceMen';
+export * from '@assets/icons/bottomTab/menuMoreIcon';
+export * from '@assets/icons/bottomTab/activeMenuMoreIcon';
 
 export * from '@assets/icons/home/allBooking';
 export * from '@assets/icons/home/category';
@@ -62,6 +64,7 @@ export * from '@assets/icons/home/starIcon';
 export * from '@assets/icons/home/verify';
 export * from '@assets/icons/home/certificate';
 export * from '@assets/icons/home/services';
+
 
 export * from '@assets/icons/notification/alert';
 export * from '@assets/icons/notification/checkList';
@@ -120,3 +123,5 @@ export * from '@assets/icons/setting/tick';
 export * from '@assets/icons/setting/pending';
 export * from '@assets/icons/setting/morefill';
 export * from '@assets/icons/setting/packageIcon';
+export * from '@assets/icons/setting/profileSettingsMenu';
+export * from '@assets/icons/moreMenus/moreMenus';

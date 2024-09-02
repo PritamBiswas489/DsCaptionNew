@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigation from './authNavigation';
-import {RootStack} from './RootStackNavigator';
-import {BottomTab} from './tabNavigation';
+import { RootStack } from './RootStackNavigator';
+import { BottomTab } from './tabNavigation';
 import {
   AddNewAddress,
   AddNewService,
@@ -58,15 +58,19 @@ import {
   Booking,
   EditBooking,
   AddressCurrentLocation,
-  CoverLocationList
+  CoverLocationList,
+  MoreMenus,
+  Setting,
+
 
 } from '../screens';
-import {MultipleServiceMenList} from '@otherComponent/booking/bookingDetail/multipleServiceMenList';
-import {AddExtraCharges} from '@otherComponent/booking/addExtraCharges';
-import {ServiceProof} from '@otherComponent/booking/serviceProof';
-import {ProviderInfo} from '@screens/dashboard/serviceMan/home';
+import { MultipleServiceMenList } from '@otherComponent/booking/bookingDetail/multipleServiceMenList';
+import { AddExtraCharges } from '@otherComponent/booking/addExtraCharges';
+import { ServiceProof } from '@otherComponent/booking/serviceProof';
+import { ProviderInfo } from '@screens/dashboard/serviceMan/home';
 import NoInternet from '@otherComponent/noInternet';
 import NetInfo from '@react-native-community/netinfo';
+import ContentPages from '@src/screens/dashboard/home/ContentPages';
 
 
 export default function MyStack() {
@@ -89,12 +93,12 @@ export default function MyStack() {
           <RootStack.Screen name="NoInternet" component={NoInternet} />
         ) : (
           <>
-          
-          <RootStack.Screen
+
+            <RootStack.Screen
               name="AuthNavigation"
               component={AuthNavigation}
             />
-            
+
             <RootStack.Screen name="Booking" component={Booking} />
 
             <RootStack.Screen name="EditBooking" component={EditBooking} />
@@ -105,13 +109,13 @@ export default function MyStack() {
               name="EmptyNotification"
               component={EmptyNotification}
             />
-            <RootStack.Screen name="Notification"  component={Notification} />
+            <RootStack.Screen name="Notification" component={Notification} />
             {/* Service list */}
-            <RootStack.Screen name="ServiceList"   component={ServiceList} />
+            <RootStack.Screen name="ServiceList" component={ServiceList} />
             {/* Service details */}
             <RootStack.Screen name="ServiceDetail" component={ServiceDetail} />
-            <RootStack.Screen name="LatestBlog"    component={LatestBlog} />
-            <RootStack.Screen name="BlogDetail"    component={BlogDetail} />
+            <RootStack.Screen name="LatestBlog" component={LatestBlog} />
+            <RootStack.Screen name="BlogDetail" component={BlogDetail} />
             <RootStack.Screen
               name="ServiceMenDetail"
               component={ServiceMenDetail}
@@ -122,18 +126,18 @@ export default function MyStack() {
             {/* Add new Service SubCategory */}
             <RootStack.Screen name="AddNewServiceSubCategory" component={AddNewServiceSubCategory} />
 
-            
+
 
             {/* Popular service view */}
             <RootStack.Screen
               name="PopularServiceView"
               component={PopularServiceView}
-            /> 
+            />
 
             <RootStack.Screen
               name="MySubscriptions"
               component={MySubscriptions}
-            /> 
+            />
 
 
 
@@ -149,14 +153,14 @@ export default function MyStack() {
             <RootStack.Screen name="AddNewAddress" component={AddNewAddress} />
             <RootStack.Screen name="CoverLocationList" component={CoverLocationList} />
 
-            
+
             <RootStack.Screen name="Categories" component={Categories} />
             <RootStack.Screen
               name="ServiceMenList"
               component={ServiceMenList}
             />
 
-             <RootStack.Screen
+            <RootStack.Screen
               name="AcceptedBooking"
               component={AcceptedBooking}
             />
@@ -175,9 +179,9 @@ export default function MyStack() {
             />
             <RootStack.Screen name="MapView" component={MapView} />
             <RootStack.Screen name="Chat" component={Chat} />
-            <RootStack.Screen name="ChatHistory" component={ChatHistory} /> 
+            <RootStack.Screen name="ChatHistory" component={ChatHistory} />
 
-             <RootStack.Screen
+            <RootStack.Screen
               name="CompletedBooking"
               component={CompletedBooking}
             />
@@ -194,8 +198,8 @@ export default function MyStack() {
             <RootStack.Screen
               name="AssignedBooking"
               component={AssignedBooking}
-            /> 
-             <RootStack.Screen name="AppSetting" component={AppSetting} />
+            />
+            <RootStack.Screen name="AppSetting" component={AppSetting} />
             <RootStack.Screen
               name="ChangeCurrency"
               component={ChangeCurrency}
@@ -218,7 +222,7 @@ export default function MyStack() {
             <RootStack.Screen
               name="ChangePassword"
               component={ChangePassword}
-            /> 
+            />
             <RootStack.Screen
               name="UserProfileSetting"
               component={UserProfileSetting}
@@ -238,8 +242,8 @@ export default function MyStack() {
             <RootStack.Screen
               name="CommissionHistory"
               component={CommissionHistory}
-            /> 
-             <RootStack.Screen name="PackageDetail" component={PackageDetail} />
+            />
+            <RootStack.Screen name="PackageDetail" component={PackageDetail} />
             <RootStack.Screen name="AddPackage" component={AddPackage} />
             <RootStack.Screen
               name="BookingDetails"
@@ -255,21 +259,33 @@ export default function MyStack() {
               name="CommissionDetail"
               component={CommissionDetail}
             />
-             <RootStack.Screen
+            <RootStack.Screen
               name="AddressCurrentLocation"
               component={AddressCurrentLocation}
-            /> 
+            />
             <RootStack.Screen name="ProviderInfo" component={ProviderInfo} />
             <RootStack.Screen
               name="CurrentLocation"
               component={CurrentLocation}
-            /> 
+            />
 
-           
+            <RootStack.Screen
+              name="MoreMenus"
+              component={MoreMenus}
+            />
+
+            <RootStack.Screen
+              name="ProfileSettings"
+              component={Setting}
+            />
+            <RootStack.Screen
+              name="ContentPages"
+              component={ContentPages}
+            />
 
 
 
-            
+
           </>
         )}
       </RootStack.Navigator>

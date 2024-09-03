@@ -23,11 +23,14 @@ import Toast from 'react-native-toast-message';
 
 
 
+
 const AddressCurrentLocation=({route}: any) =>{
   
   const screen = route?.params?.screen;
   const dispatch = useDispatch()
   const {isDark} = useValues();
+
+  const { googlekey } = useSelector((state: RootState) => state['providerAppConfig'])
 
 
   const latitude = useSelector((state: RootState)=>state['registerProviderField'].latitude)
@@ -61,7 +64,7 @@ const AddressCurrentLocation=({route}: any) =>{
   }
 
   const getGeoLocationAddress = (lat:number,lng:number) =>{
-    Geocoder.init('AIzaSyCb7XJAeWDd5AXTQpyjeYIU93Gc7CfUpVk', { language: 'en' });
+    Geocoder.init(googlekey, { language: 'en' });
     console.log("=============== getAddress ========================")
     console.log(lat)
     console.log(lng)

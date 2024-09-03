@@ -15,15 +15,18 @@ import { deleteAuthTokens } from '@src/config/auth';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 import { useDispatch } from 'react-redux';
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
+import { logoutClearReduxState } from '@src/services/logout.service';
 
 export default function RenderItem({
   item,
   setModalVisible,
   setCommissionModal,
+  showPromotionalModal
 }: {
   item: settingType;
   setModalVisible: React.Dispatch<React.SetStateAction<Boolean>>;
   setCommissionModal:React.Dispatch<React.SetStateAction<Boolean>>;
+  showPromotionalModal:React.Dispatch<React.SetStateAction<Boolean>>;
 }) {
   const {replace, navigate} = useNavigation<routeProps>();
   const {isDark, t} = useValues();
@@ -34,13 +37,16 @@ export default function RenderItem({
       clearServiceMenData()
     }else if(data.gotoScreen === 'logoutProcess'){
         const response = await deleteAuthTokens(); 
-        dispatch(serviceProviderAccountDataActions.resetState());
+        logoutClearReduxState(dispatch)
         replace('AuthNavigation');
     }else if(data.gotoScreen === 'CommissionModal'){
-      setCommissionModal(true)
+       setCommissionModal(true)
+    }else if(data.gotoScreen === 'PromotionalCostModal'){
+      showPromotionalModal(true)
     }else{
         navigate(data.gotoScreen)
     }
+    //PromotionalCost
   };
 
   const clearServiceMenData = async () => {
@@ -89,6 +95,7 @@ export default function RenderItem({
 
       {item.data.map(data => (
         <View
+        key={data.name}
           style={{
             backgroundColor: item.showDivider
               ? isDark

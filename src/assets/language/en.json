@@ -1012,7 +1012,16 @@
             "reviewsMenu":"Reviews",
             "bankMenu":"Bank Information",
             "PercentageText":"Percentage",
-            "PercentageContent":"Currently you are using default commission"
+            "PercentageContent":"Currently you are using default commission",
+            "BookingServed":"Booking Served",
+            "DaysSinceJoined":"Days Since Joined",
+            "TotalSubscriptions":"Total Subscriptions",
+            "PromotionalCostheading":"Promotional Cost",
+            "PromotionalContent":"Current you are using the following percentage as the promotional cost",
+            "DiscountCostpercentage":"Discount Cost percentage",
+            "CampaignCostpercentage":"Campaign Cost percentage",
+            "CouponCostpercentage":"Coupon Cost percentage"
+
 
 
 

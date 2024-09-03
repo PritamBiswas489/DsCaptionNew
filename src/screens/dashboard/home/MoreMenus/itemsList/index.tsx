@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 import { deleteAuthTokens } from '@src/config/auth';
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
+import { logoutClearReduxState } from '@src/services/logout.service';
 
 export default function ItemsList({ isGrid }: { isGrid: boolean }) {
   const { navigate, replace } = useNavigation<ItemsProps>();
@@ -24,7 +25,7 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
   ) => {
     if (screen === 'logoutProcess') {
       const response = await deleteAuthTokens();
-      dispatch(serviceProviderAccountDataActions.resetState());
+      logoutClearReduxState(dispatch)
       replace('AuthNavigation');
     } else if (screen === 'about_us') {
       navigate('ContentPages', { content_key: 'about_us' });

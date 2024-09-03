@@ -26,7 +26,7 @@ export function ProviderLogin() {
     serviceMenData: ServiceMenList,
   } = useSelector((state: RootState) => state['homeData'])
 
-
+  console.log(ServiceMenList)
 
 
 
@@ -43,18 +43,18 @@ export function ProviderLogin() {
         isHorizontal={true}
       />
 
-      {!isFreelancerLogin && (
-        <>
-          <HeadingRow
-            rowStyle={{ marginTop: 0 }}
-            title={'home.activeServiceMen'}
-            content={'home.viewAll'}
-            gotoScreen={() => navigate('ServiceMenList')}
-          />
-          {!ServiceMenList && <HomeNoFataFound message={t('newDeveloper.homeServiceMenFound')} />}
-          {ServiceMenList && <ActiveServiceMen data={ServiceMenList} />}
-        </>
-      )}
+
+      <>
+        <HeadingRow
+          rowStyle={{ marginTop: 0 }}
+          title={'home.activeServiceMen'}
+          content={'home.viewAll'}
+          gotoScreen={() => navigate('ServiceMenList')}
+        />
+        {ServiceMenList.length === 0 && <HomeNoFataFound message={t('newDeveloper.homeServiceMenFound')} />}
+        {ServiceMenList.length > 0 && <ActiveServiceMen data={ServiceMenList} />}
+      </>
+
     </View>
   );
 }

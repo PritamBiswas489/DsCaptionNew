@@ -20,6 +20,7 @@ import { mapFieldActions } from '@src/store/redux/map-address-redux';
 import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
 import Geocoder from 'react-native-geocoding';
 import Toast from 'react-native-toast-message';
+
  
 
 
@@ -32,6 +33,7 @@ const AddressCurrentLocation=({route}: any) =>{
   const [mapLat,setMapLat] = useState<number>(0)
   const [mapLng, setMapLng] = useState<number>(0)
   const navigation =  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { googlekey } = useSelector((state: RootState) => state['providerAppConfig'])
 
 
   const setMapAddressState = () =>{
@@ -66,7 +68,7 @@ const AddressCurrentLocation=({route}: any) =>{
   
 
   const getGeoLocationAddress = (lat:number,lng:number) =>{
-    Geocoder.init('AIzaSyCb7XJAeWDd5AXTQpyjeYIU93Gc7CfUpVk', { language: 'en' });
+    Geocoder.init(googlekey, { language: 'en' });
     console.log("=============== getAddress ========================")
     console.log(lat)
     console.log(lng)

@@ -32,11 +32,14 @@ import homeDataSlice from "./redux/home-data-redux";
 import notificationListSlice from "./redux/notifications-data-redux";
 import forgetPasswordSlice from "./redux/forgetpassword-redux";
 import contentPagesSlice from "./redux/content-pages-redux";
-
+import serviceProviderBookingReviewSlice from "./redux/service-provider-booking-review-redux";
+import serviceProviderPomotionalCostSlice from "./redux/service-provider-pomotional-cost-redux";
 
 const store = configureStore({
     reducer: { 
       serviceProviderAccountData:serviceProviderAccountDataSlice.reducer,
+      serviceProviderBookingReview:serviceProviderBookingReviewSlice.reducer,
+      serviceProviderPomotionalCost:serviceProviderPomotionalCostSlice.reducer,
       registerProviderField:registerFieldSlice.reducer,
       registerProviderErrorField:registerFieldErrorSlice.reducer,
       zoneList:zoneDataSlice.reducer,
@@ -69,6 +72,7 @@ const store = configureStore({
       notificationsData:notificationListSlice.reducer,
       forgetPassword:forgetPasswordSlice.reducer,
       contentPages:contentPagesSlice.reducer
+      // DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
   });
   

@@ -14,6 +14,7 @@ import { RootState, AppDispatch } from '@src/store';
 import { registerFieldActions } from '@src/store/redux/register-field-redux';
 import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
 import PhoneTextInput from '@otherComponent/auth/phoneTextInput';
+import appColors from '@src/theme/appColors';
 
 
 export default function ContactPersonInputField() {
@@ -80,7 +81,7 @@ export default function ContactPersonInputField() {
   const errorContactPersonPhoneNo = useSelector((state: RootState)=>state['registerProviderErrorField'].contact_person_phone)
 
 
-  const {t} = useValues(); 
+  const {t,isDark} = useValues(); 
   const [sameAsGeneralInfo, setSameAsGeneralInfo] = useState(false);
 
   const genInfoCompanyName =  useSelector((state: RootState)=>state['registerProviderField'].company_name)
@@ -111,7 +112,7 @@ export default function ContactPersonInputField() {
             onPress={() => setSameAsGeneralInfo(!sameAsGeneralInfo)}
             color={sameAsGeneralInfo ? 'orange' : undefined}
           />
-            <Text style={styles.label}>{t('newDeveloper.SameAsGeneralInfo')}</Text>
+            <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>{t('newDeveloper.SameAsGeneralInfo')}</Text>
       </View>
      {/* Company/Individual Name */}
      <TextInputComponent

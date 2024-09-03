@@ -56,7 +56,7 @@ export function Home() {
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
   const { navigate } = useNavigation<navigationProp>();
   const { isDark, isServiceManLogin, t } = useValues();
-  const [showSkeletonLoader, setSkeletonLoader] = useState(true)
+  const [showSkeletonLoader, setSkeletonLoader] = useState(false)
  
   const [refreshing, setRefreshing] = React.useState(false);
  
@@ -124,6 +124,8 @@ export function Home() {
     // console.log({ servicemenNeedFresh, subscriptionFresh })
     if (!loadBookingList && !loadSubsScriptionList && !loadServiceMen) {
       setSkeletonLoader(false)
+    }else{
+      setSkeletonLoader(true)
     }
   }, [loadBookingList, loadSubsScriptionList, loadServiceMen])
 

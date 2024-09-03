@@ -26,6 +26,8 @@ import { RootState, AppDispatch } from '@src/store';
 import { getAuthUserService } from '@src/services/auth.service';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 import { useDispatch } from 'react-redux';
+import { serviceProviderBookingReviewActions } from '@src/store/redux/service-provider-booking-review-redux';
+import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-provider-pomotional-cost-redux';
  interface LoginResponse {
   data: any;
   status: number;
@@ -40,6 +42,7 @@ import { useDispatch } from 'react-redux';
    const navigation = useNavigation<loginProps>(); 
   const [errors, setErrors] = useState({email: '', password: ''});
   const [form, setForm] = useState({email: 'dorkarbeldanga@gmail.com', password: '@Beldanga1234'});
+  // const [form, setForm] = useState({email: 'pritam.biswas489@gmail.com', password: 'Pritam123@#'});
   const [selectOptionModal, setOptionModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch()
@@ -125,10 +128,11 @@ import { useDispatch } from 'react-redux';
       }else{
         await setAuthTokens(response?.data?.content?.token, null);
         const responseuser = await getAuthUserService()
-         if(responseuser?.data?.response_code === 'default_200' && responseuser?.data?.content?.id){
-              dispatch(serviceProviderAccountDataActions.setData(responseuser?.data?.content))
-              console.log("==== login fetch ============")
-              console.log(responseuser?.data?.content?.id);
+        
+         if(responseuser?.data?.response_code === 'default_200' && responseuser?.data?.content?.provider_info?.id){
+              dispatch(serviceProviderAccountDataActions.setData(responseuser?.data?.content?.provider_info))
+              dispatch(serviceProviderBookingReviewActions.setData(responseuser?.data?.content?.booking_overview))
+              dispatch(serviceProviderPomotionalCostActions.setData(responseuser?.data?.content?.promotional_cost_percentage))
               Toast.show({
                   type: 'success',
                   text1: 'Success',

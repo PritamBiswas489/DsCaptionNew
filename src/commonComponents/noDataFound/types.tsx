@@ -9,4 +9,5 @@ export interface NodataProps {
   gradiantBtn: React.ReactNode;
   infoImage: ImageSourcePropType | undefined;
   imageStyle?: ViewStyle;
+  showheader?:boolean
 }

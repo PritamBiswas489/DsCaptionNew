@@ -10,10 +10,20 @@ interface Response {
   }
 export const getAuthUserService =  async (): Promise<Response> => {
 	try {
-		const response = await api.get('/provider');
+		const response = await api.get('/provider/account/overview');
 		return response;
 	} catch (error:any) {
 		return error.response;
 	}
 };
+
+export const deleteProviderOwnAccount = async(): Promise<Response> => {
+	try {
+		const response = await api.delete('/provider/delete');
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}
  

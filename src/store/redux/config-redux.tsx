@@ -79,6 +79,7 @@ const initialConfig: ConfigInterface = {
       advanced_booking_restriction_value: 0,
       advanced_booking_restriction_type: "hour",
     },
+    googlekey:''
   };
 
   const initialState: ConfigInterface = initialConfig

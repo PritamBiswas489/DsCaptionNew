@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import appColors from '@src/theme/appColors';
 import appFonts from '@src/theme/appFonts';
 import { fontSizes } from '@src/theme/appConstant';
+import {useValues} from '../../../App';
+import { windowHeight } from '@src/theme/appConstant';
 
 interface DataItem {
   label: string;
@@ -45,9 +47,10 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
     setIsModalVisible(false);
     setFilteredData(data);
   };
+  const {isDark} = useValues()
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
       {/* {label && (
         <Text style={[styles.label,  { color: 'black' }]}>
           {label}
@@ -55,8 +58,8 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
       )} */}
 
       <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-        <View style={pickerSelectStyles.inputContainer}>
-          <Text style={value ? styles.selectedTextStyle : styles.placeholderStyle}>
+        <View style={[pickerSelectStyles.inputContainer,{backgroundColor:isDark ? appColors.darkTheme : appColors.textInput  }]}>
+          <Text style={value ? [styles.selectedTextStyle,{color: isDark ? appColors.white : appColors.darkText,}] : [styles.placeholderStyle,{color: isDark ? appColors.white : appColors.darkText,}]}>
             {value ? label+ ':   '+ data.find(item => item.value === value)?.label ?? '' : label}
           </Text>
           <Icon name="arrow-drop-down" size={24} color="gray" />
@@ -69,10 +72,10 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
         animationType="slide"
         onRequestClose={() => setIsModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
+        <View style={[styles.modalContainer,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
+          <View style={[styles.modalContent,,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
             <TextInput
-              style={styles.inputSearchStyle}
+              style={[styles.inputSearchStyle,{color: isDark ? appColors.white : appColors.darkText,}]}
               placeholder="Search..."
               value={searchQuery}
               onChangeText={handleSearch}
@@ -85,7 +88,7 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
                   style={styles.item}
                   onPress={() => handleSelect(item)}
                 >
-                  <Text style={{color:'black'}}>{item.label}</Text>
+                  <Text style={{color: isDark ? appColors.white : appColors.darkText,}}>{item.label}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -105,10 +108,8 @@ const pickerSelectStyles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    backgroundColor: '#F7F8F8',
+    borderRadius: windowHeight(1),
+     
   },
 });
 

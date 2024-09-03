@@ -15,10 +15,15 @@ import { getServiceMenCredentials } from '@utils/functions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { getAuthUserService } from '@src/services/auth.service';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
-import { useDispatch } from 'react-redux';
+import { serviceProviderBookingReviewActions } from '@src/store/redux/service-provider-booking-review-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
 import { getProviderConfig, getPagesContent } from '@src/services/settings.service';
 import { configAppActions } from '@src/store/redux/config-redux';
 import { contentPagesActions } from '@src/store/redux/content-pages-redux';
+import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-provider-pomotional-cost-redux';
+import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
+import { homeDataActions } from '@src/store/redux/home-data-redux';
 type navigation = NativeStackNavigationProp<RootStackParamList>;
 
 const SplashScreen = () => {
@@ -103,11 +108,20 @@ const SplashScreen = () => {
     });
   };
 
+  const {
+   
+    loadSubsScriptionList
+  } = useSelector((state: RootState) => state['homeData'])
+
   const interpolatedValue = scaleValue.interpolate({
     inputRange: [0.5, 0.5],
     outputRange: ['50deg', '0deg'],
   });
 
+  const loadmySubscriptionData = async () => {
+    await loadMySubscriptionFunc(dispatch, '?limit=200&offset=1')
+    dispatch(homeDataActions.setData({field:'loadSubsScriptionList',data:false}))
+  }
   const checkuser = async () => {
     setCheckingLoader(true)
     const responseProviderConfig = await getProviderConfig();
@@ -148,10 +162,16 @@ const SplashScreen = () => {
 
     }
     
+    
 
     const response = await getAuthUserService()
-    if (response?.data?.response_code === 'default_200' && response?.data?.content?.id) {
-      dispatch(serviceProviderAccountDataActions.setData(response?.data?.content))
+    if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
+      dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
+      dispatch(serviceProviderBookingReviewActions.setData(response?.data?.content?.booking_overview))
+      dispatch(serviceProviderPomotionalCostActions.setData(response?.data?.content?.promotional_cost_percentage))
+      if (loadSubsScriptionList) {
+        await loadmySubscriptionData()
+      }
       replace('BottomTab');
     } else {
       replace('IntroSlider');

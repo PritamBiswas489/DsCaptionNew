@@ -5,14 +5,15 @@ import {settingData, serviceMenSettingData} from './data/data';
 import RenderItem from './renderItem';
 import {useValues} from '../../../../../../App';
 
-export function SettingList({setModalVisible,setCommissionModal}: {setModalVisible: any,setCommissionModal:any}) {
+export function SettingList({setModalVisible,setCommissionModal,showPromotionalModal}: {setModalVisible: any,setCommissionModal:any,showPromotionalModal:any}) {
   const {isServiceManLogin} = useValues();
   return (
     <View style={[styles.container]}>
       <FlatList
+       
         data={isServiceManLogin ? serviceMenSettingData : settingData}
-        renderItem={({item}) => (
-          <RenderItem setModalVisible={setModalVisible} setCommissionModal={setCommissionModal} item={item} />
+        renderItem={({item,index}) => (
+          <RenderItem key={index}  setModalVisible={setModalVisible} showPromotionalModal={showPromotionalModal} setCommissionModal={setCommissionModal} item={item} />
         )}
       />
     </View>

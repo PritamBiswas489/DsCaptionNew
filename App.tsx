@@ -8,7 +8,7 @@ import {ScrollView, TouchableOpacity, View,Text} from 'react-native';
 const initialContextVal = {
   currSymbol: '$',
   currValue: 1,
-  isDark: false,
+  isDark: true,
   setIsDark: () => {},
   setCurrValue: () => {},
   setCurrSymbol: () => {},

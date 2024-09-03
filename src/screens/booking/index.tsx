@@ -71,10 +71,9 @@ export function Booking() {
      
     }
   }
-
   const { navigate } = useNavigation<routeProps>();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
       <Header
         showBackArrow={false}
         title={'booking.booking'}
@@ -90,7 +89,7 @@ export function Booking() {
         onTrailIcon={() => dispatch(bookingSearchFieldActions.setData({field:'refreshData',data:true}))}
         content={''}
       />
-      <View style={styles.fixedFilter}>
+      <View style={[styles.fixedFilter,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
         <StatusFilter />
       </View>
       <ScrollView
@@ -208,7 +207,7 @@ const styles = StyleSheet.create({
     top: 0,
     width: '100%',
     zIndex: 1,
-    backgroundColor: appColors.white,
+    
     paddingVertical: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

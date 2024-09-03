@@ -15,6 +15,7 @@ export default function NoDataFound({
   content,
   gradiantBtn,
   infoImage,
+  showheader,
   imageStyle,
 }: NodataProps) {
   const shakeAnimation = useRef(new Animated.Value(0)).current;
@@ -53,7 +54,7 @@ export default function NoDataFound({
         GlobalStyle.mainView,
         {backgroundColor: isDark ? appColors.darkTheme : appColors.white},
       ]}>
-      <Header title={headerTitle} />
+      {showheader && <Header title={headerTitle} />}
       <View style={styles.container}>
         <View style={styles.blankView}></View>
         <View>

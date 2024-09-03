@@ -83,5 +83,6 @@ export  interface ConfigInterface {
     schedule_booking: number;
     schedule_booking_time_restriction: number;
     advanced_booking: AdvancedBookingInterface;
+    googlekey:string;
   }
   

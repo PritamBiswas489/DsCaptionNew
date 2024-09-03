@@ -226,6 +226,7 @@ export default function BookingList({
       {!firstTimeLoading && searchData.length === 0 && <NoDataFound
         headerTitle="newDeveloper.noBookingFound"
         image={noValue}
+        showheader={true}
         infoImage={undefined}
         title="newDeveloper.noBookingFound"
         content="newDeveloper.noBookingFoundContent"

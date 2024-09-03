@@ -74,8 +74,14 @@ export const settingData: Array<settingType> = [
       {
         icon: <PromotionalCostIcon />,
         name: 'Promotional Cost',
-        gotoScreen: '',
+        gotoScreen: 'PromotionalCostModal',
         darkIcon: <PromotionalCostIcon color={appColors.white} />,
+      },
+          {
+        icon: <Calendar />,
+        name: 'profileSetting.timeSlots',
+        gotoScreen: 'TimeSlots',
+        darkIcon: <Calendar color={appColors.white} />,
       },
       
       // {

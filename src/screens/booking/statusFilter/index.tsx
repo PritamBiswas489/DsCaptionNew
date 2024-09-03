@@ -8,6 +8,7 @@ import { useValues } from '../../../../App';
 import { bookingSearchFieldActions } from '@src/store/redux/booking-search-field';
 import { searchStatusArray } from '@src/config/utility';
 import { CountObjInterface } from '@src/interfaces/countObjInterface';
+import appColors from '@src/theme/appColors';
 interface Response {
   data: any;
   status: number;
@@ -20,7 +21,7 @@ interface Response {
 export default function StatusFilter({ }) {
   const flatListRef = useRef<FlatList>(null);
   const dispatch = useDispatch()
-  const { t } = useValues()
+  const { t, isDark } = useValues()
   
   const {
     selectedStatus: selectedSubCategory,
@@ -47,7 +48,10 @@ export default function StatusFilter({ }) {
     <View>
       <FlatList
         ref={flatListRef}
-        contentContainerStyle={styles.mainContainer}
+        contentContainerStyle={[
+          styles.mainContainer,
+          {backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }
+        ]}
         data={statusList}
         keyExtractor={item=>item.readableId}
         renderItem={({ index, item }) => {

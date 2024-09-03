@@ -3,6 +3,8 @@ import React, { useEffect, useRef } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import appColors from '@theme/appColors';
 import { propsType } from './types';
+import { useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
  
 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -19,8 +21,10 @@ export function MapContainer({ latitude, longitude, setCoordinatesValue, company
   useEffect(() => {
     ref.current?.setAddressText('');
   }, []);
- 
 
+  const { googlekey } = useSelector((state: RootState) => state['providerAppConfig'])
+ 
+ 
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -71,7 +75,7 @@ export function MapContainer({ latitude, longitude, setCoordinatesValue, company
           }
         }}
         query={{
-          key: 'AIzaSyCb7XJAeWDd5AXTQpyjeYIU93Gc7CfUpVk',
+          key: googlekey,
           language: 'en',
         }}
         nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch

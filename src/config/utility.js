@@ -401,4 +401,19 @@ export function datetimeArr(timestamp){
    }
 
 }
+
+export function calculateDaysDifference(dateString)   {
+  const givenDate = new Date(dateString); // Parse the given date
+  const currentDate = new Date(); // Get the current date
+
+  // Calculate the difference in milliseconds
+  const differenceInMilliseconds = currentDate - givenDate;
+
+  // Convert milliseconds to days
+  const millisecondsInOneDay = 1000 * 60 * 60 * 24;
+  const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInOneDay);
+
+  return differenceInDays;
+};
+
 export function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }

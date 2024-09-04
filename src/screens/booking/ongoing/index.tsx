@@ -60,7 +60,7 @@ export function OngoingBooking({ route }: any) {
   }
 
   useEffect(() => {
-    console.log(detailBookingDetails)
+    //console.log(detailBookingDetails)
   }, [detailBookingDetails])
 
   useEffect(() => {

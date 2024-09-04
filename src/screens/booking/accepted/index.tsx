@@ -75,7 +75,7 @@ export function AcceptedBooking({ route }: any) {
   }
 
   useEffect(() => {
-    console.log(detailBookingDetails)
+    //console.log(detailBookingDetails)
   }, [detailBookingDetails])
 
   useEffect(() => {

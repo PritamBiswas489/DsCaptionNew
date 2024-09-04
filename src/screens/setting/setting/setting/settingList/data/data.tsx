@@ -31,20 +31,20 @@ export const settingData: Array<settingType> = [
       },
       {
         icon: <AccountInformationIcon />,
-        name: 'Account Information',
+        name: 'newDeveloper.AccountInformation',
         gotoScreen: '',
         darkIcon: <AccountInformationIcon color={appColors.white} />,
       },
       {
         icon: <BusinessSettingsIcon />,
-        name: 'Business settings',
-        gotoScreen: '',
+        name: 'newDeveloper.Businesssettings',
+        gotoScreen: 'BusinessSettings',
         darkIcon: <BusinessSettingsIcon color={appColors.white} />,
       },
       {
         icon: <BusinessInformationIcon />,
-        name: 'Business Information',
-        gotoScreen: '',
+        name: 'newDeveloper.BusinessInformation',
+        gotoScreen: 'BusinessInformation',
         darkIcon: <AccountInformationIcon color={appColors.white} />,
       },
       // {
@@ -67,22 +67,22 @@ export const settingData: Array<settingType> = [
       },
       {
         icon: <CommissionIcon />,
-        name: 'Commission',
+        name: 'newDeveloper.Commission',
         gotoScreen: 'CommissionModal',
         darkIcon: <CommissionIcon color={appColors.white} />,
       },
       {
         icon: <PromotionalCostIcon />,
-        name: 'Promotional Cost',
+        name: 'newDeveloper.PromotionalCost',
         gotoScreen: 'PromotionalCostModal',
         darkIcon: <PromotionalCostIcon color={appColors.white} />,
       },
-          {
-        icon: <Calendar />,
-        name: 'profileSetting.timeSlots',
-        gotoScreen: 'TimeSlots',
-        darkIcon: <Calendar color={appColors.white} />,
-      },
+      //     {
+      //   icon: <Calendar />,
+      //   name: 'profileSetting.timeSlots',
+      //   gotoScreen: 'TimeSlots',
+      //   darkIcon: <Calendar color={appColors.white} />,
+      // },
       
       // {
       //   icon: <Identity color={appColors.darkText} strokeWidth={'1.3'} />,

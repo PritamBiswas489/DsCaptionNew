@@ -1,7 +1,7 @@
 //export {default as SplashScreen} from './SplashScreen';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Animated, Easing, View } from 'react-native';
+import { Alert, Animated, Easing, View, Text } from 'react-native';
 import { splashLogo2 } from '@utils/images';
 import appColors from '@theme/appColors';
 import { styles } from './styles';
@@ -35,7 +35,7 @@ const SplashScreen = () => {
   const data = [appColors.darkText, appColors.primary, appColors.darkText];
   const { replace } = useNavigation<navigation>();
   const { i18n } = useTranslation();
-  const { setCurrSymbol, setCurrValue, setIsServiceManLogin, setIsDark } =
+  const { setCurrSymbol, setCurrValue, setIsServiceManLogin, setIsDark, isDark, t } =
     useValues();
 
   const [checkingLoader, setCheckingLoader] = useState(false);
@@ -227,6 +227,11 @@ const SplashScreen = () => {
         ]}
         resizeMode={'contain'}
       />
+      <Text style={{
+        color: isDark ? appColors.white : appColors.darkText, 
+        fontSize:24, 
+        fontWeight:'bold'
+        }}>{t('newDeveloper.ServiceProviderApp')}</Text>
       <Spinner
         visible={checkingLoader}
         textContent={''}

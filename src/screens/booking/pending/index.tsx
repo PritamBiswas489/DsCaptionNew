@@ -64,7 +64,7 @@ export function PendingBooking({ route }: any) {
   }
 
   useEffect(() => {
-    console.log(detailBookingDetails)
+    //console.log(detailBookingDetails)
   }, [detailBookingDetails])
 
   useEffect(() => {

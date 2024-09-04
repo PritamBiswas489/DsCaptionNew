@@ -416,4 +416,21 @@ export function calculateDaysDifference(dateString)   {
   return differenceInDays;
 };
 
+export function convertTo12Hour(timeString) {
+  // Split the time string into components
+  const [hours, minutes, seconds] = timeString.split(':');
+
+  // Convert hours from string to number
+  let hoursNumber = parseInt(hours);
+
+  // Determine AM or PM
+  const amOrPm = hoursNumber >= 12 ? 'PM' : 'AM';
+
+  // Convert hours to 12-hour format
+  hoursNumber = hoursNumber % 12 || 12;
+
+  // Return formatted time string
+  return `${hoursNumber}:${minutes}  ${amOrPm}`;
+}
+
 export function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }

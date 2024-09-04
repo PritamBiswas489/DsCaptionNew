@@ -26,7 +26,7 @@ export function ProviderLogin() {
     serviceMenData: ServiceMenList,
   } = useSelector((state: RootState) => state['homeData'])
 
-  console.log(ServiceMenList)
+  //console.log(ServiceMenList)
 
 
 

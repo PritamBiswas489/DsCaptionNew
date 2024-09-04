@@ -34,6 +34,8 @@ import forgetPasswordSlice from "./redux/forgetpassword-redux";
 import contentPagesSlice from "./redux/content-pages-redux";
 import serviceProviderBookingReviewSlice from "./redux/service-provider-booking-review-redux";
 import serviceProviderPomotionalCostSlice from "./redux/service-provider-pomotional-cost-redux";
+import availableTimeSlotSlice from "./redux/available-time-slot-redux";
+import businessSettingsSlice from "./redux/business-settings-redux";
 
 const store = configureStore({
     reducer: { 
@@ -71,8 +73,12 @@ const store = configureStore({
       homeData:homeDataSlice.reducer,
       notificationsData:notificationListSlice.reducer,
       forgetPassword:forgetPasswordSlice.reducer,
-      contentPages:contentPagesSlice.reducer
-      // DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
+      contentPages:contentPagesSlice.reducer,
+      availableTimeSlot:availableTimeSlotSlice.reducer,
+      businessSetting:businessSettingsSlice.reducer
+
+      //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
+
     },
   });
   

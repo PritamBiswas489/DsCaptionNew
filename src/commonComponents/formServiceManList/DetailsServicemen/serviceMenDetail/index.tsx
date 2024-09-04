@@ -98,7 +98,7 @@ export function ServiceMenDetail() {
   }, [id])
 
   useEffect(() => {
-    console.log(detailServiceMenDetails)
+    //console.log(detailServiceMenDetails)
   }, [detailServiceMenDetails])
 
   const refreshServiceMenDetailsDataHandle = () => {

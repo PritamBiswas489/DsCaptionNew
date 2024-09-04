@@ -20,6 +20,8 @@ import { completedListingActions } from '@src/store/redux/completed-listing-redu
 import { acceptedListingActions } from '@src/store/redux/accepted.listing-redux';
 import { canceledListingActions } from '@src/store/redux/canceled-listing-redux';
 import { ongoingListingActions } from '@src/store/redux/ongoing-listing-redux';
+import { availableTimeSlotActions } from '@src/store/redux/available-time-slot-redux';
+import { businessSettingsActions } from '@src/store/redux/business-settings-redux';
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
       dispatch(mySubscriptionsAction.resetState())
@@ -41,5 +43,7 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(acceptedListingActions.resetState())
       dispatch(canceledListingActions.resetState())
       dispatch(ongoingListingActions.resetState())
+      dispatch(availableTimeSlotActions.resetState())
+      dispatch(businessSettingsActions.resetState())
       
 }

@@ -51,7 +51,7 @@ export function CancelledBooking({ route }: any) {
   }
 
   useEffect(() => {
-    console.log(detailBookingDetails)
+    //console.log(detailBookingDetails)
   }, [detailBookingDetails])
 
   useEffect(() => {

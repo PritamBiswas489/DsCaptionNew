@@ -196,7 +196,7 @@ export function AddNewServiceMen() {
           }
           setLoadingServiceMenAdd(true)
           const response:RegisterResponse  = await addServiceMen(formData)
-           console.log(response?.data)
+          // console.log(response?.data)
           if(response?.data?.response_code === 'default_400'){
             response?.data?.errors.forEach((data:{"error_code": string, "message": string},index:number)=>{
                 Toast.show({

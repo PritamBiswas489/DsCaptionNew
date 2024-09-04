@@ -161,4 +161,6 @@ export type RootStackParamList = {
   MoreMenus:undefined;
   ProfileSettings:undefined;
   ContentPages:{content_key:string}
+  BusinessInformation:undefined;
+  BusinessSettings:undefined;
 };

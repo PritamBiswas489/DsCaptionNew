@@ -1020,7 +1020,35 @@
             "PromotionalContent":"Current you are using the following percentage as the promotional cost",
             "DiscountCostpercentage":"Discount Cost percentage",
             "CampaignCostpercentage":"Campaign Cost percentage",
-            "CouponCostpercentage":"Coupon Cost percentage"
+            "CouponCostpercentage":"Coupon Cost percentage",
+            "ServiceProviderApp":"Provider App",
+            "AccountInformation":"Account Information",
+            "Businesssettings":"Business settings",
+            "BizInformationIdentityType":"Identity Type",
+            "BizInformationIdentityNumber":"Identity Number",
+            "BizInformationIdentityImages":"Identity Images",
+            "CantEditIndentityMessage":"*You can't change this information",
+            "ServiceAvailability":"Service Availability",
+            "BookingsSettings":"Bookings",
+            "updateSettings":"Update Settings",
+            "Commission":"Commission",
+            "PromotionalCost":"Promotional Cost",
+            "ServiceProvidingTime":"Service Providing Time",
+            "ServiceAvailabilityMessage":"*By turning off availability mode, you will not get any new booking request from customers and customer will show that you are currently unavailable to provide service",
+            "Sunday":"Sunday",
+            "Monday":"Monday",
+            "Tuesday":"Tuesday",
+            "Wednesday":"Wednesday",
+            "Thursday":"Thursday",
+            "Friday":"Friday",
+            "Saturday":"Saturday",
+            "Servicemancaneditbooking":"Serviceman can edit booking",
+            "Servicemancancancelbooking":"Serviceman can cancel booking",
+            "Servicemancaneditbookingtext":"if you enable this setting, servicemen will be able to edit bookings.",
+            "Servicemancancancelbookingtext":"if you enable this setting, servicemen will be able to cancel booking requests."
+
+             
+
 
 
 

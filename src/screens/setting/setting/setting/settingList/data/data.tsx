@@ -29,10 +29,10 @@ export const settingData: Array<settingType> = [
         gotoScreen: 'UserProfileSetting',
         darkIcon: <Person color={appColors.white} />,
       },
-      {
+      { //account information
         icon: <AccountInformationIcon />,
         name: 'newDeveloper.AccountInformation',
-        gotoScreen: '',
+        gotoScreen: 'ProfileAccountInformation',
         darkIcon: <AccountInformationIcon color={appColors.white} />,
       },
       {

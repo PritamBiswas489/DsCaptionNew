@@ -163,4 +163,5 @@ export type RootStackParamList = {
   ContentPages:{content_key:string}
   BusinessInformation:undefined;
   BusinessSettings:undefined;
+  ProfileAccountInformation:undefined;
 };

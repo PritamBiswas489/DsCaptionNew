@@ -1047,7 +1047,14 @@
             "Servicemancaneditbookingtext":"if you enable this setting, servicemen will be able to edit bookings.",
             "Servicemancancancelbookingtext":"if you enable this setting, servicemen will be able to cancel booking requests.",
             "SpinnerLoader":"Loading...",
-            "timeErrorOne":"Schedule End time must greater than Start time"
+            "timeErrorOne":"Schedule End time must greater than Start time",
+            "AccountInformationText":"Account Information",
+            "PayNow":"Pay Now",
+            "PayableBalance":"Payable balance",
+            "Receivablebalance":"Receivable balance",
+            "Pendingwithdrawn":"Pending withdrawn",
+            "Alreadywithdrawn":"Already withdrawn",
+             "Totalearning":"Total earning"
 
              
 

@@ -11,6 +11,20 @@ export const styles = StyleSheet.create({
     marginTop: windowHeight(1),
     marginHorizontal: windowWidth(2),
   },
+  innerContainer: {
+    borderColor: appColors.border,
+    borderWidth: 1,
+    backgroundColor: appColors.white,
+    borderRadius: windowWidth(3),
+    marginVertical: windowWidth(3),
+    paddingBottom: windowHeight(2),
+  },
+  containerStyle: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    paddingHorizontal: windowWidth(0),
+    paddingTop: windowWidth(1),
+  },
   note: {
     color: appColors.darkText,
     margin: windowWidth(1),

@@ -61,7 +61,7 @@ import {
   CoverLocationList,
   MoreMenus,
   Setting,
-  
+
 
 } from '../screens';
 import { MultipleServiceMenList } from '@otherComponent/booking/bookingDetail/multipleServiceMenList';
@@ -73,6 +73,7 @@ import NetInfo from '@react-native-community/netinfo';
 import ContentPages from '@src/screens/dashboard/home/ContentPages';
 import BusinessInformation from '@src/screens/dashboard/home/BusinessInformation';
 import BusinessSettings from '@src/screens/dashboard/home/BusinessSettings';
+import { ProfileAccountInformation } from '@src/screens/dashboard/home/AccountInformation';
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -288,9 +289,14 @@ export default function MyStack() {
               component={BusinessInformation}
             />
 
-           <RootStack.Screen
+            <RootStack.Screen
               name="BusinessSettings"
               component={BusinessSettings}
+            />
+
+            <RootStack.Screen
+              name="ProfileAccountInformation"
+              component={ProfileAccountInformation}
             />
 
 

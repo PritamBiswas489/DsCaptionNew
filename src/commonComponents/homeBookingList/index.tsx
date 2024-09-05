@@ -18,6 +18,7 @@ import {
 import { useValues } from '../../../App';
 import appColors from '@theme/appColors';
 import { BookingListingInterface } from '@src/interfaces/bookingListingInterface';
+import { windowWidth } from '@src/theme/appConstant';
 
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
@@ -44,15 +45,13 @@ export default function HomeBookingList({
   const { isDark } = useValues();
   return (
     <View style={[styles.container, containerStyle]}>
-       
       <FlatList
-       
         data={data}
         horizontal={true}
         keyExtractor={(item)=>item.id}
         showsHorizontalScrollIndicator={true}
         renderItem={({ item }) => (
-          <View style={{ marginLeft: 10 }}>
+          <View style={{ marginLeft: 10, width:windowWidth(95) }}>
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => {

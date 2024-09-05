@@ -4,10 +4,9 @@ import {BarChart} from 'react-native-gifted-charts';
 import {styles} from './styles';
 import appColors from '@theme/appColors';
 import { useValues } from '../../../../../../../../App';
-import { color } from 'react-native-elements/dist/helpers';
 
 export default function BarChartView() {
-  const {t,isDark} = useValues()
+  const {t} = useValues()
   const data = [
     {
       value: 20,
@@ -43,7 +42,7 @@ export default function BarChartView() {
         barBorderRadius={10}
         barBorderBottomLeftRadius={0}
         barBorderBottomRightRadius={0}
-         
+        frontColor="lightgray"
         data={data}
         yAxisThickness={0}
         xAxisThickness={0}
@@ -52,8 +51,7 @@ export default function BarChartView() {
         spacing={42}
         rulesThickness={0}
         xAxisLabelTextStyle={{fontSize: 12}}
-        //@ts-ignore
-        xAxisLabelTextStyle={{color: isDark ? appColors.white : appColors.darkText,}}
+        xAxisLabelTextStyle={styles.textStyle}
       />
     </View>
   );

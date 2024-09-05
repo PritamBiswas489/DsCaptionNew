@@ -34,13 +34,25 @@ export function ServiceMenDetail({bookingDetails}: {bookingDetails:BookingDetail
         ]}>
         {t('serviceManDetails.servicemenDetails')} :{' '}
       </Text>
-      <CardContainer data={[
+      <View
+        style={[
+          styles.innerContainer,
+          {
+            backgroundColor: isDark ? appColors.darkTheme : appColors.white,
+            borderColor: isDark ? appColors.darkBorder : appColors.border,
+          },
+        ]}>
+      <CardContainer
+      containerStyle={styles.containerStyle}
+      data={[
         {
           name:bookingDetails.serviceMeninfo.name,
           image: profileImage,
           defaultImageValue
         }
       ]}  />
+
+      
        <View
         style={[
           GlobalStyle.horizontalLine,
@@ -71,6 +83,7 @@ export function ServiceMenDetail({bookingDetails}: {bookingDetails:BookingDetail
         />
       </TouchableOpacity>
       </View>
+      </View>
     
   );
 }
@@ -82,5 +95,19 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.FONT4,
     marginTop: windowHeight(1),
     marginHorizontal: windowWidth(2),
+  },
+  innerContainer: {
+    borderColor: appColors.border,
+    borderWidth: 1,
+    backgroundColor: appColors.white,
+    borderRadius: windowWidth(3),
+    marginVertical: windowWidth(3),
+    paddingBottom: windowHeight(2),
+  },
+  containerStyle: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    paddingHorizontal: windowWidth(0),
+    paddingTop: windowWidth(1),
   },
 });

@@ -31,69 +31,53 @@ export function CustomerDetail({ bookingDetails }: { bookingDetails: BookingDeta
         ]}>
         {t('bookingDetail.CustomerDetails')} :{' '}
       </Text>
-
-      <CardContainer data={[
-        {
-          name: bookingDetails.customerInfo.firstName + ' ' + (bookingDetails?.customerInfo?.lastName ?? ''),
-          image: profileImage,
-          defaultImageValue
-        }
-      ]} />
       <View
         style={[
-          GlobalStyle.horizontalLine,
+          styles.innerContainer,
           {
-            marginHorizontal: windowHeight(2),
-            marginTop: windowWidth(2),
-            marginBottom: 0.5,
+            backgroundColor: isDark ? appColors.darkTheme : appColors.white,
             borderColor: isDark ? appColors.darkBorder : appColors.border,
           },
-        ]}></View>
-      <TouchableOpacity onPress={() => {
-        let phoneNumberURI = `tel:${bookingDetails.customerInfo.phone}`;
-        Linking.canOpenURL(phoneNumberURI)
-          .then((supported) => {
-            if (!supported) {
-              Alert.alert('Phone number is not available');
-            } else {
-              return Linking.openURL(phoneNumberURI);
+        ]}>
+        <CardContainer
+          containerStyle={styles.containerStyle}
+          data={[
+            {
+              name: bookingDetails.customerInfo.firstName + ' ' + (bookingDetails?.customerInfo?.lastName ?? ''),
+              image: profileImage,
+              defaultImageValue
             }
-          })
-          .catch((err: any) => console.error('Error opening dialer', err));
-
-      }}>
-        <InfoRow
-          icon={<Call color={isDark ? appColors.white : appColors.lightText} />}
-          title={'providerDetail.call'}
-          subHeading={bookingDetails.customerInfo.phone}
-        />
-      </TouchableOpacity>
-
-
-      {/* {item?.isAssigned && (
-        <Text
+          ]} />
+        <View
           style={[
-            styles.note,
-            {color: isDark ? appColors.lightText : appColors.darkText},
-          ]}>
-          {t('subscription.note')}:{' '}
-          <Text
-            style={[
-              styles.note,
-              {color: isDark ? appColors.lightText : appColors.darkText},
-            ]}>
-            {t('booking.serviceManNote')}
-          </Text>
-        </Text>
-      )} */}
-      {/* {item?.isAssigned == false && (
-        <Text style={[styles.note, {color: appColors.error}]}>
-          {t('subscription.note')}:{' '}
-          <Text style={[styles.note, {color: appColors.error}]}>
-            {t('booking.detail')}
-          </Text>
-        </Text>
-      )} */}
+            GlobalStyle.horizontalLine,
+            {
+              marginHorizontal: windowHeight(2),
+              marginTop: windowWidth(2),
+              marginBottom: 0.5,
+              borderColor: isDark ? appColors.darkBorder : appColors.border,
+            },
+          ]}></View>
+        <TouchableOpacity onPress={() => {
+          let phoneNumberURI = `tel:${bookingDetails.customerInfo.phone}`;
+          Linking.canOpenURL(phoneNumberURI)
+            .then((supported) => {
+              if (!supported) {
+                Alert.alert('Phone number is not available');
+              } else {
+                return Linking.openURL(phoneNumberURI);
+              }
+            })
+            .catch((err: any) => console.error('Error opening dialer', err));
+
+        }}>
+          <InfoRow
+            icon={<Call color={isDark ? appColors.white : appColors.lightText} />}
+            title={'providerDetail.call'}
+            subHeading={bookingDetails.customerInfo.phone}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

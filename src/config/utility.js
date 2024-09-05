@@ -432,5 +432,17 @@ export function convertTo12Hour(timeString) {
   // Return formatted time string
   return `${hoursNumber}:${minutes}  ${amOrPm}`;
 }
+export function validateTime(fromTime, toTime) {
+  
+  let from = new Date(`1970-01-01T${fromTime}Z`);
+  let to   = new Date(`1970-01-01T${toTime}Z`);
 
+  if (from.getTime() === to.getTime()) {
+      return false;
+  } else if (to.getTime() <= from.getTime()) {
+      return false;
+  } else {
+      return true;
+  }
+}
 export function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }

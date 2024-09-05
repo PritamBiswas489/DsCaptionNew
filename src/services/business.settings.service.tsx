@@ -29,3 +29,26 @@ export const getBusinessSettings   = async(): Promise<Response> => {
 		return error.response;
 	}
 }
+
+export const saveServiceAvailability  = async(formData:FormData): Promise<Response> => {
+	formData.append('_method','PUT')
+	try {
+		const response = await api.post('/provider/available-time-schedule',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}
+
+export const updateBookingSettings = async(formData:FormData): Promise<Response> => {
+	formData.append('_method','PUT')
+	try {
+		const response = await api.post('/provider/business-settings/set-business-settings',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+
+}

@@ -77,19 +77,8 @@ export const settingData: Array<settingType> = [
         gotoScreen: 'PromotionalCostModal',
         darkIcon: <PromotionalCostIcon color={appColors.white} />,
       },
-      //     {
-      //   icon: <Calendar />,
-      //   name: 'profileSetting.timeSlots',
-      //   gotoScreen: 'TimeSlots',
-      //   darkIcon: <Calendar color={appColors.white} />,
-      // },
-      
-      // {
-      //   icon: <Identity color={appColors.darkText} strokeWidth={'1.3'} />,
-      //   name: 'profileSetting.idVerification',
-      //   gotoScreen: 'IdVerification',
-      //   darkIcon: <Identity color={appColors.white} />,
-      // },
+       
+     
       
     ],
   },
@@ -114,12 +103,7 @@ export const settingData: Array<settingType> = [
   //       gotoScreen: 'Packages',
   //       darkIcon: <Package color={appColors.white} />,
   //     },
-  //     {
-  //       icon: <Review />,
-  //       name: 'profileSetting.myReviews',
-  //       gotoScreen: 'Reviews',
-  //       darkIcon: <Review color={appColors.white} />,
-  //     },
+  
   //     {
   //       icon: <Subscription />,
   //       name: 'subscription.subscriptionPlan',

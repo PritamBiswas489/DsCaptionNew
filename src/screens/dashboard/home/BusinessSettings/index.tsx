@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView } from 'react-native-virtualized-view';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Header from '@src/commonComponents/header';
 import appColors from '@src/theme/appColors';
 import { useValues } from '../../../../../App';
@@ -13,6 +13,13 @@ import { availableTimeSlotActions, ServiceAvailabilityType } from '@src/store/re
 import ServiceAvailability from './serviceAvailability';
 import { getBusinessSettings } from '@src/services/business.settings.service';
 import { businessSettingsActions } from '@src/store/redux/business-settings-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from 'src/navigation/types';
+
+type props = NativeStackNavigationProp<RootStackParamList>;
+
 interface Response {
 	data: any;
 	status: number;
@@ -23,49 +30,70 @@ interface Response {
 }
 const BusinessSettings = () => {
     const [activeTab, setActiveTab] = useState('Tab1');
+    const [loadSpinner,setLoadSpinner] = useState(false)
     const { isDark, t } = useValues()
+    const [spinnertext,setSpinnerText] = useState(t('newDeveloper.SpinnerLoader'))
+    const [withoutLoaderOneRefresh,setWithoutLoaderOneRefresh] =  useState(false)
+    const [withoutLoaderTwoRefresh,setWithoutLoaderTwoRefresh] =  useState(false)
 
     const dispatch = useDispatch()
     const {isFirstTimeLoading:loadingOne} = useSelector((state: RootState)=>state['availableTimeSlot'])
     const {isFirstTimeLoading:loadingTwo} = useSelector((state: RootState)=>state['businessSetting'])
-     
+    const { navigate } = useNavigation<props>();
 
+    //Available time slot data
     const loadFunctionOne = async()=>{
         const response:Response = await getBusinessSettingsAvailabletimeSchedule()
-        if(response?.data?.response_code === 'default_200'){
+        if(response?.data?.response_code === 'default_200'){ 
             if(response?.data?.content?.time_schedule){
                const ct =  response?.data?.content
                Object.keys(ct).forEach((key)=>{
                    const typedKey = key as keyof ServiceAvailabilityType;
                   dispatch(availableTimeSlotActions.setData({field:typedKey,data:ct[key]}))
                })
-               dispatch(availableTimeSlotActions.setData({field:'isFirstTimeLoading',data:false}))
             }
+            dispatch(availableTimeSlotActions.setData({field:'isFirstTimeLoading',data:false}))
+            setWithoutLoaderOneRefresh(false)
+        }else{
+            Alert.alert("Can't able to load data")
+            navigate('ProfileSettings')
+            dispatch(availableTimeSlotActions.setData({field:'isFirstTimeLoading',data:true}))
         }
+       
     }
 
+    //Business settings data
     const loadFunctionTwo = async()=>{
         const response:Response = await getBusinessSettings()
         if(response?.data?.content){
             dispatch(businessSettingsActions.setData({field:'data',data:response?.data?.content})) 
         }
         dispatch(businessSettingsActions.setData({field:'isFirstTimeLoading',data:false}))
+        setWithoutLoaderTwoRefresh(false)
     }
 
-
      useEffect(()=>{
-        if(loadingOne){
+        if(loadingOne || withoutLoaderOneRefresh){
             loadFunctionOne() 
         }
-        
-     },[loadingOne])
+     },[loadingOne,withoutLoaderOneRefresh])
 
      useEffect(()=>{
-        if(loadingTwo){
+        if(loadingTwo || withoutLoaderTwoRefresh){
             loadFunctionTwo() 
         }
-        
-     },[loadingTwo])
+     },[loadingTwo,withoutLoaderTwoRefresh])
+
+
+     useEffect(()=>{
+        if(loadingOne || loadingTwo){
+            setLoadSpinner(true)
+        }else{
+            setActiveTab('Tab1')
+            setLoadSpinner(false)
+        }
+
+     },[loadingOne,loadingTwo])
 
 
 
@@ -94,10 +122,18 @@ const BusinessSettings = () => {
             {/* Scrollable Content Based on Active Tab */}
            
                 {activeTab === 'Tab1' ? (
-                    <ServiceAvailability />
+                    <ServiceAvailability setSpinnerText={setSpinnerText} setLoadSpinner={setLoadSpinner} setWithoutLoaderOneRefresh={setWithoutLoaderOneRefresh} />
                 ) : (
-                    <BusinessBookingSettings />
+                    <BusinessBookingSettings setSpinnerText={setSpinnerText} setLoadSpinner={setLoadSpinner} setWithoutLoaderTwoRefresh={setWithoutLoaderTwoRefresh} />
                 )}
+
+                <Spinner
+                    visible={loadSpinner}
+                    // overlayColor={isDark ? appColors.darkTheme : appColors.white}
+                    textContent={spinnertext}
+                    textStyle={{ color: '#FFF' }}
+                    
+                />
             
         </View>
     );

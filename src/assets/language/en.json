@@ -1045,7 +1045,9 @@
             "Servicemancaneditbooking":"Serviceman can edit booking",
             "Servicemancancancelbooking":"Serviceman can cancel booking",
             "Servicemancaneditbookingtext":"if you enable this setting, servicemen will be able to edit bookings.",
-            "Servicemancancancelbookingtext":"if you enable this setting, servicemen will be able to cancel booking requests."
+            "Servicemancancancelbookingtext":"if you enable this setting, servicemen will be able to cancel booking requests.",
+            "SpinnerLoader":"Loading...",
+            "timeErrorOne":"Schedule End time must greater than Start time"
 
              
 

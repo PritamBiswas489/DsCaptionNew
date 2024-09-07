@@ -4,6 +4,8 @@ import en from './en.json';
 import ar from './ar.json';
 import fr from './fr.json';
 import es from './es.json';
+import hi from './hi.json';
+import bn from './bn.json';
 
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
@@ -13,6 +15,8 @@ i18next.use(initReactI18next).init({
     ar: ar,
     fr: fr,
     es: es,
+    hi: hi,
+    bn: bn,
   },
 });
 

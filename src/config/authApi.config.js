@@ -6,6 +6,7 @@ import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { userAccountDataActions } from '../store/redux/service-provider-account-data.redux';
 import { getAppUrl } from './utility';
+import { getValue } from '@src/utils/localstorage';
 
 const app_url =  getAppUrl();
 console.log(app_url + '/api/v1');
@@ -25,16 +26,20 @@ const resetStateData = ()=>{
 
 api.interceptors.request.use(async (config) => {
 	const {accessToken, refreshToken} = await getAuthTokens();
-	// console.log("hello")
+    const languageCode = await getValue('languageCode');
+	 console.log({languageCode})
 	if(config.method!=='get'){
 		config.headers = {
+            ...config.headers,
 			'Content-Type': 'multipart/form-data',
 			'Authorization': 'Bearer ' + accessToken,
+            'X-localization': languageCode || 'en',  
 		};
 	}else{
 		config.headers = {
+            ...config.headers,
 			'Authorization': 'Bearer ' + accessToken,
-			
+            'X-localization': languageCode || 'en', 
 		};
 	}
     // console.log(config.headers)

@@ -110,6 +110,12 @@ export const transaction = require('../assets/images/booking/transaction.png');
 export const arabic = require('../assets/images/setting/arabic.png');
 export const french = require('../assets/images/setting/french.png');
 export const spanish = require('../assets/images/setting/spanish.png');
+
+export const lang_english = require('../assets/images/setting/us2.png');
+export const lang_hindi = require('../assets/images/setting/india.png');
+export const lang_bengali = require('../assets/images/setting/bangladesh.png');
+
+
 export const us = require('../assets/images/setting/us.png');
 export const euro = require('../assets/images/setting/euro.png');
 export const inr = require('../assets/images/setting/inr.png');

@@ -108,3 +108,12 @@ export const fetchMySubscriptions = async (queryParams:string) :Promise<Response
 		return error.response;
 	}
 }
+
+export const updatelanguage = async ():Promise<Response> => {api
+	try {
+		const response = await api.post(`/provider/change-language`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

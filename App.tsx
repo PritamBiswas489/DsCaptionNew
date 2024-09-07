@@ -10,6 +10,8 @@ const initialContextVal = {
   currValue: 1,
   isDark: true,
   setIsDark: () => {},
+  notificationSound:true,
+  setNotificationSound:()=>{},
   setCurrValue: () => {},
   setCurrSymbol: () => {},
   isServiceManLogin: false,
@@ -24,9 +26,10 @@ export const ThemeContext = createContext<ThemeContextType>(initialContextVal);
 const App: React.FC = () => {
   const [currSymbol, setCurrSymbol] = useState('₹');
   const [currValue, setCurrValue] = useState(1);
-  const [isDark, setIsDark] = useState(false);
-  const [isServiceManLogin, setIsServiceManLogin] = useState(false);
-  const [isFreelancerLogin, setIsFreeLancerLogin] = useState(false);
+  const [isDark, setIsDark] = useState(initialContextVal.isDark);
+  const [notificationSound, setNotificationSound] = useState(initialContextVal.notificationSound);
+  const [isServiceManLogin, setIsServiceManLogin] = useState(initialContextVal.isServiceManLogin);
+  const [isFreelancerLogin, setIsFreeLancerLogin] = useState(initialContextVal.isFreelancerLogin);
   const {t} = useTranslation();
   const contextValue = {
     currSymbol,
@@ -35,6 +38,8 @@ const App: React.FC = () => {
     setCurrValue,
     isDark,
     setIsDark,
+    notificationSound,
+    setNotificationSound,
     isServiceManLogin,
     setIsServiceManLogin,
     isFreelancerLogin,
@@ -45,9 +50,6 @@ const App: React.FC = () => {
   return (
     <ThemeContext.Provider value={contextValue}>
       <Navigation />
-      {/* <View>
-        <Text>ddddd</Text>
-      </View> */}
     </ThemeContext.Provider>
   );
 };

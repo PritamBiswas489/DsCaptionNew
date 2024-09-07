@@ -3,6 +3,8 @@ export interface ThemeContextType {
   currValue: number;
   isDark: boolean;
   setIsDark: React.Dispatch<React.SetStateAction<boolean>>;
+  notificationSound: boolean;
+  setNotificationSound: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrValue: React.Dispatch<React.SetStateAction<number>>;
   setCurrSymbol: React.Dispatch<React.SetStateAction<string>>;
   isServiceManLogin: boolean;

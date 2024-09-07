@@ -22,9 +22,9 @@ import { getProviderConfig, getPagesContent } from '@src/services/settings.servi
 import { configAppActions } from '@src/store/redux/config-redux';
 import { contentPagesActions } from '@src/store/redux/content-pages-redux';
 import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-provider-pomotional-cost-redux';
-import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
-import { homeDataActions } from '@src/store/redux/home-data-redux';
+ 
 type navigation = NativeStackNavigationProp<RootStackParamList>;
+import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
 
 const SplashScreen = () => {
   const scaleValue = useRef(new Animated.Value(0)).current;
@@ -35,15 +35,29 @@ const SplashScreen = () => {
   const data = [appColors.darkText, appColors.primary, appColors.darkText];
   const { replace } = useNavigation<navigation>();
   const { i18n } = useTranslation();
-  const { setCurrSymbol, setCurrValue, setIsServiceManLogin, setIsDark, isDark, t } =
+  const { 
+    setCurrSymbol, 
+    setCurrValue, 
+    setIsServiceManLogin, 
+    setIsDark, 
+    isDark, 
+    t,
+    notificationSound,
+    setNotificationSound 
+  
+  } =
     useValues();
 
   const [checkingLoader, setCheckingLoader] = useState(false);
   const dispatch = useDispatch()
 
+  const { callAllFunctionHome } = useHomeDataLoader();
+   
+   
   useEffect(() => {
     getLanguageCode();
     getTheme();
+    getNotitifcationSound();
     checkServiceMenCredential();
     getSelectedCurrency();
   }, []);
@@ -62,13 +76,29 @@ const SplashScreen = () => {
         setValue('darkTheme', val.toString());
       });
   };
+  const getNotitifcationSound = async () =>{
+    getValue('notificationSound').then(res => {
+        if (res !== null) {
+          return JSON.parse(res);
+        } else {
+          return true;
+        }
+    })
+    .then(val => {
+        setNotificationSound(val);
+        setValue('notificationSound', val.toString());
+    });
+
+  }
 
   const getLanguageCode = async () => {
     const languageCode = await getValue('languageCode');
-
     if (languageCode !== null) {
-      i18n.changeLanguage(languageCode);
-      setValue('languageCode', languageCode);
+        i18n.changeLanguage(languageCode);
+        setValue('languageCode', languageCode);
+    }else{
+        i18n.changeLanguage('en');
+        setValue('languageCode', 'en');
     }
   };
 
@@ -108,20 +138,14 @@ const SplashScreen = () => {
     });
   };
 
-  const {
    
-    loadSubsScriptionList
-  } = useSelector((state: RootState) => state['homeData'])
 
   const interpolatedValue = scaleValue.interpolate({
     inputRange: [0.5, 0.5],
     outputRange: ['50deg', '0deg'],
   });
 
-  const loadmySubscriptionData = async () => {
-    await loadMySubscriptionFunc(dispatch, '?limit=200&offset=1')
-    dispatch(homeDataActions.setData({field:'loadSubsScriptionList',data:false}))
-  }
+   
   const checkuser = async () => {
     setCheckingLoader(true)
     const responseProviderConfig = await getProviderConfig();
@@ -161,6 +185,8 @@ const SplashScreen = () => {
       })
 
     }
+
+   
     
     
 
@@ -169,9 +195,7 @@ const SplashScreen = () => {
       dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
       dispatch(serviceProviderBookingReviewActions.setData(response?.data?.content?.booking_overview))
       dispatch(serviceProviderPomotionalCostActions.setData(response?.data?.content?.promotional_cost_percentage))
-      if (loadSubsScriptionList) {
-        await loadmySubscriptionData()
-      }
+      await callAllFunctionHome()
       replace('BottomTab');
     } else {
       replace('IntroSlider');

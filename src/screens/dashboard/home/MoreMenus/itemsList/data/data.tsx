@@ -40,6 +40,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <SettingIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuSettings',
+    goToScreen:'AppSetting'
    
   },
   {

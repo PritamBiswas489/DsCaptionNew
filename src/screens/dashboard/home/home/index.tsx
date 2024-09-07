@@ -38,6 +38,7 @@ import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
 import { homeBookingList } from '@src/services/load.booking.service';
 import HomeBookingList from '@src/commonComponents/homeBookingList';
 import { homeDataActions } from '@src/store/redux/home-data-redux';
+import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -57,16 +58,21 @@ export function Home() {
   const { navigate } = useNavigation<navigationProp>();
   const { isDark, isServiceManLogin, t } = useValues();
   const [showSkeletonLoader, setSkeletonLoader] = useState(false)
+  const [needSkeletonLoader,setNeedSkeletonLoader] =  useState(true)
  
   const [refreshing, setRefreshing] = React.useState(false);
  
+  const dispatch = useDispatch()
+  const { callAllFunctionHome } = useHomeDataLoader();
 
-  const onRefresh = React.useCallback(() => {
+
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     dispatch(homeDataActions.setData({field:'loadServiceMen',data:true}))
     dispatch(homeDataActions.setData({field:'loadBookingList',data:true}))
     dispatch(homeDataActions.setData({field:'loadSubsScriptionList',data:true}))
-    setSkeletonLoader(true)
+    setNeedSkeletonLoader(false)
+    await callAllFunctionHome();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -79,53 +85,29 @@ export function Home() {
     loadServiceMen,
     loadSubsScriptionList
   } = useSelector((state: RootState) => state['homeData'])
-
-  const dispatch = useDispatch()
-
-  const loadData = async () => {
-    const queryParams = `?offset=1&limit=${serviceMenLimit}&status=active`
-    await homeloadServiceMenData(queryParams, dispatch)
-    dispatch(homeDataActions.setData({field:'loadServiceMen',data:false}))
-  }
-  useEffect(() => {
-    if (loadServiceMen) {
-      loadData()
-    }
-  }, [loadServiceMen])
-
-  const loadmySubscriptionData = async () => {
-    await loadMySubscriptionFunc(dispatch, '?limit=200&offset=1')
-    dispatch(homeDataActions.setData({field:'loadSubsScriptionList',data:false}))
-  }
-  useEffect(() => {
-    if (loadSubsScriptionList) {
-      loadmySubscriptionData()
-    }
-  }, [loadSubsScriptionList])
-
-
-  const loadRecentBooking = async () => {
-    await homeBookingList(dispatch)
-    dispatch(homeDataActions.setData({field:'loadBookingList',data:false}))
-  }
-
-  useEffect(() => {
-    if (loadBookingList) {
-      loadRecentBooking()
-    }
-
-  }, [loadBookingList])
+  
+  //handle load all data
+   
 
   const filterModalVisible = () => {
     setShowWalletModal(true);
   };
 
+  useEffect(()=>{
+    callAllFunctionHome()
+  },[])
+
+   
   useEffect(() => {
     // console.log({ servicemenNeedFresh, subscriptionFresh })
     if (!loadBookingList && !loadSubsScriptionList && !loadServiceMen) {
       setSkeletonLoader(false)
+      setNeedSkeletonLoader(true)
     }else{
-      setSkeletonLoader(true)
+      if(needSkeletonLoader){
+        setSkeletonLoader(true)
+      }
+      
     }
   }, [loadBookingList, loadSubsScriptionList, loadServiceMen])
 

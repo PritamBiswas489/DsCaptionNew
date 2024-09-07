@@ -71,9 +71,9 @@ export function Setting() {
       showsVerticalScrollIndicator={false}>
       <Header
         title="profileSetting.profileSetting"
-        trailIcon={<AppSetting />}
+        // trailIcon={<AppSetting />}
         showBackArrow={true}
-        gotoScreen={() => navigate('AppSetting')}
+        // gotoScreen={() => navigate('AppSetting')}
         containerStyle={{
           paddingVertical: windowHeight(4),
         }}

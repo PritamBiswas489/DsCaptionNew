@@ -10,6 +10,7 @@ import {setValue, getValue} from '@utils/localstorage';
 import {useValues} from '../../../../../App';
 import appColors from '@theme/appColors';
 import { useNavigation } from '@react-navigation/native';
+import { updatelanguage } from '@src/services/profile.service';
 
 export function ChangeLanguage() {
   const [selectedLang, setSelectedLang] = useState('');
@@ -21,7 +22,7 @@ export function ChangeLanguage() {
   const onUpdateBtn = () => {
     i18n.changeLanguage(selectedLang);
     setValue('languageCode', selectedLang);
-
+    updatelanguage()
   };
 
   useEffect(() => {

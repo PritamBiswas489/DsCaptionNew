@@ -1,25 +1,21 @@
-import {arabic, english, french, hindi, spanish} from '@utils/images';
+import {arabic, english, french, hindi, spanish,  lang_bengali, lang_english, lang_hindi} from '@utils/images';
 import {CountryDataItemType} from './types';
 
 export const langues: CountryDataItemType[] = [
   {
-    name: 'introSlider.english',
-    country: english,
+    name: 'English',
+    country: lang_english,
     code: 'en',
   },
   {
-    name: 'language.arabic',
-    country: arabic,
-    code: 'ar',
+    name: 'বাংলা',
+    country: lang_bengali,
+    code: 'bn',
   },
   {
-    name: 'language.french',
-    country: french,
-    code: 'fr',
+    name: 'हिन्दी',
+    country: lang_hindi,
+    code: 'hi',
   },
-  {
-    name: 'language.spanish',
-    country: spanish,
-    code: 'es',
-  },
+  
 ];

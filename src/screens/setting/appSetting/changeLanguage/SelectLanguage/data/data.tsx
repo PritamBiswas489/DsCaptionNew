@@ -1,15 +1,10 @@
-import {arabic, english, french, spanish} from '@utils/images';
+import {arabic, english, french, lang_bengali, lang_english, lang_hindi, spanish} from '@utils/images';
 import {ImageSourcePropType} from 'react-native';
 
 export const languages: Array<dataType> = [
-  {icon: english, name: 'language.english', code: 'en'},
-  {icon: arabic, name: 'language.arabic', code: 'ar'},
-  {icon: french, name: 'language.french', code: 'fr'},
-  {
-    icon: spanish,
-    name: 'language.spanish',
-    code: 'es',
-  },
+  {icon: lang_english, name: 'English', code: 'en'},
+  {icon: lang_bengali, name: 'বাংলা', code: 'bn'},
+  {icon: lang_hindi, name: 'हिन्दी', code: 'hi'},
 ];
 
 export type dataType = {

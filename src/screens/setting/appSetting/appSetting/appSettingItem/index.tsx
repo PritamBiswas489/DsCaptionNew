@@ -15,8 +15,8 @@ type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
 export function AppSettingItem() {
   const {navigate} = useNavigation<routeProps>();
-  const {isDark, setIsDark,t} = useValues();
-  const [notification, setNotification] = useState(false);
+  const {isDark, setIsDark,t,notificationSound,setNotificationSound} = useValues();
+  
 
   const changeTheme = () => {
     const val = !isDark;
@@ -24,8 +24,15 @@ export function AppSettingItem() {
     setValue('darkTheme', val.toString());
   };
 
+  const changeNotificationSound = () =>{
+    const val = !notificationSound;
+    setNotificationSound(val)
+    setValue('notificationSound', val.toString());
+  }
+
   useEffect(() => {
     getTheme();
+    getNotitifcationSound();
   }, []);
 
   const getTheme = async () => {
@@ -38,9 +45,23 @@ export function AppSettingItem() {
         }
       })
       .then(val => {
-        setIsDark(val);
+        setIsDark(val); 
       });
   };
+
+  const getNotitifcationSound = async () =>{
+    getValue('notificationSound').then(res => {
+        if (res !== null) {
+          return JSON.parse(res);
+        } else {
+          return true;
+        }
+    })
+    .then(val => {
+        setNotificationSound(val);
+    });
+
+  }
 
   return (
     <View style={styles.container}>
@@ -94,9 +115,9 @@ export function AppSettingItem() {
               ) : (
                 <SwitchContainer
                   toggleDarkSwitch={() =>
-                    index == 0 ? changeTheme() : setNotification(!notification)
+                    index == 0 ? changeTheme() : changeNotificationSound()
                   }
-                  switchOn={index == 0 ? isDark : notification}
+                  switchOn={index == 0 ? isDark : notificationSound}
                 />
               )}
             </View>

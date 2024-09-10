@@ -1055,8 +1055,10 @@
             "Pendingwithdrawn":"Pending withdrawn",
             "Alreadywithdrawn":"Already withdrawn",
             "Totalearning":"Total earning",
-            "NotificationSound":"Notification Sound"
-
+            "NotificationSound":"Notification Sound",
+            "TransactionsReport":"Transactions Report",
+            "BusinessReport":"Business Report",
+            "BookingReport":"Booking Report"
 
              
 

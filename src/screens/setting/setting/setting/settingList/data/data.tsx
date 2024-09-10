@@ -77,8 +77,13 @@ export const settingData: Array<settingType> = [
         gotoScreen: 'PromotionalCostModal',
         darkIcon: <PromotionalCostIcon color={appColors.white} />,
       },
+      // {
+      //       icon: <Commission strokeWidth={'1'} color={appColors.darkText} />,
+      //   name: 'profileSetting.commissionDetails',
+      //   gotoScreen: 'CommissionHistory',
+      //   darkIcon: <Commission color={appColors.white} />,
+      // },
        
-     
       
     ],
   },

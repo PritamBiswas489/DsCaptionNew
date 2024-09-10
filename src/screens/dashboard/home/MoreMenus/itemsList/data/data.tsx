@@ -51,6 +51,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <ReportsIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuReports',
+    goToScreen:'ReportMenus'
    
   },
   {

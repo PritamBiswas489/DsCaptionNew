@@ -164,4 +164,8 @@ export type RootStackParamList = {
   BusinessInformation:undefined;
   BusinessSettings:undefined;
   ProfileAccountInformation:undefined;
+  ReportMenus:undefined;
+  TransactionReports:undefined;
+  BookingReports:undefined;
+  BusinessReports:undefined;
 };

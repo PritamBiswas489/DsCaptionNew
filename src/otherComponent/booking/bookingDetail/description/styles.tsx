@@ -23,8 +23,7 @@ export const styles = StyleSheet.create({
     borderRadius: windowWidth(2),
   },
   icontainer:{
-    backgroundColor: appColors.white,
-    borderColor: appColors.border,
+     
     borderWidth: 1,
     borderRadius: windowHeight(1.8),
     paddingHorizontal: windowWidth(2),

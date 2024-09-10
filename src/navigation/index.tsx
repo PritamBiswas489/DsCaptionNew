@@ -74,7 +74,10 @@ import ContentPages from '@src/screens/dashboard/home/ContentPages';
 import BusinessInformation from '@src/screens/dashboard/home/BusinessInformation';
 import BusinessSettings from '@src/screens/dashboard/home/BusinessSettings';
 import { ProfileAccountInformation } from '@src/screens/dashboard/home/AccountInformation';
-
+import { ReportMenus } from '@src/screens/dashboard/home/ReportMenus';
+import { TransactionReports } from '@src/screens/dashboard/home/Reports/TransactionReports';
+import { BookingReports } from '@src/screens/dashboard/home/Reports/BookingReports';
+import { BusinessReports } from '@src/screens/dashboard/home/Reports/BusinessReports';
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
 
@@ -298,13 +301,22 @@ export default function MyStack() {
               name="ProfileAccountInformation"
               component={ProfileAccountInformation}
             />
-
-
-
-
-
-
-
+            <RootStack.Screen
+              name="ReportMenus"
+              component={ReportMenus}
+            />
+            <RootStack.Screen
+              name="TransactionReports"
+              component={TransactionReports}
+            />
+            <RootStack.Screen
+              name="BookingReports"
+              component={BookingReports}
+            />
+            <RootStack.Screen
+              name="BusinessReports"
+              component={BusinessReports}
+            />
           </>
         )}
       </RootStack.Navigator>

@@ -70,7 +70,13 @@ export function Description({
       {/* {bookingStatus === 'completedBooking' && <PaymentSummary />}
       {serviceProof && <ServiceProofDetails serviceProof={serviceProof} />} */}
       {/* <ReviewsSection /> */}
-      {item.evidence_photos && <><View style={[styles.icontainer]}>
+      {item.evidence_photos.length > 0 && <><View style={[
+        styles.icontainer,
+        {
+          backgroundColor: isDark ? appColors.darkTheme : appColors.white,
+          borderColor: isDark ? appColors.darkBorder : appColors.border,
+        },
+        ]}>
         <Text style={{ color: isDark ? appColors.white : appColors.darkText, fontWeight: 'bold', marginBottom: 10 }}>{t('booking.proof')}</Text>
         {item.evidence_photos.map((evphoto) => {
           return (<TouchableOpacity onPress={() => {

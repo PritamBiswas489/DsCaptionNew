@@ -1,29 +1,46 @@
 import appColors from '@src/theme/appColors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
-import { View, Text, StyleSheet, Alert  } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import { useValues } from '../../../../../../../App';
 import Modal from 'react-native-modal';
- 
- 
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { formatNumberWithAbbreviation } from '@src/config/utility';
+
+
 // Define the type for the chart data
 interface ChartData {
   value: number;
   label: string;
+  admin_commission: number;
+  tax_amount: number;
 }
 
 const YearAmountChart: React.FC = () => {
-  // Array of chart data
-  const {t,isDark} = useValues()
-  const data: ChartData[] = [
-    { value: 5000, label: '2018' },
-    { value: 10000, label: '2019' },
-    { value: 7500, label: '2020' },
-    { value: 12000, label: '2021' },
-    { value: 9500, label: '2022' },
-    { value: 13500, label: '2023' },
-  ];
+  const { t, isDark } = useValues()
+  const {
+    chart_data
+  } = useSelector(
+    (state: RootState) => state['bookingReports']
+  );
+
+
+  const [chartData, setChartData] = useState<ChartData[]>([])
+  useEffect(() => {
+    if (chart_data?.timeline && Array.isArray(chart_data.admin_commission) && Array.isArray(chart_data.tax_amount) && Array.isArray(chart_data.booking_amount)) {
+      const formattedData = chart_data.timeline.map((timeLineValue, timeLineIndex) => {
+        return {
+          admin_commission: chart_data.admin_commission[timeLineIndex] || 0,
+          tax_amount: chart_data.tax_amount[timeLineIndex] || 0,
+          value: chart_data.booking_amount[timeLineIndex] || 0,
+          label: timeLineValue.toString() || 'Unknown'
+        };
+      });
+      setChartData(formattedData);
+    }
+  }, [chart_data]);
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<ChartData | null>(null);
@@ -36,25 +53,24 @@ const YearAmountChart: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    chartData.length > 0 && <View style={styles.container}>
       <BarChart
-        data={data}
-        barWidth={30} // Width of each bar
-        barBorderRadius={4} // Make bars rounded
-        initialSpacing={20} // Space before first bar
-        spacing={20} // Space between bars
-        yAxisThickness={1} // Thickness of the Y-axis line
-        xAxisThickness={1} // Thickness of the X-axis line
-        xAxisLabelTextStyle={[styles.xAxisLabel,{color: isDark ? appColors.white : appColors.darkText,}]} // X-axis label style
-        yAxisTextStyle={[styles.yAxisText,{color: isDark ? appColors.white : appColors.darkText,}]} // Y-axis text style
-        hideRules={true} // Hides background grid lines
-        frontColor={appColors.primary} // Color of the bars
-        xAxisColor={appColors.gradientBtn} // Custom X-axis line color
-        yAxisColor={ isDark ? appColors.darkTheme : appColors.white} // Custom Y-axis line color
+        data={chartData}
+        barWidth={30}  
+        barBorderRadius={4}  
+        initialSpacing={20}  
+        spacing={20}  
+        yAxisThickness={1}  
+        xAxisThickness={1}  
+        xAxisLabelTextStyle={[styles.xAxisLabel, { color: isDark ? appColors.white : appColors.darkText, }]}  
+        yAxisTextStyle={[styles.yAxisText, { color: isDark ? appColors.white : appColors.darkText, }]}  
+        hideRules={true}  
+        frontColor={appColors.primary}  
+        xAxisColor={appColors.gradientBtn}  
+        yAxisColor={isDark ? appColors.darkTheme : appColors.white}  
         hideYAxisText={true}
-        onPress={(data:any, x:number, y:number) => handleBarPress(data, x, y)}
+        onPress={(data: any, x: number, y: number) => handleBarPress(data, x, y)}
       />
-      
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setIsModalVisible(false)}
@@ -63,13 +79,14 @@ const YearAmountChart: React.FC = () => {
         <View style={styles.modalContent}>
           {selectedData && (
             <>
-              <Text style={styles.modalText}>{`Label: ${selectedData.label}`}</Text>
-              <Text style={styles.modalText}>{`Value: ${selectedData.value}`}</Text>
+              <Text style={styles.modalText}>{`${t('newDeveloper.Timeline')}:  ${selectedData.label}`}</Text>
+              <Text style={styles.modalText}>{`${t('newDeveloper.Amount')}: ${formatNumberWithAbbreviation(selectedData.value)}`}</Text>
+              <Text style={styles.modalText}>{`${t('newDeveloper.Taxamount')}: ${formatNumberWithAbbreviation(selectedData.tax_amount)}`}</Text>
+              <Text style={styles.modalText}>{`${t('newDeveloper.Admincommission')}: ${formatNumberWithAbbreviation(selectedData.admin_commission)}`}</Text>
             </>
           )}
         </View>
       </Modal>
-        
     </View>
   );
 };
@@ -80,8 +97,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal:10,
-    paddingVertical:10
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+
   },
   title: {
     fontSize: 18,

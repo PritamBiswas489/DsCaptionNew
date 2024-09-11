@@ -1,4 +1,5 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, Alert} from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view';
 import React, {useState} from 'react';
 import {GlobalStyle} from '@style/styles';
 import CancelHeader from '@commonComponents/cancelHeader';
@@ -14,27 +15,14 @@ import appColors from '@theme/appColors';
 import {DropdownWithIcon} from '@commonComponents/dropdownWithIcon';
 
 export default function BookingReportFilter({
-  setShowModal,
-  setSearchModal,
-  selectedCategory,
-  setSelectedCategory,
-  setDatePicker,
-  setIsStartDate,
-  startDate,
-  endDate,
-}: filterType) {
+    setShowModal,
+  
+}: {setShowModal: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [showInvalidDateError, setInvalidDateError] = useState(false);
   const [bookingType, setBookingType] = useState<string | any>('');
   const {isDark,t} = useValues();
 
-  const onApplyBtn = () => {
-    if (startDate > endDate) {
-      setInvalidDateError(true);
-    } else {
-      setShowModal(false);
-    }
-  };
-
+   
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -52,16 +40,8 @@ export default function BookingReportFilter({
         gotoScreen={() => setShowModal(false)}
         onButtonClick={() => setShowModal(false)}
       />
-      <Text style={[styles.textStyle, {marginTop: windowHeight(3)}]}>
-        {t('bookingDetail.status')}
-      </Text>
-      {/* <DropdownWithIcon
-        label="booking.allBooking"
-        data={bookingFilterData}
-        onSelect={setBookingType}
-        dropdownStyle={styles.dropDownContainerStyle}
-        iconStyle={styles.iconStyle}
-      /> */}
+       
+      
       <View
         style={[
           GlobalStyle.horizontalLine,
@@ -71,15 +51,8 @@ export default function BookingReportFilter({
           },
         ]}
       />
-      <Text style={styles.textStyle}>{t('dataFilter.selectDate')}</Text>
-      <SelectDateSection
-        setShowModal={setShowModal}
-        setDatePicker={setDatePicker}
-        setIsStartDate={setIsStartDate}
-        startDate={startDate}
-        endDate={endDate}
-        showInvalidDateError={showInvalidDateError}
-      />
+      
+       
       <View
         style={[
           GlobalStyle.horizontalLine,
@@ -89,18 +62,12 @@ export default function BookingReportFilter({
           },
         ]}
       />
-      <Text style={styles.textStyle}>{t('addNewService.category')}</Text>
-      <AddCategory
-        containerStyle={{marginHorizontal: 0}}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        setShowModal={setShowModal}
-        setSearchModal={setSearchModal}
-      />
+     
+       
       <GradientBtn
         additionalStyle={styles.additionalStyle}
         label="filterModal.apply"
-        onPress={() => onApplyBtn()}
+        onPress={() => { Alert.alert('Hello Hello Hello Hello') }}
       />
     </ScrollView>
   );

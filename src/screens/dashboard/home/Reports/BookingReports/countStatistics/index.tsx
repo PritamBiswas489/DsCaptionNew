@@ -9,6 +9,7 @@ import { formatNumberWithAbbreviation } from '@src/config/utility';
 import appColors from '@src/theme/appColors';
 import { useValues } from '../../../../../../../App';
 import { windowWidth } from '@src/theme/appConstant';
+ 
 
 const statusColor: Record<'pending' | 'accepted' | 'ongoing' | 'completed' | 'canceled', string> = {
   pending: appColors.pending,
@@ -19,8 +20,17 @@ const statusColor: Record<'pending' | 'accepted' | 'ongoing' | 'completed' | 'ca
 };
 
 export const CountStatistics = () => {
-  const {owner} = useSelector((state: RootState)=>state['serviceProviderAccountData'])
   const {isDark,t } = useValues()
+
+  //======= booking count ===================//
+  const {
+     bookings_count,
+     booking_amount
+  } = useSelector(
+      (state: RootState) => state['bookingReports']
+  );
+
+   
   
   return (
     <ScrollView horizontal={true} style={styles.scrollView}>
@@ -34,7 +44,7 @@ export const CountStatistics = () => {
           <Text style={[
             styles.number,
             {color: isDark ? appColors.white : appColors.darkText,}
-          ]}>184</Text>
+          ]}>{formatNumberWithAbbreviation(bookings_count?.total_bookings)}</Text>
           <Text style={
             [styles.text,
             {color: isDark ? appColors.white : appColors.darkText,}
@@ -51,7 +61,7 @@ export const CountStatistics = () => {
           ]}>
             <Text style={[styles.smallNumber,
               {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>7</Text>
+            ]}>{formatNumberWithAbbreviation(bookings_count?.canceled)}</Text>
             <Text style={[styles.smallText,{color:statusColor['canceled']}]}>{t('newDeveloper.CanceledServices')}</Text>
           </View>
           <View style={[styles.gridItemSmall,
@@ -62,7 +72,7 @@ export const CountStatistics = () => {
           ]}>
             <Text style={[styles.smallNumber,
               {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>7</Text>
+            ]}>{formatNumberWithAbbreviation(bookings_count?.ongoing)}</Text>
             <Text style={[styles.smallText,{color:statusColor['ongoing']}]}>{t('newDeveloper.OnGoingServices')}</Text>
           </View>
           <View style={[styles.gridItemSmall,
@@ -73,7 +83,7 @@ export const CountStatistics = () => {
           ]}>
             <Text style={[styles.smallNumber,
               {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>8</Text>
+            ]}>{formatNumberWithAbbreviation(bookings_count?.accepted)}</Text>
             <Text style={[styles.smallText,{color:statusColor['accepted']}]}>{t('newDeveloper.accepted')}</Text>
           </View>
           <View style={[styles.gridItemSmall,
@@ -84,7 +94,7 @@ export const CountStatistics = () => {
           ]}>
             <Text style={[styles.smallNumber,
               {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>100</Text>
+            ]}>{formatNumberWithAbbreviation(bookings_count?.completed)}</Text>
             <Text style={[styles.smallText,{color:statusColor['completed']}]}>{t('newDeveloper.CompletedServices')}</Text>
           </View>
         </View>
@@ -99,11 +109,11 @@ export const CountStatistics = () => {
           <Text style={[
             styles.number,
             {color: isDark ? appColors.white : appColors.darkText,}
-          ]}>184</Text>
+          ]}>{formatNumberWithAbbreviation(booking_amount.total_booking_amount)}</Text>
           <Text style={
             [styles.text,
             {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>Total Booking Amount</Text>
+            ]}>{t('newDeveloper.TotalBookingAmount')}</Text>
         </View>
         <View style={styles.gridRow}>
           <View style={[styles.gridItemSmall,
@@ -115,8 +125,8 @@ export const CountStatistics = () => {
           ]}>
             <Text style={[styles.smallNumber,
               {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>7</Text>
-            <Text style={styles.smallText}>Due Amount</Text>
+            ]}>{formatNumberWithAbbreviation(booking_amount.total_unpaid_booking_amount)}</Text>
+            <Text style={styles.smallText}>{t('newDeveloper.DueAmount')}</Text>
           </View>
           <View style={[styles.gridItemSmall,
             {
@@ -127,11 +137,9 @@ export const CountStatistics = () => {
           ]}>
             <Text style={[styles.smallNumber,
               {color: isDark ? appColors.white : appColors.darkText,}
-            ]}>7</Text>
-            <Text style={styles.smallText}>Already Settled</Text>
+            ]}>{formatNumberWithAbbreviation(booking_amount.total_paid_booking_amount)}</Text>
+            <Text style={styles.smallText}>{t('newDeveloper.AlreadySettled')}</Text>
           </View>
-           
-          
         </View>
       </View>
     </View>

@@ -12,6 +12,17 @@ export const styles = StyleSheet.create({
     marginTop: windowHeight(3),
     borderRadius: windowWidth(2),
   },
+  chartContainer: {
+    marginTop: 20,
+    borderColor: appColors.border,
+    borderWidth: 1,
+    borderRadius: windowWidth(2),
+    backgroundColor: appColors.white,
+    width: windowWidth(95),
+    marginHorizontal: windowWidth(2),
+    marginVertical: 20,
+    paddingTop: 20
+  },
   innerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -39,5 +50,6 @@ export const styles = StyleSheet.create({
     color: appColors.lightText,
     fontFamily: appFonts.NunitoMedium,
     fontSize: fontSizes.FONT3HALF,
+    width:windowWidth(27)
   },
 });

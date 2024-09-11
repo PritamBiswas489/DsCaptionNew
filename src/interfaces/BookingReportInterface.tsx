@@ -1,3 +1,5 @@
+ 
+
 // Define the type for a translation object
 export interface TransactionInterface {
     id: number;
@@ -20,7 +22,7 @@ export interface CategoryDataInterface {
     translations: TransactionInterface[];
 }
 
-export interface SubCategoryCategoryDataInterface {
+export interface SubCategoryDataInterface {
     id: string;
     name: string;
     translations: TransactionInterface[];
@@ -128,10 +130,7 @@ export interface CustomerInterface {
     service_availability: number;
     owner: Owner;
   }
-  
-
-
-export interface BookingReportInterface {
+export interface BookingFilterData{
     id: string;
     readable_id: number;
     customer_id: string;
@@ -168,18 +167,43 @@ export interface BookingReportInterface {
     total_referral_discount_amount: number;
     customer:CustomerInterface;
     provider:Provider;
-    booking_amount:{
-        total_booking_amount: number,
-        total_paid_booking_amount: number,
-        total_unpaid_booking_amount: number
-    };
-    chart_data:{
-        booking_amount:number[],
-        tax_amount:number[],
-        admin_commission:number[],
-        timeline:number[]
-    }
-  }
+}
+  
+export interface BookingCount {
+    total_bookings: number;
+    accepted: number;
+    ongoing: number;
+    completed: number;
+    canceled: number;
+}
+
+export interface BookingAmount {
+    total_booking_amount: number;
+    total_paid_booking_amount: number;
+    total_unpaid_booking_amount: number;
+}
+
+export interface ChartData{
+  booking_amount:number[];
+  tax_amount:number[];
+  admin_commission:number[];
+  timeline:number[];
+}
+
+
+export interface BookingReportInterface {
+    zones:ZoneInterface[];
+    categories:CategoryDataInterface[];
+    sub_categories:SubCategoryDataInterface[];
+    filtered_bookings : BookingFilterData[];
+    bookings_count:BookingCount;
+    booking_amount:BookingAmount;
+    chart_data:ChartData;
+    limit:number;
+    offset:number;
+    isFirstTimeLoading: boolean,
+    isNoMoreData: boolean,
+}
 
 
 

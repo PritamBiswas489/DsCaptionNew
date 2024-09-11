@@ -8,16 +8,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { windowHeight, windowWidth } from '@theme/appConstant';
 import appColors from '@theme/appColors';
 import { useValues } from '../../../../../../App';
-import { Alert, RefreshControl, StyleSheet, View } from 'react-native';
-import { CountStatistics } from './countStatistics';
-import ServiceBarCartAccountInformation from './barChart';
-import ServiceCount from './serviceCount';
+import { Alert, RefreshControl, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { BookingReportList } from './historySection';
-import YearAmountChart from './barChart';
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 import BookingReportFilter from './bookingFilter';
-import {   BookingFilterIcon } from '@utils/icons';
+import { BookingFilterIcon } from '@utils/icons';
 import CommonModal from '@src/commonComponents/commonModal';
+import {   useDispatch } from 'react-redux';
+import { bookingReportActions } from '@src/store/redux/booking-reports-redux';
+ 
 
 interface Response {
   data: any;
@@ -32,66 +31,51 @@ interface Response {
 export function BookingReports() {
   const { navigate } = useNavigation<navigationProp>();
   const { isDark, t } = useValues();
-  const [showSkeletonLoader, setSkeletonLoader] = useState(false)
   const [refreshing, setRefreshing] = React.useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  
+  const dispatch = useDispatch()
 
   const filterModalVisible = () => {
     setShowModal(true);
   };
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-
+    dispatch(bookingReportActions.resetState())
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   }, []);
 
+
   return (
     <>
-    <ScrollView
-      style={[
-        GlobalStyle.mainView,
-        { backgroundColor: isDark ? appColors.darkTheme : appColors.white, },
-      ]}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      showsVerticalScrollIndicator={false}>
-      <Header
-        showBackArrow={true}
-        trailIcon={
-          <BookingFilterIcon
-            color={isDark ? appColors.white : appColors.darkText}
-          />
-        }
-        gotoScreen={() => setShowModal(true)}
-        title={'newDeveloper.BookingReport'}
-      />
-      <CountStatistics />
-      <View
+      <ScrollView
         style={[
-          styles.chartContainer,
-          {
-            backgroundColor: isDark ? appColors.darkTheme : appColors.white,
-            borderColor: isDark ? appColors.darkBorder : appColors.border,
-          },
-        ]}>
-        <YearAmountChart />
-      </View>
-      <BookingReportList />
-    </ScrollView>
-    {showModal && (
+          GlobalStyle.mainView,
+          { backgroundColor: isDark ? appColors.darkTheme : appColors.white, },
+        ]}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        showsVerticalScrollIndicator={false}>
+        <Header
+          showBackArrow={true}
+          trailIcon={
+            <BookingFilterIcon
+              color={isDark ? appColors.white : appColors.darkText}
+            />
+          }
+          gotoScreen={() => setShowModal(true)}
+          title={'newDeveloper.BookingReport'}
+        />
+       
+        <BookingReportList    />
+        
+      </ScrollView>
+      {showModal && (
         <CommonModal
           modal={
             <BookingReportFilter
-              setSearchModal={()=>{}}
               setShowModal={setShowModal}
-              selectedCategory={[]}
-              setSelectedCategory={()=>{}}
-              setDatePicker={()=>{}}
-              setIsStartDate={()=>{}}
-              startDate={''}
-              endDate={''}
             />
           }
           showModal={showModal}
@@ -99,7 +83,7 @@ export function BookingReports() {
         />
       )}
     </>
-    
+
   );
 }
 export const styles = StyleSheet.create({
@@ -112,7 +96,7 @@ export const styles = StyleSheet.create({
     width: windowWidth(95),
     marginHorizontal: windowWidth(2),
     marginVertical: 20,
-    paddingTop:20
+    paddingTop: 20
   },
   rowStyle: {
     marginHorizontal: windowWidth(3),

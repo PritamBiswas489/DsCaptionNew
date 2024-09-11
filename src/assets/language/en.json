@@ -1058,13 +1058,19 @@
             "NotificationSound":"Notification Sound",
             "TransactionsReport":"Transactions Report",
             "BusinessReport":"Business Report",
-            "BookingReport":"Booking Report"
-
-             
-
-
-
-
+            "BookingReport":"Booking Report",
+            "TotalBookingAmount":"Total Booking Amount",
+            "DueAmount":"Due Amount",
+            "AlreadySettled":"Already Settled" ,
+            "Timeline":"Timeline",
+            "Amount":"Amount",
+            "Taxamount":"Tax amount",
+            "Admincommission":"Admin commission",
+            "CustomerName":"Customer" ,
+            "BookingAmount":"Booking Amount",
+            "ServiceDiscount":"Service Discount",
+            "CouponDiscount":"Coupon Discount",
+            "GSTtax":"GST/tax"
 
         }
     }

@@ -36,6 +36,7 @@ import serviceProviderBookingReviewSlice from "./redux/service-provider-booking-
 import serviceProviderPomotionalCostSlice from "./redux/service-provider-pomotional-cost-redux";
 import availableTimeSlotSlice from "./redux/available-time-slot-redux";
 import businessSettingsSlice from "./redux/business-settings-redux";
+import bookingReportSlice from "./redux/booking-reports-redux";
 
 const store = configureStore({
     reducer: { 
@@ -75,8 +76,8 @@ const store = configureStore({
       forgetPassword:forgetPasswordSlice.reducer,
       contentPages:contentPagesSlice.reducer,
       availableTimeSlot:availableTimeSlotSlice.reducer,
-      businessSetting:businessSettingsSlice.reducer
-
+      businessSetting:businessSettingsSlice.reducer,
+      bookingReports:bookingReportSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
 
     },

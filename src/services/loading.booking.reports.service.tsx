@@ -3,6 +3,7 @@ import { getBookingReports } from "./reports.service";
 import { RootState, AppDispatch } from '@src/store';
 import { BookingFilterData, BookingReportInterface } from "@src/interfaces/BookingReportInterface";
 import { bookingReportActions } from "@src/store/redux/booking-reports-redux";
+import Toast from "react-native-toast-message";
 
 
 
@@ -39,5 +40,14 @@ export const loadBookingReportsService = async (
                         data: false
                     })); //is first time loading
       }else{
+          Toast.show({
+              type: 'error',
+              text1: 'ERROR',
+              text2: response?.data?.message,
+          });
+          dispatch(bookingReportActions.setData({
+            field: 'isFirstTimeLoading',
+            data: false
+        })); //is first time loading
       }
 }

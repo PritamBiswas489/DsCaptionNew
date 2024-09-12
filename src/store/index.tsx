@@ -37,6 +37,7 @@ import serviceProviderPomotionalCostSlice from "./redux/service-provider-pomotio
 import availableTimeSlotSlice from "./redux/available-time-slot-redux";
 import businessSettingsSlice from "./redux/business-settings-redux";
 import bookingReportSlice from "./redux/booking-reports-redux";
+import reportFilterSlice from "./redux/reports-filter-redux";
 
 const store = configureStore({
     reducer: { 
@@ -77,7 +78,8 @@ const store = configureStore({
       contentPages:contentPagesSlice.reducer,
       availableTimeSlot:availableTimeSlotSlice.reducer,
       businessSetting:businessSettingsSlice.reducer,
-      bookingReports:bookingReportSlice.reducer
+      bookingReports:bookingReportSlice.reducer,
+      reportFilter:reportFilterSlice.reducer,
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
 
     },

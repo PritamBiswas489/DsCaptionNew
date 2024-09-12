@@ -6,6 +6,7 @@ import appFonts from '@src/theme/appFonts';
 import { fontSizes } from '@src/theme/appConstant';
 import {useValues} from '../../../App';
 import { windowHeight } from '@src/theme/appConstant';
+import GradientBtn from '@src/commonComponents/gradientBtn';
 
 interface DataItem {
   label: string;
@@ -68,7 +69,7 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
 
       <Modal
         visible={isModalVisible}
-        transparent={true}
+        transparent={false}
         animationType="slide"
         onRequestClose={() => setIsModalVisible(false)}
       >
@@ -92,8 +93,16 @@ export default function SelectionDropdown({ data, value, setValue, label, error 
                 </TouchableOpacity>
               )}
             />
+           
           </View>
+          
         </View>
+        <View style={{backgroundColor:isDark ? appColors.darkCardBg : appColors.white, paddingHorizontal:10  }}>
+        <GradientBtn
+        additionalStyle={{marginHorizontal: 0,}}
+        label="newDeveloper.CloseBtn"
+        onPress={() => { setIsModalVisible(false)  }}
+      /></View>
       </Modal>
 
       {error && <Text style={styles.error}>{error}</Text>}

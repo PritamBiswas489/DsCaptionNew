@@ -1,16 +1,11 @@
 import { View, FlatList, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { historyData } from './data';
 import { styles } from './styles';
 import { GlobalStyle } from '@style/styles';
 import { HistoryRow } from './historyRow';
-import { Arrow } from '@utils/icons';
 import appColors from '@theme/appColors';
 import { windowWidth } from '@theme/appConstant';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from 'src/navigation/types';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useValues } from '../../../../../../../App';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
@@ -21,6 +16,7 @@ import { loadBookingReportsService } from '@src/services/loading.booking.reports
 import { CountStatistics } from '../countStatistics';
 import YearAmountChart from '../barChart';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
+import Toast from 'react-native-toast-message';
 
 
 export function BookingReportList() {
@@ -35,9 +31,24 @@ export function BookingReportList() {
   } = useSelector(
     (state: RootState) => state['bookingReports']
   );
+
+
+  const {
+    zone: filterZone,
+    category: filterCategory,
+    subcategory: filterSubCategory,
+    status: filterStatus,
+    timerange: filtertimeRange,
+    fromDate: filterFromDate,
+    toDate: filterToDate,
+  } = useSelector(
+    (state: RootState) => state['reportFilter'])
+
+
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
 
+  //handle scroll processing
   const handleScrollProcessing = () => {
     if (noMoreData) { return }
     setClickLoadMore(true)
@@ -45,9 +56,32 @@ export function BookingReportList() {
   }
 
   const loadDataReports = async () => {
+    console.log({ filterZone, filterCategory, filterSubCategory, filterStatus, filtertimeRange, filterFromDate, filterToDate })
     const formData = new FormData()
     formData.append('limit', limitData) //limit
     formData.append('offset', offsetData) //offset
+    if (filterZone !== '') {
+      formData.append('zone_ids[]', filterZone)
+    }
+    if (filterCategory !== '') {
+        formData.append('category_ids[]', filterCategory)
+    }
+    if (filterSubCategory !== '') {
+        formData.append('sub_category_ids[]', filterSubCategory)
+    }
+    if (filterStatus !== '') {
+        formData.append('booking_status', filterStatus)
+    }
+    if (filtertimeRange !== '') {
+        formData.append('date_range', filtertimeRange)
+    }
+    if(filtertimeRange === 'custom_date'){
+      if(filterFromDate !== '' && filterToDate !== ''){
+        formData.append('from', filterFromDate)
+        formData.append('to', filterToDate)
+      } 
+    }
+
     await loadBookingReportsService(
       formData,
       dispatch

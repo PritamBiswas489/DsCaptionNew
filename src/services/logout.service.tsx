@@ -23,6 +23,7 @@ import { ongoingListingActions } from '@src/store/redux/ongoing-listing-redux';
 import { availableTimeSlotActions } from '@src/store/redux/available-time-slot-redux';
 import { businessSettingsActions } from '@src/store/redux/business-settings-redux';
 import { bookingReportActions } from '@src/store/redux/booking-reports-redux';
+import { reportFiltersActions } from '@src/store/redux/reports-filter-redux';
 
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
@@ -48,4 +49,5 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(availableTimeSlotActions.resetState())
       dispatch(businessSettingsActions.resetState())
       dispatch(bookingReportActions.resetState()) //booking report actions
+      dispatch(reportFiltersActions.resetState())
 }

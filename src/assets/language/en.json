@@ -1070,7 +1070,31 @@
             "BookingAmount":"Booking Amount",
             "ServiceDiscount":"Service Discount",
             "CouponDiscount":"Coupon Discount",
-            "GSTtax":"GST/tax"
+            "GSTtax":"GST/tax",
+            "ReportFilterZone":"Zone list",
+            "ReportFilterCategories":"Categories",
+            "ReportFilterSubcategories":"Sub categories",
+            "CloseBtn":"Close",
+            "TimeRange":"Time Range",
+            "all_time":"All time",
+            "this_week":"This week",
+            "last_week":"Last week",
+            "last_15_days":"This week",
+            "this_month":"This month",
+            "last_month":"Last month",
+            "this_year":"This year",
+            "last_year":"Last year",
+            "this_year_1st_quarter":"This year 1st quater",
+            "this_year_2nd_quarter":"This year 2nd quater",
+            "this_year_3rd_quarter":"This year 3rd quater",
+            "this_year_4th_quarter":"This year 4th quater",
+            "custom_date":"Custom date",
+            "fromDate":"From",
+            "toDate":"To",
+            "fromToDateError":"From and to date both required"
+            
+
+            
 
         }
     }

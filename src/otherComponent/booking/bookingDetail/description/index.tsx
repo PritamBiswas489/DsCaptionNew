@@ -70,7 +70,7 @@ export function Description({
       {/* {bookingStatus === 'completedBooking' && <PaymentSummary />}
       {serviceProof && <ServiceProofDetails serviceProof={serviceProof} />} */}
       {/* <ReviewsSection /> */}
-      {item.evidence_photos.length > 0 && <><View style={[
+      {item?.evidence_photos && item.evidence_photos.length > 0 && <><View style={[
         styles.icontainer,
         {
           backgroundColor: isDark ? appColors.darkTheme : appColors.white,

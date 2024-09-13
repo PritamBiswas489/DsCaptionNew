@@ -24,7 +24,13 @@ import { availableTimeSlotActions } from '@src/store/redux/available-time-slot-r
 import { businessSettingsActions } from '@src/store/redux/business-settings-redux';
 import { bookingReportActions } from '@src/store/redux/booking-reports-redux';
 import { reportFiltersActions } from '@src/store/redux/reports-filter-redux';
+import { transactionReportActions } from '@src/store/redux/transactions-reports-redux';
+import { serviceOverviewActions } from '@src/store/redux/service-overview-redux';
+import { transactionsReportFiltersActions } from '@src/store/redux/transactions-reports-filter-redux';
+import { businessEarningListingActions } from '@src/store/redux/business-earning-listing-redux';
+import { businessExpenseActions } from '@src/store/redux/business-expenses-redux';
 
+//logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
       dispatch(mySubscriptionsAction.resetState())
@@ -50,4 +56,9 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(businessSettingsActions.resetState())
       dispatch(bookingReportActions.resetState()) //booking report actions
       dispatch(reportFiltersActions.resetState())
+      dispatch(transactionReportActions.resetState())
+      dispatch(transactionsReportFiltersActions.resetState())
+      dispatch(serviceOverviewActions.resetState())
+      dispatch(businessEarningListingActions.resetState())
+      dispatch(businessExpenseActions.resetState()) 
 }

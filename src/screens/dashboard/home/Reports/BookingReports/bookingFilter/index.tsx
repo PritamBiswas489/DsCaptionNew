@@ -140,6 +140,7 @@ export default function BookingReportFilter({
           onButtonClick={() => {
               setShowModal(false)
               dispatch(reportFiltersActions.resetState())
+              dispatch(bookingReportActions.resetState())
             
             }
           }

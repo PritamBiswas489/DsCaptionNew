@@ -36,7 +36,7 @@ interface SetDataPayload {
 }
 
 const bookingReportSlice = createSlice({
-    name: "bookingReportInterface",
+    name: "bookingReports",
     initialState: initialState,
     reducers: {
         setData(state: any, action: PayloadAction<SetDataPayload>) {

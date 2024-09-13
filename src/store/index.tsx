@@ -38,6 +38,11 @@ import availableTimeSlotSlice from "./redux/available-time-slot-redux";
 import businessSettingsSlice from "./redux/business-settings-redux";
 import bookingReportSlice from "./redux/booking-reports-redux";
 import reportFilterSlice from "./redux/reports-filter-redux";
+import transactionReportSlice from "./redux/transactions-reports-redux";
+import transactionReportFilterSlice from "./redux/transactions-reports-filter-redux";
+import serviceOverviewSlice from "./redux/service-overview-redux";
+import businessEarningSlice from "./redux/business-earning-listing-redux";
+import businessExpensesSlice from "./redux/business-expenses-redux";
 
 const store = configureStore({
     reducer: { 
@@ -80,8 +85,12 @@ const store = configureStore({
       businessSetting:businessSettingsSlice.reducer,
       bookingReports:bookingReportSlice.reducer,
       reportFilter:reportFilterSlice.reducer,
+      transactionReports:transactionReportSlice.reducer,
+      transactionReportFilter:transactionReportFilterSlice.reducer,
+      serviceOverview:serviceOverviewSlice.reducer,
+      businessEarning:businessEarningSlice.reducer,
+      businessExpenses:businessExpensesSlice.reducer,
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
-
     },
   });
   

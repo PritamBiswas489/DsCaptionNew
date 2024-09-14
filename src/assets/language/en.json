@@ -1133,7 +1133,12 @@
             "NetProfitRate":"Net Profit Rate",
             "TotalExpenses":"Total expenses",
             "TAX":"TAX",
-            "TotalTaxCollected":"Total Tax Collected" 
+            "TotalTaxCollected":"Total Tax Collected" ,
+            "Expenses":"Expenses",
+            "Totalearnings":"Total Earnings",
+            "Netprofit":"Net profit"
+            
+             
              
         }
     }

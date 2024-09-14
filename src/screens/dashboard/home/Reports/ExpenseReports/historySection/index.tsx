@@ -97,6 +97,17 @@ export function BookingReportList() {
       {firstTimeLoading && <SkeletonLoader />}
       {!firstTimeLoading && <>
         <CountStatistics />
+
+        <View
+          style={[
+            styles.chartContainer,
+            {
+              backgroundColor: isDark ? appColors.darkTheme : appColors.white,
+              borderColor: isDark ? appColors.darkBorder : appColors.border,
+            },
+          ]}>
+          <YearAmountChart />
+        </View>
          
         <View style={{ marginBottom: 40 }}>
           <FlatList

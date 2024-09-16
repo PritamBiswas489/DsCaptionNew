@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     borderColor: appColors.primary,
     borderWidth: 1,
     height: windowHeight(3.5),
-    width: windowWidth(7),
+    width: windowWidth(18),
     borderRadius: windowWidth(10),
     alignItems: 'center',
     justifyContent: 'center',

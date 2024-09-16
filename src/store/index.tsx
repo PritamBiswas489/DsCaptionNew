@@ -43,6 +43,8 @@ import transactionReportFilterSlice from "./redux/transactions-reports-filter-re
 import serviceOverviewSlice from "./redux/service-overview-redux";
 import businessEarningSlice from "./redux/business-earning-listing-redux";
 import businessExpensesSlice from "./redux/business-expenses-redux";
+import businessReportFilterSlice from "./redux/business-reports-filter-redux";
+import homeStatisticsGraphSlice from "./redux/home-statistics-graph-redux";
 
 const store = configureStore({
     reducer: { 
@@ -90,12 +92,14 @@ const store = configureStore({
       serviceOverview:serviceOverviewSlice.reducer,
       businessEarning:businessEarningSlice.reducer,
       businessExpenses:businessExpensesSlice.reducer,
+      businessReportsFilter:businessReportFilterSlice.reducer,
+      homeStatisticGraph:homeStatisticsGraphSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
+    
   });
   
 export default store;
-
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch

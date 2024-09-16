@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {dashBoardType} from '../data/types';
+ 
 import {styles} from './styles';
 import {Arrow} from '@utils/icons';
 import {useNavigation} from '@react-navigation/native';
@@ -10,14 +10,18 @@ import {useValues} from '../../../../../../App';
 import appColors from '@theme/appColors';
 
 type navigation = NativeStackNavigationProp<RootStackParamList>;
-
+type dashBoardType = {
+  icon: React.ReactNode;
+  name: string;
+  count: any;
+  darkIcon: React.ReactNode;
+};
 export default function GridItem({item}: {item: dashBoardType}) {
   const {navigate} = useNavigation<navigation>();
   const {isDark,t} = useValues();
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={() => navigate(item.gotoScreen as keyof RootStackParamList)}
       style={[
         styles.gridItem,
         {
@@ -41,7 +45,6 @@ export default function GridItem({item}: {item: dashBoardType}) {
           ]}>
           {item.count}
         </Text>
-        <Arrow />
       </View>
     </TouchableOpacity>
   );

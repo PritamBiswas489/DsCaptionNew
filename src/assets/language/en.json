@@ -1136,10 +1136,13 @@
             "TotalTaxCollected":"Total Tax Collected" ,
             "Expenses":"Expenses",
             "Totalearnings":"Total Earnings",
-            "Netprofit":"Net profit"
-            
-             
-             
+            "Netprofit":"Net profit",
+            "TotalSubscribedSubcategories":"Total Subscribed Subcategories",
+            "TotalBookingServed":"Total Booking Served",
+            "TotalServicemen":"Total Servicemen",
+            "Monthly":"Monthly",
+            "Yearly":"Yearly"  ,
+            "EarningStatistics":"Earning Statistics"       
         }
     }
 }

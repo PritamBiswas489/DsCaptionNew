@@ -9,7 +9,12 @@ interface HomeDataStateInterface {
     bookingList:BookingListingInterface[];
     bookingListLimit:number;
     loadBookingList:boolean;
-    loadSubsScriptionList:boolean    
+    loadSubsScriptionList:boolean;
+    loadingTopCard:boolean;
+    totalServiceMen:number;
+    totalEarning:number;
+    totalSubscribedServices:number;
+    totalBookingServed:number;   
 }
 
 
@@ -25,8 +30,12 @@ const initialState: HomeDataStateInterface = {
     bookingListLimit:5,
     loadServiceMen:true,
     loadBookingList:true,
-    loadSubsScriptionList:true
-    
+    loadSubsScriptionList:true,
+    loadingTopCard:true,
+    totalServiceMen:0,
+    totalEarning:0,
+    totalSubscribedServices:0,
+    totalBookingServed:0,
 };
 
 const homeDataSlice = createSlice({

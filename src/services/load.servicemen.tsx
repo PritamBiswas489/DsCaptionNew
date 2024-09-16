@@ -59,7 +59,7 @@ export const homeloadServiceMenData = async (queryParams:string,dispatch:AppDisp
        // console.log("==================== formattedData ========================")
       //console.log({formattedData})
       dispatch(homeDataActions.setData({field:'serviceMenData',data:formattedData}));
-     
+      
   }
  
 

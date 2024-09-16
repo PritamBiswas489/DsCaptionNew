@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
   },
   containerView: {
     paddingVertical: windowHeight(3),
-    paddingLeft: 3,
+    // paddingLeft: 3,
+    overflow:'scroll'
   },
 });

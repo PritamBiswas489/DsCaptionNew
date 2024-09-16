@@ -5,18 +5,15 @@ import { GlobalStyle } from '@style/styles';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from 'src/navigation/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { windowHeight, windowWidth } from '@theme/appConstant';
+import {   windowWidth } from '@theme/appConstant';
 import appColors from '@theme/appColors';
 import { useValues } from '../../../../../../App';
-import { Alert, RefreshControl, StyleSheet, View, ActivityIndicator } from 'react-native';
+import {   RefreshControl, StyleSheet } from 'react-native';
 import { BookingReportList } from './historySection';
-type navigationProp = NativeStackNavigationProp<RootStackParamList>;
- 
 import { useDispatch } from 'react-redux';
-
- 
 import { businessExpenseActions } from '@src/store/redux/business-expenses-redux';
 
+type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 interface Response {
   data: any;

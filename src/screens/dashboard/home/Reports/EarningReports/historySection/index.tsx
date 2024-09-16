@@ -31,16 +31,15 @@ export function BookingReportList() {
     (state: RootState) => state['businessEarning']
   );
 
-   
-
   const {
     zone: filterZone,
-    transaction_type:filterTransactionType,
+    category: filterCategory,
+    subcategory: filterSubCategory,
     timerange: filtertimeRange,
     fromDate: filterFromDate,
     toDate: filterToDate,
   } = useSelector(
-    (state: RootState) => state['transactionReportFilter'])
+    (state: RootState) => state['businessReportsFilter'])
 
 
   const { isDark, t, currSymbol } = useValues();
@@ -57,21 +56,24 @@ export function BookingReportList() {
         const formData = new FormData()
         formData.append('limit', limitData) //limit
         formData.append('offset', offsetData) //offset
-        // if (filterZone !== '') {
-        //   formData.append('zone_ids[]', filterZone)
-        // }
-        // if(filterTransactionType!==''){
-        //   formData.append('transaction_type', filterTransactionType)
-        // }
-        // if (filtertimeRange !== '') {
-        //     formData.append('date_range', filtertimeRange)
-        // }
-        // if(filtertimeRange === 'custom_date'){
-        //   if(filterFromDate !== '' && filterToDate !== ''){
-        //     formData.append('from', filterFromDate)
-        //     formData.append('to', filterToDate)
-        //   } 
-        // }
+        if (filterZone !== '') {
+              formData.append('zone_ids[]', filterZone)
+        }
+        if (filterCategory !== '') {
+              formData.append('category_ids[]', filterCategory)
+        }
+        if (filterSubCategory !== '') {
+              formData.append('sub_category_ids[]', filterSubCategory)
+        }
+        if (filtertimeRange !== '') {
+              formData.append('date_range', filtertimeRange)
+        }
+        if(filtertimeRange === 'custom_date'){
+          if(filterFromDate !== '' && filterToDate !== ''){
+                formData.append('from', filterFromDate)
+                formData.append('to', filterToDate)
+          } 
+        }
         await loadEarningReportData(
           formData,
           dispatch

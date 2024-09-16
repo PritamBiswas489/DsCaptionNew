@@ -39,6 +39,8 @@ import { homeBookingList } from '@src/services/load.booking.service';
 import HomeBookingList from '@src/commonComponents/homeBookingList';
 import { homeDataActions } from '@src/store/redux/home-data-redux';
 import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
+import messaging from '@react-native-firebase/messaging';
+import { Platform } from 'react-native';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -85,6 +87,10 @@ export function Home() {
     loadServiceMen,
     loadSubsScriptionList
   } = useSelector((state: RootState) => state['homeData'])
+
+   
+
+  
   
   //handle load all data
    
@@ -111,7 +117,38 @@ export function Home() {
     }
   }, [loadBookingList, loadSubsScriptionList, loadServiceMen])
 
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
 
+  const getFCMToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        console.log('FCM Token:', fcmToken);
+        // Store the token in your backend if necessary
+      } else {
+        console.log('Failed to get FCM token');
+      }
+    } catch (error) {
+      console.error('Error getting FCM token:', error);
+    }
+  };
+  useEffect(() => {
+    requestUserPermission();
+    getFCMToken();
+    const unsubscribe = messaging().onTokenRefresh(token => {
+      console.log('New FCM token:', token);
+    });
+    return () => unsubscribe();
+  }, []);
 
 
   return (
@@ -137,7 +174,7 @@ export function Home() {
           onTrailIcon={() => navigate('Notification')}
         />
         {isServiceManLogin && <Provider />}
-        <TotalBalance onPress={() => setShowWalletModal(true)} />
+        <TotalBalance onPress={() => Alert.alert('NOT DONE YET')} />
         {isServiceManLogin ? <ServiceMenDashBoard /> : <DashBoard />}
         <HeadingRow
           title={

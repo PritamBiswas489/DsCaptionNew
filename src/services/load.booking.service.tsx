@@ -129,7 +129,7 @@ export const homeBookingList = async (dispatch:AppDispatch) =>{
         const formData = new FormData();
         formData.append('limit', 20);
         formData.append('offset', 1);
-        formData.append('booking_status', 'all');
+        formData.append('booking_status', 'pending');
         const response: Response = await getBookings(formData);
         const bookingData = response?.data?.content?.bookings?.data;
 

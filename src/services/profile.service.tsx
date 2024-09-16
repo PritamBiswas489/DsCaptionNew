@@ -56,6 +56,7 @@ export const getServiceMenList = async(queryParam:string): Promise<Response> => 
 	}
 
 }
+ 
 export const deleteServiceMenRequest = async(serviceMenId:string): Promise<Response> => {
 	try {
 		const response = await api.delete(`/provider/serviceman/delete?serviceman_id[]=${serviceMenId}`);

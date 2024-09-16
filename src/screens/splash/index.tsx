@@ -22,10 +22,13 @@ import { getProviderConfig, getPagesContent } from '@src/services/settings.servi
 import { configAppActions } from '@src/store/redux/config-redux';
 import { contentPagesActions } from '@src/store/redux/content-pages-redux';
 import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-provider-pomotional-cost-redux';
- 
-type navigation = NativeStackNavigationProp<RootStackParamList>;
 import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
+import { homeStatisticsGraphActions } from '@src/store/redux/home-statistics-graph-redux';
 
+
+
+
+type navigation = NativeStackNavigationProp<RootStackParamList>;
 const SplashScreen = () => {
   const scaleValue = useRef(new Animated.Value(0)).current;
   const images = [splashLogo2, splashLogo2];
@@ -144,8 +147,149 @@ const SplashScreen = () => {
     inputRange: [0.5, 0.5],
     outputRange: ['50deg', '0deg'],
   });
+  function getRandomFloat(min:number, max:number) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+  function getDaysInMonth(month:number, year:number) {
+    return new Date(year, month, 0).getDate();
+}
 
-   
+  //assing default homestatistics data
+  // const assignDefaultHomeStatisticsData = ()=>{
+  //   console.log("====== Assign Default Home Statistics ======")
+  //   const currentYear = new Date().getFullYear();
+  //   const lastFourYears = [currentYear];
+
+  //   for (let i = 0; i < 4; i++) {
+  //       lastFourYears.push(currentYear - (i + 1));
+  //   }
+
+  //   dispatch(homeStatisticsGraphActions.setData({field:'lastFourYears',data:lastFourYears}))
+
+  //   const yearData:any = []
+  //   const monthNames = [
+  //     "January", "February", "March", "April", "May", "June",
+  //     "July", "August", "September", "October", "November", "December"
+  //   ];
+  //   dispatch(homeStatisticsGraphActions.setData({field:'monthList',data:monthNames}))
+
+  //   lastFourYears.forEach((yearValue,yearIndex)=>{
+      
+  //      const monthData=[]
+  //      for (let i = 0; i < monthNames.length; i++) {
+  //           monthData.push({
+  //             monthName:monthNames[i],
+  //             amount:0
+  //           })
+  //      }
+  //      const dd = {
+  //       year:yearValue,
+  //       month:monthData
+  //      }
+  //      yearData.push(dd)
+  //   })
+  //   dispatch(homeStatisticsGraphActions.setData({field:'yearStatData',data:yearData}))
+
+  //   const monthList:any = []
+  //   lastFourYears.forEach((yearValue,yearIndex)=>{
+  //     const monthData=[]
+  //     for (let i = 0; i < monthNames.length; i++) {
+  //      const MonthDays = [];
+  //      const getNumberOfDays = getDaysInMonth(i+1,yearValue) 
+  //      let day =1
+  //      while(day<=getNumberOfDays){
+  //       MonthDays.push({
+  //         dayNumber:day,
+  //         amount:0
+  //       }) 
+  //       day++
+  //      }
+  //      monthData.push({
+  //         monthName:monthNames[i],
+  //         days:MonthDays
+  //       })
+  //     }
+  //     const dd = {
+  //       year:yearValue,
+  //       month:monthData
+  //      }
+       
+  //      monthList.push(dd)
+  //   })
+     
+  //   dispatch(homeStatisticsGraphActions.setData({field:'monthStatData',data:monthList}))
+  // }
+
+
+  
+  const assignDefaultHomeStatisticsData = () => {
+    console.log("====== Assign Default Home Statistics ======");
+  
+    const currentYear = new Date().getFullYear();
+    
+    // Generate last four years array using Array.from
+    const lastFourYears = Array.from({ length: 4 }, (_, i) => currentYear - i);
+  
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+  
+    // Precompute the days for each month across all four years
+    const getMonthDataWithDays = (yearValue: number) => {
+      return monthNames.map((monthName, i) => {
+        const numberOfDays = getDaysInMonth(i + 1, yearValue);
+        const days = Array.from({ length: numberOfDays }, (_, dayIndex) => ({
+          dayNumber: dayIndex + 1,
+          amount: 0
+        }));
+  
+        return {
+          monthName,
+          days
+        };
+      });
+    };
+  
+    // Precompute month data (with amount: 0) for all months
+    const defaultMonthData = monthNames.map(monthName => ({
+      monthName,
+      amount: 0
+    }));
+  
+    // Generate yearStatData and monthStatData in a single loop
+     
+    const yearStatData: {
+      year: number; month: { monthName: string; amount: number; }[]; // Reuse precomputed default month data
+    }[] = [];
+     
+    const monthStatData: {
+      year: number; month: { monthName: string; days: { dayNumber: number; amount: number; }[]; }[]; // Precompute days for each month
+    }[] = [];
+  
+    lastFourYears.forEach((yearValue) => {
+      yearStatData.push({
+        year: yearValue,
+        month: [...defaultMonthData] // Reuse precomputed default month data
+      });
+  
+      monthStatData.push({
+        year: yearValue,
+        month: getMonthDataWithDays(yearValue) // Precompute days for each month
+      });
+    });
+  
+    // Dispatch the data in one go to avoid multiple state updates
+    
+    dispatch(homeStatisticsGraphActions.updateMultipleField({
+       
+        lastFourYears,
+        monthList: monthNames,
+        yearStatData,
+        monthStatData
+    }));
+  };
+  
   const checkuser = async () => {
     setCheckingLoader(true)
     const responseProviderConfig = await getProviderConfig();
@@ -195,6 +339,7 @@ const SplashScreen = () => {
       dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
       dispatch(serviceProviderBookingReviewActions.setData(response?.data?.content?.booking_overview))
       dispatch(serviceProviderPomotionalCostActions.setData(response?.data?.content?.promotional_cost_percentage))
+
       await callAllFunctionHome()
       replace('BottomTab');
     } else {
@@ -212,8 +357,9 @@ const SplashScreen = () => {
           zoomOut().start(() => {
             // replace('IntroSlider');
             //Alert.alert('Can Checking Here which page to redirect')
-
+            assignDefaultHomeStatisticsData()
             checkuser()
+
           });
         });
       }, 10);

@@ -5,6 +5,7 @@ import styles from './styles';
 import {Switch} from 'react-native-switch';
 import {switchType} from './types';
 import { useValues } from '../../../App';
+import { windowHeight,windowWidth } from '@src/theme/appConstant';
 
 export default function SwitchContainer({
   switchOn,
@@ -15,7 +16,7 @@ export default function SwitchContainer({
   return (
     <View>
       <Switch
-        containerStyle={[styles.containerStyle, containerStyle]}
+        containerStyle={{...styles.containerStyle, ...containerStyle}}
         renderActiveText={false}
         renderInActiveText={false}
         value={switchOn}
@@ -25,15 +26,20 @@ export default function SwitchContainer({
         backgroundActive={ appColors.primary}
         backgroundInactive={isDark ? appColors.darkBorder : appColors.border}
         circleSize={22}
-        innerCircleStyle={[
-          styles.switch,
-          {
+        innerCircleStyle={{
+          
             backgroundColor: switchOn ? appColors.white : appColors.lightText,
             borderWidth: 0,
             left: switchOn ? null : 3,
             right: switchOn ? 2 : null,
-          },
-        ]}
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: windowHeight(2),
+            width: windowWidth(4),
+            borderRadius: windowHeight(10),
+            bottom: 0.5,
+          
+        }}
       />
     </View>
   );

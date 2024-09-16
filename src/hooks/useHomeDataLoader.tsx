@@ -5,7 +5,15 @@ import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
 import { homeDataActions } from '@src/store/redux/home-data-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { homeloadServiceMenData } from '@src/services/load.servicemen';
-
+import { homeTopCardData } from '@src/services/home.service';
+interface Response {
+	data: any;
+	status: number;
+	statusText: string;
+	headers: any;
+	config: any;
+	request?: any;
+}
 const useHomeDataLoader = () => {
     const dispatch = useDispatch();
   
@@ -14,11 +22,36 @@ const useHomeDataLoader = () => {
       bookingList,
       loadBookingList,
       loadServiceMen,
-      loadSubsScriptionList
+      loadSubsScriptionList,
+      loadingTopCard
     } = useSelector((state: RootState) => state['homeData']);
 
-    // console.log(loadBookingList,loadServiceMen,loadSubsScriptionList)
-  
+
+   
+
+
+   //Function load Earning Statics
+   
+
+   //Function load top card 
+   const loadTopCard =useCallback(async () => {
+       if(loadingTopCard){ 
+            const response:Response =  await homeTopCardData();
+            const {top_cards} = response?.data?.content[0]
+            const {
+                        total_booking_served ,
+                        total_earning ,
+                        total_service_man ,
+                        total_subscribed_services 
+                    } = top_cards
+
+            dispatch(homeDataActions.setData({ field: 'totalServiceMen', data: total_service_man }));      
+            dispatch(homeDataActions.setData({ field: 'totalEarning', data: total_earning }));
+            dispatch(homeDataActions.setData({ field: 'totalSubscribedServices', data: total_subscribed_services }));
+            dispatch(homeDataActions.setData({ field: 'totalBookingServed', data: total_booking_served }));
+       }
+   }, [dispatch,loadingTopCard]);
+
     // Function to load Service Men Data
     const loadServiceMenData = useCallback(async () => {
         if (loadServiceMen) {
@@ -46,7 +79,8 @@ const useHomeDataLoader = () => {
   
     
     const callAllFunctionHome = async()=>{
-         
+       
+       await loadTopCard()  
        await loadServiceMenData()
        await loadSubscriptionData()
        await loadRecentBookingData()

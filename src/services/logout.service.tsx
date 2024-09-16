@@ -29,6 +29,8 @@ import { serviceOverviewActions } from '@src/store/redux/service-overview-redux'
 import { transactionsReportFiltersActions } from '@src/store/redux/transactions-reports-filter-redux';
 import { businessEarningListingActions } from '@src/store/redux/business-earning-listing-redux';
 import { businessExpenseActions } from '@src/store/redux/business-expenses-redux';
+import { businessReportFiltersActions } from '@src/store/redux/business-reports-filter-redux';
+import { homeStatisticsGraphActions } from '@src/store/redux/home-statistics-graph-redux';
 
 //logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
@@ -59,6 +61,8 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(transactionReportActions.resetState())
       dispatch(transactionsReportFiltersActions.resetState())
       dispatch(serviceOverviewActions.resetState())
-      dispatch(businessEarningListingActions.resetState())
-      dispatch(businessExpenseActions.resetState()) 
+      dispatch(businessEarningListingActions.resetState()) //business earning listing actions
+      dispatch(businessExpenseActions.resetState()) //business expense actions
+      dispatch(businessReportFiltersActions.resetState()) //business report filter actions
+      dispatch(homeStatisticsGraphActions.resetState())
 }

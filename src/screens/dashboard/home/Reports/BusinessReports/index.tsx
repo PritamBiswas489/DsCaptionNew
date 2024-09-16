@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
 import { GridIcon, Listviewicon, Search } from '@utils/icons';
@@ -9,13 +9,38 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { ServiceOverviewReports } from '../ServiceOverviewReports';
 import { EarningReports } from '../EarningReports';
 import { ExpenseReports } from '../ExpenseReports';
+import BusinessReportFilter from './bookingFilter';
+import CommonModal from '@src/commonComponents/commonModal';
+import { BookingFilterIcon } from '@utils/icons';
+import { businessReportFiltersActions } from '@src/store/redux/business-reports-filter-redux';
+import {   useDispatch } from 'react-redux';
 
-
+// Business report screen
 export function BusinessReports() {
   const { isDark, t } = useValues();
   const [loadSpinner, setLoadSpinner] = useState(false)
   const [activeTab, setActiveTab] = useState('Tab1');
   const [spinnertext, setSpinnerText] = useState(t('newDeveloper.SpinnerLoader'))
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [reportType,setReportType] = useState('ExpenseReports')
+  const dispatch = useDispatch()
+
+
+  useEffect(()=>{
+    if(activeTab === 'Tab1'){ //active tab1
+       setReportType('ServiceOverviewReports') // Service  Overview reports
+    }else if(activeTab === 'Tab2'){ //active tab2
+       setReportType('EarningReports') //earning reports
+    }else{
+       setReportType('ExpenseReports') //expense reports
+    }
+    dispatch(businessReportFiltersActions.resetState()) //business report filter actions
+  },[activeTab])
+  
+
+  const filterModalVisible = () => {
+    setShowModal(true);
+  };
   return (
     <View
       style={[
@@ -25,6 +50,12 @@ export function BusinessReports() {
       <Header
         showBackArrow={true}
         title={'newDeveloper.BusinessReport'}
+        trailIcon={
+          <BookingFilterIcon
+            color={isDark ? appColors.white : appColors.darkText}
+          />
+        }
+        gotoScreen={() => setShowModal(true)}
         showSearchBar={false}
       />
       <View style={styles.tabContainer}>
@@ -54,6 +85,19 @@ export function BusinessReports() {
          <EarningReports/>
       )  : (
          <ExpenseReports/>
+      )}
+
+{showModal && (
+        <CommonModal
+          modal={
+            <BusinessReportFilter
+                reportType={reportType}
+                setShowModal={setShowModal}
+            />
+          }
+          showModal={showModal}
+          visibleModal={filterModalVisible}
+        />
       )}
 
       <Spinner

@@ -1143,7 +1143,10 @@
             "Monthly":"Monthly",
             "Yearly":"Yearly"  ,
             "EarningStatistics":"Earning Statistics" ,
-            "NewNotification":"New Notification"     
+            "NewNotification":"New Notification" ,
+            "AdminSupport":"Admin Support" ,
+            "Customers":"Customers"   ,
+            "Servicemen":"Servicemen"   
         }
     }
 }

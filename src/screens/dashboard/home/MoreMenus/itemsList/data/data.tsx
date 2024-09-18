@@ -32,9 +32,10 @@ export const categoriesData: Array<HomeCategoryType> = [
     goToScreen:'MySubscriptions'
    
   },
-  {
+  { 
     icon: <ChatIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuChat',
+    goToScreen:'ChatHistory'
    
   },
   {

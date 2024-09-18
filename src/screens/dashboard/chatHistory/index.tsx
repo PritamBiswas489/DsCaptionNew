@@ -42,11 +42,7 @@ export function ChatHistory() {
       ]}>
       <Header
         showBackArrow={true}
-        title={'chat.chatHistory'}
-        trailIcon={
-          <More color={isDark ? appColors.white : appColors.darkText} />
-        }
-        gotoScreen={() => setVisible(true)}
+        title={'chat.chatHistory'} 
       />
       <HistoryList />
       <Toast config={successConfig} />
@@ -56,18 +52,7 @@ export function ChatHistory() {
         data={historyOptions}
         getSelected={getSelected}
       />
-      <ModalComponent
-        icon={<Delete color={appColors.error} height={'60'} width={'60'} />}
-        visible={showDeleteModal}
-        onClose={() => setModalVisible(false)}
-        success={false}
-        title="chat.clearChat"
-        content="chat.clearChatConfirmation"
-        btnTitle="profileSetting.delete"
-        gotoScreen={() => setModalVisible(false)}
-        showText={t('wallet.cancel')}
-        onShowText={() => setModalVisible(false)}
-      />
+       
     </View>
   );
 }

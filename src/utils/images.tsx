@@ -59,6 +59,7 @@ export const user6 = require('../assets/images/home/servicemen4.png');
 export const noValue = require('../assets/images/home/noValue.png');
 export const notification = require('../assets/images/home/notification.png');
 export const wifi = require('../assets/images/home/wifi.png');
+export const userPlaceHolder = require('../assets/images/home/user_placeholder.png');
 
 export const blog = require('../assets/images/blog/blog.png');
 export const blog1 = require('../assets/images/blog/blog1.png');

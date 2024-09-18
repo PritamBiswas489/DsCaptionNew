@@ -42,7 +42,7 @@ export default function StaticsDetail() {
     const response:Response = await homeStaticGraphData(url)
     //earning stats
     if (response?.data?.content?.[0]?.earning_stats.length > 0 && selectedFilter === 0) {
-     // console.log(response?.data?.content?.[0]?.earning_stats);
+     
     
       const yrstat = [...yearStatData]; // Clone the yearStatData array
       const findyear = yrstat.find(ele => ele.year.toString() === selectedYear.toString());

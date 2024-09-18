@@ -110,9 +110,21 @@ export const fetchMySubscriptions = async (queryParams:string) :Promise<Response
 	}
 }
 
-export const updatelanguage = async ():Promise<Response> => {api
+export const updatelanguage = async ():Promise<Response> => { 
 	try {
 		const response = await api.post(`/provider/change-language`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+//save fcm token process
+export const saveFcmTokenProcess = async (formData:FormData):Promise<Response> => { 
+	formData.append('_method','PUT')
+	try {
+		const response = await api.post(`/provider/update/fcm-token`,formData);
+		console.log(response?.data)
 		return response;
 	} catch (error:any) {
 		return error.response;

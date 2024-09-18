@@ -45,6 +45,9 @@ import businessEarningSlice from "./redux/business-earning-listing-redux";
 import businessExpensesSlice from "./redux/business-expenses-redux";
 import businessReportFilterSlice from "./redux/business-reports-filter-redux";
 import homeStatisticsGraphSlice from "./redux/home-statistics-graph-redux";
+import adminChannelSlice from "./redux/admin-channel-redux";
+import serviceMenChannelSlice from "./redux/serviceman-channels-redux";
+import customerChannelSlice from "./redux/customer-channels-redux";
 
 const store = configureStore({
     reducer: { 
@@ -93,10 +96,19 @@ const store = configureStore({
       businessEarning:businessEarningSlice.reducer,
       businessExpenses:businessExpensesSlice.reducer,
       businessReportsFilter:businessReportFilterSlice.reducer,
-      homeStatisticGraph:homeStatisticsGraphSlice.reducer
+      homeStatisticGraph:homeStatisticsGraphSlice.reducer,
+      adminChannel:adminChannelSlice.reducer,
+      serviceMenChannel:serviceMenChannelSlice.reducer,
+      customerChannel:customerChannelSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
-    
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          // Increase the timeout threshold for warnings
+          warnAfter: 128,  // Increase threshold to 128ms
+        },
+      }),
   });
   
 export default store;

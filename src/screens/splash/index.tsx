@@ -223,8 +223,7 @@ const SplashScreen = () => {
 
   
   const assignDefaultHomeStatisticsData = () => {
-    console.log("====== Assign Default Home Statistics ======");
-  
+     
     const currentYear = new Date().getFullYear();
     
     // Generate last four years array using Array.from

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
       android:name=".MainApplication"
@@ -28,9 +29,6 @@
       <meta-data
      android:name="com.google.android.geo.API_KEY"
      android:value="AIzaSyDGCQvcXUsXwCdYArPXo72dLZ31WS3WQRw"/>
-
-     <!-- <meta-data
-     android:name="com.google.android.geo.API_KEY"
-     android:value="AIzaSyDkE91hFqzV-g45mOcBN5-ypHa3TLyfeOs"/> -->
-    </application>
+     
+  </application>
 </manifest>

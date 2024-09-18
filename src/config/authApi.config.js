@@ -27,7 +27,7 @@ const resetStateData = ()=>{
 api.interceptors.request.use(async (config) => {
 	const {accessToken, refreshToken} = await getAuthTokens();
     const languageCode = await getValue('languageCode');
-	 console.log({languageCode})
+	 
 	if(config.method!=='get'){
 		config.headers = {
             ...config.headers,

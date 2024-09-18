@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "93070709046",
+    "project_id": "dorkar-d5793",
+    "storage_bucket": "dorkar-d5793.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93070709046:android:6d8a5dd2d43c35f9142397",
+        "android_client_info": {
+          "package_name": "app.dorkar.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYa4ovtQeoE7bTET2SYpGeq8h5ybG7bwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93070709046:android:6923ec56c8502efb142397",
+        "android_client_info": {
+          "package_name": "com.dorkar.serviceman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYa4ovtQeoE7bTET2SYpGeq8h5ybG7bwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93070709046:android:9d0b3b7d7febb600142397",
+        "android_client_info": {
+          "package_name": "com.dorkarlyf.captain.testing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYa4ovtQeoE7bTET2SYpGeq8h5ybG7bwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93070709046:android:335ef6552646faf1142397",
+        "android_client_info": {
+          "package_name": "com.dorkarservice.man"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYa4ovtQeoE7bTET2SYpGeq8h5ybG7bwk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93070709046-eelsnf8obf839ss1kfponsoumg6sif4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

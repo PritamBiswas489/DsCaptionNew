@@ -15,12 +15,12 @@ export const profileSettingData: Array<settingItemType> = [
     showArrowIcon: false,
     darkIcon: <DarkTheme color={appColors.white} />,
   },
-  {
-    icon: <Notification />,
-    name: 'newDeveloper.NotificationSound',
-    showArrowIcon: false,
-    darkIcon: <Notification color={appColors.white} />,
-  },
+  // {
+  //   icon: <Notification />,
+  //   name: 'newDeveloper.NotificationSound',
+  //   showArrowIcon: false,
+  //   darkIcon: <Notification color={appColors.white} />,
+  // },
   {
     icon: <LanguageTranslator />,
     name: 'profileSetting.changeLanguage',

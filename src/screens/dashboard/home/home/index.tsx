@@ -41,6 +41,7 @@ import { homeDataActions } from '@src/store/redux/home-data-redux';
 import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
 import messaging from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
+import { saveFcmTokenProcess } from '@src/services/profile.service';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -90,7 +91,8 @@ export function Home() {
 
    
 
-  
+  const serviceProviderAccountData = useSelector((state: RootState) => state['serviceProviderAccountData'])
+  console.log({fcm_token:serviceProviderAccountData.owner.fcm_token})
   
   //handle load all data
    
@@ -127,13 +129,19 @@ export function Home() {
       console.log('Authorization status:', authStatus);
     }
   }
+ 
+  //==== save fcm token ======//
+  const saveFcmTokenData = (fcmToken:string) =>{
+     const formData = new FormData()
+     formData.append('fcm_token',fcmToken)
+     saveFcmTokenProcess(formData)
+  }
 
   const getFCMToken = async () => {
     try {
       const fcmToken = await messaging().getToken();
       if (fcmToken) {
-        console.log('FCM Token:', fcmToken);
-        // Store the token in your backend if necessary
+        saveFcmTokenData(fcmToken)
       } else {
         console.log('Failed to get FCM token');
       }
@@ -144,10 +152,42 @@ export function Home() {
   useEffect(() => {
     requestUserPermission();
     getFCMToken();
-    const unsubscribe = messaging().onTokenRefresh(token => {
-      console.log('New FCM token:', token);
+
+    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert(t('newDeveloper.NewNotification'), remoteMessage.notification?.title,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",     
+          },
+          { 
+            text: "OK", 
+            onPress: () => navigate('Notification') 
+          }
+        ]
+      );
     });
-    return () => unsubscribe();
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('Notification caused app to open from background state:', remoteMessage.notification);
+    });
+     
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log('Notification caused app to open from quit state:', remoteMessage.notification);
+        }
+      });
+    const unsubscribeOnTokenRefresh = messaging().onTokenRefresh(token => {
+      saveFcmTokenData(token)
+    });
+
+    return () => {
+      unsubscribeOnMessage();
+      unsubscribeOnTokenRefresh();
+    };
   }, []);
 
 

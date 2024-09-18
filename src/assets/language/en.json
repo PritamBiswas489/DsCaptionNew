@@ -1142,7 +1142,8 @@
             "TotalServicemen":"Total Servicemen",
             "Monthly":"Monthly",
             "Yearly":"Yearly"  ,
-            "EarningStatistics":"Earning Statistics"       
+            "EarningStatistics":"Earning Statistics" ,
+            "NewNotification":"New Notification"     
         }
     }
 }

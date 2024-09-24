@@ -28,4 +28,40 @@ export const messageList: Array<messageType> = [
     message: 'chat.receiverMsg!',
     date: '12:30',
   },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  {
+    sender: 'Sender',
+    message: 'chat.receiverMsg!',
+    date: '12:30',
+  },
+  
 ];

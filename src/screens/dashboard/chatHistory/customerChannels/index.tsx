@@ -28,8 +28,8 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
     channels: customerChannels,
   } = useSelector((state: RootState) => state['customerChannel'])
 
-  const gotToChatScreen = (id: string) => {
-    Alert.alert(id)
+  const gotToChatScreen = (id: string,userName:string) => {
+    navigation.navigate('Chat',{id:id,toUserName:userName})
   }
 
   return (
@@ -44,9 +44,14 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
           if (getChannelUserNotMe?.user?.profile_image && getChannelUserNotMe?.user?.profile_image!=='default.png') {
              profileImage = `${getMediaUrl()}/user/profile_image/${getChannelUserNotMe?.user?.profile_image}`
           }
+          
           return <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => gotToChatScreen(item?.id)}
+            onPress={() => gotToChatScreen(
+              item?.id,
+              getChannelUserNotMe?.user?.first_name+' '+(getChannelUserNotMe?.user?.last_name || '')
+            
+            )}
             style={[
               styles.container,
               { backgroundColor: isDark ? appColors.darkCard : appColors.boxBg },
@@ -59,7 +64,7 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
                     styles.person,
                     { color: isDark ? appColors.white : appColors.darkText },
                   ]}>
-                  {getChannelUserNotMe?.user?.first_name} {getChannelUserNotMe?.user?.last_name} 
+                  {getChannelUserNotMe?.user?.first_name} {getChannelUserNotMe?.user?.last_name || ''} 
                 </Text>
                 <Text style={styles.msg}>{item?.last_sent_message}</Text>
               </View>

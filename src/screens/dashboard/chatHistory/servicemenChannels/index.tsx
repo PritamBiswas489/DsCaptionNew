@@ -28,19 +28,11 @@ export function ServiceMenChannels({handleScrollServiceMenProcessing}:{
   const {
     channels: serviceMenChannels,
   } = useSelector((state: RootState) => state['serviceMenChannel'])
-  
-  
-
-   
-  
-
-  
 
    //got to chat screen
-   const gotToChatScreen = (id:string) =>{
-      Alert.alert(id)
-   }
-
+   const gotToChatScreen = (id: string,userName:string) => {
+    navigation.navigate('Chat',{id:id,toUserName:userName})
+  }
  
   return (
     <View style={{flex:1}}>
@@ -56,7 +48,11 @@ export function ServiceMenChannels({handleScrollServiceMenProcessing}:{
           }
           return <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => gotToChatScreen(item?.id)}
+            onPress={() => gotToChatScreen(
+              item?.id,
+              getChannelUserNotMe?.user?.first_name+' '+(getChannelUserNotMe?.user?.last_name || '')
+            
+            )}
             style={[
               styles.container,
               { backgroundColor: isDark ? appColors.darkCard : appColors.boxBg },
@@ -69,7 +65,7 @@ export function ServiceMenChannels({handleScrollServiceMenProcessing}:{
                     styles.person,
                     { color: isDark ? appColors.white : appColors.darkText },
                   ]}>
-                  {getChannelUserNotMe?.user?.first_name} {getChannelUserNotMe?.user?.last_name} 
+                  {getChannelUserNotMe?.user?.first_name} {getChannelUserNotMe?.user?.last_name || ''} 
                 </Text>
                 <Text style={styles.msg}>{item?.last_sent_message}</Text>
               </View>

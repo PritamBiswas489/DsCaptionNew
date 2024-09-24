@@ -38,8 +38,18 @@ export const styles = StyleSheet.create({
   },
   imageStyle: {
     height: windowHeight(9),
-    width: windowWidth(16),
+    width: windowWidth(9),
     resizeMode: 'contain',
     marginTop: windowHeight(2),
+  },
+  timeView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  time: {
+    color: appColors.lightText,
+    fontFamily: appFonts.NunitoMedium,
+    fontSize: fontSizes.FONT4,
+    marginBottom: windowHeight(2),
   },
 });

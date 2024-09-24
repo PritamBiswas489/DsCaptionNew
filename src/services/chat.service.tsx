@@ -25,3 +25,12 @@ export const getServicemanChannels = async (limit:number,offset:number): Promise
 		return error.response;
 	}
 }
+
+export const getChannelMessages =  async (channelId:string,limit:number,offset:number): Promise<Response> => {
+    try {
+		const response = await api.get(`/provider/chat/conversation?channel_id=${channelId}&limit=${limit}&offset=${offset}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

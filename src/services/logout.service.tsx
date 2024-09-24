@@ -34,7 +34,7 @@ import { homeStatisticsGraphActions } from '@src/store/redux/home-statistics-gra
 import { adminChannelActions } from '@src/store/redux/admin-channel-redux';
 import { serviceMenChannelActions } from '@src/store/redux/serviceman-channels-redux';
 import { customerChannelActions } from '@src/store/redux/customer-channels-redux';
-
+import { chatMessagesActions } from '@src/store/redux/chat-messages-redux';
 //logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
@@ -71,4 +71,5 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(adminChannelActions.resetState())
       dispatch(serviceMenChannelActions.resetState())
       dispatch(customerChannelActions.resetState())
+      dispatch(chatMessagesActions.resetState())
 }

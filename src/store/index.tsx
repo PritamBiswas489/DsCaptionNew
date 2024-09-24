@@ -48,6 +48,7 @@ import homeStatisticsGraphSlice from "./redux/home-statistics-graph-redux";
 import adminChannelSlice from "./redux/admin-channel-redux";
 import serviceMenChannelSlice from "./redux/serviceman-channels-redux";
 import customerChannelSlice from "./redux/customer-channels-redux";
+import chatMessagesSlice from "./redux/chat-messages-redux";
 
 const store = configureStore({
     reducer: { 
@@ -99,7 +100,8 @@ const store = configureStore({
       homeStatisticGraph:homeStatisticsGraphSlice.reducer,
       adminChannel:adminChannelSlice.reducer,
       serviceMenChannel:serviceMenChannelSlice.reducer,
-      customerChannel:customerChannelSlice.reducer
+      customerChannel:customerChannelSlice.reducer,
+      chatMessages:chatMessagesSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

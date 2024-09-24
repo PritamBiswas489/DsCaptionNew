@@ -5,6 +5,7 @@ import { adminChannelActions } from "@src/store/redux/admin-channel-redux";
 import { serviceMenChannelActions } from "@src/store/redux/serviceman-channels-redux";
 import { getCustomerChannels } from "./chat.service";
 import { getServicemanChannels } from "./chat.service";
+import { chatMessagesActions } from "@src/store/redux/chat-messages-redux";
 interface Response {
 	data: any;
 	status: number;
@@ -29,11 +30,13 @@ export const loadCustomerChannels = async(
                 field: 'isFirstTimeLoading',
                 data: false
               }));
+              updateChatMessagesRedux([response?.data?.content?.adminChannel],dispatch)
             }
             if(response?.data?.content?.channelList?.data){
-                dispatch(customerChannelActions.setChannels(
-                    response?.data?.content?.channelList?.data
-                ))
+                    dispatch(customerChannelActions.setChannels(
+                        response?.data?.content?.channelList?.data
+                    ))
+                    updateChatMessagesRedux(response?.data?.content?.channelList?.data,dispatch)
             }
             dispatch(customerChannelActions.setData({
                 field: 'isFirstTimeLoading',
@@ -60,11 +63,14 @@ export  const loadServiceManChannels = async(
                     field: 'isFirstTimeLoading',
                     data: false
                   }));
+
+                  updateChatMessagesRedux([response?.data?.content?.adminChannel],dispatch)
              }
              if(response?.data?.content?.channelList?.data){
                 dispatch(serviceMenChannelActions.setChannels(
                     response?.data?.content?.channelList?.data
                 ))
+                updateChatMessagesRedux(response?.data?.content?.channelList?.data,dispatch)
             }
             dispatch(serviceMenChannelActions.setData({
                 field: 'isFirstTimeLoading',
@@ -78,6 +84,21 @@ export  const loadServiceManChannels = async(
             }));
         }
 
+}
+
+const updateChatMessagesRedux = (channelData:any[],dispatch:AppDispatch)=>{
+    if(channelData.length > 0){
+        channelData.forEach(({id:channelID},index)=>{
+            dispatch(chatMessagesActions.initChannel({
+                channel_id:channelID,
+                isFirstTimeLoading: true,
+                isNoMoreData: true,
+                offset:1,
+                limit:200,
+                dateMessages:[]
+            }))
+        })
+    }
 }
 
 

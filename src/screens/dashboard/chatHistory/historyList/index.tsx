@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, TouchableOpacity,Alert } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import { styles } from './styles';
 import { RootStackParamList } from 'src/navigation/types';
@@ -18,6 +18,7 @@ import { ServiceMenChannels } from '../servicemenChannels';
 import { userPlaceHolder } from '@src/utils/images';
 import { serviceMenChannelActions } from '@src/store/redux/serviceman-channels-redux';
 import { customerChannelActions } from '@src/store/redux/customer-channels-redux';
+import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 
 
 export function HistoryList() {
@@ -27,6 +28,7 @@ export function HistoryList() {
   const { isDark, t } = useValues();
   const [customerChannelClickMore, setCustomerChannelClickMore] = useState(false)
   const [serviceMenChannelClickMore, setServiceMenChannelClickMore] = useState(false)
+  const [showSkelatonLoader, setShowSkeletonLoader] = useState(true)
 
   const {
     channel: adminChanelData,
@@ -46,14 +48,14 @@ export function HistoryList() {
     isNoMoreData: customerIsMoreData
   } = useSelector((state: RootState) => state['customerChannel'])
 
-  const [adminChannelPanelDetails,setadminChannelPanelDetails] = useState({
-    id:'',
-    screenName:'',
-    profileImage:'',
-    lastMessage:'',
-    channelPanelUpdatedTime:'',
-    isReadMessage:false    
-  }) 
+  const [adminChannelPanelDetails, setadminChannelPanelDetails] = useState({
+    id: '',
+    screenName: '',
+    profileImage: '',
+    lastMessage: '',
+    channelPanelUpdatedTime: '',
+    isReadMessage: false
+  })
 
 
   useEffect(() => {
@@ -81,66 +83,75 @@ export function HistoryList() {
         dispatch
       )
     }
-    
+
   }, [
-    customerIsFirstTimeLoading, 
+    customerIsFirstTimeLoading,
     customerChannelOffset,
     customerChannelClickMore
   ])
 
   //onload process here
-   useEffect(()=>{
-    if(adminChanelData?.id){
-      const getChannelUserNotMe = adminChanelData?.channel_users.find(ele=>ele.user.user_type!=='provider-admin')
+  useEffect(() => {
+    if (adminChanelData?.id) {
+      const getChannelUserNotMe = adminChanelData?.channel_users.find(ele => ele.user.user_type !== 'provider-admin')
       let profileImage = ''
       if (getChannelUserNotMe?.user?.profile_image) {
-         profileImage = `${getMediaUrl()}/user/profile_image/${getChannelUserNotMe?.user?.profile_image}`
+        profileImage = `${getMediaUrl()}/user/profile_image/${getChannelUserNotMe?.user?.profile_image}`
       }
       setadminChannelPanelDetails({
-        id:adminChanelData?.id,
-        screenName:t('newDeveloper.AdminSupport'),
-        profileImage:profileImage,
-        lastMessage:adminChanelData?.last_sent_message,
-        channelPanelUpdatedTime:timeformatting(adminChanelData?.updated_at),
-        isReadMessage:false    
+        id: adminChanelData?.id,
+        screenName: t('newDeveloper.AdminSupport'),
+        profileImage: profileImage,
+        lastMessage: adminChanelData?.last_sent_message,
+        channelPanelUpdatedTime: timeformatting(adminChanelData?.updated_at),
+        isReadMessage: false
       })
 
     }
     setCustomerChannelClickMore(false)
-   },[adminChanelData])
+  }, [adminChanelData])
 
-   //got to chat screen
-   const gotToChatScreen = (id:string) =>{
-      Alert.alert(id)
-   }
-
-   const handleScrollServiceMenProcessing = ()=>{
-    if(serviceMenIsMoreData) { return }
-      setServiceMenChannelClickMore(true)
-      dispatch(serviceMenChannelActions.setData({field:'offset',data:serviceMenChannelOffset+1}))
-  }
-  const handleScrollCustomerProcessing = ()=>{
-     
-    if(serviceMenIsMoreData) { return }
-      setCustomerChannelClickMore(true)
-      dispatch(customerChannelActions.setData({field:'offset',data:serviceMenChannelOffset+1}))
+  //got to chat screen
+  const gotToChatScreen = (id: string,userName:string) => {
+    navigation.navigate('Chat',{id:id,toUserName:userName})
   }
 
- 
+  const handleScrollServiceMenProcessing = () => {
+    if (serviceMenIsMoreData) { return }
+    setServiceMenChannelClickMore(true)
+    dispatch(serviceMenChannelActions.setData({ field: 'offset', data: serviceMenChannelOffset + 1 }))
+  }
+  const handleScrollCustomerProcessing = () => {
+
+    if (serviceMenIsMoreData) { return }
+    setCustomerChannelClickMore(true)
+    dispatch(customerChannelActions.setData({ field: 'offset', data: serviceMenChannelOffset + 1 }))
+  }
+
+  useEffect(() => {
+    if(!adminChanelFirstTimeLoading && !serviceMenIsFirstTimeLoading && !customerIsFirstTimeLoading){
+         setShowSkeletonLoader(false)
+    }
+  }, [adminChanelFirstTimeLoading, serviceMenIsFirstTimeLoading, customerIsFirstTimeLoading])
+
+
   return (
-    <View style={{flex:1}}>
-      
+    <View style={{ flex: 1 }}>
+      {showSkelatonLoader && <SkeletonLoader />}
       {/* admin chat panel */}
-      {adminChannelPanelDetails?.id && <>
+      {adminChannelPanelDetails?.id && !showSkelatonLoader && <>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=>{  gotToChatScreen(adminChannelPanelDetails?.id) }}
+          onPress={() => { gotToChatScreen(
+            adminChannelPanelDetails?.id,
+            adminChannelPanelDetails.screenName) 
+          }}
           style={[
             styles.container,
             { backgroundColor: isDark ? appColors.darkCard : appColors.boxBg },
           ]}>
           <View style={styles.rowContainer}>
-           {adminChannelPanelDetails.profileImage ? <Image source={{uri:adminChannelPanelDetails.profileImage}} style={styles.imageStyle} /> : <Image source={userPlaceHolder} style={styles.imageStyle} />} 
+            {adminChannelPanelDetails.profileImage ? <Image source={{ uri: adminChannelPanelDetails.profileImage }} style={styles.imageStyle} /> : <Image source={userPlaceHolder} style={styles.imageStyle} />}
             <View style={styles.textContainer}>
               <Text
                 style={[
@@ -156,27 +167,26 @@ export function HistoryList() {
         </TouchableOpacity>
         <DashLine />
       </>}
-
-      <View style={styles.tabContainer}>
-                <TouchableOpacity
-                    style={[styles.tabButton, { borderBottomColor: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab1' && styles.activeTabButton]}
-                    onPress={() => setActiveTab('Tab1')}
-                >
-                    <Text style={[styles.tabText, , { color: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab1' && styles.activeTabText]}>{t('newDeveloper.Customers')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.tabButton, { borderBottomColor: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab2' && styles.activeTabButton]}
-                    onPress={() => setActiveTab('Tab2')}
-                >
-                    <Text style={[styles.tabText, , { color: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab2' && styles.activeTabText]}>{t('newDeveloper.Servicemen')}</Text>
-                </TouchableOpacity>
-            </View>
-
-            {activeTab === 'Tab1' ? (
-                   <CustomerChannels handleScrollCustomerProcessing={handleScrollCustomerProcessing}/>
-                ) : (
-                  <ServiceMenChannels handleScrollServiceMenProcessing={handleScrollServiceMenProcessing}/>
-                )}
+      {!showSkelatonLoader && <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[styles.tabButton, { borderBottomColor: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab1' && styles.activeTabButton]}
+          onPress={() => setActiveTab('Tab1')}
+        >
+          <Text style={[styles.tabText, , { color: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab1' && styles.activeTabText]}>{t('newDeveloper.Customers')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tabButton, { borderBottomColor: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab2' && styles.activeTabButton]}
+          onPress={() => setActiveTab('Tab2')}
+        >
+          <Text style={[styles.tabText, , { color: isDark ? appColors.white : appColors.darkText, }, activeTab === 'Tab2' && styles.activeTabText]}>{t('newDeveloper.Servicemen')}</Text>
+        </TouchableOpacity>
+      </View>
+      }
+      {activeTab === 'Tab1' && !showSkelatonLoader ? (
+        <CustomerChannels handleScrollCustomerProcessing={handleScrollCustomerProcessing} />
+      ) : (
+        <ServiceMenChannels handleScrollServiceMenProcessing={handleScrollServiceMenProcessing} />
+      )}
     </View>
   );
 }

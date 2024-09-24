@@ -129,7 +129,7 @@ export type RootStackParamList = {
   PendingApproval: undefined;
   HoldBooking: undefined;
   MapView: undefined;
-  Chat: undefined;
+  Chat: {id:string,toUserName:string};
   MultipleServiceMenList: undefined;
   AddExtraCharges: undefined;
   ServiceProof: serviceProofProp;

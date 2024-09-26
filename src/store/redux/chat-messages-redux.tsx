@@ -10,6 +10,7 @@ export interface channelInterface  {
         limit:number;
         dateMessages:{
             date:string,
+            mainDate:string,
             messages: ChatMessageInterface[]
         }[]
 }

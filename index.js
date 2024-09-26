@@ -13,6 +13,7 @@ import messaging from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance, EventType  } from '@notifee/react-native';
 import {PermissionsAndroid} from 'react-native';
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+ 
 
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('Message handled in the background!', remoteMessage);

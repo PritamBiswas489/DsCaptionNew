@@ -12,7 +12,7 @@ import { RootState, AppDispatch } from '@src/store'
 export function Chat({ route }: any) {
   const {isDark,t} = useValues();
   const {id,toUserName} = route.params
-  console.log(id)
+  // console.log(id)
   const {data:chatMessages} = useSelector((state: RootState) => state['chatMessages'])
   const channelData  = chatMessages.find((ele: { channel_id: string; })=>ele.channel_id === id)
   return (

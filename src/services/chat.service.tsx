@@ -34,3 +34,11 @@ export const getChannelMessages =  async (channelId:string,limit:number,offset:n
 		return error.response;
 	}
 }
+export const sendMessageInChannel = async (formData:FormData): Promise<Response> => {
+	try {
+		const response = await api.post(`/provider/chat/send-message`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

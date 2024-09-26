@@ -99,6 +99,8 @@ export * from '@assets/icons/booking/upArrow';
 export * from '@assets/icons/booking/More';
 export * from '@assets/icons/booking/emoji';
 export * from '@assets/icons/booking/microphone';
+export * from '@assets/icons/booking/attachment';
+export * from '@assets/icons/booking/imageIcon';
 export * from '@assets/icons/booking/send';
 export * from '@assets/icons/booking/doubleTick';
 export * from '@assets/icons/booking/whatsapp';

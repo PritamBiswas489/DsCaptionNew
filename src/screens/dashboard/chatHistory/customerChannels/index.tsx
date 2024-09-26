@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { DashLine } from '@src/commonComponents';
 import { timeformatting } from '@src/config/utility';
 import { getMediaUrl } from '@src/config/utility';
+import { Attachment } from '@src/utils/icons';
 
 
 export function CustomerChannels({handleScrollCustomerProcessing}:{
@@ -66,7 +67,8 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
                   ]}>
                   {getChannelUserNotMe?.user?.first_name} {getChannelUserNotMe?.user?.last_name || ''} 
                 </Text>
-                <Text style={styles.msg}>{item?.last_sent_message}</Text>
+                {item?.last_sent_message && <Text style={styles.msg}>{item?.last_sent_message}</Text>} 
+                {item.last_sent_attachment_type && <Text style={styles.msg}><Attachment/>{t('newDeveloper.attachment')}</Text> }
               </View>
             </View>
             <Text style={styles.time}>{timeformatting(item?.updated_at)}</Text>

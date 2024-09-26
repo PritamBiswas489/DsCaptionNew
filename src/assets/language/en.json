@@ -1146,7 +1146,8 @@
             "NewNotification":"New Notification" ,
             "AdminSupport":"Admin Support" ,
             "Customers":"Customers"   ,
-            "Servicemen":"Servicemen"   
+            "Servicemen":"Servicemen" ,
+            "attachment":"Attachment"  
         }
     }
 }

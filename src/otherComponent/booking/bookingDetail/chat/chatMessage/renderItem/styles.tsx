@@ -42,6 +42,12 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginTop: windowHeight(2),
   },
+  imageStyle2: {
+    height: windowHeight(30),
+    width: windowWidth(30),
+    resizeMode: 'contain',
+     
+  },
   timeView: {
     alignItems: 'center',
     justifyContent: 'center',

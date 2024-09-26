@@ -1,6 +1,6 @@
 import {View, TextInput, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Emoji, Send, Microphone} from '@utils/icons';
+import {Emoji, Send, Microphone,Attachment, ImageIcon} from '@utils/icons';
 import {styles} from './styles';
 import appColors from '@theme/appColors';
 import {useValues} from '../../../../../../App';
@@ -21,19 +21,22 @@ export default function ChatInput({
         styles.inputContainer,
         {backgroundColor: isDark ? appColors.darkCard : appColors.boxBg},
       ]}>
-      <Emoji />
       <TextInput
         style={[
           styles.input,
           {backgroundColor: isDark ? appColors.darkCard : appColors.boxBg},
+          {color: isDark ? appColors.white : appColors.darkText,}
         ]}
         placeholderTextColor={appColors.lightText}
         placeholder={t('chat.typeHere')}
         value={newMessage}
         onChangeText={setNewMessage}
       />
-      <TouchableOpacity activeOpacity={0.9}>
-        <Microphone />
+      <TouchableOpacity style={{marginRight:10}}  activeOpacity={0.9}>
+        <ImageIcon />
+      </TouchableOpacity>
+      <TouchableOpacity style={{marginRight:2}} activeOpacity={0.9}>
+        <Attachment />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={handleSendMessage}

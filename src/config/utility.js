@@ -341,20 +341,22 @@ export function searchStatusArray() {
 
 export function timeformatting(timestamp) {
   // Convert to a Date object
-       const date = new Date(timestamp);
+       const utcDate = new Date(timestamp);
+       const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+       const date = new Date(utcDate.getTime() + istOffset);
 
-		// Extracting day, month, year, hour, and minute
-		const day = date.getUTCDate();
-		const month = date.toLocaleString('en-US', { month: 'long' });
-		const year = date.getUTCFullYear();
-		let hours = date.getUTCHours();
-		const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-		const ampm = hours >= 12 ? 'PM' : 'AM';
-		hours = hours % 12;
-		hours = hours ? hours : 12; // the hour '0' should be '12'
+      // Extracting day, month, year, hour, and minute
+      const day = date.getUTCDate();
+      const month = date.toLocaleString('en-US', { month: 'short' });
+      const year = date.getUTCFullYear();
+      let hours = date.getUTCHours();
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
 
 		// Formatting the output
-		const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+	  	const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
 
         return formattedOutput;
 }
@@ -363,7 +365,7 @@ export function timeformatting2(timestamp){
 		const date = new Date(timestamp.replace(' ', 'T') + 'Z');
 		// Extracting day, month, year, hour, and minute
 		const day = date.getUTCDate();
-		const month = date.toLocaleString('en-US', { month: 'long' });
+		const month = date.toLocaleString('en-US', { month: 'short' });
 		const year = date.getUTCFullYear();
 		let hours = date.getUTCHours();
 		const minutes = date.getUTCMinutes().toString().padStart(2, '0');
@@ -379,7 +381,10 @@ export function timeformatting2(timestamp){
  
 export function datetimeArr(timestamp){
   // Convert to a Date object
-  const date = new Date(timestamp);
+  const datet = new Date(timestamp);
+
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+  const date = new Date(datet.getTime() + istOffset);
 
   // Extracting day, month, year, hour, and minute
   const day = date.getUTCDate();

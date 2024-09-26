@@ -94,7 +94,7 @@ const updateChatMessagesRedux = (channelData:any[],dispatch:AppDispatch)=>{
                 isFirstTimeLoading: true,
                 isNoMoreData: true,
                 offset:1,
-                limit:200,
+                limit:6,
                 dateMessages:[]
             }))
         })

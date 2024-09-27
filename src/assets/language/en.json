@@ -1147,7 +1147,27 @@
             "AdminSupport":"Admin Support" ,
             "Customers":"Customers"   ,
             "Servicemen":"Servicemen" ,
-            "attachment":"Attachment"  
+            "attachment":"Attachment" ,
+            "ADJUST":"Adjust",
+            "ADJUSTABLE_BALANCE":"Adjustable balance",
+            "ADJUSTABLE_BALANCE_DESC":"Your payable and receivable balances are equal.By making adjustments,there will be no due amount between you and the admin.",
+            "WITHDRAW":"Withdraw",
+            "RECEIVABLE_BALANCE":"Receivable balance",
+            "RECEIVABLE_BALANCE_DESC":"You can withdraw this amount from Admin, as you have more receivable balance than cash in hand.",
+            "PAY_NOW":"Pay now",
+            "PAYABLE_BALANCE":"Payable balance",
+            "PAYABLE_BALANCE_DESC":"You have to pay this amount to Admin, as you have more cash in hand balance than receivable balance.",
+            "ADJUST_WITHDRAW":"Adjust & withdraw",
+            "FINAL_RECEIVABLE_BALANCE":"Final receivable balance",
+            "FINAL_RECEIVABLE_DESC":"You can withdraw this amount from the admin.As after adjustment the both receivable and cash in hand balance, you have more receivable balance than cash in hand",
+            "ADJUST_PAY":"Adjust & Pay",
+            "FINAL_PAYABLE_BALANCE":"Final payable balance",
+            "FINAL_PAYABLE_DESC":"You have to pay this amount to the Admin.As after adjusting the both receivable and cash in hand balance, you have more cash in hand balance than receivable balance"
+
+
+             
+
+
         }
     }
 }

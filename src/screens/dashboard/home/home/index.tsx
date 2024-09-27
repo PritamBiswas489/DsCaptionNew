@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Chat, Notification } from '@utils/icons';
 import Header from '@commonComponents/header';
 import { GlobalStyle } from '@style/styles';
-import { TotalBalance } from '@otherComponent/home';
+import { TotalPayBackBalance } from '../AccountInformation/totalBalance';
 import { DashBoard } from '../dashBoard';
 import HeadingRow from '@commonComponents/headingRow';
 import { BookingData } from '../data';
@@ -42,6 +42,8 @@ import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
 import messaging from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 import { saveFcmTokenProcess } from '@src/services/profile.service';
+import { getAuthUserService } from '@src/services/auth.service';
+import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -58,7 +60,7 @@ export function Home() {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [cancelBookingModal, setCancelBookingModal] = useState(false);
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
-  const { navigate } = useNavigation<navigationProp>();
+  const { navigate,replace } = useNavigation<navigationProp>();
   const { isDark, isServiceManLogin, t } = useValues();
   const [showSkeletonLoader, setSkeletonLoader] = useState(false)
   const [needSkeletonLoader,setNeedSkeletonLoader] =  useState(true)
@@ -74,8 +76,15 @@ export function Home() {
     dispatch(homeDataActions.setData({field:'loadServiceMen',data:true}))
     dispatch(homeDataActions.setData({field:'loadBookingList',data:true}))
     dispatch(homeDataActions.setData({field:'loadSubsScriptionList',data:true}))
+    
     setNeedSkeletonLoader(false)
     await callAllFunctionHome();
+    const response = await getAuthUserService()
+    if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
+      dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
+    }else{
+      replace('IntroSlider');
+    }
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -92,10 +101,10 @@ export function Home() {
    
 
   const serviceProviderAccountData = useSelector((state: RootState) => state['serviceProviderAccountData'])
-  console.log({fcm_token:serviceProviderAccountData.owner.fcm_token})
+  // console.log({fcm_token:serviceProviderAccountData.owner.fcm_token})
   
   //handle load all data
-   
+   console.log(JSON.stringify(serviceProviderAccountData,null,2))
 
   const filterModalVisible = () => {
     setShowWalletModal(true);
@@ -214,7 +223,7 @@ export function Home() {
           onTrailIcon={() => navigate('Notification')}
         />
         {isServiceManLogin && <Provider />}
-        <TotalBalance onPress={() => Alert.alert('NOT DONE YET')} />
+        <TotalPayBackBalance onPress={() => Alert.alert('NOT DONE YET')} />
         {isServiceManLogin ? <ServiceMenDashBoard /> : <DashBoard />}
         <HeadingRow
           title={

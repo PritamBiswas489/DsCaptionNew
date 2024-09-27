@@ -85,7 +85,7 @@ export default function BillSummary({ bookingDetails }: { bookingDetails: Bookin
                bookingDetails.payment_method.replace(/_/g, " ").toUpperCase()
             }
             color={
-              appColors.darkText
+              isDark ? appColors.white : appColors.darkText
             }
             rowStyle={{ paddingTop: 10, paddingBottom:10 }}
             titleStyle={{ fontFamily: appFonts.NunitoExtraBold }}

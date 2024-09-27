@@ -15,7 +15,8 @@ import { TotalPayBackBalance } from './totalBalance';
 import { CountStatistics } from './countStatistics';
 import ServiceBarCartAccountInformation from './barChart';
 import ServiceCount from './serviceCount';
-
+import { getAuthUserService } from '@src/services/auth.service';
+import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -34,9 +35,12 @@ export function ProfileAccountInformation() {
   const { isDark, isServiceManLogin, t } = useValues();
   const [showSkeletonLoader, setSkeletonLoader] = useState(false)
   const [refreshing, setRefreshing] = React.useState(false);
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = React.useCallback(async() => {
     setRefreshing(true);
-
+    const response = await getAuthUserService()
+    if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
+      dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
+    }
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);

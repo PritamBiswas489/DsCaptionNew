@@ -197,7 +197,7 @@ export const determineFileType = mimeType => {
 
 export const formatNumberWithAbbreviation = num => {
   num = num.toString().replace(/[^0-9.]/g, '');
-  if (num < 1000) {
+  if (num < 10000) {
     return num;
   }
   let si = [
@@ -341,54 +341,13 @@ export function searchStatusArray() {
 
 export function timeformatting(timestamp) {
   // Convert to a Date object
-       const utcDate = new Date(timestamp);
-       const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
-       const date = new Date(utcDate.getTime() + istOffset);
-
-      // Extracting day, month, year, hour, and minute
-      const day = date.getUTCDate();
-      const month = date.toLocaleString('en-US', { month: 'short' });
-      const year = date.getUTCFullYear();
-      let hours = date.getUTCHours();
-      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12; // the hour '0' should be '12'
-
-		// Formatting the output
-	  	const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
-
-        return formattedOutput;
-}
-export function timeformatting2(timestamp){
-		// Convert to a Date object
-		const date = new Date(timestamp.replace(' ', 'T') + 'Z');
-		// Extracting day, month, year, hour, and minute
-		const day = date.getUTCDate();
-		const month = date.toLocaleString('en-US', { month: 'short' });
-		const year = date.getUTCFullYear();
-		let hours = date.getUTCHours();
-		const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-		const ampm = hours >= 12 ? 'PM' : 'AM';
-		hours = hours % 12;
-		hours = hours ? hours : 12; // the hour '0' should be '12'
-		// Formatting the output
-		const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
-
-		return formattedOutput
-
-}
- 
-export function datetimeArr(timestamp){
-  // Convert to a Date object
-  const datet = new Date(timestamp);
-
+  const utcDate = new Date(timestamp);
   const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
-  const date = new Date(datet.getTime() + istOffset);
+  const date = new Date(utcDate.getTime() + istOffset);
 
   // Extracting day, month, year, hour, and minute
   const day = date.getUTCDate();
-  const month = date.toLocaleString('en-US', { month: 'short' });
+  const month = date.toLocaleString('en-US', {month: 'short'});
   const year = date.getUTCFullYear();
   let hours = date.getUTCHours();
   const minutes = date.getUTCMinutes().toString().padStart(2, '0');
@@ -397,18 +356,57 @@ export function datetimeArr(timestamp){
   hours = hours ? hours : 12; // the hour '0' should be '12'
 
   // Formatting the output
-   return {
+  const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+
+  return formattedOutput;
+}
+export function timeformatting2(timestamp) {
+  // Convert to a Date object
+  const date = new Date(timestamp.replace(' ', 'T') + 'Z');
+  // Extracting day, month, year, hour, and minute
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('en-US', {month: 'short'});
+  const year = date.getUTCFullYear();
+  let hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  // Formatting the output
+  const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+
+  return formattedOutput;
+}
+
+export function datetimeArr(timestamp) {
+  // Convert to a Date object
+  const datet = new Date(timestamp);
+
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+  const date = new Date(datet.getTime() + istOffset);
+
+  // Extracting day, month, year, hour, and minute
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('en-US', {month: 'short'});
+  const year = date.getUTCFullYear();
+  let hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  // Formatting the output
+  return {
     day,
     month,
     year,
     hours,
     minutes,
-    ampm
-   }
-
+    ampm,
+  };
 }
 
-export function calculateDaysDifference(dateString)   {
+export function calculateDaysDifference(dateString) {
   const givenDate = new Date(dateString); // Parse the given date
   const currentDate = new Date(); // Get the current date
 
@@ -417,10 +415,12 @@ export function calculateDaysDifference(dateString)   {
 
   // Convert milliseconds to days
   const millisecondsInOneDay = 1000 * 60 * 60 * 24;
-  const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInOneDay);
+  const differenceInDays = Math.floor(
+    differenceInMilliseconds / millisecondsInOneDay,
+  );
 
   return differenceInDays;
-};
+}
 
 export function convertTo12Hour(timeString) {
   // Split the time string into components
@@ -439,36 +439,85 @@ export function convertTo12Hour(timeString) {
   return `${hoursNumber}:${minutes}  ${amOrPm}`;
 }
 export function validateTime(fromTime, toTime) {
-  
   let from = new Date(`1970-01-01T${fromTime}Z`);
-  let to   = new Date(`1970-01-01T${toTime}Z`);
+  let to = new Date(`1970-01-01T${toTime}Z`);
 
   if (from.getTime() === to.getTime()) {
-      return false;
+    return false;
   } else if (to.getTime() <= from.getTime()) {
-      return false;
+    return false;
   } else {
-      return true;
+    return true;
   }
 }
-export function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-
-export function convertToScale(value){
+export function convertToScale(value) {
   if (isNaN(value)) {
     return 'Invalid number';
-}
+  }
   if (value >= 1e9) {
     // If the value is a billion or more
     return (value / 1e9).toFixed(2) + 'B';
-} else if (value >= 1e6) {
+  } else if (value >= 1e6) {
     // If the value is a million or more
     return (value / 1e6).toFixed(2) + 'M';
-} else if (value >= 1e3) {
+  } else if (value >= 1e3) {
     // If the value is a thousand or more
     return (value / 1e3).toFixed(2) + 'K';
-} else {
+  } else {
     // If the value is less than a thousand, return as is
     return value.toString();
+  }
 }
+
+export function paymentSectionData(account_receivable, account_payable) {
+  console.log({account_receivable, account_payable});
+  //account_receivable: account receive from admin
+  //account payable : account have to pay admin
+  let returnData = {};
+  if (account_receivable === account_payable) {
+    returnData = {
+      action: 'ADJUST',
+      amount: formatNumberWithAbbreviation(account_receivable),
+      text: 'ADJUSTABLE_BALANCE',
+      desc: 'ADJUSTABLE_BALANCE_DESC',
+    };
+  } else if (account_receivable > 0 && account_payable === 0) {
+    returnData = {
+      action: 'WITHDRAW',
+      amount: formatNumberWithAbbreviation(account_receivable),
+      text: 'RECEIVABLE_BALANCE',
+      desc: 'RECEIVABLE_BALANCE_DESC',
+    };
+  } else if (account_receivable === 0 && account_payable > 0) {
+    returnData = {
+      action: 'PAY_NOW',
+      amount: formatNumberWithAbbreviation(account_payable),
+      text: 'PAYABLE_BALANCE',
+      desc: 'PAYABLE_BALANCE_DESC',
+    };
+  } else if (account_receivable > account_payable) {
+    returnData = {
+      action: 'ADJUST_WITHDRAW',
+      amount: formatNumberWithAbbreviation(
+        account_receivable - account_payable,
+      ),
+      text: 'FINAL_RECEIVABLE_BALANCE',
+      desc: 'FINAL_RECEIVABLE_DESC',
+    };
+  } else if (account_receivable < account_payable) {
+    returnData = {
+      action: 'ADJUST_PAY',
+      amount: formatNumberWithAbbreviation(
+        account_payable - account_receivable,
+      ),
+      text: 'FINAL_PAYABLE_BALANCE',
+      desc: 'FINAL_PAYABLE_DESC',
+    };
+  }
+
+  return returnData;
 }

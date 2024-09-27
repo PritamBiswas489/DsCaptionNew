@@ -106,7 +106,7 @@ export function FormStatusChangePanel({ bookingId, setStatusModal }: { bookingId
   //send otp for confirmation to customer mobile 
   const handleSendOtpForConfirmation = async () => {
     const response:Response = await sendOtpNotification(bookingId)
-    //console.log(response.data)
+    console.log(response.data)
   }
   const handleUpdateStatusBooking = async () => {
     setProcessingSpinner(true)

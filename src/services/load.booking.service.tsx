@@ -76,6 +76,7 @@ export const loadBookingDetails = async (bookingId:string) =>{
                     phone:bookingDetail?.serviceman?.user?.phone ? bookingDetail?.serviceman?.user?.phone  :  '',
                     gender:bookingDetail?.serviceman?.user?.gender ? bookingDetail?.serviceman?.user?.gender :  '',
                     profileImage:bookingDetail?.serviceman?.user?.profile_image ? bookingDetail?.serviceman?.user?.profile_image :  '',
+                    user_id:bookingDetail?.serviceman?.user?.id ? bookingDetail?.serviceman?.user?.id :  '',
             }
 
             const statusHistories:BookingServiceStatusHistories[] = bookingDetail.status_histories.map((statusHistories:any)=>{

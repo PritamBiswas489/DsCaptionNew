@@ -340,26 +340,28 @@ export function searchStatusArray() {
 }
 
 export function timeformatting(timestamp) {
-  // Convert to a Date object
-  const utcDate = new Date(timestamp);
-  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
-  const date = new Date(utcDate.getTime() + istOffset);
+  // Create a new Date object from the timestamp
+  const date = new Date(timestamp);
 
-  // Extracting day, month, year, hour, and minute
-  const day = date.getUTCDate();
-  const month = date.toLocaleString('en-US', {month: 'short'});
-  const year = date.getUTCFullYear();
-  let hours = date.getUTCHours();
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
+  // Set options for formatting to IST and for the desired output format
+  const options = {
+    timeZone: 'Asia/Kolkata', // IST time zone
+    year: 'numeric',
+    month: 'short', // Short month name, e.g., 'Sep'
+    day: '2-digit', // Day with leading zero if needed
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true // 12-hour format with AM/PM
+  };
 
-  // Formatting the output
-  const formattedOutput = `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+  // Use Intl.DateTimeFormat to format the date
+  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const formattedOutput = formatter.format(date);
 
   return formattedOutput;
 }
+
+
 export function timeformatting2(timestamp) {
   // Convert to a Date object
   const date = new Date(timestamp.replace(' ', 'T') + 'Z');
@@ -382,29 +384,39 @@ export function datetimeArr(timestamp) {
   // Convert to a Date object
   const datet = new Date(timestamp);
 
-  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
-  const date = new Date(datet.getTime() + istOffset);
+  // Use Intl.DateTimeFormat to automatically handle the conversion to IST (Asia/Kolkata)
+  const options = {
+    timeZone: 'Asia/Kolkata', // India Time Zone (IST)
+    year: 'numeric',
+    month: 'short', // Short month name, e.g., 'Sep'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true, // 12-hour format with AM/PM
+  };
 
-  // Extracting day, month, year, hour, and minute
-  const day = date.getUTCDate();
-  const month = date.toLocaleString('en-US', {month: 'short'});
-  const year = date.getUTCFullYear();
-  let hours = date.getUTCHours();
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
+  const formatter = new Intl.DateTimeFormat('en-US', options);
+  const formattedDateParts = formatter.formatToParts(datet);
 
-  // Formatting the output
+  // Extract the parts (day, month, year, hours, minutes, AM/PM)
+  const dateObj = {};
+  formattedDateParts.forEach(({ type, value }) => {
+    if (type !== 'literal') {
+      dateObj[type] = value;
+    }
+  });
+
+  // Format the output to match your desired structure
   return {
-    day,
-    month,
-    year,
-    hours,
-    minutes,
-    ampm,
+    day: dateObj.day,
+    month: dateObj.month,
+    year: dateObj.year,
+    hours: dateObj.hour,
+    minutes: dateObj.minute,
+    ampm: dateObj.dayPeriod, // 'AM' or 'PM'
   };
 }
+
 
 export function calculateDaysDifference(dateString) {
   const givenDate = new Date(dateString); // Parse the given date

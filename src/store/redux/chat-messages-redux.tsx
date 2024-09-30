@@ -36,7 +36,12 @@ const chatMessagesSlice = createSlice({
         state[action.payload.field] = action.payload.data;
       },
       initChannel(state, action: PayloadAction<channelInterface>) {
-        state.data.push(action.payload);
+        const existingChannelIndex = state.data.findIndex(
+            (channel) => channel.channel_id === action.payload.channel_id
+        );
+        if (existingChannelIndex === -1) {
+            state.data.push(action.payload);
+        }
       },
       updateData(state, action: PayloadAction<channelInterface>) {
         const existingChannelIndex = state.data.findIndex(

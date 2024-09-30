@@ -26,7 +26,7 @@ export default function BillSummary({ bookingDetails }: { bookingDetails: Bookin
         style={[
           styles.imageStyle,
           {
-            height: windowHeight(45),
+            height: windowHeight(50),
           },
         ]}>
         {bookingDetails.servicesList.map((serviceDet: BookingServiceListInterface, serviceindex: number) => {

@@ -17,7 +17,7 @@ import { DashLine } from '@src/commonComponents';
 import { timeformatting } from '@src/config/utility';
 import { getMediaUrl } from '@src/config/utility';
 import { Attachment } from '@src/utils/icons';
-
+import { limitWords } from '@src/config/utility';
 
 export function CustomerChannels({handleScrollCustomerProcessing}:{
   handleScrollCustomerProcessing:()=>void
@@ -40,10 +40,19 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
         data={customerChannels}
         keyExtractor={item=>item.id}
         renderItem={({ item }) => {
+         
           const getChannelUserNotMe = item?.channel_users.find(ele=>ele.user.user_type!=='provider-admin')
           let profileImage = ''
           if (getChannelUserNotMe?.user?.profile_image && getChannelUserNotMe?.user?.profile_image!=='default.png') {
              profileImage = `${getMediaUrl()}/user/profile_image/${getChannelUserNotMe?.user?.profile_image}`
+          }
+          const getChannelUserMe = item?.channel_users.find(ele=>ele.user.user_type==='provider-admin')
+          
+          let bgColor =  isDark ? appColors.darkCard : appColors.boxBg
+          let colortext = isDark ? appColors.white : appColors.darkText
+          if(getChannelUserMe?.is_read === 0){
+              bgColor = appColors.lightRed
+              colortext = appColors.darkText
           }
           
           return <TouchableOpacity
@@ -55,7 +64,7 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
             )}
             style={[
               styles.container,
-              { backgroundColor: isDark ? appColors.darkCard : appColors.boxBg },
+              { backgroundColor: bgColor },
             ]}>
             <View style={styles.rowContainer}>
               {profileImage ? <Image source={{uri:profileImage}} style={styles.imageStyle} /> : <Image source={userPlaceHolder} style={styles.imageStyle} />} 
@@ -63,9 +72,9 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
                 <Text
                   style={[
                     styles.person,
-                    { color: isDark ? appColors.white : appColors.darkText },
+                    { color: colortext },
                   ]}>
-                  {getChannelUserNotMe?.user?.first_name} {getChannelUserNotMe?.user?.last_name || ''} 
+                  {limitWords((getChannelUserNotMe?.user?.first_name + (getChannelUserNotMe?.user?.last_name || '')),2)} 
                 </Text>
                 {item?.last_sent_message && <Text style={styles.msg}>{item?.last_sent_message}</Text>} 
                 {item.last_sent_attachment_type && <Text style={styles.msg}><Attachment/>{t('newDeveloper.attachment')}</Text> }

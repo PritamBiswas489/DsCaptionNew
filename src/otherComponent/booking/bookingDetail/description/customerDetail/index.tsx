@@ -9,14 +9,30 @@ import { useValues } from '../../../../../../App';
 import { BookingDetailsInterface } from '@src/interfaces/bookingDetailsInterface';
 import { InfoRow } from '../providerDetail/info';
 import { windowHeight, windowWidth } from '@theme/appConstant';
-import { Call, Email, Location } from '@utils/icons';
+import { Call, Email, Location, Chat } from '@utils/icons';
 import { GlobalStyle } from '@style/styles';
 import { getMediaUrl } from '@src/config/utility';
 import { maleDefault, femaleDefault } from '@src/utils/images';
-
-
+import { createChatChannel } from '@src/services/chat.service';
+import { customerChannelActions } from '@src/store/redux/customer-channels-redux';
+import { chatMessagesActions } from '@src/store/redux/chat-messages-redux';
+import { useDispatch } from 'react-redux';
+import { RootStackParamList } from 'src/navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+interface Response {
+	data: any;
+	status: number;
+	statusText: string;
+	headers: any;
+	config: any;
+	request?: any;
+}
 export function CustomerDetail({ bookingDetails }: { bookingDetails: BookingDetailsInterface }) {
   const { isDark, t } = useValues();
+  const dispatch = useDispatch()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   let profileImage = ''
   if (bookingDetails.customerInfo.profileImage && bookingDetails.customerInfo.profileImage !== 'default.png') {
     profileImage = `${getMediaUrl()}/user/profile_image/${bookingDetails.customerInfo.profileImage}`
@@ -76,6 +92,35 @@ export function CustomerDetail({ bookingDetails }: { bookingDetails: BookingDeta
             title={'providerDetail.call'}
             subHeading={bookingDetails.customerInfo.phone}
           />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={async () => {
+            const formData = new FormData()
+            formData.append('reference_id',bookingDetails.id)
+            formData.append('reference_type','booking_id')
+            formData.append('to_user',bookingDetails.customer_id)
+            const response:Response = await createChatChannel(formData)
+            if(response?.data?.content?.id){
+              dispatch(customerChannelActions.resetState())
+              dispatch(chatMessagesActions.initChannel({
+                  channel_id:response?.data?.content?.id,
+                  isFirstTimeLoading: true,
+                  isNoMoreData: true,
+                  offset:1,
+                  limit:6,
+                  dateMessages:[]
+              }))
+              navigation.navigate('Chat',{id:response?.data?.content?.id,toUserName:bookingDetails.customerInfo.firstName + ' ' + (bookingDetails?.customerInfo?.lastName ?? '')})
+          }else{
+              Alert.alert(response?.data?.message)
+          }
+        }}>
+          <InfoRow
+            icon={<Chat color={isDark ? appColors.white : appColors.lightText} />}
+            title={'newDeveloper.Chat'}
+            subHeading={'newDeveloper.clickHereTapCustomer'}
+          />
+
+          
         </TouchableOpacity>
       </View>
     </View>

@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, Alert, PermissionsAndroid, Platform  } from 'react-native';
-import React, {useEffect} from 'react';
+import { View, Text, Image, TouchableOpacity, Alert,  } from 'react-native';
+import React, {useEffect, useState} from 'react';
 import { styles } from './styles';
 import { messageType } from '../../data/types';
 import { chatProfile } from '@utils/images';
@@ -17,6 +17,7 @@ import Toast from 'react-native-toast-message';
 import FastImage from 'react-native-fast-image'
 import RNFS from 'react-native-fs';
 import FileViewer from 'react-native-file-viewer'; 
+import Spinner from 'react-native-loading-spinner-overlay';
  
 
 export default function RenderItem({ item }: {
@@ -27,8 +28,10 @@ export default function RenderItem({ item }: {
 }) {
   const { isDark, t } = useValues();
   const dateSplit = item.date.split('_')
+  const [loadSpinner,setSpinner] = useState(false)
+  const [spinnerText,setSpinnerText] = useState('')
 
-   
+  
 
   const openFile =   (filePath:string) => {
       FileViewer.open(filePath, { showOpenWithDialog: true, showAppsSuggestions: true }) 
@@ -40,12 +43,15 @@ export default function RenderItem({ item }: {
   });
   };
 
+  //Downloading files from chat message 
   const downloadFile = async (conversation_files:any)=>{
+    setSpinner(true)
     const fileUrl = `${getMediaUrl()}/conversation/${conversation_files.stored_file_name}`; // The file URL
     const filePath = RNFS.DownloadDirectoryPath + '/'+conversation_files.stored_file_name;
     const fileExists = await RNFS.exists(filePath);
     if (fileExists) {
       openFile(filePath);  
+      setSpinner(false)
     }else{
       RNFS.downloadFile({
         fromUrl: fileUrl,
@@ -53,12 +59,12 @@ export default function RenderItem({ item }: {
         background: true,  
         discretionary: true,  
         progress: (res) => {
-         
           const progress = (res.bytesWritten / res.contentLength) * 100;
-          console.log(`Progress: ${progress.toFixed(2)}%`);
+          setSpinnerText(`Downloading ${progress.toFixed(2)}%`)
         },
       })
         .promise.then((response) => {
+          setSpinner(false)
           if (response.statusCode === 200) {
             console.log('File downloaded successfully to:', filePath);
             openFile(filePath);  
@@ -68,6 +74,7 @@ export default function RenderItem({ item }: {
           }
         })
         .catch((err) => {
+          setSpinner(false)
           console.log('Download error:', err);
           Alert.alert('Failed to download file')
         });
@@ -89,7 +96,7 @@ export default function RenderItem({ item }: {
           minutes,
           ampm } = datetimeArr(messgeData.created_at);
         return (<View
-          key={'message-' + messgeData.id}
+          key={'message-' + messgeData.id+messageIndex}
           style={[
             styles.row,
             { alignSelf: isSender ? 'flex-end' : 'flex-start' },
@@ -117,7 +124,20 @@ export default function RenderItem({ item }: {
               },
             ]}>
             <View>
-              {messgeData?.message && <Text
+             
+
+              {messgeData.conversation_files.length > 0 &&
+                messgeData.conversation_files.map((msgData:any,msgIndex:number) => {
+                  if(msgData?.file_type === 'jpg' || msgData?.file_type==='png'){
+                       return <TouchableOpacity onPress={()=>downloadFile(msgData)}><Image source={{ uri: `${getMediaUrl()}/conversation/${msgData.stored_file_name}` }} style={styles.imageStyle2}   /></TouchableOpacity>
+                  }else{
+
+                    
+                    return <TouchableOpacity onPress={()=>downloadFile(msgData)}><Attachment/><Text>{msgData.original_file_name}</Text></TouchableOpacity>
+                  }
+                })
+              }
+               {messgeData?.message && <Text
                 style={[
                   styles.message,
                   {
@@ -131,18 +151,6 @@ export default function RenderItem({ item }: {
                 ]}>
                 {messgeData.message}
               </Text>}
-
-              {messgeData.conversation_files.length > 0 &&
-                messgeData.conversation_files.map((msgData:any,msgIndex:number) => {
-                  if(msgData?.file_type === 'jpg' || msgData?.file_type==='png'){
-                       return <TouchableOpacity onPress={()=>downloadFile(msgData)}><Image source={{ uri: `${getMediaUrl()}/conversation/${msgData.stored_file_name}` }} style={styles.imageStyle2}   /></TouchableOpacity>
-                  }else{
-
-                    
-                    return <TouchableOpacity onPress={()=>downloadFile(msgData)}><Attachment/><Text>{msgData.original_file_name}</Text></TouchableOpacity>
-                  }
-                })
-              }
               <View
                 style={[
                   styles.row,
@@ -177,7 +185,11 @@ export default function RenderItem({ item }: {
       >
         <Text>{`${dateSplit?.[0]} ${dateSplit?.[1]} ${dateSplit?.[2]}`}</Text>
       </View>
-
+      <Spinner
+          visible={loadSpinner}
+          textContent={spinnerText}
+          textStyle={{ color: '#FFF' }}
+        />
     </>
   );
 }

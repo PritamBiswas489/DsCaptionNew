@@ -42,3 +42,11 @@ export const sendMessageInChannel = async (formData:FormData): Promise<Response>
 		return error.response;
 	}
 }
+export const createChatChannel = async (formData:FormData): Promise<Response> => {
+	try {
+		const response = await api.post(`/provider/chat/create-channel`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

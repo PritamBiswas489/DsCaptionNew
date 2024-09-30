@@ -46,6 +46,7 @@ export interface BookingServiceServicemenInterface {
     phone:string;
     gender:string;
     profileImage:string;
+    user_id:string;
     
 }
 export interface BookingServiceStatusHistories {

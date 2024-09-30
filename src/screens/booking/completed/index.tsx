@@ -49,6 +49,7 @@ interface Response {
 
 
 export function CompletedBooking({ route }: any) {
+   
   const [bookStatusModal, setBookStatusModal] = useState(false);
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
   const [processingSpinner, setProcessingSpinner] = useState(false)

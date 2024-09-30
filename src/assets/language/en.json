@@ -1162,8 +1162,10 @@
             "FINAL_RECEIVABLE_DESC":"You can withdraw this amount from the admin.As after adjustment the both receivable and cash in hand balance, you have more receivable balance than cash in hand",
             "ADJUST_PAY":"Adjust & Pay",
             "FINAL_PAYABLE_BALANCE":"Final payable balance",
-            "FINAL_PAYABLE_DESC":"You have to pay this amount to the Admin.As after adjusting the both receivable and cash in hand balance, you have more cash in hand balance than receivable balance"
-
+            "FINAL_PAYABLE_DESC":"You have to pay this amount to the Admin.As after adjusting the both receivable and cash in hand balance, you have more cash in hand balance than receivable balance",
+            "Chat":"Chat",
+            "clickHereTap":"Tap here to chat with serviceman",
+            "clickHereTapCustomer":"Tap here to chat with customer"
 
              
 

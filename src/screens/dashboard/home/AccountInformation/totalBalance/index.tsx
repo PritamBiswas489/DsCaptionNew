@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   GestureResponderEvent,
+  Alert
 } from 'react-native';
 import React, {FormEvent} from 'react';
 import {styles} from './styles';
@@ -16,6 +17,11 @@ import { paymentSectionData } from '@src/config/utility';
 import { Arrow } from '@src/utils/icons';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Tooltip } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'src/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export function TotalPayBackBalance({
   onPress,
@@ -25,7 +31,22 @@ export function TotalPayBackBalance({
   const {currSymbol, currValue,t} = useValues();
   const {owner} = useSelector((state: RootState)=>state['serviceProviderAccountData'])
   const {account} = owner
-  const paySectionData:any = paymentSectionData(account.account_receivable,account.account_payable) 
+  const paySectionData:any = paymentSectionData(account.account_receivable,account.account_payable)
+  const { navigate } = useNavigation<navigationProp>();
+  const goToActionPage = ()=>{ 
+    
+    if(paySectionData.action === 'ADJUST_WITHDRAW' || paySectionData.action === 'WITHDRAW'){
+      navigate('WithdrawRequest')
+    }
+
+    if(paySectionData.action === 'ADJUST_PAY' || paySectionData.action === 'PAY_NOW'){
+        Alert.alert('Redirect to pay page')
+    }
+
+    if(paySectionData.action === 'ADJUST'){
+        Alert.alert('Adjust wallet amount')
+    }
+  } 
   return (
     paySectionData?.action ? 
     <View style={styles.container}>
@@ -60,9 +81,7 @@ export function TotalPayBackBalance({
           </Text>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={
-              onPress as unknown as (event: GestureResponderEvent) => void
-            }
+            onPress={goToActionPage}
             style={styles.containerView}>
             <Text style={styles.text}>{t(`newDeveloper.${paySectionData.action}`)}</Text>
           </TouchableOpacity>

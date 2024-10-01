@@ -1165,11 +1165,16 @@
             "FINAL_PAYABLE_DESC":"You have to pay this amount to the Admin.As after adjusting the both receivable and cash in hand balance, you have more cash in hand balance than receivable balance",
             "Chat":"Chat",
             "clickHereTap":"Tap here to chat with serviceman",
-            "clickHereTapCustomer":"Tap here to chat with customer"
-
+            "clickHereTapCustomer":"Tap here to chat with customer",
+            "Withdrawrequest":"Withdraw request",
+            "EnterWithDrawAmount":"Enter withdraw amount",
+            "WriteYourNoteHere":"Write your note here",
+            "SendWithdrawRequest":"Send withdraw request",
+            "Availablebalance":"Available balance",
+            "Minimumwithdrawamount":"Minimum withdraw amount",
+            "Maximumwithdrawamount":"Maximum withdraw amount",
+            "SelectWithDrawMethod":"Select withdraw method"
              
-
-
         }
     }
 }

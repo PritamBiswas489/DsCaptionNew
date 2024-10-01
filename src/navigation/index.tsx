@@ -78,6 +78,9 @@ import { ReportMenus } from '@src/screens/dashboard/home/ReportMenus';
 import { TransactionReports } from '@src/screens/dashboard/home/Reports/TransactionReports';
 import { BookingReports } from '@src/screens/dashboard/home/Reports/BookingReports';
 import { BusinessReports } from '@src/screens/dashboard/home/Reports/BusinessReports';
+import { WithdrawRequest } from '@src/screens/dashboard/home/WithdrawRequest';
+
+
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
 
@@ -316,6 +319,10 @@ export default function MyStack() {
             <RootStack.Screen
               name="BusinessReports"
               component={BusinessReports}
+            />
+            <RootStack.Screen
+                 name="WithdrawRequest"
+                 component={WithdrawRequest}
             />
           </>
         )}

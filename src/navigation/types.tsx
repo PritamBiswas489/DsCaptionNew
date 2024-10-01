@@ -168,4 +168,5 @@ export type RootStackParamList = {
   TransactionReports:undefined;
   BookingReports:undefined;
   BusinessReports:undefined;
+  WithdrawRequest:undefined;
 };

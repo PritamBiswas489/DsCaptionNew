@@ -30,12 +30,10 @@ import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-
-import { homeloadServiceMenData } from '@src/services/load.servicemen';
-import { loadMySubscriptionFunc } from '@src/services/load.mysubscription';
+ 
 
 import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
-import { homeBookingList } from '@src/services/load.booking.service';
+ 
 import HomeBookingList from '@src/commonComponents/homeBookingList';
 import { homeDataActions } from '@src/store/redux/home-data-redux';
 import useHomeDataLoader from '@src/hooks/useHomeDataLoader';

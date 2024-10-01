@@ -36,14 +36,15 @@ export const styles = StyleSheet.create({
   },
   containerView: {
     backgroundColor: appColors.white,
-    paddingHorizontal: windowWidth(30),
+    paddingHorizontal: windowWidth(20),
     marginTop: windowWidth(3),
-    paddingVertical: windowWidth(3.2),
+    paddingVertical: windowWidth(3),
     borderRadius: windowWidth(2),
   },
   text: {
     color: appColors.primary,
     fontFamily: appFonts.NunitoSemiBold,
     fontSize: fontSizes.FONT4,
+     
   },
 });

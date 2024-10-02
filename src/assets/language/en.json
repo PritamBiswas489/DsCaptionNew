@@ -1173,7 +1173,16 @@
             "Availablebalance":"Available balance",
             "Minimumwithdrawamount":"Minimum withdraw amount",
             "Maximumwithdrawamount":"Maximum withdraw amount",
-            "SelectWithDrawMethod":"Select withdraw method"
+            "SelectWithDrawMethod":"Withdraw method",
+            "noWithdrawsFound":"No data found",
+            "noWithdrawsFoundContent":"No withdraws request found",
+            "WithdrawAmount":"Withdraw amount",
+            "WithdrawDate":"Request date",
+            "Approvedby":"Approved by",
+            "Deniedby":"Denied by",
+            "WithDrawStatus":"Withdraw status",
+            "paid":"paid",
+            "unpaid":"unpaid"
              
         }
     }

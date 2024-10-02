@@ -79,6 +79,7 @@ import { TransactionReports } from '@src/screens/dashboard/home/Reports/Transact
 import { BookingReports } from '@src/screens/dashboard/home/Reports/BookingReports';
 import { BusinessReports } from '@src/screens/dashboard/home/Reports/BusinessReports';
 import { WithdrawRequest } from '@src/screens/dashboard/home/WithdrawRequest';
+import WithdrawList from '@src/screens/dashboard/home/WithdrawList';
 
 
 export default function MyStack() {
@@ -323,6 +324,10 @@ export default function MyStack() {
             <RootStack.Screen
                  name="WithdrawRequest"
                  component={WithdrawRequest}
+            />
+             <RootStack.Screen
+                 name="WithdrawList"
+                 component={WithdrawList}
             />
           </>
         )}

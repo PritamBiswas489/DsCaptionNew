@@ -34,12 +34,16 @@ export default function InputView({
   setWithdrawNote,
   withDrawAmount,
   setWithDrawAmount,
+  withdrawalMethodId,
+  setWithdrawMethodId
   
 }: {
   withdrawNote: string,
   setWithdrawNote: (value: string) => void,
   withDrawAmount: string,
   setWithDrawAmount: (amt: string) => void,
+  withdrawalMethodId: string,
+  setWithdrawMethodId: (value: string) => void,
 }) {
   const { t, isDark, currSymbol } = useValues();
   const [categoryList, setCategoryList] = useState<DataItem[]>([]);
@@ -53,7 +57,6 @@ export default function InputView({
   const {owner} = useSelector((state: RootState) => state['serviceProviderAccountData'])
   const {account} = owner
   const {account_receivable,account_payable} = account
-
   const balanceAmount = account_receivable - account_payable;
 
   
@@ -62,6 +65,23 @@ export default function InputView({
     const cleanedValue = value.replace(/[^\d]/g, '');
     setWithDrawAmount(`${currSymbol} ${cleanedValue}`);
   };
+  const withdrawMethod = useSelector((state: RootState) => state['withdrawMethod'])
+
+  useEffect(()=>{
+    if(withdrawMethod.length > 0){
+      const d:DataItem[] = withdrawMethod.map((withdrawDt,withdrawIdx)=>{
+        return {label:withdrawDt.method_name, value:withdrawDt.id}
+      })
+      setCategoryList(d)
+    }
+
+  },[withdrawMethod])
+
+
+
+  useEffect(()=>{
+      console.log(withdrawalMethodId)
+  },[withdrawalMethodId])
 
    
 
@@ -72,8 +92,9 @@ export default function InputView({
       {/* Select category panel */}
       <SelectionDropdown
         data={categoryList}
-        value={''}
+        value={withdrawalMethodId}
         setValue={(value: string) => {
+          setWithdrawMethodId(value)
         }}
         label={t('newDeveloper.SelectWithDrawMethod')}
         error={''}

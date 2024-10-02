@@ -49,6 +49,8 @@ import adminChannelSlice from "./redux/admin-channel-redux";
 import serviceMenChannelSlice from "./redux/serviceman-channels-redux";
 import customerChannelSlice from "./redux/customer-channels-redux";
 import chatMessagesSlice from "./redux/chat-messages-redux";
+import withdrawListingSlice from "./redux/withdraw-list-redux";
+import withdrawMethodSlice from "./redux/withdraw-method-redux";
 
 const store = configureStore({
     reducer: { 
@@ -101,7 +103,9 @@ const store = configureStore({
       adminChannel:adminChannelSlice.reducer,
       serviceMenChannel:serviceMenChannelSlice.reducer,
       customerChannel:customerChannelSlice.reducer,
-      chatMessages:chatMessagesSlice.reducer
+      chatMessages:chatMessagesSlice.reducer,
+      withdrawList:withdrawListingSlice.reducer,
+      withdrawMethod:withdrawMethodSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

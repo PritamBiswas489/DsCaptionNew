@@ -47,6 +47,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <WithdrawListIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuWithdrawlist',
+    goToScreen:'WithdrawList'
    
   },
   {

@@ -11,6 +11,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
+import { getWithdrawMethodList } from '@src/services/withdraw.service';
+import { withdrawMethodActions } from '@src/store/redux/withdraw-method-redux';
 interface Variant {
   name: string;
   price: string;
@@ -29,6 +31,7 @@ export function WithdrawRequest() {
   const dispatch = useDispatch()
   const [withdrawNote, setWithdrawNote] = useState<string>('I need that amount as soon as possible')
   const [withDrawAmount, setWithDrawAmount] = useState<string>('')
+  const [withdrawalMethodId,setWithdrawMethodId] = useState<string>('')
   const { isDark, t, currSymbol } = useValues();
   const [processingSpinner, setProcessingLoader] = useState(false)
 
@@ -36,6 +39,25 @@ export function WithdrawRequest() {
     maximum_withdraw_amount,
     minimum_withdraw_amount
   } = useSelector((state: RootState) => state['providerAppConfig'])
+
+  const withdrawMethod = useSelector((state: RootState) => state['withdrawMethod'])
+
+  const loadWithdrawMethodListing = async ()=>{
+      const response:Response = await getWithdrawMethodList()
+      if(response?.data?.content?.data){
+        
+        dispatch(withdrawMethodActions.setWithdrawMethod(response?.data?.content?.data))
+      }
+  }
+
+  useEffect(()=>{
+    if(withdrawMethod.length === 0){
+      loadWithdrawMethodListing()
+    }
+      
+  },[withdrawMethod])
+
+  
 
 
   const handleProcessWithdrawAmount = () => {
@@ -84,6 +106,8 @@ export function WithdrawRequest() {
         setWithdrawNote={setWithdrawNote}
         withDrawAmount={withDrawAmount}
         setWithDrawAmount={setWithDrawAmount}
+        withdrawalMethodId={withdrawalMethodId}
+        setWithdrawMethodId={setWithdrawMethodId}
       />
 
       <GradientBtn

@@ -27,3 +27,12 @@ export const getWithdrawMethodList = async(): Promise<Response> => {
         return error.response;
     }
 }
+
+export const sendWithdrawRequest = async(formData:FormData): Promise<Response> => {
+    try {
+        const response = await api.post(`/provider/withdraw`,formData);
+        return response;
+    } catch (error:any) {
+        return error.response;
+    }
+}

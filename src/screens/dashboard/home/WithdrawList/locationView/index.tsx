@@ -22,55 +22,92 @@ export default function LocationView({ item }: { item: WithDrawListInterface }) 
   }
   const { isDark, t } = useValues();
   return (
-    <View style={styles.dateContainer}>
+    <>
+      <View style={styles.dateContainer}>
 
-      {(item.request_status === 'denied' || item.request_status === 'approved')
-        && <View
+        {(item.request_status === 'denied' || item.request_status === 'approved')
+          && <View
+            style={[
+              styles.innerContainer,
+              {
+                width: windowWidth(49),
+                backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
+                borderColor: isDark ? appColors.darkBorder : appColors.border,
+              },
+            ]}>
+            <Text style={styles.title}>{
+              item.request_status === 'denied' ?
+                t('newDeveloper.Deniedby')
+                :
+                t('newDeveloper.Approvedby')
+
+            }</Text>
+            <View style={styles.row}>
+
+              <Text
+                style={[
+                  styles.textStyle,
+                  { color: isDark ? appColors.white : appColors.darkText },
+                ]}>
+                {item.request_updater.first_name + ' ' + item.request_updater.last_name}
+              </Text>
+
+            </View>
+          </View>
+
+        }
+
+
+
+
+        <View
           style={[
             styles.innerContainer,
             {
-              width: windowWidth(49),
+              marginHorizontal:(item.request_status === 'denied' || item.request_status === 'approved') ? windowHeight(1.2) : 0,
               backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
               borderColor: isDark ? appColors.darkBorder : appColors.border,
             },
           ]}>
-          <Text style={styles.title}>{
-            item.request_status === 'denied' ?
-              t('newDeveloper.Deniedby')
-              :
-              t('newDeveloper.Approvedby')
-
-          }</Text>
-          <View style={styles.row}>
-
-            <Text
-              style={[
-                styles.textStyle,
-                { color: isDark ? appColors.white : appColors.darkText },
-              ]}>
-              {item.request_updater.first_name + ' ' + item.request_updater.last_name}
-            </Text>
-
-          </View>
+          <Text style={styles.title}>{t('newDeveloper.WithDrawStatus')}</Text>
+          <Text style={[styles.text, { color: backgroundColor }]}>{item.request_status}</Text>
         </View>
 
-      }
 
-
-
-
-      <View
-        style={[
-          styles.innerContainer,
-          {
-            marginHorizontal: windowHeight(1.2),
-            backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
-            borderColor: isDark ? appColors.darkBorder : appColors.border,
-          },
-        ]}>
-        <Text style={styles.title}>{t('newDeveloper.WithDrawStatus')}</Text>
-        <Text style={[styles.text, { color: backgroundColor }]}>{item.request_status}</Text>
       </View>
-    </View>
+      {item.note && <View style={styles.dateContainer}>
+        <View
+          style={[
+            styles.innerContainer,
+            {
+
+              backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
+              borderColor: isDark ? appColors.darkBorder : appColors.border,
+              width: windowWidth(80),
+              marginTop: 10
+            },
+          ]}>
+          <Text style={styles.title}>{t('Note')}</Text>
+          <Text style={[styles.text, { color: isDark ? appColors.white : appColors.darkText }]}>{item.note}</Text>
+        </View>
+      </View>}
+      {item.admin_note && <View style={styles.dateContainer}>
+        <View
+          style={[
+            styles.innerContainer,
+            {
+
+              backgroundColor: isDark ? appColors.darkCard : appColors.boxBg,
+              borderColor: isDark ? appColors.darkBorder : appColors.border,
+              width: windowWidth(80),
+              marginTop: 10
+            },
+          ]}>
+          <Text style={styles.title}>{t('Admin note')}</Text>
+          <Text style={[styles.text, { color: isDark ? appColors.white : appColors.darkText }]}>{item.admin_note}</Text>
+        </View>
+      </View>}
+      
+    </>
   );
 }

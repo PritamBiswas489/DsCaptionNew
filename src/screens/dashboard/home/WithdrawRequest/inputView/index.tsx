@@ -13,6 +13,7 @@ import appColors from '@src/theme/appColors';
 import PriceCategory from '../priceCategory';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
+import WithdrawMethodFields from './fields';
 
 interface DataItem {
   label: string;
@@ -35,7 +36,9 @@ export default function InputView({
   withDrawAmount,
   setWithDrawAmount,
   withdrawalMethodId,
-  setWithdrawMethodId
+  setWithdrawMethodId,
+  withdrawMethodFieldValues, //withdraw method field values
+  setWithdrawMethodFieldValues //set withdraw method field values
   
 }: {
   withdrawNote: string,
@@ -44,10 +47,21 @@ export default function InputView({
   setWithDrawAmount: (amt: string) => void,
   withdrawalMethodId: string,
   setWithdrawMethodId: (value: string) => void,
+  withdrawMethodFieldValues:{
+    withdrawMethodId:string,
+    fieldName:string,
+    fieldValue:string
+  }[],
+  setWithdrawMethodFieldValues: React.Dispatch<React.SetStateAction<{
+    withdrawMethodId:string,
+    fieldName:string,
+    fieldValue:string
+  }[]>>;
 }) {
   const { t, isDark, currSymbol } = useValues();
-  const [categoryList, setCategoryList] = useState<DataItem[]>([]);
-   
+  const [withdrawMethodList, setwithdrawMethodList] = useState<DataItem[]>([]);
+  const [withdrawMethodFields, setWithdrawMethodFields] = useState<(JSX.Element | React.ComponentType | null)[]>([]);
+ 
   const {
     maximum_withdraw_amount,
     minimum_withdraw_amount
@@ -70,18 +84,98 @@ export default function InputView({
   useEffect(()=>{
     if(withdrawMethod.length > 0){
       const d:DataItem[] = withdrawMethod.map((withdrawDt,withdrawIdx)=>{
+        if(withdrawDt.is_default === 1){
+          setWithdrawMethodId(withdrawDt.id)
+        }
         return {label:withdrawDt.method_name, value:withdrawDt.id}
       })
-      setCategoryList(d)
+      setwithdrawMethodList(d)
     }
 
   },[withdrawMethod])
 
+ 
+
+  
+  const setWithDrawMethodFieldValue = (fieldInputName: string, fieldInputValue: string) => {
+    setWithdrawMethodFieldValues(prevValues => {
+      const findIndex = prevValues.findIndex(
+        (field) => 
+          field.withdrawMethodId === withdrawalMethodId && 
+          field.fieldName === fieldInputName
+      );
+      if (findIndex !== -1) {
+          const updatedValues = [...prevValues];  
+          updatedValues[findIndex] = {
+            ...updatedValues[findIndex],
+            fieldValue: fieldInputValue  
+          };
+          return updatedValues;  
+      } else {
+        return [
+          ...prevValues,
+          {
+            withdrawMethodId: withdrawalMethodId,
+            fieldName: fieldInputName,
+            fieldValue: fieldInputValue
+          }
+        ];
+      }
+    });
+  };
+  const getWithdrawFieldValue = (fieldInputName: string) => {
+    const findIndex = withdrawMethodFieldValues.findIndex(
+      (field) => 
+        field.withdrawMethodId === withdrawalMethodId && 
+        field.fieldName === fieldInputName
+    );
+    
+    if (findIndex !== -1) {
+      const fieldValue = withdrawMethodFieldValues[findIndex].fieldValue;
+      
+      return fieldValue;
+       
+    }
+    return ''
+  }
+  const generateMethodFields = () => {
+    const findWithdrawMethod = withdrawMethod.find(ele => ele.id === withdrawalMethodId);
+    if (findWithdrawMethod) {
+      const { method_fields } = findWithdrawMethod;
+      if (method_fields && Array.isArray(method_fields)) {
+        const methodFields = method_fields.map((methodField, methodIndex) => {
+         
+           
+            return (
+              <WithdrawMethodFields 
+              methodField={methodField} 
+              methodIndex={methodIndex} 
+              setWithDrawMethodFieldValue={setWithDrawMethodFieldValue}
+              getWithdrawFieldValue={getWithdrawFieldValue}
+              />
+            );
+           
+         
+        }).filter(Boolean);  
+  
+        if (methodFields.length > 0) {
+          setWithdrawMethodFields(methodFields);   
+        } else {
+          setWithdrawMethodFields([]);   
+        }
+      } else {
+        setWithdrawMethodFields([]);   
+      }
+    }
+  };
 
 
-  useEffect(()=>{
-      console.log(withdrawalMethodId)
-  },[withdrawalMethodId])
+
+  useEffect(() => {
+    if (withdrawalMethodId) {
+      generateMethodFields();
+    }
+  }, [withdrawalMethodId, withdrawMethodFieldValues]);
 
    
 
@@ -91,7 +185,7 @@ export default function InputView({
     <View style={{ flex: 1 }}>
       {/* Select category panel */}
       <SelectionDropdown
-        data={categoryList}
+        data={withdrawMethodList}
         value={withdrawalMethodId}
         setValue={(value: string) => {
           setWithdrawMethodId(value)
@@ -99,6 +193,15 @@ export default function InputView({
         label={t('newDeveloper.SelectWithDrawMethod')}
         error={''}
       />
+      {withdrawMethodFields.map((ComponentOrElement, index) =>
+        ComponentOrElement ? (
+          typeof ComponentOrElement === 'function' ? (
+            <ComponentOrElement key={index} /> // Render component types
+          ) : (
+            <View key={index}>{ComponentOrElement}</View> // Render JSX elements
+          )
+        ) : null
+      )}
       {/* service short description */}
       <TextInputComponent
         placeholder={t('newDeveloper.WriteYourNoteHere')}

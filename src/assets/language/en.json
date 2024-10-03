@@ -1182,7 +1182,11 @@
             "Deniedby":"Denied by",
             "WithDrawStatus":"Withdraw status",
             "paid":"paid",
-            "unpaid":"unpaid"
+            "unpaid":"unpaid",
+            "WithDrawMethodRequired":"Withdraw method required",
+            "WithdrawRequestSuccessfullySend":"Withdraw request successfully send",
+            "WithdrawRequestFailedSend":"Withdraw request failed"
+
              
         }
     }

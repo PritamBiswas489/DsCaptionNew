@@ -533,3 +533,15 @@ export function paymentSectionData(account_receivable, account_payable) {
 
   return returnData;
 }
+
+export function utf8ToBase64(str) {
+  const utf8Bytes = new TextEncoder().encode(str);   
+  const binaryString = Array.from(utf8Bytes).map(byte => String.fromCharCode(byte)).join('');
+  return btoa(binaryString);   
+}
+export function base64ToUtf8(base64) {
+  const binaryString = atob(base64);   
+  const utf8Bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0));   
+  return new TextDecoder().decode(utf8Bytes);   
+}
+

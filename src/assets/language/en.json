@@ -1185,7 +1185,15 @@
             "unpaid":"unpaid",
             "WithDrawMethodRequired":"Withdraw method required",
             "WithdrawRequestSuccessfullySend":"Withdraw request successfully send",
-            "WithdrawRequestFailedSend":"Withdraw request failed"
+            "WithdrawRequestFailedSend":"Withdraw request failed",
+            "AdjustBalance":"Adjust balance",
+            "NotAdjustBalance":"Current balance not adjustable",
+            "ReceivableAmount":"Receivable amount",
+            "PayableAmount":"Payable amount",
+            "BalanceAdjusted":"Balance Adjusted",
+            "BalanceAdjustedMessage":"Your balance has been adjusted successfully.",
+            "failedAdjustment":"Failed to adjust balance",
+            "AdjustYourBalance":"Adjust Your Balance"
 
              
         }

@@ -170,4 +170,5 @@ export type RootStackParamList = {
   BusinessReports:undefined;
   WithdrawRequest:undefined;
   WithdrawList:undefined;
+  AdjustBalance:undefined
 };

@@ -44,11 +44,12 @@ export function TotalPayBackBalance({
     }
 
     if(paySectionData.action === 'ADJUST'){
-        Alert.alert('Adjust wallet amount')
+        navigate('AdjustBalance')
     }
   } 
+ 
   return (
-    paySectionData?.action ? 
+    paySectionData?.action && (account.account_receivable > 0 || account.account_payable > 0) ? 
     <View style={styles.container}>
       
       <View>

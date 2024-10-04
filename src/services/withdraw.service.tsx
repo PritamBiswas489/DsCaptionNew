@@ -36,3 +36,12 @@ export const sendWithdrawRequest = async(formData:FormData): Promise<Response> =
         return error.response;
     }
 }
+
+export const adjustBalance = async(): Promise<Response> => {
+    try {
+        const response = await api.get(`/provider/adjust`);
+        return response;
+    } catch (error:any) {
+        return error.response;
+    }
+}

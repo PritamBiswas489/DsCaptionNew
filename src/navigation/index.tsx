@@ -80,6 +80,7 @@ import { BookingReports } from '@src/screens/dashboard/home/Reports/BookingRepor
 import { BusinessReports } from '@src/screens/dashboard/home/Reports/BusinessReports';
 import { WithdrawRequest } from '@src/screens/dashboard/home/WithdrawRequest';
 import WithdrawList from '@src/screens/dashboard/home/WithdrawList';
+import AdjustBalance from '@src/screens/dashboard/home/AdjustBalance';
 
 
 export default function MyStack() {
@@ -328,6 +329,10 @@ export default function MyStack() {
              <RootStack.Screen
                  name="WithdrawList"
                  component={WithdrawList}
+            />
+            <RootStack.Screen
+                 name="AdjustBalance"
+                 component={AdjustBalance}
             />
           </>
         )}

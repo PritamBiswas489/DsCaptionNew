@@ -62,11 +62,14 @@ export function ServiceDetail() {
 
   const loadServiceDetails = async () => {
     const response: Response = await getServiceDetails(serviceId)
+    
     if (response?.data?.content?.id) {
+      
       //zone list 
-      const zoneList = response?.data?.content?.category?.zones_basic_info.map((zoneDt: any, zoneindex: number) => {
+      const zoneList =response?.data?.content?.category?.zones_basic_info &&  response?.data?.content?.category?.zones_basic_info.map((zoneDt: any, zoneindex: number) => {
         return zoneDt?.name
       })
+       
       const dt = {
         id: response?.data?.content?.id,
         name: response?.data?.content?.name,
@@ -82,6 +85,8 @@ export function ServiceDetail() {
         category: response?.data?.content?.category?.name,
         zone: zoneList
       }
+      
+       
       dispatch(serviceDetailsAction.addServiceArr(dt))
       dispatch(serviceDetailsAction.setData({ field: 'selected', data: dt }))
     }

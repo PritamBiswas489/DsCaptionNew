@@ -34,17 +34,16 @@ export function TotalPayBackBalance({
   const paySectionData:any = paymentSectionData(account.account_receivable,account.account_payable)
   const { navigate } = useNavigation<navigationProp>();
   const goToActionPage = ()=>{ 
-    
     if(paySectionData.action === 'ADJUST_WITHDRAW' || paySectionData.action === 'WITHDRAW'){
-      navigate('WithdrawRequest')
+      navigate('WithdrawRequest') //withdraw request page
     }
 
     if(paySectionData.action === 'ADJUST_PAY' || paySectionData.action === 'PAY_NOW'){
-        Alert.alert('Redirect to pay page')
+      navigate('RazorPay') //razor pay page
     }
 
     if(paySectionData.action === 'ADJUST'){
-        navigate('AdjustBalance')
+        navigate('AdjustBalance') //adjust balance 
     }
   } 
  

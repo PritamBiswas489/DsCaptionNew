@@ -110,6 +110,7 @@ export default function BookingList({
         
         const response: Response = await getBookings(formData);
         const bookingData = response?.data?.content?.bookings?.data;
+        console.log(JSON.stringify(bookingData,null,2))
         if(firstTimeLoading){
           const acceptedCount = response?.data?.content?.bookings_count?.accepted
           const canceledCount = response?.data?.content?.bookings_count?.canceled

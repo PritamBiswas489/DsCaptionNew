@@ -1193,7 +1193,14 @@
             "BalanceAdjusted":"Balance Adjusted",
             "BalanceAdjustedMessage":"Your balance has been adjusted successfully.",
             "failedAdjustment":"Failed to adjust balance",
-            "AdjustYourBalance":"Adjust Your Balance"
+            "AdjustYourBalance":"Adjust Your Balance",
+            "PaymentSection":"Payment",
+            "EnterPaymentAmount":"Enter payment amount",
+            "EnoughPayableAmount":"You have no enough payable amount to make payment",
+            "ProcessPayment":"Process payment",
+            "EnterValidAmount":"Enter valid amount",
+            "Failedtomakepayment":"Failed to make payment"
+             
 
              
         }

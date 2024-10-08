@@ -36,7 +36,7 @@ export function ServiceItems({
   return (
     <View style={styles.rowContainer}>
       <View style={styles.row}>
-        <Image
+         <Image
           source={{ uri: `${getMediaUrl()}/category/${item.subCategoryImage}` }}
           style={[styles.serviceImage, imageStyle]}
         />

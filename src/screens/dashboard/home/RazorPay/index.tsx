@@ -83,7 +83,7 @@ export default function RazorPay() {
     formData.append('amount', updateAmountToPay)
     formData.append('note', paymentNote)
 
-    try {
+    try { 
       const response: Response = await createOrderRozarPayService(formData);
       if (response?.data?.content?.orderId) {
           setRozarpayOrderData(response?.data?.content);
@@ -93,7 +93,9 @@ export default function RazorPay() {
             text1: 'ERROR',
             text2: t('newDeveloper.Failedtomakepayment'),
           });
-        goBack();
+          setRozarpayOrderData(null)
+          setRozarpayPaymentDetails(null)
+          goBack();
       }
     } catch (error) {
         Toast.show({
@@ -101,7 +103,9 @@ export default function RazorPay() {
           text1: 'ERROR',
           text2: t('newDeveloper.Failedtomakepayment'),
         });
-      goBack();
+        setRozarpayOrderData(null)
+        setRozarpayPaymentDetails(null)
+        goBack();
     } finally {
         setProcessingLoader(false);
     }
@@ -109,13 +113,39 @@ export default function RazorPay() {
 
   //handle payment success process
   const handlePaymentSuccessProcess = async()=>{
-      setProcessingLoader(true)
-      const formData = new FormData();
-      formData.append('razorpay_order_id',rozarpayPaymentDetails?.razorpay_order_id)
-      formData.append('razorpay_payment_id',rozarpayPaymentDetails?.razorpay_payment_id)
-      formData.append('razorpay_signature',rozarpayPaymentDetails?.razorpay_signature)
-      const response:Response = await paymentSuccessProcess(formData);
-      console.log(response);
+          setProcessingLoader(true)
+          const formData = new FormData();
+          formData.append('razorpay_order_id',rozarpayPaymentDetails?.razorpay_order_id)
+          formData.append('razorpay_payment_id',rozarpayPaymentDetails?.razorpay_payment_id)
+          formData.append('razorpay_signature',rozarpayPaymentDetails?.razorpay_signature)
+          const response:Response = await paymentSuccessProcess(formData);
+
+          if(response?.data?.content?.success){
+              const response = await getAuthUserService()
+              if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
+                  dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
+              }
+                Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2: t('newDeveloper.SuccessPayment'),
+                });
+                setProcessingLoader(false)
+                setRozarpayOrderData(null)
+                setRozarpayPaymentDetails(null)
+                navigate('ProfileAccountInformation')
+          }else{
+                Toast.show({
+                  type: 'error',
+                  text1: 'ERROR',
+                  text2: t('newDeveloper.Failedtomakepayment'),
+                });
+                setProcessingLoader(false)
+                setRozarpayOrderData(null)
+                setRozarpayPaymentDetails(null)
+                navigate('ProfileAccountInformation')
+          }
+         
   }
 
   const processRozarPayCheckout = async () => {
@@ -146,6 +176,8 @@ export default function RazorPay() {
           text1: 'ERROR',
           text2: t('newDeveloper.Failedtomakepayment'),
         });
+        setRozarpayOrderData(null)
+        setRozarpayPaymentDetails(null)
         goBack()
       });
   }
@@ -158,13 +190,6 @@ export default function RazorPay() {
         handlePaymentSuccessProcess()
     }
   }, [rozarpayOrderData, rozarpayPaymentDetails])
-
-  //   const response = await getAuthUserService()
-  //   if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
-  //     dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
-  //   }
-
-
 
   return (
     <ScrollView

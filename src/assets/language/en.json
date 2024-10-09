@@ -1199,7 +1199,10 @@
             "EnoughPayableAmount":"You have no enough payable amount to make payment",
             "ProcessPayment":"Process payment",
             "EnterValidAmount":"Enter valid amount",
-            "Failedtomakepayment":"Failed to make payment"
+            "Failedtomakepayment":"Failed to make payment",
+            "received_commission":"Received Comission",
+            "paid_commission":"Paid Commission",
+            "SuccessPayment":"Payment successfully done"
              
 
              

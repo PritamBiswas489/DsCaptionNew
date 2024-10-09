@@ -130,7 +130,7 @@ export function BookingReportList() {
                       styles.title,
                       { color: isDark ? appColors.white : appColors.darkText },
                     ]}>
-                    {'DORKAR BELDANGA'}
+                    {`${item.to_user.first_name} ${item?.to_user?.last_name || ''}`}
                   </Text>
                 </View>
                 <View

@@ -95,26 +95,7 @@ export default function AddressList({
                 </TouchableOpacity> */}
               </View>
             </View>
-            <TouchableOpacity
-              onPress={() => navigate('AddNewArea')}
-              activeOpacity={0.9}
-              style={[
-                GlobalStyle.circleView,
-                styles.iconContainer,
-                {
-                  backgroundColor: isDark
-                    ? appColors.darkTheme
-                    : appColors.white,
-                  borderWidth: isDark ? 0.2 : 1,
-                },
-              ]}>
-              {/* <Edit
-                color={isDark ? appColors.white : appColors.darkText}
-                height={'15'}
-                width={'15'}
-                strokeWidth={'1.8'}
-              /> */}
-            </TouchableOpacity>
+            
           </View>
         )}
         ItemSeparatorComponent={() => (

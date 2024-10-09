@@ -11,8 +11,9 @@ interface Response {
 
 
 export const createOrderRozarPayService = async(formData:FormData): Promise<Response> => {
+	 
 	try {
-		const response = await api.post(`/provider/rozar-pay-create-order`,formData);
+		const response = await api.post(`/provider/razor-pay-create-order-process`,formData);
 		return response;
 	} catch (error:any) {
 		return error.response;
@@ -20,7 +21,7 @@ export const createOrderRozarPayService = async(formData:FormData): Promise<Resp
 }
 export const paymentSuccessProcess = async(formData:FormData): Promise<Response> => {
 	try {
-		const response = await api.post(`/provider/rozar-pay-success-order`,formData);
+		const response = await api.post(`/provider/razor-pay-success-order`,formData);
 		return response;
 	} catch (error:any) {
 		return error.response;

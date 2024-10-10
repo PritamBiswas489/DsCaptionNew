@@ -62,11 +62,7 @@ export default function RazorPay() {
     amount_due:number,
     currency:string,
   }  | null>(null);
-  const [rozarpayPaymentDetails, setRozarpayPaymentDetails] = useState<{
-    razorpay_order_id: string,
-    razorpay_payment_id: string,
-    razorpay_signature: string
-  } | null>(null);
+  
 
   //handle process rozarpay payment process
   const handleProcessPaymentAmount = async () => {
@@ -94,7 +90,7 @@ export default function RazorPay() {
             text2: t('newDeveloper.Failedtomakepayment'),
           });
           setRozarpayOrderData(null)
-          setRozarpayPaymentDetails(null)
+         
           goBack();
       }
     } catch (error) {
@@ -104,7 +100,7 @@ export default function RazorPay() {
           text2: t('newDeveloper.Failedtomakepayment'),
         });
         setRozarpayOrderData(null)
-        setRozarpayPaymentDetails(null)
+        
         goBack();
     } finally {
         setProcessingLoader(false);
@@ -112,7 +108,11 @@ export default function RazorPay() {
   }
 
   //handle payment success process
-  const handlePaymentSuccessProcess = async()=>{
+  const handlePaymentSuccessProcess = async(rozarpayPaymentDetails:{
+    razorpay_order_id: string,
+    razorpay_payment_id: string,
+    razorpay_signature: string
+  })=>{
           setProcessingLoader(true)
           const formData = new FormData();
           formData.append('razorpay_order_id',rozarpayPaymentDetails?.razorpay_order_id)
@@ -121,18 +121,17 @@ export default function RazorPay() {
           const response:Response = await paymentSuccessProcess(formData);
 
           if(response?.data?.content?.success){
-              const response = await getAuthUserService()
-              if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
-                  dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
-              }
+                setRozarpayOrderData(null)
+                const response = await getAuthUserService()
+                if (response?.data?.response_code === 'default_200' && response?.data?.content?.provider_info?.id) {
+                    dispatch(serviceProviderAccountDataActions.setData(response?.data?.content?.provider_info))
+                }
                 Toast.show({
                   type: 'success',
                   text1: 'Success',
                   text2: t('newDeveloper.SuccessPayment'),
                 });
-                setProcessingLoader(false)
-                setRozarpayOrderData(null)
-                setRozarpayPaymentDetails(null)
+                setProcessingLoader(false)  
                 navigate('ProfileAccountInformation')
           }else{
                 Toast.show({
@@ -142,10 +141,9 @@ export default function RazorPay() {
                 });
                 setProcessingLoader(false)
                 setRozarpayOrderData(null)
-                setRozarpayPaymentDetails(null)
+                
                 navigate('ProfileAccountInformation')
           }
-         
   }
 
   const processRozarPayCheckout = async () => {
@@ -167,8 +165,8 @@ export default function RazorPay() {
     };
     
     RazorpayCheckout.open(options)
-      .then((data: any) => {
-        setRozarpayPaymentDetails(data)
+      .then(async (data: any) => {
+        await handlePaymentSuccessProcess(data)
       })
       .catch((error: any) => {
         Toast.show({
@@ -177,19 +175,17 @@ export default function RazorPay() {
           text2: t('newDeveloper.Failedtomakepayment'),
         });
         setRozarpayOrderData(null)
-        setRozarpayPaymentDetails(null)
+        
         goBack()
       });
   }
 
   useEffect(() => {
-    if (rozarpayOrderData?.orderId && !rozarpayPaymentDetails?.razorpay_payment_id) {
+    if (rozarpayOrderData?.orderId) {
       processRozarPayCheckout()
     }
-    if(rozarpayPaymentDetails?.razorpay_payment_id){
-        handlePaymentSuccessProcess()
-    }
-  }, [rozarpayOrderData, rozarpayPaymentDetails])
+     
+  }, [rozarpayOrderData])
 
   return (
     <ScrollView

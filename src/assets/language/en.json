@@ -1202,7 +1202,12 @@
             "Failedtomakepayment":"Failed to make payment",
             "received_commission":"Received Comission",
             "paid_commission":"Paid Commission",
-            "SuccessPayment":"Payment successfully done"
+            "SuccessPayment":"Payment successfully done",
+            "PaymentList":"Payments list",
+            "PaymentAmount":"Payment amount",
+            "PaymentDate":"Payment date",
+            "PaymentId":"Payment ID"
+             
              
 
              

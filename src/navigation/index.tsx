@@ -82,6 +82,7 @@ import { WithdrawRequest } from '@src/screens/dashboard/home/WithdrawRequest';
 import WithdrawList from '@src/screens/dashboard/home/WithdrawList';
 import AdjustBalance from '@src/screens/dashboard/home/AdjustBalance';
 import RazorPay from '@src/screens/dashboard/home/RazorPay';
+import PaymentList from '@src/screens/dashboard/home/PaymentList';
 
 
 export default function MyStack() {
@@ -340,6 +341,12 @@ export default function MyStack() {
                  name="RazorPay"
                  component={RazorPay}
             />
+            <RootStack.Screen
+                 name="PaymentList"
+                 component={PaymentList}
+            />
+
+             
 
           </>
         )}

@@ -10,6 +10,7 @@ import {
   ChatIcon,
   SettingIcon,
   WithdrawListIcon,
+  PaymentIcon,
   ReportsIcon,
   AboutUsIcon,
   PrivacyPolicyIcon,
@@ -50,6 +51,12 @@ export const categoriesData: Array<HomeCategoryType> = [
     goToScreen:'WithdrawList'
    
   },
+  {
+    icon:     <PaymentIcon height={'36'} width={'36'} />,
+    title:    'newDeveloper.PaymentList',
+    goToScreen:'PaymentList'
+  },
+  // PaymentList
   {
     icon: <ReportsIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuReports',

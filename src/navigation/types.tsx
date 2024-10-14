@@ -171,5 +171,6 @@ export type RootStackParamList = {
   WithdrawRequest:undefined;
   WithdrawList:undefined;
   AdjustBalance:undefined;
-  RazorPay:undefined
+  RazorPay:undefined;
+  PaymentList:undefined;
 };

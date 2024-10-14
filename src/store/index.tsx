@@ -51,6 +51,7 @@ import customerChannelSlice from "./redux/customer-channels-redux";
 import chatMessagesSlice from "./redux/chat-messages-redux";
 import withdrawListingSlice from "./redux/withdraw-list-redux";
 import withdrawMethodSlice from "./redux/withdraw-method-redux";
+import paymentListingSlice from "./redux/payment-list-redux";
 
 const store = configureStore({
     reducer: { 
@@ -105,7 +106,8 @@ const store = configureStore({
       customerChannel:customerChannelSlice.reducer,
       chatMessages:chatMessagesSlice.reducer,
       withdrawList:withdrawListingSlice.reducer,
-      withdrawMethod:withdrawMethodSlice.reducer
+      withdrawMethod:withdrawMethodSlice.reducer,
+      paymentListing:paymentListingSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

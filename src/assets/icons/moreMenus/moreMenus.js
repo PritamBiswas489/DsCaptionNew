@@ -113,7 +113,34 @@ export const WithdrawListIcon = (props) => (
   </Svg>
 );
 
- 
+export const PaymentIcon = ({ width = '27', height = '27', color = '#D8DCDE' }) => (
+  <Svg
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    {/* Card Background */}
+    <Rect x="2" y="4" width="20" height="16" rx="2" ry="2" fill={color} />
+
+    {/* Card Stripe */}
+    <Rect x="2" y="9" width="20" height="2" fill="#FFFFFF" />
+
+    {/* Card Details - Left */}
+    <Rect x="4" y="13" width="6" height="2" fill="#FFFFFF" />
+    <Rect x="4" y="16" width="6" height="2" fill="#FFFFFF" />
+
+    {/* Card Details - Right */}
+    <Rect x="14" y="13" width="6" height="5" fill="#FFFFFF" />
+
+    {/* Payment Icon (Dollar Sign) */}
+    <Path
+      d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6H8C8 3.8 9.8 2 12 2C14.2 2 16 3.8 16 6C16 7.7 14.9 9 13.3 9.6L13.3 9.6C12.9 9.8 12.5 10 12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12H16C16 14.2 14.2 16 12 16C10.8 16 9.8 15.4 9.3 14.5C9.1 14.1 9 13.6 9 13H10.7C10.9 13.8 11.4 14.4 12 14.4C12.6 14.4 13.1 14 13.3 13.5L13.3 13.5C13.5 13.1 13.6 12.6 13.6 12H10C10 11.2 10.5 10.6 11.2 10.2L11.2 10.2C11.6 10 12 9.7 12 9.3V8Z"
+      fill="#FFFFFF"
+    />
+  </Svg>
+);
+
 
 export const ReportsIcon = (props) => (
   <Svg

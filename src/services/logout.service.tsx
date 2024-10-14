@@ -37,6 +37,7 @@ import { customerChannelActions } from '@src/store/redux/customer-channels-redux
 import { chatMessagesActions } from '@src/store/redux/chat-messages-redux';
 import { withdrawListingActions } from '@src/store/redux/withdraw-list-redux';
 import { withdrawMethodActions } from '@src/store/redux/withdraw-method-redux';
+import { paymentListingActions } from '@src/store/redux/payment-list-redux';
 //logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
@@ -76,4 +77,5 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(chatMessagesActions.resetState())
       dispatch(withdrawListingActions.resetState())
       dispatch(withdrawMethodActions.resetState()) //withdraw method actions
+      dispatch(paymentListingActions.resetState())
 }

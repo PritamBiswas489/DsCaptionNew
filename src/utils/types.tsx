@@ -11,5 +11,7 @@ export interface ThemeContextType {
   setIsServiceManLogin: React.Dispatch<React.SetStateAction<boolean>>;
   isFreelancerLogin: boolean;
   setIsFreeLancerLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedInUserType: string;
+  setLoggedInUserType: React.Dispatch<React.SetStateAction<string>>;
   t:any
 }

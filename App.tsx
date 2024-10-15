@@ -18,6 +18,8 @@ const initialContextVal = {
   setIsServiceManLogin: () => {},
   isFreelancerLogin: false,
   setIsFreeLancerLogin: () => {},
+  loggedInUserType:'', //logged in user type
+  setLoggedInUserType:()=>{}, 
   t: '',
 };
 
@@ -30,6 +32,7 @@ const App: React.FC = () => {
   const [notificationSound, setNotificationSound] = useState(initialContextVal.notificationSound);
   const [isServiceManLogin, setIsServiceManLogin] = useState(initialContextVal.isServiceManLogin);
   const [isFreelancerLogin, setIsFreeLancerLogin] = useState(initialContextVal.isFreelancerLogin);
+  const [loggedInUserType, setLoggedInUserType] = useState(initialContextVal.loggedInUserType);
   const {t} = useTranslation();
   const contextValue = {
     currSymbol,
@@ -45,6 +48,8 @@ const App: React.FC = () => {
     isFreelancerLogin,
     setIsFreeLancerLogin,
     t,
+    loggedInUserType,
+    setLoggedInUserType
   };
 
   return (

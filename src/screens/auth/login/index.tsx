@@ -59,7 +59,9 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
     isServiceManLogin,
     setIsServiceManLogin,
     setIsFreeLancerLogin,
-    t
+    t,
+    loggedInUserType,
+    setLoggedInUserType
   } = useValues();
 
   const onChange = ({name, value}: {name: string; value: string}) => {
@@ -141,6 +143,8 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
               setIsServiceManLogin(false);
               setIsLoading(false)
               setIsFreeLancerLogin(true);
+              setValue('loggedInUserType','Provider')
+              setLoggedInUserType('Provider')
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'BottomTab' }],
@@ -168,30 +172,8 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
 
 
 
-  const clearServiceMenData = async () => {
-    try {
-      const clearServiceMen = await clearServiceMenCredential();
-      await setValue('isLogin', true.toString());
-      if (clearServiceMen) {
-        navigation.navigate('BottomTab');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const saveServiceMenCredentials = async () => {
-    try {
-      await setValue('servicemenEmail', form.email);
-      await setValue('servicemenPassword', form.password);
-      await setValue('isLogin', true.toString());
-      setIsServiceManLogin(true);
-      setIsFreeLancerLogin(false);
-      navigation.navigate('BottomTab');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+   
+   
 
   return (
     <>

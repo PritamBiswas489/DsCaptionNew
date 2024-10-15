@@ -46,8 +46,10 @@ const SplashScreen = () => {
     isDark, 
     t,
     notificationSound,
-    setNotificationSound 
-  
+    setNotificationSound ,
+    loggedInUserType,
+    setLoggedInUserType
+    
   } =
     useValues();
 
@@ -63,8 +65,24 @@ const SplashScreen = () => {
     getNotitifcationSound();
     checkServiceMenCredential();
     getSelectedCurrency();
+     
   }, []);
 
+  const getLoggedInUserType = async () => {
+    getValue('loggedInUserType')
+      .then(res => {
+        if (res !== null) {
+          return res;
+        } else {
+          return false;
+        }
+      })
+      .then(val => {
+        setLoggedInUserType(val.toString());
+        setValue('loggedInUserType', val.toString());
+      });
+  };
+  
   const getTheme = async () => {
     getValue('darkTheme')
       .then(res => {
@@ -154,72 +172,7 @@ const SplashScreen = () => {
     return new Date(year, month, 0).getDate();
 }
 
-  //assing default homestatistics data
-  // const assignDefaultHomeStatisticsData = ()=>{
-  //   console.log("====== Assign Default Home Statistics ======")
-  //   const currentYear = new Date().getFullYear();
-  //   const lastFourYears = [currentYear];
-
-  //   for (let i = 0; i < 4; i++) {
-  //       lastFourYears.push(currentYear - (i + 1));
-  //   }
-
-  //   dispatch(homeStatisticsGraphActions.setData({field:'lastFourYears',data:lastFourYears}))
-
-  //   const yearData:any = []
-  //   const monthNames = [
-  //     "January", "February", "March", "April", "May", "June",
-  //     "July", "August", "September", "October", "November", "December"
-  //   ];
-  //   dispatch(homeStatisticsGraphActions.setData({field:'monthList',data:monthNames}))
-
-  //   lastFourYears.forEach((yearValue,yearIndex)=>{
-      
-  //      const monthData=[]
-  //      for (let i = 0; i < monthNames.length; i++) {
-  //           monthData.push({
-  //             monthName:monthNames[i],
-  //             amount:0
-  //           })
-  //      }
-  //      const dd = {
-  //       year:yearValue,
-  //       month:monthData
-  //      }
-  //      yearData.push(dd)
-  //   })
-  //   dispatch(homeStatisticsGraphActions.setData({field:'yearStatData',data:yearData}))
-
-  //   const monthList:any = []
-  //   lastFourYears.forEach((yearValue,yearIndex)=>{
-  //     const monthData=[]
-  //     for (let i = 0; i < monthNames.length; i++) {
-  //      const MonthDays = [];
-  //      const getNumberOfDays = getDaysInMonth(i+1,yearValue) 
-  //      let day =1
-  //      while(day<=getNumberOfDays){
-  //       MonthDays.push({
-  //         dayNumber:day,
-  //         amount:0
-  //       }) 
-  //       day++
-  //      }
-  //      monthData.push({
-  //         monthName:monthNames[i],
-  //         days:MonthDays
-  //       })
-  //     }
-  //     const dd = {
-  //       year:yearValue,
-  //       month:monthData
-  //      }
-       
-  //      monthList.push(dd)
-  //   })
-     
-  //   dispatch(homeStatisticsGraphActions.setData({field:'monthStatData',data:monthList}))
-  // }
-
+  
 
   
   const assignDefaultHomeStatisticsData = () => {
@@ -347,18 +300,22 @@ const SplashScreen = () => {
     setCheckingLoader(false)
   }
 
+   
+
   const animate = () => {
     setTimeout(() => {
       setBackgroundColor(appColors.darkText);
       setCurrentIndex(0);
       setTimeout(() => {
         zoomIn().start(() => {
-          zoomOut().start(() => {
-            // replace('IntroSlider');
-            //Alert.alert('Can Checking Here which page to redirect')
-            assignDefaultHomeStatisticsData()
-            checkuser()
-
+          zoomOut().start(async () => {
+            const getUserType = await getValue('loggedInUserType')
+            if(getUserType === 'Provider'){
+                assignDefaultHomeStatisticsData()
+                checkuser()
+            }else{
+              replace('IntroSlider');
+            }
           });
         });
       }, 10);

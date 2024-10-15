@@ -14,6 +14,7 @@ import { serviceProviderAccountDataActions } from '@src/store/redux/service-prov
 import { deleteAuthTokens } from '@src/config/auth';
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 import { logoutClearReduxState } from '@src/services/logout.service';
+import { clearValue } from '@src/utils/localstorage';
 
 export default function ItemsList({ isGrid }: { isGrid: boolean }) {
   const { navigate, replace } = useNavigation<ItemsProps>();
@@ -24,6 +25,7 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
 
   ) => {
     if (screen === 'logoutProcess') {
+      clearValue('loggedInUserType')
       const response = await deleteAuthTokens();
       logoutClearReduxState(dispatch)
       replace('AuthNavigation');

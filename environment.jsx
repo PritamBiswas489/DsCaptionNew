@@ -25,3 +25,29 @@ export const env = {
     },
   },
 };
+
+export const envStore = {
+  type: 'dev', //prod staging dev
+  appUrls: {
+    dev: {
+      apiUrl: 'https://dorkarmall.aqualeafitsol.com',
+    },
+    staging: {
+      apiUrl: 'https://dorkarmall.aqualeafitsol.com',
+    },
+    prod: {
+      apiUrl: 'https://dorkarmall.aqualeafitsol.com',
+    },
+  },
+  mediaUrls: {
+    dev: {
+      apiUrl: 'https://dorkarmall.aqualeafitsol.com/storage/app/public',
+    },
+    staging: {
+      apiUrl: 'https://dorkarmall.aqualeafitsol.com/storage/app/public',
+    },
+    prod: {
+      apiUrl: 'https://dorkarmall.aqualeafitsol.com/storage/app/public',
+    },
+  },
+}

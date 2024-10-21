@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import {env} from '../../environment';
+import { envStore } from '../../environment';
 import {useValues} from '../../App';
 import {allListingActions} from '@src/store/redux/all-listing-redux';
 import {pendingListingActions} from '@src/store/redux/pending-listing-redux';
@@ -49,6 +50,14 @@ export const getMediaUrl = () => {
   const {type, mediaUrls} = env;
   return mediaUrls[type].apiUrl;
 };
+export const getStoreAppUrl = ()=>{
+  const {type, appUrls} = envStore;
+  return appUrls[type].apiUrl;
+}
+export const getStoreMediaUrl  = () =>{
+  const {type, appUrls} = envStore;
+  return appUrls[type].apiUrl;
+}
 export const isValidUrl = str => {
   const pattern = new RegExp(
     '^([a-zA-Z]+:\\/\\/)?' + // protocol

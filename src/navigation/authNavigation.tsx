@@ -13,6 +13,13 @@ import {
   Login,
   FreeLancerDetails,
   LoaderScreen,
+  StoreRegister,
+  StoreCompanyLocation,
+  StoreProviderDetails,
+  StoreCompanyDetails,
+  StoreForgotPassword,
+  StoreResetPassword,
+  StoreVerifyOtp,
 } from '../screens';
 
 //import {SplashScreen} from '@screens/splash';
@@ -38,6 +45,13 @@ export default function AuthNavigation() {
       <RootStack.Screen name="FreelancerDetail" component={FreeLancerDetails} />
       <RootStack.Screen name="CompanyDetails" component={CompanyDetails} />
       <RootStack.Screen name="LoaderScreen" component={LoaderScreen} />
+      {/**********   store auth   *******************/}
+      <RootStack.Screen name="StoreRegister" component={StoreRegister} />
+      <RootStack.Screen name="StoreCompanyLocation" component={StoreCompanyLocation} />
+      <RootStack.Screen name="StoreProviderDetails" component={StoreProviderDetails} />
+      <RootStack.Screen name="StoreCompanyDetails" component={StoreCompanyDetails} />
+      <RootStack.Screen name="StoreForgotPassword" component={StoreForgotPassword} />
+      <RootStack.Screen name="StoreVerifyOtp" component={StoreVerifyOtp} />
     </RootStack.Navigator>
   );
 }

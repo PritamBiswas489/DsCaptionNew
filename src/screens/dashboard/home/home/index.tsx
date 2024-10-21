@@ -59,7 +59,7 @@ export function Home() {
   const [cancelBookingModal, setCancelBookingModal] = useState(false);
   const [acceptBookingModal, setAcceptBookingModal] = useState(false);
   const { navigate,replace } = useNavigation<navigationProp>();
-  const { isDark, isServiceManLogin, t } = useValues();
+  const { isDark, isServiceManLogin, t, loggedInUserType } = useValues();
   const [showSkeletonLoader, setSkeletonLoader] = useState(false)
   const [needSkeletonLoader,setNeedSkeletonLoader] =  useState(true)
  
@@ -102,7 +102,7 @@ export function Home() {
   // console.log({fcm_token:serviceProviderAccountData.owner.fcm_token})
   
   //handle load all data
-   console.log(JSON.stringify(serviceProviderAccountData,null,2))
+  //  console.log(JSON.stringify(serviceProviderAccountData,null,2))
 
   const filterModalVisible = () => {
     setShowWalletModal(true);
@@ -196,6 +196,9 @@ export function Home() {
       unsubscribeOnTokenRefresh();
     };
   }, []);
+
+  console.log("=============== loggedInUserType =====================")
+  console.log(loggedInUserType)
 
 
   return (

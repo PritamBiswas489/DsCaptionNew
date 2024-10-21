@@ -1,4 +1,5 @@
 export * from './auth';
+export * from './auth-store';
 export * from './dashboard/home';
 export * from './dashboard/categories';
 export * from './dashboard/service';

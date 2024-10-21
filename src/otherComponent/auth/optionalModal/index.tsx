@@ -24,11 +24,9 @@ export default function OptionalModal({
   const {isDark, setIsFreeLancerLogin, t} = useValues();
   const [selectOption, setOption] = useState(0);
   const {navigate} = useNavigation<routeProps>();
+
   const onFreelancerClick = async () => {
-    Alert.alert('Not Working.Functionality not done yet')
-    return
     setOption(1);
-    await setValue('freelancerLogin', true.toString());
     setIsFreeLancerLogin(true);
   };
 
@@ -110,7 +108,7 @@ export default function OptionalModal({
                             : appFonts.NunitoRegular,
                       },
                     ]}>
-                    {t('newDeveloper.loginAsProvider')}
+                    {t('newDeveloper.Provider')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -148,7 +146,7 @@ export default function OptionalModal({
                             : appFonts.NunitoRegular,
                       },
                     ]}>
-                    {t('auth.freelancer')}
+                    {t('newDeveloper.LoginSeller')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -157,7 +155,11 @@ export default function OptionalModal({
                 label="auth.continue"
                 onPress={() => {
                   setOptionModal(false);
-                  navigate('Register');
+                  if(selectOption === 0){
+                    navigate('Register');
+                  }else{
+                    navigate('StoreRegister');
+                  }
                 }}
               />
             </View>

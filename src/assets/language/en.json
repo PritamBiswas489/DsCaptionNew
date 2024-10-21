@@ -21,7 +21,7 @@
             "password": "Enter password",
             "loginNow": "Login now",
             "forgotPassword": "Forget password ?",
-            "serviceManLogin": "Login as a Servicemen",
+            "serviceManLogin": "Login as Store Seller",
             "fixit": "fixit",
             "forgetPassword": "forget PASSWORD",
             "forgetPasswordContent": "Don’t worry ! Just enter your register no.",
@@ -1206,7 +1206,12 @@
             "PaymentList":"Payments list",
             "PaymentAmount":"Payment amount",
             "PaymentDate":"Payment date",
-            "PaymentId":"Payment ID"
+            "PaymentId":"Payment ID",
+            "LoginSeller":"Seller",
+            "Provider":"Provider",
+            "RegisterAsProvider":"Register as provider",
+            "RegisterAsSeller":"Register as store"
+
              
              
 

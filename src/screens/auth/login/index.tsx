@@ -19,6 +19,7 @@ import {clearServiceMenCredential} from '@utils/functions';
 import {setValue} from '@utils/localstorage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { loginService } from '@src/services/login.service';
+import { loginService as storeLoginService } from '@src/services/store/login.service';
 import Toast from 'react-native-toast-message';
 import { setAuthTokens } from '@src/config/auth';
 import { useSelector } from 'react-redux';
@@ -41,7 +42,7 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
  const Login=({route}: any) =>{
    const navigation = useNavigation<loginProps>(); 
   const [errors, setErrors] = useState({email: '', password: ''});
-  const [form, setForm] = useState({email: 'dorkarbeldanga@gmail.com', password: '@Beldanga1234'});
+  const [form, setForm] = useState({email: '', password: ''});
   // const [form, setForm] = useState({email: 'pritam.biswas489@gmail.com', password: 'Pritam123@#'});
   const [selectOptionModal, setOptionModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,6 +82,15 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
   }, []);
 
 
+  useEffect(()=>{
+    if(isServiceManLogin){
+      setForm({...form, ['email']: 'fashion1@gmail.com',['password']: '@Dorkar1234'});
+    }else{
+      setForm({...form, ['email']: 'dorkarbeldanga@gmail.com',['password']: '@Beldanga1234'});
+    }
+  },[isServiceManLogin])
+
+
   const handleLoginServiceProvider = () => {
     const reg =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -101,12 +111,20 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
     }
     else {
        //isServiceManLogin ? saveServiceMenCredentials() : clearServiceMenData();
-       isServiceManLogin ?  handleServiceManLoginHandle() : handleServiceProviderLoginHandle()
+       isServiceManLogin ?  handleStoreSellerLoginHandle() : handleServiceProviderLoginHandle()
 
     }
   };
-  const handleServiceManLoginHandle = async()=>{
-    Alert.alert('Service man login not done yet')
+  const handleStoreSellerLoginHandle = async()=>{
+    // setIsLoading(true)
+    const data:{email:string,password:string} = {
+      email: form.email,
+      password: form.password,
+    };
+    console.log("======================================")
+    console.log(data)
+    const response:LoginResponse  = await storeLoginService(data);
+    console.log(response?.data)
   }
 
   const handleServiceProviderLoginHandle = async()=>{
@@ -148,7 +166,7 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'BottomTab' }],
-         });
+              });
           }else{
             setIsLoading(false)
             Toast.show({

@@ -11,7 +11,7 @@ import { getValue } from '@utils/localstorage';
 import { RootStackParamList } from 'src/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { getZoneList } from '@src/services/settings.service';
+import { getProviderConfig, getZoneList } from '@src/services/settings.service';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import { zoneDataActions } from '@src/store/redux/zone-list-redux';
@@ -20,6 +20,7 @@ import { registrationService } from '@src/services/signup.service';
 import Toast from 'react-native-toast-message';
 import { registerFieldActions } from '@src/store/redux/register-field-redux';
 import { mapFieldActions } from '@src/store/redux/map-address-redux';
+import { configAppActions } from '@src/store/redux/config-redux';
 
 
  
@@ -49,12 +50,14 @@ const Register = ({ route }: any) => {
     zoneList = JSON.parse(zones)
   }
   const [isZoneLoaded,setZoneLoaded] = useState<boolean>(zoneList && false);
+  const [isProviderConfigLoaded,setProviderConfigLoaded] = useState<boolean>(false);
 
    
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const serviceProviderData = useSelector((state: RootState)=>state['serviceProviderAccountData'])
+    const providerAppConfig = useSelector((state: RootState)=>state['providerAppConfig'])
 
      
     if(serviceProviderData?.id!==''){
@@ -62,12 +65,29 @@ const Register = ({ route }: any) => {
        navigation.navigate('BottomTab');
     }
 
+    const loadConfigData  = async ()=>{
+      const responseProviderConfig = await getProviderConfig();
+      if (responseProviderConfig?.data?.content?.base_url) {
+        console.log(responseProviderConfig?.data?.content?.googlekey)
+          dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
+      }
+      setProviderConfigLoaded(true)
+    }
+
+    useEffect(()=>{
+      if(providerAppConfig?.base_url!==''){
+        setProviderConfigLoaded(true)
+      }else{
+        loadConfigData()  
+      }
+    },[providerAppConfig])
+
 
    useEffect(()=>{
-     if(isZoneLoaded){
+     if(isZoneLoaded && isProviderConfigLoaded){
         setSkeletionLoaderView(false)
      }
-   },[isZoneLoaded])
+   },[isZoneLoaded,isProviderConfigLoaded])
 
    useEffect(()=>{
    
@@ -76,7 +96,7 @@ const Register = ({ route }: any) => {
         //console.log("================ called ended ==========================")
         setZoneLoaded(true);
         if(response?.data?.content?.data){
-          console.log(response?.data?.content?.data)
+          // console.log(response?.data?.content?.data)
           dispatch(zoneDataActions.setData({
             field: 'zones',
             data: JSON.stringify(response?.data?.content?.data),
@@ -195,7 +215,7 @@ const Register = ({ route }: any) => {
                 <View>
                   <HeaderComponent
                     showBack={true}
-                    authTitle={'auth.register'}
+                    authTitle={'newDeveloper.RegisterAsProvider'}
                     content={'auth.registerContent'}
                     gotoScreen={() => handlePrevStep()}
                     containerStyle={styles.containerStyle}

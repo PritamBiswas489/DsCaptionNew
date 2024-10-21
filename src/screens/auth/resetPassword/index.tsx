@@ -107,9 +107,9 @@ const ResetPassword = () => {
       formData.append('confirm_password', form.confirmPassword)
       formData.append('_method','PUT')
       
-      console.log(formData)
+      // console.log(formData)
       const response: Response = await resetPasswordNew(formData)
-      console.log(response?.data)
+      // console.log(response?.data)
       if (response?.data?.response_code === 'default_password_reset_200') {
         setProcessingSpinner(false)
         Toast.show({

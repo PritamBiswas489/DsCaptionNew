@@ -51,8 +51,8 @@ export default function SubCategory({}) {
      const response:Response = await getServices(queryParam)
      if (response?.data?.content?.data) {
       const services = response?.data?.content?.data
-      console.log("=========== services =================================")
-      console.log(services)
+      // console.log("=========== services =================================")
+      // console.log(services)
       if (services.length > 0) {
         const formattedData: ServiceInterface[] = response.data.content.data.map((serviceData: any) =>{
           const variants:ServiceVariantInterface[] = serviceData?.variations.map((vData:ServiceVariantInterface,vIndex:number)=>{

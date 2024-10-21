@@ -24,6 +24,7 @@ import { contentPagesActions } from '@src/store/redux/content-pages-redux';
 import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-provider-pomotional-cost-redux';
 import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
 import { homeStatisticsGraphActions } from '@src/store/redux/home-statistics-graph-redux';
+import { checkLoggedInUserType } from '@utils/functions';
 
 
 
@@ -65,7 +66,7 @@ const SplashScreen = () => {
     getNotitifcationSound();
     checkServiceMenCredential();
     getSelectedCurrency();
-     
+    getLoggedInUserType();//set logged in user type in context
   }, []);
 
   const getLoggedInUserType = async () => {
@@ -309,12 +310,13 @@ const SplashScreen = () => {
       setTimeout(() => {
         zoomIn().start(() => {
           zoomOut().start(async () => {
-            const getUserType = await getValue('loggedInUserType')
+            //check logged in user type for retrieve 
+            const getUserType = await checkLoggedInUserType()
             if(getUserType === 'Provider'){
                 assignDefaultHomeStatisticsData()
                 checkuser()
             }else{
-              replace('IntroSlider');
+                replace('IntroSlider');
             }
           });
         });

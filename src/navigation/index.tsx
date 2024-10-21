@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigation from './authNavigation';
 import { RootStack } from './RootStackNavigator';
 import { BottomTab } from './tabNavigation';
+import { BottomTabSeller } from './tabNavigationStore';
 import {
   AddNewAddress,
   AddNewService,
@@ -344,6 +345,17 @@ export default function MyStack() {
             <RootStack.Screen
                  name="PaymentList"
                  component={PaymentList}
+            />
+
+
+
+
+
+            {/****************  Store seller app menu **********************/}
+            
+            <RootStack.Screen
+                 name="BottomTabSeller"
+                 component={BottomTabSeller}
             />
 
              

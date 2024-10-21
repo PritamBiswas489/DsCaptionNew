@@ -55,16 +55,16 @@ export function AcceptedBooking({ route }: any) {
   const setData = async () => {
     const checkExisting = BookingDetailsState.find(elementDet => elementDet.id === bookingId);
     if (checkExisting?.id && !needExstingUpdateData) {
-      console.log("==================== Existing ==========================")
+      // console.log("==================== Existing ==========================")
       setDetailsBookingDetails(checkExisting.details)
     } else {
       const response: any = await loadBookingDetails(bookingId);
       if (response?.id) {
         if (!needExstingUpdateData!) {
-          console.log("================ loading new data ===============")
+          // console.log("================ loading new data ===============")
           dispatch(bookingDetailsAction.addBookingDetailsArr(response))
         } else {
-          console.log("================= update after refresh ===============")
+          // console.log("================= update after refresh ===============")
           dispatch(bookingDetailsAction.updateBookingDetails(response))
         }
         setDetailsBookingDetails(response)

@@ -97,6 +97,7 @@ export type RootStackParamList = {
   Subscription: undefined;
   SubscriptionPlan: undefined;
   BottomTab: undefined;
+  BottomTabSeller:undefined;
   Earnings: undefined;
   History: undefined;
   AddNewService: undefined;
@@ -173,4 +174,11 @@ export type RootStackParamList = {
   AdjustBalance:undefined;
   RazorPay:undefined;
   PaymentList:undefined;
+
+  StoreRegister:undefined;
+  StoreCompanyLocation:undefined;
+  StoreProviderDetails:undefined;
+  StoreCompanyDetails:undefined;
+  StoreForgotPassword:undefined;
+  StoreVerifyOtp:undefined;
 };

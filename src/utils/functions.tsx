@@ -77,3 +77,12 @@ export const clearServiceMenCredential = async () => {
     return false;
   }
 };
+
+//get logged in user type
+export const checkLoggedInUserType =  async()=>{
+  const getUserType = await getValue('loggedInUserType')
+  if(getUserType === 'Provider'){
+     return 'Provider'
+  }
+  return null
+}

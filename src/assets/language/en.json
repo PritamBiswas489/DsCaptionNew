@@ -1210,7 +1210,22 @@
             "LoginSeller":"Seller",
             "Provider":"Provider",
             "RegisterAsProvider":"Register as provider",
-            "RegisterAsSeller":"Register as store"
+            "RegisterAsSeller":"Register as store",
+            "EstimatedDeliveryTime":"Estimated Delivery Time",
+            "EstimateTimePanelText":"The item will be shown in the user app website",
+            "Minimum":"Minimum",
+            "Maximum":"Maximum",
+            "Unit":"Unit" ,
+            "Confirm":"Confirm",
+            "Cancel":"Cancel",
+            "StoreNextProcess":"Provide store information to proceed text",
+            "UploadStorelogo":"Upload Store logo",
+            "Uploadstorecoverphoto":"Upload store cover photo",
+            "Enterstorename":"Enter store name",
+            "Selectdeliverytime":"Select delivery time",
+            "Selectstoreaddress":"Select store address",
+            "Selectmodule":"Select module"
+             
 
              
              

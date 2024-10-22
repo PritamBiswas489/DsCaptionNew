@@ -62,6 +62,7 @@ import {
   CoverLocationList,
   MoreMenus,
   Setting,
+  StoreAddressCurrentLocation
 
 
 } from '../screens';
@@ -357,6 +358,14 @@ export default function MyStack() {
                  name="BottomTabSeller"
                  component={BottomTabSeller}
             />
+
+          <RootStack.Screen
+                 name="StoreAddressCurrentLocation"
+                 component={StoreAddressCurrentLocation}
+            />
+
+
+
 
              
 

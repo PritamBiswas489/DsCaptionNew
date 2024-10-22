@@ -16,13 +16,9 @@ const CompanyDetails=() =>{
         {backgroundColor: isDark ? appColors.darkCardBg : appColors.white},
       ]}>
       <View style={styles.container}>
-        <Text style={styles.textStyle}>1. {t('newDeveloper.GeneralInformation')}</Text>
+        <Text style={styles.textStyle}>{t('newDeveloper.StoreNextProcess')}</Text>
       </View>
       <InputField />
-      <View style={styles.container}>
-        <Text style={styles.textStyle}>2. {t('newDeveloper.ContactPersonInformation')}</Text>
-      </View>
-      <ContactPersonInputField />
     </View>
   );
 }

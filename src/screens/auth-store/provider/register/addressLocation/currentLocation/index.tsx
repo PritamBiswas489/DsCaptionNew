@@ -25,7 +25,6 @@ import Toast from 'react-native-toast-message';
 
 
 const AddressCurrentLocation=({route}: any) =>{
-  
   const screen = route?.params?.screen;
   const dispatch = useDispatch()
   const {isDark} = useValues();

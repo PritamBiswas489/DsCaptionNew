@@ -1,9 +1,12 @@
 import appColors from '@src/theme/appColors';
 import { windowWidth } from '@src/theme/appConstant';
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Modal, ViewStyle, TextStyle, TouchableOpacity } from 'react-native';
+import React, { useState , useEffect} from 'react';
+import { View, Text, Button, StyleSheet, Modal, ViewStyle, TextStyle, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from 'react-native-wheel-pick';
 import { useValues } from '../../../App';
+import {  useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
 
 const DeliveryTimePicker = ({showDeliveryTimeModal,setShowDeliveryTimeModal}:{
     showDeliveryTimeModal:boolean,
@@ -14,10 +17,31 @@ const DeliveryTimePicker = ({showDeliveryTimeModal,setShowDeliveryTimeModal}:{
     const [maxValue, setMaxValue] = useState<string>('12');
     const [unit, setUnit] = useState<string>('Hours');
     const {t} = useValues()
+    const dispatch = useDispatch()
 
     const hideDeliveryPopup = () => {
         setShowDeliveryTimeModal(false);
     };
+
+    const setDeliveryTime =()=>{  
+        if(parseInt(maxValue) < parseInt(minValue)){
+            Alert.alert(t('newDeveloper.deliveryTimeErrorOne'))
+            return;
+        }
+        dispatch(storeRegisterFieldActions.setData({
+            field: 'minimum_delivery_time',
+            data: minValue,
+        }))
+        dispatch(storeRegisterFieldActions.setData({
+            field: 'maximum_delivery_time',
+            data: maxValue,
+        }))
+        dispatch(storeRegisterFieldActions.setData({
+            field: 'delivery_time_type',
+            data: unit,
+        }))
+        setShowDeliveryTimeModal(false);
+    }
 
     return (
         <View style={styles.container}>
@@ -66,7 +90,7 @@ const DeliveryTimePicker = ({showDeliveryTimeModal,setShowDeliveryTimeModal}:{
                         </View>
                         <View style={styles.pickerContainer}>
                              
-                            <TouchableOpacity style={[styles.button,{backgroundColor: appColors.success}]} onPress={hideDeliveryPopup}>
+                            <TouchableOpacity style={[styles.button,{backgroundColor: appColors.success}]} onPress={setDeliveryTime}>
                               <Text style={styles.buttonText}>{t('newDeveloper.Confirm')}</Text> 
                             </TouchableOpacity>
 

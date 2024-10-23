@@ -17,6 +17,10 @@ import { RootState, AppDispatch } from '@src/store';
 import { registerFieldActions } from '@src/store/redux/register-field-redux';
 import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
 
+import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
+import { storeRegisterFieldErrorActions } from '@src/store/redux/store/register-error-redux';
+
+
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
@@ -32,6 +36,7 @@ type props = NativeStackNavigationProp<RootStackParamList>;
 export default function InputField() {
   const dispatch = useDispatch()
   const { navigate } = useNavigation<props>();
+  const { t } = useValues();
   const [showDeliveryTimeModal, setShowDeliveryTimeModal] = useState<boolean>(false)
 
 
@@ -53,93 +58,48 @@ export default function InputField() {
 
 
 
-  const company = useSelector((state: RootState) => state['registerProviderField'].company_name)
-  const setCompany = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'company_name',
-      data: value,
-    }))
+   
+   
 
-    dispatch(registerFieldErrorActions.setData({
-      field: 'company_name',
-      data: '',
-    }))
+   
 
-  }
-  const errorCompany = useSelector((state: RootState) => state['registerProviderErrorField'].company_name)
+  
 
-  const email = useSelector((state: RootState) => state['registerProviderField'].company_email)
-  const setEmail = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'company_email',
-      data: value,
-    }))
+   
 
-    dispatch(registerFieldErrorActions.setData({
-      field: 'company_email',
-      data: '',
-    }))
+   
 
+ 
+ 
+
+  const logo = useSelector((state: RootState) => state['storeRegisterField'].logo)
+  const setLogo = (value: string) => {
+      dispatch(storeRegisterFieldActions.setData({
+        field: 'logo',
+        data: value,
+      }))
+
+      dispatch(storeRegisterFieldErrorActions.setData({
+        field: 'logo',
+        data: '',
+      }))
   }
 
-  const errorEmail = useSelector((state: RootState) => state['registerProviderErrorField'].company_email)
+  const logoError = useSelector((state: RootState) => state['storeRegisterFieldError'].logo)
 
-  const phoneCountryCode = useSelector((state: RootState) => state['registerProviderField'].company_phone_country)
-  const setPhoneCountryCode = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'company_phone_country',
-      data: value,
-    }))
+  const coverPhoto = useSelector((state: RootState) => state['storeRegisterField'].cover_photo)
+  const setCoverPhoto = (value: string) => {
+      dispatch(storeRegisterFieldActions.setData({
+        field: 'cover_photo',
+        data: value,
+      }))
 
+      dispatch(storeRegisterFieldErrorActions.setData({
+        field: 'cover_photo',
+        data: '',
+      }))
   }
-  const errorPhoneCountryCode = useSelector((state: RootState) => state['registerProviderErrorField'].company_phone_country)
-
-  const phoneCountryDialCode = useSelector((state: RootState) => state['registerProviderField'].company_phone_dial_code)
-  const setPhoneCountryDialCode = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'company_phone_dial_code',
-      data: value,
-    }))
-  }
-
-  const errorPhoneCountryDialCode = useSelector((state: RootState) => state['registerProviderErrorField'].company_phone_dial_code)
-
-  const phoneNo = useSelector((state: RootState) => state['registerProviderField'].company_phone)
-  const setPhoneNo = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'company_phone',
-      data: value,
-    }))
-
-    dispatch(registerFieldErrorActions.setData({
-      field: 'company_phone',
-      data: '',
-    }))
-
-  }
-  const errorPhoneNo = useSelector((state: RootState) => state['registerProviderErrorField'].company_phone)
-
-  const company_address = useSelector((state: RootState) => state['mapField'].address)
-
-  const errorCompanyAddress = useSelector((state: RootState) => state['registerProviderErrorField'].company_address)
-
-  const { t } = useValues();
-
-  const image = useSelector((state: RootState) => state['registerProviderField'].company_logo)
-  const setImage = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'company_logo',
-      data: value,
-    }))
-
-    dispatch(registerFieldErrorActions.setData({
-      field: 'company_logo',
-      data: '',
-    }))
-
-  }
-
-  const imageError = useSelector((state: RootState) => state['registerProviderErrorField'].company_logo)
+  const coverPhotoError = useSelector((state: RootState) => state['storeRegisterFieldError'].cover_photo)
 
   const openImage = () => {
     const options: ImageLibraryOptions = {
@@ -150,12 +110,74 @@ export default function InputField() {
     };
 
     handleImagePicker(options, (imageUri: string) => {
-      setImage(imageUri);
+      setLogo(imageUri);
     });
   };
-  useEffect(() => {
-    console.log(image)
-  }, [image])
+
+  const openCoverPhoto = () => {
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    handleImagePicker(options, (imageUri: string) => {
+      setCoverPhoto(imageUri);
+    });
+  };
+
+
+  const storeName = useSelector((state: RootState) => state['storeRegisterField'].store_name)
+
+  const setStoreName = (value: string) => {
+      dispatch(storeRegisterFieldActions.setData({
+        field: 'store_name',
+        data: value,
+      }))
+
+      dispatch(storeRegisterFieldErrorActions.setData({
+        field: 'store_name',
+        data: '',
+      }))
+  }
+ 
+  
+  const storeNameError = useSelector((state: RootState) => state['storeRegisterFieldError'].store_name)
+
+  const storeAddress = useSelector((state: RootState) => state['storeRegisterField'].store_address)
+
+  const errorStoreAddress = useSelector((state: RootState) => state['storeRegisterFieldError'].store_address)
+
+
+  const tax = useSelector((state: RootState) => state['storeRegisterField'].tax)
+
+  const setTax = (value: string) => {
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'tax',
+      data: value,
+    }))
+
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'tax',
+      data: '',
+    }))
+   }
+   const taxError = useSelector((state: RootState) => state['storeRegisterFieldError'].tax)
+
+
+   const [deliveryTimeValue,setDeliveryTimeValue] = useState('')
+   const minimum_delivery_time = useSelector((state: RootState) => state['storeRegisterField'].minimum_delivery_time)
+   const maximum_delivery_time = useSelector((state: RootState) => state['storeRegisterField'].maximum_delivery_time)
+   const delivery_time_type = useSelector((state: RootState) => state['storeRegisterField'].delivery_time_type)
+
+   useEffect(()=>{
+    if(minimum_delivery_time && maximum_delivery_time && delivery_time_type){
+        setDeliveryTimeValue(minimum_delivery_time+'-'+maximum_delivery_time+' '+delivery_time_type)
+    }
+   },[minimum_delivery_time,maximum_delivery_time,delivery_time_type])
+
+   const deliveryTimeError = useSelector((state: RootState) => state['storeRegisterFieldError'].delivery_time)
 
   return (
 
@@ -166,33 +188,27 @@ export default function InputField() {
       <UploadContainerView
         title={t('newDeveloper.UploadStorelogo')}
         onPress={() => openImage()}
-        image={image}
-        setImage={setImage}
-        error={imageError}
+        image={logo}
+        setImage={setLogo}
+        error={logoError}
       />
       {/* Upload store cover photo */}
 
       <UploadContainerView
         title={t('newDeveloper.Uploadstorecoverphoto')}
-        onPress={() => openImage()}
-        image={image}
-        setImage={setImage}
-        error={imageError}
+        onPress={() => openCoverPhoto()}
+        image={coverPhoto}
+        setImage={setCoverPhoto}
+        error={coverPhotoError}
       />
-
-
-
-
-
-
       {/* Store name */}
       <TextInputComponent
         placeholder={t('newDeveloper.Enterstorename')}
         Icon={<Company />}
-        error={errorCompany}
-        value={company}
+        error={storeNameError}
+        value={storeName}
         onChangeText={value => {
-          setCompany(value);
+          setStoreName(value);
         }}
         containerStyle={{ marginBottom: windowHeight(1) }}
       />
@@ -207,17 +223,15 @@ export default function InputField() {
         error={''}
       />
       {/* Company address */}
-
       <TouchableOpacity onPress={() => navigate('StoreAddressCurrentLocation')}>
         <TextInputComponent
           placeholder={t('newDeveloper.Selectstoreaddress')}
           Icon={<Location />}
-          error={''}
-          value={''}
+          error={errorStoreAddress}
+          value={storeAddress}
           editable={false}
           onFocus={() => navigate('StoreAddressCurrentLocation')}
           onChangeText={value => {
-
           }}
           containerStyle={{
             marginBottom: windowWidth(1),
@@ -226,27 +240,27 @@ export default function InputField() {
         />
       </TouchableOpacity>
 
-
+      {/* tax vat value */}
       <TextInputComponent
         placeholder={t('Vat/tax')}
         Icon={<Amount />}
-        error={errorCompany}
+        error={taxError}
         keyboardType='number-pad'
-        value={company}
+        value={tax}
         onChangeText={value => {
-          setCompany(value);
+          setTax(value);
         }}
         containerStyle={{ marginBottom: windowHeight(1) }}
       />
 
 
-
+       {/* set delivery time */}
       <TouchableOpacity onPress={() => setShowDeliveryTimeModal(true)}>
         <TextInputComponent
           placeholder={t('newDeveloper.Selectdeliverytime')}
           Icon={<Clock />}
-          error={errorCompanyAddress}
-          value={company_address}
+          error={deliveryTimeError}
+          value={deliveryTimeValue}
           editable={false}
           onFocus={() => setShowDeliveryTimeModal(true)}
           onChangeText={value => {

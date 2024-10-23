@@ -52,6 +52,8 @@ import chatMessagesSlice from "./redux/chat-messages-redux";
 import withdrawListingSlice from "./redux/withdraw-list-redux";
 import withdrawMethodSlice from "./redux/withdraw-method-redux";
 import paymentListingSlice from "./redux/payment-list-redux";
+import storeRegisterFieldSlice from "./redux/store/register-field-redux";
+import storeRegisterFieldErrorSlice from "./redux/store/register-error-redux";
 
 const store = configureStore({
     reducer: { 
@@ -107,7 +109,13 @@ const store = configureStore({
       chatMessages:chatMessagesSlice.reducer,
       withdrawList:withdrawListingSlice.reducer,
       withdrawMethod:withdrawMethodSlice.reducer,
-      paymentListing:paymentListingSlice.reducer
+      paymentListing:paymentListingSlice.reducer,
+      //============ store field redux list ==========================//
+      storeRegisterField:storeRegisterFieldSlice.reducer,
+      storeRegisterFieldError:storeRegisterFieldErrorSlice.reducer
+
+
+      
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

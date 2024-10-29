@@ -38,6 +38,14 @@ import { chatMessagesActions } from '@src/store/redux/chat-messages-redux';
 import { withdrawListingActions } from '@src/store/redux/withdraw-list-redux';
 import { withdrawMethodActions } from '@src/store/redux/withdraw-method-redux';
 import { paymentListingActions } from '@src/store/redux/payment-list-redux';
+
+import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
+import { storeRegisterFieldErrorActions } from '@src/store/redux/store/register-error-redux';
+import { modulesAction } from '@src/store/redux/store/modules-redux';
+import { mapStoreFieldActions } from '@src/store/redux/store/map-address-redux';
+import { storeConfigAppActions } from '@src/store/redux/store/store-config-redux';
+import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
+
 //logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
@@ -78,4 +86,12 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(withdrawListingActions.resetState())
       dispatch(withdrawMethodActions.resetState()) //withdraw method actions
       dispatch(paymentListingActions.resetState())
+      
+      // store redux actions reset
+      dispatch(storeRegisterFieldActions.resetState())
+      dispatch(storeRegisterFieldErrorActions.resetState())
+      dispatch(modulesAction.resetState())
+      dispatch(mapStoreFieldActions.resetState())
+      dispatch(storeConfigAppActions.resetState())
+      dispatch(storeProfileDataActions.resetState())
 }

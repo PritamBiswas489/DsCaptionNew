@@ -25,8 +25,10 @@ import { serviceProviderPomotionalCostActions } from '@src/store/redux/service-p
 import useHomeDataLoader from '@src/hooks/useHomeDataLoader';
 import { homeStatisticsGraphActions } from '@src/store/redux/home-statistics-graph-redux';
 import { checkLoggedInUserType } from '@utils/functions';
-
-
+import { storeConfigAppActions } from '@src/store/redux/store/store-config-redux';
+import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
+import { getStoreSettings } from '@src/services/store/settings.service';
+import { getAuthUserService as storeAuthService } from '@src/services/store/auth.service';
 
 
 type navigation = NativeStackNavigationProp<RootStackParamList>;
@@ -243,6 +245,26 @@ const SplashScreen = () => {
     }));
   };
   
+  //check vendor
+  const checkVendor = async ()=>{
+    setCheckingLoader(true)
+    const responseStoreConfig = await getStoreSettings()
+    if(responseStoreConfig?.data?.business_name){
+       dispatch(storeConfigAppActions.setData(responseStoreConfig?.data))
+    }else{
+       Alert.alert('Unable to load app.restart the app')
+       setCheckingLoader(false)
+       return
+    }
+    const responseuser = await storeAuthService()
+    if (responseuser?.data?.id) {
+        dispatch(storeProfileDataActions.setData(responseuser?.data))
+        replace('BottomTabSeller');
+    }else{
+        replace('IntroSlider');
+    }
+  }
+  //check user 
   const checkuser = async () => {
     setCheckingLoader(true)
     const responseProviderConfig = await getProviderConfig();
@@ -312,9 +334,12 @@ const SplashScreen = () => {
           zoomOut().start(async () => {
             //check logged in user type for retrieve 
             const getUserType = await checkLoggedInUserType()
+            
             if(getUserType === 'Provider'){
-                assignDefaultHomeStatisticsData()
-                checkuser()
+                 assignDefaultHomeStatisticsData()
+                 checkuser()
+            }else if(getUserType === 'Seller'){
+                  checkVendor()
             }else{
                 replace('IntroSlider');
             }
@@ -356,7 +381,7 @@ const SplashScreen = () => {
         resizeMode={'contain'}
       />
       <Text style={{
-        color: isDark ? appColors.white : appColors.darkText, 
+        color: appColors.primary, 
         fontSize:24, 
         fontWeight:'bold'
         }}>{t('newDeveloper.ServiceProviderApp')}</Text>

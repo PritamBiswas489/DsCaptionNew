@@ -4,9 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface FieldState {
   logo:string;
   cover_photo:string;
-  f_name:string;
-  latitude:string;
-  longitude:string;
+  name:string;
   email:string;
   phone_country:string;
   phone_dial_code:string;
@@ -28,9 +26,7 @@ interface SetDataPayload {
 const initialState: FieldState = {
     logo:'',
     cover_photo:'',
-    f_name:'',
-    latitude:'',
-    longitude:'',
+    name:'',
     email:'',
     phone_country : '',
     phone_dial_code:'',

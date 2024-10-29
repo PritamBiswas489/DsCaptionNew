@@ -54,6 +54,10 @@ import withdrawMethodSlice from "./redux/withdraw-method-redux";
 import paymentListingSlice from "./redux/payment-list-redux";
 import storeRegisterFieldSlice from "./redux/store/register-field-redux";
 import storeRegisterFieldErrorSlice from "./redux/store/register-error-redux";
+import modulesSlice from "./redux/store/modules-redux";
+import mapStoreFieldSlice from "./redux/store/map-address-redux";
+import storeConfigAppSlice from "./redux/store/store-config-redux";
+import storeProfileDataSlice from "./redux/store/store-profile-redux";
 
 const store = configureStore({
     reducer: { 
@@ -112,10 +116,11 @@ const store = configureStore({
       paymentListing:paymentListingSlice.reducer,
       //============ store field redux list ==========================//
       storeRegisterField:storeRegisterFieldSlice.reducer,
-      storeRegisterFieldError:storeRegisterFieldErrorSlice.reducer
-
-
-      
+      storeRegisterFieldError:storeRegisterFieldErrorSlice.reducer,
+      storeModules:modulesSlice.reducer,
+      storeMapField:mapStoreFieldSlice.reducer,
+      storeConfig:storeConfigAppSlice.reducer, //store config
+      storeProfileData:storeProfileDataSlice.reducer //store profile data
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

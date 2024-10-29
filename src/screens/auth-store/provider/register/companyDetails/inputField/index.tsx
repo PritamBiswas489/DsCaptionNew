@@ -4,7 +4,7 @@ import { styles } from './styles';
 import UploadContainerView from '@otherComponent/auth-store/uploadContainer';
 import TextInputComponent from '@otherComponent/auth-store/textInput';
 import { Company, Experience } from '@utils/icons';
-import PhoneTextInput from '@otherComponent/auth-store/phoneTextInput';
+ 
 import { windowHeight, windowWidth } from '@theme/appConstant';
 import { Notes, Email, Location, Amount, Clock } from '@utils/icons';
 
@@ -14,8 +14,7 @@ import { handleImagePicker } from '@utils/functions';
 import { useValues } from '../../../../../../../App';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { registerFieldActions } from '@src/store/redux/register-field-redux';
-import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
+ 
 
 import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
 import { storeRegisterFieldErrorActions } from '@src/store/redux/store/register-error-redux';
@@ -26,6 +25,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import SelectionDropdown from '@src/otherComponent/selectionDropdown';
 import DeliveryTimePicker from '@commonComponents/deliveryTimePicker';
+import { ModuleInterface } from '@src/interfaces/store/modules.interface';
 
 interface DataItem {
   label: string;
@@ -38,39 +38,35 @@ export default function InputField() {
   const { navigate } = useNavigation<props>();
   const { t } = useValues();
   const [showDeliveryTimeModal, setShowDeliveryTimeModal] = useState<boolean>(false)
+  const modules = useSelector((state: RootState) => state['storeModules'])
+  const [moduleList, setModulelist] = useState<DataItem[]>([]);
+  const module_id = useSelector((state: RootState) => state['storeRegisterField'].module_id)
+
+  useEffect(()=>{
+    if(modules){
+      const loopZones: { label: string; value: string }[] = [];
+         modules.forEach((arr:ModuleInterface,index:number)=>{
+            return loopZones.push({ label: arr.module_name, value: arr.id.toString() });
+         })
+
+         setModulelist(loopZones)
+       
+    }
+  },[modules])
 
 
-  const zones = useSelector((state: RootState) => state['zoneList'].zones)
-  const [zoneList, setZoneList] = useState<DataItem[]>([]);
 
-  const zone_id = useSelector((state: RootState) => state['registerProviderField'].zone_id)
-  const setZoneId = (value: string) => {
-    dispatch(registerFieldActions.setData({
-      field: 'zone_id',
+  const setModuleId = (value: string) => {
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'module_id',
       data: value,
     }))
 
-    dispatch(registerFieldErrorActions.setData({
-      field: 'zone_id',
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'module_id',
       data: '',
     }))
   }
-
-
-
-   
-   
-
-   
-
-  
-
-   
-
-   
-
- 
- 
 
   const logo = useSelector((state: RootState) => state['storeRegisterField'].logo)
   const setLogo = (value: string) => {
@@ -127,7 +123,6 @@ export default function InputField() {
     });
   };
 
-
   const storeName = useSelector((state: RootState) => state['storeRegisterField'].store_name)
 
   const setStoreName = (value: string) => {
@@ -141,11 +136,10 @@ export default function InputField() {
         data: '',
       }))
   }
- 
   
   const storeNameError = useSelector((state: RootState) => state['storeRegisterFieldError'].store_name)
 
-  const storeAddress = useSelector((state: RootState) => state['storeRegisterField'].store_address)
+  const storeAddress = useSelector((state: RootState) => state['storeMapField'].address)
 
   const errorStoreAddress = useSelector((state: RootState) => state['storeRegisterFieldError'].store_address)
 
@@ -180,10 +174,8 @@ export default function InputField() {
    const deliveryTimeError = useSelector((state: RootState) => state['storeRegisterFieldError'].delivery_time)
 
   return (
-
-
+     
     <View style={styles.container}>
-
       {/* Upload store logo  */}
       <UploadContainerView
         title={t('newDeveloper.UploadStorelogo')}
@@ -193,7 +185,6 @@ export default function InputField() {
         error={logoError}
       />
       {/* Upload store cover photo */}
-
       <UploadContainerView
         title={t('newDeveloper.Uploadstorecoverphoto')}
         onPress={() => openCoverPhoto()}
@@ -214,10 +205,10 @@ export default function InputField() {
       />
 
       <SelectionDropdown
-        data={zoneList}
-        value={zone_id}
+        data={moduleList}
+        value={module_id}
         setValue={(value: string) => {
-          setZoneId(value)
+          setModuleId(value)
         }}
         label={t('newDeveloper.Selectmodule')}
         error={''}

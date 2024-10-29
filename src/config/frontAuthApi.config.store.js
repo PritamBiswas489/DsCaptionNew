@@ -28,6 +28,7 @@ frontApi.interceptors.request.use(async (config) => {
 		Authorization: 'Bearer ' + accessToken,
 		refreshtoken: refreshToken,
 		'Content-Type': 'multipart/form-data',
+        'vendorType':'owner'
 	};
 
 	return config;

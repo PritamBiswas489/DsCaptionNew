@@ -11,19 +11,15 @@ import { getValue } from '@utils/localstorage';
 import { RootStackParamList } from 'src/navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { getProviderConfig, getZoneList } from '@src/services/settings.service';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { zoneDataActions } from '@src/store/redux/zone-list-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { registrationService } from '@src/services/signup.service';
 import Toast from 'react-native-toast-message';
 import { registerFieldActions } from '@src/store/redux/register-field-redux';
 import { mapFieldActions } from '@src/store/redux/map-address-redux';
-import { configAppActions } from '@src/store/redux/config-redux';
-
-
-
+import { getModuleList } from '@src/services/store/settings.service';
+import { modulesAction } from '@src/store/redux/store/modules-redux';
 
 interface Response {
   data: any;
@@ -44,72 +40,39 @@ const Register = ({ route }: any) => {
   const [isSkeletonLoaderView, setSkeletionLoaderView] = useState<boolean>(true);
   const [isProcessRegistering, setIsProcessRegistering] = useState<boolean>(false);
 
-  const { zones } = useSelector((state: RootState) => state['zoneList'])
-
-  let zoneList = [];
-  if (zones != '') {
-    zoneList = JSON.parse(zones)
-  }
-  const [isZoneLoaded, setZoneLoaded] = useState<boolean>(zoneList && false);
-  const [isProviderConfigLoaded, setProviderConfigLoaded] = useState<boolean>(false);
-
+  const moduleList = useSelector((state: RootState) => state['storeModules'])
+  const [isModuleLoaded, setModuleLoaded] = useState<boolean>(moduleList && false);
+   
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const serviceProviderData = useSelector((state: RootState) => state['serviceProviderAccountData'])
-  const providerAppConfig = useSelector((state: RootState) => state['providerAppConfig'])
-
-
+  
   if (serviceProviderData?.id !== '') {
-    Alert.alert('Already logged in')
-    navigation.navigate('BottomTab');
-  }
-
-  const loadConfigData = async () => {
-    const responseProviderConfig = await getProviderConfig();
-    if (responseProviderConfig?.data?.content?.base_url) {
-      console.log(responseProviderConfig?.data?.content?.googlekey)
-      dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
-    }
-    setProviderConfigLoaded(true)
+      Alert.alert('Already logged in')
+      navigation.navigate('BottomTab');
   }
 
   useEffect(() => {
-    if (providerAppConfig?.base_url !== '') {
-      setProviderConfigLoaded(true)
-    } else {
-      loadConfigData()
-    }
-  }, [providerAppConfig])
-
-
-  useEffect(() => {
-    if (isZoneLoaded && isProviderConfigLoaded) {
+    if (isModuleLoaded) {
       setSkeletionLoaderView(false)
     }
-  }, [isZoneLoaded, isProviderConfigLoaded])
+  }, [isModuleLoaded])
 
   useEffect(() => {
-
-    const getzones = async () => {
-      const response: Response = await getZoneList();
-      //console.log("================ called ended ==========================")
-      setZoneLoaded(true);
-      if (response?.data?.content?.data) {
-        // console.log(response?.data?.content?.data)
-        dispatch(zoneDataActions.setData({
-          field: 'zones',
-          data: JSON.stringify(response?.data?.content?.data),
-        }))
+    const getModules = async () => {
+      const response: Response = await getModuleList();
+      setModuleLoaded(true);
+      if (response?.data) {
+        dispatch(modulesAction.setData(response?.data))
       }
     }
-    if (!isZoneLoaded) {
-      //console.log("================ called ==========================")
-      getzones()
+    //get Modules
+    if (!isModuleLoaded) {
+      getModules()
     }
-
-  }, [isZoneLoaded])
+  }, [isModuleLoaded])
 
 
 

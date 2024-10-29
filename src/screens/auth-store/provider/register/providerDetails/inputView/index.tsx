@@ -18,8 +18,10 @@ import {useValues} from '../../../../../../../App';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { registerFieldActions } from '@src/store/redux/register-field-redux';
-import { registerFieldErrorActions } from '@src/store/redux/register-error-redux';
+ 
+
+import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
+import { storeRegisterFieldErrorActions } from '@src/store/redux/store/register-error-redux';
 
 
 export default function InputView() {
@@ -27,76 +29,76 @@ export default function InputView() {
   
 
 
-  const provider_name = useSelector((state: RootState)=>state['registerProviderField'].provider_name)  
+  const provider_name = useSelector((state: RootState)=>state['storeRegisterField'].name)  
   const setProviderName = (value:string)=>{
-    dispatch(registerFieldActions.setData({
-      field: 'provider_name',
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'name',
       data: value,
     }))
 
-    dispatch(registerFieldErrorActions.setData({
-      field: 'provider_name',
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'name',
       data: '',
     }))
  }
-  const errorProviderName = useSelector((state: RootState)=>state['registerProviderErrorField'].provider_name)  
+  const errorProviderName = useSelector((state: RootState)=>state['storeRegisterFieldError'].name)  
 
-  const provider_email = useSelector((state: RootState)=>state['registerProviderField'].provider_email)  
+  const provider_email = useSelector((state: RootState)=>state['storeRegisterField'].email)  
   const setProviderEmail = (value:string)=>{
-    dispatch(registerFieldActions.setData({
-      field: 'provider_email',
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'email',
       data: value,
     }))
 
-    dispatch(registerFieldErrorActions.setData({
-      field: 'provider_email',
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'email',
       data: '',
     }))
   }
 
-  const errorProviderEmail =  useSelector((state: RootState)=>state['registerProviderErrorField'].provider_email)  
+  const errorProviderEmail =  useSelector((state: RootState)=>state['storeRegisterFieldError'].email)  
   
-  const provider_phone_country = useSelector((state: RootState)=>state['registerProviderField'].provider_phone_country)  
+  const provider_phone_country = useSelector((state: RootState)=>state['storeRegisterField'].phone_country)  
   const setProviderPhoneCountry = (value:string)=>{
-    dispatch(registerFieldActions.setData({
-      field: 'provider_phone_country',
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'phone_country',
       data: value,
     }))
   }
-  const provider_phone_dial_code = useSelector((state: RootState)=>state['registerProviderField'].provider_phone_dial_code)  
+  const provider_phone_dial_code = useSelector((state: RootState)=>state['storeRegisterField'].phone_dial_code)  
   const setProviderPhoneDialCode = (value:string)=>{
-    dispatch(registerFieldActions.setData({
-      field: 'provider_phone_dial_code',
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'phone_dial_code',
       data: value,
     }))
   }
-  const provider_phone = useSelector((state: RootState)=>state['registerProviderField'].provider_phone)  
+  const provider_phone = useSelector((state: RootState)=>state['storeRegisterField'].phone)  
   const setProviderPhone = (value:string)=>{
-    dispatch(registerFieldActions.setData({
-      field: 'provider_phone',
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'phone',
       data: value,
     }))
 
-    dispatch(registerFieldErrorActions.setData({
-      field: 'provider_phone',
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'phone',
       data: '',
     }))
   }
 
-  const errorProviderPhone =  useSelector((state: RootState)=>state['registerProviderErrorField'].provider_phone)  
+  const errorProviderPhone =  useSelector((state: RootState)=>state['storeRegisterFieldError'].phone)  
 
-  const provider_password = useSelector((state: RootState)=>state['registerProviderField'].provider_password)
+  const provider_password = useSelector((state: RootState)=>state['storeRegisterField'].password)
   const setProviderPassword =  (value:string)=>{
-    dispatch(registerFieldActions.setData({
-      field: 'provider_password',
+    dispatch(storeRegisterFieldActions.setData({
+      field: 'password',
       data: value,
     }))
-    dispatch(registerFieldErrorActions.setData({
-      field: 'provider_password',
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'password',
       data: '',
     }))
   }
-  const errorPassword =  useSelector((state: RootState)=>state['registerProviderErrorField'].provider_password)  
+  const errorPassword =  useSelector((state: RootState)=>state['storeRegisterFieldError'].password)  
   
   const {t} = useValues();
    

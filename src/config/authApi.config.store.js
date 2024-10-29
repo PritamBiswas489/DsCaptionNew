@@ -34,15 +34,17 @@ api.interceptors.request.use(async (config) => {
 			'Content-Type': 'multipart/form-data',
 			'Authorization': 'Bearer ' + accessToken,
             'X-localization': languageCode || 'en',  
+            'vendorType':'owner'
 		};
 	}else{
 		config.headers = {
             ...config.headers,
 			'Authorization': 'Bearer ' + accessToken,
-            'X-localization': languageCode || 'en', 
+            'X-localization': languageCode || 'en',
+            'vendorType':'owner' 
 		};
 	}
-    // console.log(config.headers)
+    console.log(config.headers)
 	const fullRequestUrl = `${config.baseURL}${config.url}`;
 	console.log('Request URL:', fullRequestUrl);
 	

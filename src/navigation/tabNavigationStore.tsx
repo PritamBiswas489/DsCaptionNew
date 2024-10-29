@@ -21,6 +21,7 @@ import {View,Text} from 'react-native';
 import CartModal from '@otherComponent/cartModal';
 import {windowHeight} from '@theme/appConstant';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { MoreMenusVendor } from '@src/screens/dashboard/home/MoreMenusVendor';
 
 const Tab = createBottomTabNavigator();
 
@@ -75,8 +76,7 @@ export function BottomTabSeller() {
         ) : selected == 3 ? (
             <Text style={{color:'black'}}>Store Seller Page Three</Text>
         ) : (
-          //<MoreMenus />
-         <Text style={{color:'black'}}>Store Seller Page Menu</Text>
+             <MoreMenusVendor/>
         )}
       </View>
       <MyTabBar onPress={onPress} selected={selected} tabData={tabData} />

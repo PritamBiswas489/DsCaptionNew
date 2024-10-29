@@ -85,6 +85,7 @@ import WithdrawList from '@src/screens/dashboard/home/WithdrawList';
 import AdjustBalance from '@src/screens/dashboard/home/AdjustBalance';
 import RazorPay from '@src/screens/dashboard/home/RazorPay';
 import PaymentList from '@src/screens/dashboard/home/PaymentList';
+import { MoreMenusVendor } from '@src/screens/dashboard/home/MoreMenusVendor';
 
 
 export default function MyStack() {
@@ -347,27 +348,20 @@ export default function MyStack() {
                  name="PaymentList"
                  component={PaymentList}
             />
-
-
-
-
-
-            {/****************  Store seller app menu **********************/}
-            
-            <RootStack.Screen
+            {/****************  Store seller app menu **********************/}  
+          <RootStack.Screen
                  name="BottomTabSeller"
                  component={BottomTabSeller}
-            />
-
+          />
           <RootStack.Screen
                  name="StoreAddressCurrentLocation"
                  component={StoreAddressCurrentLocation}
             />
+           <RootStack.Screen
+                 name="MoreMenusVendor"
+                 component={MoreMenusVendor}
+            />
 
-
-
-
-             
 
           </>
         )}

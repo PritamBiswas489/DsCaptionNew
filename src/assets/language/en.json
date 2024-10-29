@@ -1021,7 +1021,7 @@
             "DiscountCostpercentage":"Discount Cost percentage",
             "CampaignCostpercentage":"Campaign Cost percentage",
             "CouponCostpercentage":"Coupon Cost percentage",
-            "ServiceProviderApp":"Provider App",
+            "ServiceProviderApp":"Provider & Vendor App",
             "AccountInformation":"Account Information",
             "Businesssettings":"Business settings",
             "BizInformationIdentityType":"Identity Type",
@@ -1225,8 +1225,18 @@
             "Selectdeliverytime":"Select delivery time",
             "Selectstoreaddress":"Select store address",
             "Selectmodule":"Select module",
-            "deliveryTimeErrorOne":"Maximum time must greater than minimum time"
-             
+            "deliveryTimeErrorOne":"Maximum time must greater than minimum time",
+            "successfullyLoggedIn":"Successfully logged in",
+            "errorLoggedIn":"Logged in failed",
+            "Conversation":"Conversation",
+            "AddItem":"Add item",
+            "PendingItem":"Pending item",
+            "Categories":"Categories",
+            "Banner":"Banner",
+            "Campaign":"Campaign",
+            "Coupon":"Coupon"
+            
+
 
              
              

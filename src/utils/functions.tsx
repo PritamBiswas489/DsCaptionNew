@@ -83,6 +83,8 @@ export const checkLoggedInUserType =  async()=>{
   const getUserType = await getValue('loggedInUserType')
   if(getUserType === 'Provider'){
      return 'Provider'
-  }
+  }else if(getUserType === 'Seller'){
+    return 'Seller'
+ }
   return null
 }

@@ -19,7 +19,157 @@ export const ProfileIcon = (props) => (
     />
   </Svg>
 );
- 
+
+export const AddItemIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : '27'}
+    height={props.height ? props.height : '27'}
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    {/* Circle */}
+    <Path
+      d="M10 0C4.477 0 0 4.477 0 10C0 15.523 4.477 20 10 20C15.523 20 20 15.523 20 10C20 4.477 15.523 0 10 0Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Plus Symbol - Vertical Line */}
+    <Path
+      d="M10 5C9.447 5 9 5.447 9 6V9H6C5.447 9 5 9.447 5 10C5 10.553 5.447 11 6 11H9V14C9 14.553 9.447 15 10 15C10.553 15 11 14.553 11 14V11H14C14.553 11 15 10.553 15 10C15 9.447 14.553 9 14 9H11V6C11 5.447 10.553 5 10 5Z"
+      fill={props.plusColor ? props.plusColor : '#FFFFFF'}
+    />
+  </Svg>
+);
+
+export const PendingItemIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : '27'}
+    height={props.height ? props.height : '27'}
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    {/* Circle */}
+    <Path
+      d="M10 0C4.477 0 0 4.477 0 10C0 15.523 4.477 20 10 20C15.523 20 20 15.523 20 10C20 4.477 15.523 0 10 0Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Clock face */}
+    <Path
+      d="M10 2C5.589 2 2 5.589 2 10C2 14.411 5.589 18 10 18C14.411 18 18 14.411 18 10C18 5.589 14.411 2 10 2ZM10 16C6.691 16 4 13.309 4 10C4 6.691 6.691 4 10 4C13.309 4 16 6.691 16 10C16 13.309 13.309 16 10 16Z"
+      fill={props.clockFaceColor ? props.clockFaceColor : '#FFFFFF'}
+    />
+    {/* Clock hands */}
+    <Path
+      d="M11 7C11 6.447 10.553 6 10 6C9.447 6 9 6.447 9 7V10C9 10.265 9.105 10.52 9.293 10.707L11.293 12.707C11.488 12.902 11.744 13 12 13C12.256 13 12.512 12.902 12.707 12.707C13.098 12.316 13.098 11.684 12.707 11.293L11 9.586V7Z"
+      fill={props.clockHandsColor ? props.clockHandsColor : '#FFFFFF'}
+    />
+  </Svg>
+);
+export const CategoriesIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : '27'}
+    height={props.height ? props.height : '27'}
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    {/* Square 1 */}
+    <Path
+      d="M3 3H7V7H3V3Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Square 2 */}
+    <Path
+      d="M3 13H7V17H3V13Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Square 3 */}
+    <Path
+      d="M13 3H17V7H13V3Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Square 4 */}
+    <Path
+      d="M13 13H17V17H13V13Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+  </Svg>
+);
+export const BannerIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : '27'}
+    height={props.height ? props.height : '27'}
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    {/* Banner Shape */}
+    <Path
+      d="M3 2H17C17.553 2 18 2.447 18 3V17C18 17.553 17.553 18 17 18H3C2.447 18 2 17.553 2 17V3C2 2.447 2.447 2 3 2Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Triangle */}
+    <Path
+      d="M10 8L14 12H6L10 8Z"
+      fill={props.triangleColor ? props.triangleColor : '#FFFFFF'}
+    />
+  </Svg>
+);
+
+export const CampaignIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : '27'}
+    height={props.height ? props.height : '27'}
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    {/* Megaphone Shape */}
+    <Path
+      d="M2 7V13C2 14.1046 2.89543 15 4 15H6L11 18V2L6 5H4C2.89543 5 2 5.89543 2 7Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Sound Lines */}
+    <Path
+      d="M14 6V14M16 4V16M18 2V18"
+      stroke={props.soundLineColor ? props.soundLineColor : '#FFFFFF'}
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+export const CouponIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : '27'}
+    height={props.height ? props.height : '27'}
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    {/* Coupon Shape */}
+    <Path
+      d="M4 3C3.447 3 3 3.447 3 4V6C4.105 6 5 6.895 5 8C5 9.105 4.105 10 3 10V12C4.105 12 5 12.895 5 14C5 15.105 4.105 16 3 16V18C3 18.553 3.447 19 4 19H16C16.553 19 17 18.553 17 18V16C15.895 16 15 15.105 15 14C15 12.895 15.895 12 17 12V10C15.895 10 15 9.105 15 8C15 6.895 15.895 6 17 6V4C17 3.447 16.553 3 16 3H4Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Dotted Line */}
+    <Path
+      d="M5 5H15V15H5V5Z"
+      stroke={props.dottedLineColor ? props.dottedLineColor : '#FFFFFF'}
+      strokeDasharray="2,2"
+    />
+    {/* Percentage Symbol */}
+    <Path
+      d="M7 7C7.552 7 8 6.552 8 6C8 5.448 7.552 5 7 5C6.448 5 6 5.448 6 6C6 6.552 6.448 7 7 7Z"
+      fill={props.symbolColor ? props.symbolColor : '#FFFFFF'}
+    />
+    <Path
+      d="M13 13C13.552 13 14 12.552 14 12C14 11.448 13.552 11 13 11C12.448 11 12 11.448 12 12C12 12.552 12.448 13 13 13Z"
+      fill={props.symbolColor ? props.symbolColor : '#FFFFFF'}
+    />
+    <Path
+      d="M8 12L12 8"
+      stroke={props.symbolColor ? props.symbolColor : '#FFFFFF'}
+      strokeWidth="2"
+    />
+  </Svg>
+);
+
 
 export const SubscriptionsIcon = (props) => (
   <Svg

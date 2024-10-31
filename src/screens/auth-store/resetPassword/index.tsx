@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View , Alert} from 'react-native';
 import AuthBg from '@otherComponent/auth-store/authBg';
 import HeaderComponent from '@otherComponent/auth-store/header';
 import TextInputComponent from '@otherComponent/auth-store/textInput';
@@ -17,9 +17,10 @@ import { useValues } from '../../../../App';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { resetPassword, resetPasswordNew } from '@src/services/forgetpassword.service';
+import { resetPassword, resetPasswordNew } from '@src/services/store/forgetpassword.service';
 import Toast from 'react-native-toast-message';
 import { forgetPasswordAction } from '@src/store/redux/forgetpassword-redux';
+import { validatePassword } from '@src/utils/functions';
 interface Response {
   data: any;
   status: number;
@@ -30,6 +31,7 @@ interface Response {
 }
 type resetPswProps = NativeStackNavigationProp<RootStackParamList>;
 const ResetPassword = () => {
+   
   const dispatch = useDispatch()
   const [modalVisible, setModalVisible] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
@@ -45,6 +47,8 @@ const ResetPassword = () => {
     identity_type: forgetPasswordIdentityType,
     enteredOtp
   } = useSelector((state: RootState) => state['forgetPassword'])
+
+  // console.log({forgetPasswordEmail,enteredOtp})
 
   const [errors, setErrors] = useState({
     password: '',
@@ -64,13 +68,14 @@ const ResetPassword = () => {
     }
   };
   const resetPswCLick = async () => {
+    const isValidPassword = validatePassword(form.password)
     if (!form.password) {
       setErrors(prev => {
         return { ...prev, password: t('error.password') };
       });
-    } else if (form.password.length < 8) {
+    } else if (isValidPassword.valid === false) {
       setErrors(prev => {
-        return { ...prev, password: t('error.validPassword') };
+        return { ...prev, password: t(isValidPassword.message) };
       });
     }
     if (!form.confirmPassword) {
@@ -83,50 +88,46 @@ const ResetPassword = () => {
       });
     } else {
       setProcessingSpinner(true)
-      // setModalVisible(true);
-
-      const dataList: {
-        identity: string, identity_type: string, otp: string,
-        password: string,
-        confirm_password: string,
-        _method:string
-      } = {
-        identity: forgetPasswordIdentityType === 'phone' ? `${forgetPasswordPhoneDialCode}${forgerPasswordPhone}` : forgetPasswordEmail,
-        identity_type: forgetPasswordIdentityType,
-        otp: enteredOtp,
-        password: form.password,
-        confirm_password: form.confirmPassword,
-        _method:'PUT'
-      }
-
+      
       const formData = new FormData()
-      formData.append('identity', forgetPasswordIdentityType === 'phone' ? `${forgetPasswordPhoneDialCode}${forgerPasswordPhone}` : forgetPasswordEmail)
-      formData.append('identity_type', forgetPasswordIdentityType)
-      formData.append('otp', enteredOtp)
+      formData.append('email', forgetPasswordEmail)
+      formData.append('reset_token', enteredOtp)
       formData.append('password', form.password)
       formData.append('confirm_password', form.confirmPassword)
       formData.append('_method','PUT')
       
-      // console.log(formData)
+       
       const response: Response = await resetPasswordNew(formData)
-      // console.log(response?.data)
-      if (response?.data?.response_code === 'default_password_reset_200') {
-        setProcessingSpinner(false)
+       
+     if(response?.data?.errors){
         Toast.show({
-          type: 'success',
-          text1: 'success',
-          text2: response?.data?.message,
+          type: 'error',
+          text1: 'ERROR',
+          text2: response?.data?.errors[0]?.message,
+        });
+        setProcessingSpinner(false)
+     }else if(response?.data?.message){
+      setProcessingSpinner(false)
+        Toast.show({
+            type: 'success',
+            text1: 'success',
+            text2: response?.data?.message,
         });
         dispatch(forgetPasswordAction.resetState())
         navigate('Login');
-      } else {
-        setProcessingSpinner(false)
-        Toast.show({
-          type: 'error',
-          text1: 'error',
-          text2: response?.data?.message,
+     }else{
+      setProcessingSpinner(false)
+          Toast.show({
+            type: 'error',
+            text1: 'ERROR',
+            text2: t('newDeveloper.processFailed'),
         });
-      }
+    }
+
+
+
+
+
     }
   };
 

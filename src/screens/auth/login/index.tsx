@@ -305,7 +305,12 @@ const Login = ({ route }: any) => {
                 />
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  onPress={() => navigation.navigate('ForgotPassword')}
+                  onPress={() =>{
+                    !isServiceManLogin
+                    ? navigation.navigate('ForgotPassword')
+                    : navigation.navigate('StoreForgotPassword')
+
+                  } }
                   style={styles.forgotView}>
                   <Text style={styles.forgotText}>
                     {t('auth.forgotPassword')}

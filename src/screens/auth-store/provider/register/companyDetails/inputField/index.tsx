@@ -26,6 +26,7 @@ import { RootStackParamList } from 'src/navigation/types';
 import SelectionDropdown from '@src/otherComponent/selectionDropdown';
 import DeliveryTimePicker from '@commonComponents/deliveryTimePicker';
 import { ModuleInterface } from '@src/interfaces/store/modules.interface';
+import { Image as RNImage } from 'react-native';
 
 interface DataItem {
   label: string;
@@ -67,6 +68,8 @@ export default function InputField() {
       data: '',
     }))
   }
+
+  const moduleIdError = useSelector((state: RootState) => state['storeRegisterFieldError'].module_id)
 
   const logo = useSelector((state: RootState) => state['storeRegisterField'].logo)
   const setLogo = (value: string) => {
@@ -119,6 +122,7 @@ export default function InputField() {
     };
 
     handleImagePicker(options, (imageUri: string) => {
+       
       setCoverPhoto(imageUri);
     });
   };
@@ -142,7 +146,8 @@ export default function InputField() {
   const storeAddress = useSelector((state: RootState) => state['storeMapField'].address)
 
   const errorStoreAddress = useSelector((state: RootState) => state['storeRegisterFieldError'].store_address)
-
+  
+   
 
   const tax = useSelector((state: RootState) => state['storeRegisterField'].tax)
 
@@ -211,7 +216,7 @@ export default function InputField() {
           setModuleId(value)
         }}
         label={t('newDeveloper.Selectmodule')}
-        error={''}
+        error={moduleIdError}
       />
       {/* Company address */}
       <TouchableOpacity onPress={() => navigate('StoreAddressCurrentLocation')}>

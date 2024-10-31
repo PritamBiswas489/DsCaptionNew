@@ -52,6 +52,7 @@ export default function AuthNavigation() {
       <RootStack.Screen name="StoreCompanyDetails" component={StoreCompanyDetails} />
       <RootStack.Screen name="StoreForgotPassword" component={StoreForgotPassword} />
       <RootStack.Screen name="StoreVerifyOtp" component={StoreVerifyOtp} />
+      <RootStack.Screen name="StoreResetPassword" component={StoreResetPassword} />
     </RootStack.Navigator>
   );
 }

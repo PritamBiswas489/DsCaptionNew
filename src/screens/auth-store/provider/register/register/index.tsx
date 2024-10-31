@@ -14,10 +14,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { registrationService } from '@src/services/signup.service';
+import { registrationService } from '@src/services/store/signup.service';
 import Toast from 'react-native-toast-message';
-import { registerFieldActions } from '@src/store/redux/register-field-redux';
-import { mapFieldActions } from '@src/store/redux/map-address-redux';
+ 
+import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
+import { mapStoreFieldActions } from '@src/store/redux/store/map-address-redux';
 import { getModuleList } from '@src/services/store/settings.service';
 import { modulesAction } from '@src/store/redux/store/modules-redux';
 
@@ -117,36 +118,34 @@ const Register = ({ route }: any) => {
     config: any;
     request?: any;
   }
-
+  //process registration
   const processRegistration = async (registerData: FormData) => {
-
-    console.log("=== Process register ====")
     setIsProcessRegistering(true)
     const response: RegisterResponse = await registrationService(registerData)
-    if (response?.data?.response_code === 'default_400') {
-      response?.data?.errors.forEach((data: { "error_code": string, "message": string }, index: number) => {
-        Toast.show({
+    console.log("================ Process Store registration =================================")
+    if(response?.data?.errors){
+            Toast.show({
+               type: 'error',
+               text1: 'ERROR',
+               text2: response?.data?.errors[0]?.message,
+            });
+    }else if(response?.data?.store_id){
+      Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: response?.data?.message,
+          });
+      dispatch(storeRegisterFieldActions.resetState())
+      dispatch(mapStoreFieldActions.resetState())
+      navigation.navigate('Login')
+    }else{
+      Toast.show({
           type: 'error',
           text1: 'ERROR',
-          text2: data?.message,
-        });
-      })
-    } else if (response?.data?.response_code === 'provider_store_200') {
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: response?.data?.message,
-      });
-      dispatch(registerFieldActions.resetState())
-      dispatch(mapFieldActions.resetState())
-      navigation.navigate('Login')
-    } else {
-      Toast.show({
-        type: 'error',
-        text1: 'ERROR',
-        text2: t('newDeveloper.processFailed'),
+          text2: t('newDeveloper.processFailed'),
       });
     }
+
     setIsProcessRegistering(false)
   }
 

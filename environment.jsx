@@ -25,29 +25,29 @@ export const env = {
     },
   },
 };
-
+//https://dorkarmall.aqualeafitsol.com
 export const envStore = {
   type: 'dev', //prod staging dev
   appUrls: {
     dev: {
-      apiUrl: 'https://dorkarmall.aqualeafitsol.com',
+      apiUrl: 'https://ai.dorkarmall.in',
     },
     staging: {
-      apiUrl: 'https://dorkarmall.aqualeafitsol.com',
+      apiUrl: 'https://ai.dorkarmall.in',
     },
     prod: {
-      apiUrl: 'https://dorkarmall.aqualeafitsol.com',
+      apiUrl: 'https://ai.dorkarmall.in',
     },
   },
   mediaUrls: {
     dev: {
-      apiUrl: 'https://dorkarmall.aqualeafitsol.com/storage/app/public',
+      apiUrl: 'https://ai.dorkarmall.in/storage/app/public',
     },
     staging: {
-      apiUrl: 'https://dorkarmall.aqualeafitsol.com/storage/app/public',
+      apiUrl: 'https://ai.dorkarmall.in/storage/app/public',
     },
     prod: {
-      apiUrl: 'https://dorkarmall.aqualeafitsol.com/storage/app/public',
+      apiUrl: 'https://ai.dorkarmall.in/storage/app/public',
     },
   },
 }

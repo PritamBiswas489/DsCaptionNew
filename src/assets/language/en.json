@@ -1234,14 +1234,26 @@
             "Categories":"Categories",
             "Banner":"Banner",
             "Campaign":"Campaign",
-            "Coupon":"Coupon"
+            "Coupon":"Coupon",
+            "errorStoreLogo":"Upload store logo",
+            "errorCoverLogo":"Upload cover photo",
+            "errorStoreName":"Enter store name",
+            "errorModuleId":"Select module",
+            "errorAddress":"Select your service location",
+            "errorTax":"Enter tax percentage",
+            "errorDeliveryTime":"Invalid delivery time",
+            "passwordErrorOne":"Password must be at least 8 characters long.",
+            "passwordErrorTwo":"Password must include both uppercase and lowercase letters.",
+            "passwordErrorThree":"Password must include at least one letter." ,
+            "passwordErrorFour":"Password must include at least one number.",
+            "passwordErrorFive":"Password must include at least one symbol.",
+            "passwordErrorSix":"Password is too common and has been compromised.",
+            "passwordSuccess":"Password is valid."   ,
+            "errorStoreOwnerName":"Enter your name",
+            "errorStorePhoneNumber" : "Enter valid phone number",
+            "errorStoreEmail":"Enter valid store email",
+            "OtpMinLengthErrorForgetPassword":"Minimum otp length is 4"
             
-
-
-             
-             
-
-             
         }
     }
 }

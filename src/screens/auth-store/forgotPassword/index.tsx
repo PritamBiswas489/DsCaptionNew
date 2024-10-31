@@ -18,7 +18,7 @@ import { RootState, AppDispatch } from '@src/store';
 import { forgetPasswordAction } from '@src/store/redux/forgetpassword-redux';
 import { Email } from '@assets/icons/auth/email';
 import Toast from 'react-native-toast-message';
-import { getForgetpasswordOtp } from '@src/services/forgetpassword.service';
+import { getForgetpasswordOtp } from '@src/services/store/forgetpassword.service';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 type forgotPswProps = NativeStackNavigationProp<RootStackParamList>;
@@ -31,7 +31,8 @@ interface Response {
   request?: any;
 }
 
-const ForgotPassword = () => {
+const ForgotPasswordStore = () => {
+   
   const dispatch = useDispatch()
   const { navigate } = useNavigation<forgotPswProps>();
   const [errors, setErrors] = useState({ phoneNo: '' });
@@ -40,7 +41,7 @@ const ForgotPassword = () => {
   const [selectOptionModal, setOptionModal] = useState<boolean>(false);
   const [processingSpinner,setprocessingSpinner] = useState<boolean>(false);
 
-    const { forget_password_verification_method } = useSelector((state: RootState) => state['providerAppConfig'])
+    const forget_password_verification_method:string = 'email'
    
   //  const forget_password_verification_method:string = 'phone' 
  
@@ -75,6 +76,10 @@ const ForgotPassword = () => {
     dispatch(forgetPasswordAction.setData({ field: 'identity_type', data: forget_password_verification_method }))
   }, [forget_password_verification_method])
 
+  useEffect(()=>{
+    setEmailAddress('fashion1@gmail.com')
+  },[])
+
   //get otp function
   const onOtpClick = async () => {
      
@@ -106,30 +111,33 @@ const ForgotPassword = () => {
       setprocessingSpinner(true)
       //send otp to the user phone or email address
        
-      const formData:{identity:string,identity_type:string} = {
-        identity: forgetPasswordIdentityType === 'phone' ? `${forgetPasswordPhoneDialCode}${forgerPasswordPhone}` : forgetPasswordEmail,
-        identity_type:forgetPasswordIdentityType
+      const formData:{email:string} = {
+        email:forgetPasswordEmail
       }
       const response:Response = await getForgetpasswordOtp(formData)
-      console.log(response?.data)
-      if(response?.data?.response_code === 'default_200'){
-        setprocessingSpinner(false)
-        Toast.show({
-          type: 'success',
-          text1: 'success',
-          text2: response?.data?.message,
-        });
-        // console.log("========= otp number ============")
-        // console.log(response?.data?.content?.otp)
-        dispatch(forgetPasswordAction.setData({ field: 'otp', data: response?.data?.content?.otp }))
-        navigate('VerifyOtp');
+       
+      if(response?.data?.errors){
+          Toast.show({
+            type: 'error',
+            text1: 'ERROR',
+            text2: response?.data?.errors[0]?.message,
+          });
+          setprocessingSpinner(false)
+      }else if(response?.data?.message){
+          setprocessingSpinner(false)
+          Toast.show({
+              type: 'success',
+              text1: 'success',
+              text2: response?.data?.message,
+          });
+          navigate('StoreVerifyOtp');
       }else{
-        setprocessingSpinner(false)
-        Toast.show({
-          type: 'error',
-          text1: 'error',
-          text2: response?.data?.message,
-        });
+            setprocessingSpinner(false)
+            Toast.show({
+              type: 'error',
+              text1: 'ERROR',
+              text2: t('newDeveloper.processFailed'),
+          });
       }
     }
   };
@@ -183,7 +191,7 @@ const ForgotPassword = () => {
                     }
                   />
                 }
-                value={forgetPasswordEmail}
+                value={forgetPasswordEmail }
                 onChangeText={value => {
                     setEmailAddress(value)
                 }}
@@ -220,4 +228,4 @@ const ForgotPassword = () => {
   );
 }
 
-export default ForgotPassword;
+export default ForgotPasswordStore;

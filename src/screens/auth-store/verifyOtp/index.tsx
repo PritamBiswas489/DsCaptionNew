@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import AuthBg from '@otherComponent/auth-store/authBg';
 import HeaderComponent from '@otherComponent/auth-store/header';
 import OTPTextInput from 'react-native-otp-textinput';
@@ -14,27 +14,43 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Toast from 'react-native-toast-message';
 import { forgetPasswordAction } from '@src/store/redux/forgetpassword-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { verifyToken } from '@src/services/store/forgetpassword.service';
 
 type otpProps = NativeStackNavigationProp<RootStackParamList>;
-type otpRouteProps = RouteProp<RootStackParamList, 'VerifyOtp'>;
+interface Response {
+  data: any;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+  request?: any;
+}
+
 
 const VerifyOtp=()=> {
+ 
   const inputCount = 4;
   const dispatch = useDispatch()
-  const {navigate} = useNavigation<otpProps>();
-  const {params} = useRoute<otpRouteProps>();
+  const {navigate} = useNavigation<otpProps>(); 
   const {isDark,t} = useValues();
   const [enteredOtp,setEnteredOtp] = useState('')
-  
+  const [processingSpinner,setprocessingSpinner] = useState<boolean>(false);
 
   const {
-    otp:responseOtp,
+    email: forgetPasswordEmail,
   } = useSelector((state: RootState) => state['forgetPassword'])
+  
+
+  // const {
+  //   otp:responseOtp,
+  // } = useSelector((state: RootState) => state['forgetPassword'])
 
 
   // console.log({responseOtp})
 
-  const onOtpClick = () => {
+  const onOtpClick = async () => {
+    setprocessingSpinner(true)
     if(enteredOtp.length  < 4){
       Toast.show({
         type: 'error',
@@ -43,18 +59,39 @@ const VerifyOtp=()=> {
       });
       return
     }
-     
-    if(responseOtp.toString()!==enteredOtp.toString()){
-      Toast.show({
-        type: 'error',
-        text1: 'error',
-        text2: t('newDeveloper.OtpDoesnotMatch'),
-      });
-      return
-    }
-    dispatch(forgetPasswordAction.setData({ field: 'enteredOtp', data: enteredOtp }))
+    
+    const response:Response = await verifyToken(
+      {
+        email:forgetPasswordEmail,
+        reset_token:enteredOtp
+      })
 
-    navigate('ResetPassword');
+    if(response?.data?.errors){
+          Toast.show({
+              type: 'error',
+              text1: 'ERROR',
+              text2: response?.data?.errors[0]?.message,
+          });
+          setprocessingSpinner(false)
+    }else if(response?.data?.message){
+          setprocessingSpinner(false)
+          Toast.show({
+                type: 'success',
+                text1: 'success',
+                text2: response?.data?.message,
+          });
+          dispatch(forgetPasswordAction.setData({ field: 'enteredOtp', data: enteredOtp }))
+          navigate('StoreResetPassword');
+    }else{
+          setprocessingSpinner(false)
+          Toast.show({
+                type: 'error',
+                text1: 'ERROR',
+                text2: t('newDeveloper.processFailed'),
+          });
+      }
+     
+     
   };
 
   return (
@@ -90,11 +127,16 @@ const VerifyOtp=()=> {
               label={t('auth.verifySignIn')}
               onPress={onOtpClick}
               authText={'auth.resendCode'}
-              gotoScreen={() => navigate('ForgotPassword')}
+              gotoScreen={() => navigate('StoreForgotPassword')}
             />
           </View>
         }
       />
+       <Spinner
+          visible={processingSpinner}
+          textContent={'Processing.....'}
+          textStyle={{ color: '#FFF' }}
+        />
     </View>
   );
 }

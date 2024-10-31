@@ -11,7 +11,11 @@ API_PROCESS.interceptors.request.use(async (config) => {
 	const fullRequestUrl = `${config.baseURL}${config.url}`;
 	config.headers = {
 		'Content-Type': 'multipart/form-data',
+         
+         
+         
 	};
+    
 	console.log('Request URL:', fullRequestUrl);
 	return config; 
 });

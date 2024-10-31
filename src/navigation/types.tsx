@@ -183,4 +183,5 @@ export type RootStackParamList = {
   StoreVerifyOtp:undefined;
   StoreAddressCurrentLocation:undefined;
   MoreMenusVendor:undefined;
+  StoreResetPassword:undefined;
 };

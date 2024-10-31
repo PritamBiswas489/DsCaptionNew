@@ -14,6 +14,7 @@ import { RootState, AppDispatch } from '@src/store';
 import {useValues} from '../../../../App';
 import { storeRegisterFieldActions } from '@src/store/redux/store/register-field-redux';
 import { storeRegisterFieldErrorActions } from '@src/store/redux/store/register-error-redux';
+import { validatePassword } from '@src/utils/functions'; 
  
  
 
@@ -131,58 +132,143 @@ export function ProgressStepsSlider({
       data: value,
     }))
   }
-
-  
-   
-  
-  
-   
-
+  //store map field
+  const address = useSelector((state: RootState)=>state['storeMapField'].address)
+  const zone_id = useSelector((state: RootState)=>state['storeMapField'].zone_id)
+  const latitude = useSelector((state: RootState)=>state['storeMapField'].latitude)
+  const longitude = useSelector((state: RootState)=>state['storeMapField'].longitude)
+   //set error store address
+  const set_error_store_address = (value:string)=>{
+    dispatch(storeRegisterFieldErrorActions.setData({
+      field: 'store_address',
+      data: value,
+    }))
+  }
  
 
- 
-   
 
- 
-
- 
-
- 
-
- 
-  
-
-  
-   
-
-  
-
-   
-
-   
-
-   
-
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     const phoneRegex = /^(\+1|1)?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
     if (currentStep <= stepCount) {
       if(currentStep === 1){
+
+        let errorFirstStep = false;
+      
+        if(logo.trim() === ''){
+            set_error_logo(t('newDeveloper.errorStoreLogo'))
+            errorFirstStep =  true;
+        } 
+        if(cover_photo.trim() === ''){
+          set_error_cover_photo(t('newDeveloper.errorCoverLogo'))
+          errorFirstStep =  true;
+        } 
+        if(store_name.trim() === ''){
+          set_error_store_name(t('newDeveloper.errorStoreName'))
+          errorFirstStep =  true;
+        }
+       
+        if(module_id.trim() === ''){
+          set_error_module_id(t('newDeveloper.errorModuleId'))
+          errorFirstStep =  true;
+        }
+
+        if(address.trim()===''){
+          set_error_store_address(t('newDeveloper.errorAddress'))
+          errorFirstStep =  true;
+        }
+
+        if(tax === ''){
+          set_error_tax(t('newDeveloper.errorTax'))
+          errorFirstStep =  true;
+        }
+        if(minimum_delivery_time === '' || maximum_delivery_time === '' || delivery_time_type===''){
+            set_error_delivery_time(t('newDeveloper.errorDeliveryTime'))
+            errorFirstStep =  true;
+        }
+
+        if(errorFirstStep){
+          return
+        }
+        dispatch(storeRegisterFieldErrorActions.resetState())
          
-          setCurrentStep(currentStep + 1);
-          Animated.timing(progress, {
+        setCurrentStep(currentStep + 1);
+        Animated.timing(progress, {
             toValue: currentStep / stepCount,
             duration: 200,
             useNativeDriver: false,
-          }).start();
+        }).start();
       
-    } else if (currentStep === stepCount) {
-         console.log({currentStep,stepCount})
-          Alert.alert("Last step to finish")
- 
-      }
+    }  else if (currentStep === stepCount) {
+         let errorFinishStep = false
+         
+         if(name.trim()===''){
+           set_error_name(t('newDeveloper.errorStoreOwnerName'))
+           errorFinishStep =  true;
+         }
 
+         if (!phoneRegex.test(phone)) {
+              set_error_phone(t('newDeveloper.errorStorePhoneNumber'))
+              errorFinishStep =  true;
+          }
+       
+          if (!emailRegex.test(email)) {
+              set_error_email(t('newDeveloper.errorStoreEmail'))
+              errorFinishStep =  true;
+          }
+
+          //password validation
+          const validPassword = validatePassword(password)
+
+          if(validPassword.valid === false){
+              set_error_password(t(validPassword.message))
+              errorFinishStep =  true;
+          }
+
+          if(errorFinishStep){
+            return
+          }
+          
+          
+          const formData = new FormData()
+          const nameSplit = name.split(' ')
+          const firstName = nameSplit?.[0]
+          const lastName = nameSplit?.[1]
+
+          formData.append('f_name',firstName)
+          formData.append('l_name',lastName)
+          formData.append('latitude',latitude)
+          formData.append('longitude',longitude)
+          formData.append('email',email)
+          formData.append('phone',phone)
+          formData.append('minimum_delivery_time',minimum_delivery_time)
+          formData.append('maximum_delivery_time',maximum_delivery_time)
+          formData.append('delivery_time_type',delivery_time_type)
+          formData.append('password',password)
+          formData.append('zone_id',zone_id)
+          formData.append('module_id',module_id)
+
+          formData.append('logo', {
+            uri:  logo,
+            name: '1000017942.jpg', 
+            type: 'image/jpeg',
+          });
+    
+          formData.append('cover_photo', {
+            uri :  cover_photo,
+            name: 'cover_image.jpg', 
+            type: 'image/jpeg',
+          });
+          formData.append('tax',tax)
+          formData.append('translations',
+            JSON.stringify([
+              {key:'storeName',value:store_name},
+              {key:'storeAddress',value:address}]))
+          
+          processRegistration(formData)
+ 
+    }
        
     }
   };

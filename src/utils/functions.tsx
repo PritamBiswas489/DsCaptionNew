@@ -44,6 +44,7 @@ export const handleImagePicker = (
     } else if (response.errorCode) {
       console.log('Image picker error: ', response.errorMessage);
     } else {
+      console.log(response?.assets?.[0])
       const source: string | undefined =
         response.assets && response.assets.length > 0
           ? response.assets[0].uri
@@ -87,4 +88,49 @@ export const checkLoggedInUserType =  async()=>{
     return 'Seller'
  }
   return null
+}
+
+
+export function validatePassword(password:string) {
+  // Check for minimum length
+  if (password.length < 8) {
+    return { valid: false, message: "newDeveloper.passwordErrorOne" };
+  }
+
+  // Check for mixed case
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  if (!hasUpperCase || !hasLowerCase) {
+    return { valid: false, message: "newDeveloper.passwordErrorTwo" };
+  }
+
+  // Check for letters
+  const hasLetter = /[a-zA-Z]/.test(password);
+  if (!hasLetter) {
+    return { valid: false, message: "newDeveloper.passwordErrorThree" };
+  }
+
+  // Check for numbers
+  const hasNumber = /[0-9]/.test(password);
+  if (!hasNumber) {
+    return { valid: false, message: "newDeveloper.passwordErrorFour" };
+  }
+
+  // Check for symbols
+  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  if (!hasSymbol) {
+    return { valid: false, message: "newDeveloper.passwordErrorFive" };
+  }
+
+  // Check against a list of compromised passwords
+  const compromisedPasswords = [
+    "123456", "password", "123456789", "12345678", "12345", "1234567",
+    "qwerty", "111111", "1234567890", "123123", "abc123", "password1",
+    "1234", "iloveyou", "1q2w3e4r", "admin", "letmein"
+  ];
+  if (compromisedPasswords.includes(password)) {
+    return { valid: false, message: "newDeveloper.passwordErrorSix" };
+  }
+
+  return { valid: true, message: "newDeveloper.passwordSuccess" };
 }

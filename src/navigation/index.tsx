@@ -86,7 +86,8 @@ import AdjustBalance from '@src/screens/dashboard/home/AdjustBalance';
 import RazorPay from '@src/screens/dashboard/home/RazorPay';
 import PaymentList from '@src/screens/dashboard/home/PaymentList';
 import { MoreMenusVendor } from '@src/screens/dashboard/home/MoreMenusVendor';
-
+import { SettingVendor } from '@src/screens/setting/settingVendor/setting';
+import { VendorProfileEdit } from '@src/screens/setting/settingVendor/profileSetting';
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -362,6 +363,15 @@ export default function MyStack() {
                  component={MoreMenusVendor}
             />
 
+           <RootStack.Screen
+              name="VendorProfileSettings"
+              component={SettingVendor}
+            />
+
+          <RootStack.Screen
+              name="VendorProfileEdit"
+              component={VendorProfileEdit}
+            />
 
           </>
         )}

@@ -31,6 +31,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <ProfileIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuProfile', 
+    goToScreen:'VendorProfileSettings'
   },
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,

@@ -18,7 +18,7 @@ import { RootState, AppDispatch } from '@src/store';
 import {Alert} from 'react-native';
 import { deleteAuthTokens } from '@src/config/auth';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
-import { deleteProviderOwnAccount } from '@src/services/auth.service';
+import { deleteProviderOwnAccount } from '@src/services/store/auth.service';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { logoutClearReduxState } from '@src/services/logout.service';
 import PromotionalCostModal from '@src/commonComponents/promotionalCostModal';
@@ -33,8 +33,7 @@ interface Response {
 }
 
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
-export function Setting() {
-  
+export function SettingVendor() {
   const {isDark, t} = useValues();
   const {navigate, replace} = useNavigation<routeProps>();
   const [showDeleteModal, setModalVisible] = useState(false);
@@ -45,22 +44,21 @@ export function Setting() {
   const [processingSpinner,setProcessingSpinner] =  useState(false)
   const dispatch = useDispatch()
 
-  const handleDeleteProviderOwnAccount = async () =>{
+  //delete vendor own account
+  const handleDeleteVendorOwnAccount = async () =>{
     setProcessingSpinner(true)
     const response:Response = await deleteProviderOwnAccount()
-    console.log(response?.data) //default_delete_200
-    if(response?.data?.response_code === 'default_delete_200'){
+    if (response?.data?.errors) { //showing errors
+        Alert.alert(response?.data?.errors[0]?.message)
+        setProcessingSpinner(false)
+        setModalVisible(false)
+    } else{ //go to login page
         const response = await deleteAuthTokens(); 
         setProcessingSpinner(false)
         setModalVisible(false)
         logoutClearReduxState(dispatch)
         replace('AuthNavigation');
-    }else{
-      setProcessingSpinner(false)
-        setModalVisible(false)
-      Alert.alert('Failed to remove')
     }
-    
   } 
   return (
     <ScrollView
@@ -89,7 +87,7 @@ export function Setting() {
         title="profileSetting.deleteAccount"
         content="profileSetting.deleteConfirmation"
         btnTitle="profileSetting.delete"
-        gotoScreen={handleDeleteProviderOwnAccount}
+        gotoScreen={handleDeleteVendorOwnAccount}
         showText={t('wallet.cancel')}
         onShowText={() => setModalVisible(false)}
       />

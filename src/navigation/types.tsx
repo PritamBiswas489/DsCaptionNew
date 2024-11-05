@@ -184,4 +184,6 @@ export type RootStackParamList = {
   StoreAddressCurrentLocation:undefined;
   MoreMenusVendor:undefined;
   StoreResetPassword:undefined;
+  VendorProfileSettings:undefined;
+  VendorProfileEdit:undefined;
 };

@@ -19,7 +19,7 @@ export const getAuthUserService =  async (): Promise<Response> => {
 
 export const deleteProviderOwnAccount = async(): Promise<Response> => {
 	try {
-		const response = await api.delete('/provider/delete');
+		const response = await api.delete('/vendor/remove-account');
 		return response;
 	} catch (error:any) {
 		return error.response;

@@ -58,6 +58,8 @@ import modulesSlice from "./redux/store/modules-redux";
 import mapStoreFieldSlice from "./redux/store/map-address-redux";
 import storeConfigAppSlice from "./redux/store/store-config-redux";
 import storeProfileDataSlice from "./redux/store/store-profile-redux";
+import vendorProfileUpdateFieldSlice from "./redux/store/profile-field-redux";
+import vendorProfileUpdateErrorFieldSlice from "./redux/store/profile-error-redux";
 
 const store = configureStore({
     reducer: { 
@@ -120,7 +122,9 @@ const store = configureStore({
       storeModules:modulesSlice.reducer,
       storeMapField:mapStoreFieldSlice.reducer,
       storeConfig:storeConfigAppSlice.reducer, //store config
-      storeProfileData:storeProfileDataSlice.reducer //store profile data
+      storeProfileData:storeProfileDataSlice.reducer, //store profile data
+      vendorProfileUpdateField:vendorProfileUpdateFieldSlice.reducer,
+      vendorProfileUpdateErrorField:vendorProfileUpdateErrorFieldSlice.reducer,
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

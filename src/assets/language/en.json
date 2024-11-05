@@ -1252,7 +1252,13 @@
             "errorStoreOwnerName":"Enter your name",
             "errorStorePhoneNumber" : "Enter valid phone number",
             "errorStoreEmail":"Enter valid store email",
-            "OtpMinLengthErrorForgetPassword":"Minimum otp length is 4"
+            "OtpMinLengthErrorForgetPassword":"Minimum otp length is 4",
+            "days":"days",
+            "SinceJoining":"Since joining",
+            "TotalOrder":"Total order",
+            "firstName":"First name",
+            "lastName":"Last name"
+             
             
         }
     }

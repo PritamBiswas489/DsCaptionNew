@@ -42,6 +42,7 @@ import { Platform } from 'react-native';
 import { saveFcmTokenProcess } from '@src/services/profile.service';
 import { getAuthUserService } from '@src/services/auth.service';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
+ 
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -138,7 +139,8 @@ export function Home() {
   }
  
   //==== save fcm token ======//
-  const saveFcmTokenData = (fcmToken:string) =>{
+  const saveFcmTokenData = async (fcmToken:string) =>{
+     
      const formData = new FormData()
      formData.append('fcm_token',fcmToken)
      saveFcmTokenProcess(formData)

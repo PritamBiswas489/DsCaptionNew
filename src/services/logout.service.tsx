@@ -46,6 +46,10 @@ import { mapStoreFieldActions } from '@src/store/redux/store/map-address-redux';
 import { storeConfigAppActions } from '@src/store/redux/store/store-config-redux';
 import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
 
+import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux';
+import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
+import { vendorNotificationsActions } from '@src/store/redux/store/notifications-data-redux';
+
 //logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(serviceProviderAccountDataActions.resetState())
@@ -94,4 +98,9 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(mapStoreFieldActions.resetState())
       dispatch(storeConfigAppActions.resetState())
       dispatch(storeProfileDataActions.resetState())
+
+       
+      dispatch(vendorCategoriesActions.resetState())
+      dispatch(vendorSubCategoriesActions.resetState())
+      dispatch(vendorNotificationsActions.resetState())
 }

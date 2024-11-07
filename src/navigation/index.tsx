@@ -62,7 +62,8 @@ import {
   CoverLocationList,
   MoreMenus,
   Setting,
-  StoreAddressCurrentLocation
+  StoreAddressCurrentLocation,
+  SubCategories
 
 
 } from '../screens';
@@ -372,6 +373,14 @@ export default function MyStack() {
               name="VendorProfileEdit"
               component={VendorProfileEdit}
             />
+
+<RootStack.Screen
+              name="SubCategories"
+              component={SubCategories}
+            />
+
+
+
 
           </>
         )}

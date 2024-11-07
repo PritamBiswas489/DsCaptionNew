@@ -41,10 +41,10 @@ export const categoriesData: Array<HomeCategoryType> = [
     icon: <PendingItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.PendingItem', 
   },
- 
   { 
     icon: <CategoriesIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Categories', 
+    goToScreen:'Categories'
   },
   { 
     icon: <BannerIcon height={'36'} width={'36'} />,

@@ -4,9 +4,12 @@ import { getAuthTokens, setAuthTokens } from './auth';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { userAccountDataActions } from '../store/redux/service-provider-account-data.redux';
+import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
 import { getStoreAppUrl } from './utility';
 import { getValue } from '@src/utils/localstorage';
+import { clearValue } from '@src/utils/localstorage';
+import { deleteAuthTokens } from '@src/config/auth';
+import { logoutClearReduxState } from '@src/services/logout.service';
 
 const app_url =  getStoreAppUrl();
 console.log(app_url + '/api/v1');
@@ -19,10 +22,7 @@ const navigateToLogin = () => {
 	const navigation = useNavigation();
 	navigation.navigate('Login'); // Replace 'Login' with the actual name of your login screen
   };
-const resetStateData = ()=>{
-	const dispatch = useDispatch();
-	dispatch(userAccountDataActions.resetState());
-}
+ 
 
 api.interceptors.request.use(async (config) => {
 	const {accessToken, refreshToken} = await getAuthTokens();
@@ -58,13 +58,14 @@ api.interceptors.response.use(async (res) => {
     if (accesstoken && refreshtoken) {
         await setAuthTokens(accesstoken, refreshtoken);
     }
-    if (res?.data?.status === 401) {
-        resetStateData();
-    }
+     
+   
+     
     return res;
 }, error => {
     console.error('Response Error:', error);
     if (error.response) {
+        
         // The request was made and the server responded with a status code outside the range of 2xx
         console.error('Response Data:', error.response.data);
         console.error('Response Status:', error.response.status);

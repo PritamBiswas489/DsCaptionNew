@@ -1,1 +1,2 @@
-export * from './categories';
+export * from './categoriesVendors'
+export * from './subCategoriesVendors'

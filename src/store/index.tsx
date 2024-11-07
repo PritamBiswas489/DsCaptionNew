@@ -60,6 +60,9 @@ import storeConfigAppSlice from "./redux/store/store-config-redux";
 import storeProfileDataSlice from "./redux/store/store-profile-redux";
 import vendorProfileUpdateFieldSlice from "./redux/store/profile-field-redux";
 import vendorProfileUpdateErrorFieldSlice from "./redux/store/profile-error-redux";
+import vendorCategoriesSlice from "./redux/store/categories.redux";
+import vendorSubCategoriesSlice from "./redux/store/subcategories-redux";
+import vendorNotificationListSlice from "./redux/store/notifications-data-redux";
 
 const store = configureStore({
     reducer: { 
@@ -125,6 +128,9 @@ const store = configureStore({
       storeProfileData:storeProfileDataSlice.reducer, //store profile data
       vendorProfileUpdateField:vendorProfileUpdateFieldSlice.reducer,
       vendorProfileUpdateErrorField:vendorProfileUpdateErrorFieldSlice.reducer,
+      vendorCategories:vendorCategoriesSlice.reducer,
+      vendorSubCategories:vendorSubCategoriesSlice.reducer,
+      vendorNotificationList:vendorNotificationListSlice.reducer
       //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

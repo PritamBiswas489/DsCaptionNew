@@ -19,6 +19,10 @@ import { vendorProfileUpdateErrorFieldActions } from '@src/store/redux/store/pro
 import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
 import { getAuthUserService as storeAuthService } from '@src/services/store/auth.service';
 import { validatePassword } from '@src/utils/functions';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from 'src/navigation/types';
+ import { authAuthorizeRedirect } from '@src/utils/functions';
 
 interface Response {
   data: any;
@@ -29,7 +33,7 @@ interface Response {
   request?: any;
 }
 
-
+type loginProps = NativeStackNavigationProp<RootStackParamList>;
 export function VendorProfileEdit() {
   const dispatch = useDispatch()
   const [showModal, setShowModal] = useState(false);
@@ -38,6 +42,9 @@ export function VendorProfileEdit() {
   const [isUpdateLoader, setUpdateLoader] = useState<boolean>(false);
   
   const updatedProfileData = useSelector((state: RootState)=>state['vendorProfileUpdateField'])
+   
+  const navigation = useNavigation<loginProps>();
+
    
 
 
@@ -159,12 +166,14 @@ export function VendorProfileEdit() {
 
         if(response?.data?.message){
           setModalVisible(true)
-          //update store profile redux state
           const responseuser = await storeAuthService()
           if (responseuser?.data?.id) {
                dispatch(storeProfileDataActions.setData(responseuser?.data))
+          }else if (response?.data?.errors) {
+             await authAuthorizeRedirect(response,navigation)
           }
         }else if (response?.data?.errors) {
+          await authAuthorizeRedirect(response,navigation)
           Toast.show({
             type: 'error',
             text1: 'ERROR',

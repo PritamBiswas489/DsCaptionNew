@@ -7,6 +7,9 @@ import {
   ImageLibraryOptions,
 } from 'react-native-image-picker';
 
+ 
+import { deleteAuthTokens } from '@src/config/auth';
+
 export const requestLocationPermission = async () => {
   try {
     const granted = await PermissionsAndroid.request(
@@ -133,4 +136,13 @@ export function validatePassword(password:string) {
   }
 
   return { valid: true, message: "newDeveloper.passwordSuccess" };
+}
+
+
+export const authAuthorizeRedirect  = async (response:any,navigation:any) =>{
+  if(response?.data?.errors[0]?.code === 'auth-001'){
+    clearValue('loggedInUserType')
+    await deleteAuthTokens();
+    navigation.replace('AuthNavigation');
+  }
 }

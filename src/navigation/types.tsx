@@ -186,4 +186,5 @@ export type RootStackParamList = {
   StoreResetPassword:undefined;
   VendorProfileSettings:undefined;
   VendorProfileEdit:undefined;
+  SubCategories: {id:string,categoryname:string};
 };

@@ -18,7 +18,7 @@ export default function ItemsList({isGrid}: {isGrid: boolean}) {
   const {navigate} = useNavigation<ItemsProps>();
   const {isDark, t} = useValues();
   const {
-    data: categoriesData,
+    selected: categoriesData,
   } = useSelector(
     (state: RootState) => state['vendorSubCategories']
   );
@@ -28,7 +28,7 @@ export default function ItemsList({isGrid}: {isGrid: boolean}) {
       <FlatList
         showsVerticalScrollIndicator={!isGrid && false}
         contentContainerStyle={!isGrid && styles.containerStyle}
-        data={categoriesData}
+        data={categoriesData.subcategories}
         key={isGrid ? 'h' : 'v'}
         numColumns={isGrid ? 4 : 0}
         renderItem={({item}) =>

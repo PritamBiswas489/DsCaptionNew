@@ -1,22 +1,16 @@
 // Notifications data
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { NotificationInterface } from "@src/interfaces/store/notifications.interface";
+import { NotificationsInterface } from "@src/interfaces/store/notifications.interface";
 
 //notification data interface
 interface notificationDataInterface {
-    data: NotificationInterface[],
-    offsetPageUrl: string;
-    limit: number;
+    data: NotificationsInterface[],
     isFirstTimeLoading: boolean;
-    isNoMoreData: boolean;
 }
 //initial state
 const initialState: notificationDataInterface = {
-    data: [],
-    limit :10,
-    offsetPageUrl: '?offset=1',
+    data: [],    
     isFirstTimeLoading: true,
-    isNoMoreData: true,
 };
 interface SetDataPayload {
     field: keyof notificationDataInterface;
@@ -35,7 +29,7 @@ const vendorNotificationListSlice = createSlice({
         resetState(state: notificationDataInterface) {
             return initialState;
         },  
-        addNotificationsArr(state, action: PayloadAction<NotificationInterface[]>) {
+        addNotificationsArr(state, action: PayloadAction<NotificationsInterface[]>) {
             state.data.push(...action.payload);
         },
     },

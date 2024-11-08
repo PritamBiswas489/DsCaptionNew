@@ -1257,8 +1257,18 @@
             "SinceJoining":"Since joining",
             "TotalOrder":"Total order",
             "firstName":"First name",
-            "lastName":"Last name"
-             
+            "lastName":"Last name",
+            "AddNewBanner":"Add new banner",
+            "bannerTitle":"Banner title",
+            "bannerUrl":"Banner url",
+            "uploadBannerImage":"Upload banner image",
+            "AddBanner":"Create banner",
+            "AddNewItem":"Add new item",
+            "CreateItem":"Create item",
+            "itemTitle":"Item title",
+            "itemDescription":"Item description"
+
+
             
         }
     }

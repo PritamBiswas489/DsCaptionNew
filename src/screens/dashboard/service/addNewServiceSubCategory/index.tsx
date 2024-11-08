@@ -30,6 +30,7 @@ interface Response {
 }
 
 export function AddNewServiceSubCategory() {
+   
   const [subcategoryImage, setSubcategoryImage] = useState<string>('')
   const [errorSubCategoryImage, setErrorSubCategoryImage] = useState<string>('')
   const [categoryName, setCategoryName] = useState<string>('')

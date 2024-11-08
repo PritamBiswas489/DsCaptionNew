@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
  import { authAuthorizeRedirect } from '@src/utils/functions';
  import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux';
+ import Spinner from 'react-native-loading-spinner-overlay';
 
 interface Response {
   data: any;
@@ -29,7 +30,7 @@ type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function Categories() {
   const [isGrid, setIsGrid] = useState(false);
   const {isDark} = useValues();
-  const [showSearchBar, setSearchBar] = useState<boolean>();
+  const [showSpinnerLoader,setSpinnerLoader] =  useState(false); 
   const navigation = useNavigation<ItemsProps>();
   const dispatch = useDispatch()
   const {
@@ -39,12 +40,14 @@ export function Categories() {
   );
 
   const loadCategories = async () =>{
+    setSpinnerLoader(true)
     const response: Response = await getVendorCategories();
     if (response?.data?.errors) {
       await authAuthorizeRedirect(response,navigation)
     }
     dispatch(vendorCategoriesActions.setData({field:'data',data:response?.data}))
     dispatch(vendorCategoriesActions.setData({field:'isFirstTimeLoading',data:false}))
+    setSpinnerLoader(false)
   }
 
   useEffect(()=>{
@@ -65,6 +68,12 @@ export function Categories() {
         searchContainerStyle={styles.searchContainer}
       />
       <ItemsList isGrid={isGrid} />
+
+      <Spinner
+          visible={showSpinnerLoader}
+          textContent={'Processing.....'}
+          textStyle={{ color: '#FFF' }}
+        />
     </View>
   );
 }

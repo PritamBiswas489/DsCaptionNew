@@ -49,6 +49,7 @@ import { storeProfileDataActions } from '@src/store/redux/store/store-profile-re
 import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux';
 import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
 import { vendorNotificationsActions } from '@src/store/redux/store/notifications-data-redux';
+import { vendorBannerActions } from '@src/store/redux/store/banner-redux';
 
 //logout clear redux function
 export function  logoutClearReduxState(dispatch:AppDispatch){
@@ -99,8 +100,8 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(storeConfigAppActions.resetState())
       dispatch(storeProfileDataActions.resetState())
 
-       
       dispatch(vendorCategoriesActions.resetState())
       dispatch(vendorSubCategoriesActions.resetState())
       dispatch(vendorNotificationsActions.resetState())
+      dispatch(vendorBannerActions.resetState())
 }

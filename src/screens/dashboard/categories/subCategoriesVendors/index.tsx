@@ -16,6 +16,7 @@ import { RootStackParamList } from 'src/navigation/types';
  import { authAuthorizeRedirect } from '@src/utils/functions';
  import { getVendorSubCategories } from '@src/services/store/category.service';
  import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
+ import Spinner from 'react-native-loading-spinner-overlay';
 
 interface Response {
   data: any;
@@ -30,29 +31,42 @@ type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function SubCategories({ route }: any) {
   const [isGrid, setIsGrid] = useState(false);
   const {isDark} = useValues();
-  const [showSearchBar, setSearchBar] = useState<boolean>();
+   
   const navigation = useNavigation<ItemsProps>();
+  
   const dispatch = useDispatch()
+  const categoryId = route?.params?.id;
+  const serviceTitle = route?.params?.categoryname
+
   const {
-    isFirstTimeLoading: selectedFirstTimeLoading,
+    loading:showSpinnerLoader,
+    data: SubCategories,
   } = useSelector(
     (state: RootState) => state['vendorSubCategories']
   );
 
-  const categoryId = route?.params?.id;
-  const serviceTitle = route?.params?.categoryname
-
+  //load categories
   const loadCategories = async () =>{
+    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: '', subcategories: []  } }))
     const response: Response = await getVendorSubCategories(categoryId);
     if (response?.data?.errors) {
       await authAuthorizeRedirect(response,navigation)
     }
-    dispatch(vendorSubCategoriesActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorSubCategoriesActions.setData({field:'isFirstTimeLoading',data:false}))
+    
+    dispatch(vendorSubCategoriesActions.addServiceSubCategories({ id: categoryId, subcategories: response?.data }))
+    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: categoryId, subcategories: response?.data  } }))
+    dispatch(vendorSubCategoriesActions.setData({ field: 'loading', data: false }))
   }
 
   useEffect(()=>{
-       loadCategories()
+    dispatch(vendorSubCategoriesActions.setData({ field: 'loading', data: true }))
+    const checkExisting = SubCategories.find(elementDet => elementDet.categoryId === categoryId);
+    if (!checkExisting) {
+      loadCategories();
+    } else {
+      dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: categoryId, subcategories: checkExisting.subcategories } }))
+      dispatch(vendorSubCategoriesActions.setData({ field: 'loading', data: false }))
+    }
   },[categoryId])
 
   return (
@@ -67,6 +81,11 @@ export function SubCategories({ route }: any) {
         searchContainerStyle={styles.searchContainer}
       />
       <ItemsList isGrid={isGrid} />
+      <Spinner
+          visible={showSpinnerLoader}
+          textContent={'Processing.....'}
+          textStyle={{ color: '#FFF' }}
+        />
     </View>
   );
 }

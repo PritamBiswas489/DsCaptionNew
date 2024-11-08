@@ -8,7 +8,7 @@ interface Response {
 	request?: any;
 }
 //get notitfications list
-export const getNotifications = async (queryParam:string): Promise<Response> => {
+export const getNotifications = async (): Promise<Response> => {
     try {
 			const response = await api.get(`/vendor/notifications`);
 			return response;

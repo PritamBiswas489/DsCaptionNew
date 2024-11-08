@@ -187,4 +187,7 @@ export type RootStackParamList = {
   VendorProfileSettings:undefined;
   VendorProfileEdit:undefined;
   SubCategories: {id:string,categoryname:string};
+  NotificationVendor:undefined;
+  VendorAddNewBanner:undefined;
+  VendorAddItem:undefined;
 };

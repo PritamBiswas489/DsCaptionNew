@@ -36,6 +36,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.AddItem', 
+    goToScreen:'VendorAddItem'
   },
   {
     icon: <PendingItemIcon height={'36'} width={'36'} />,
@@ -49,6 +50,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   { 
     icon: <BannerIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Banner', 
+    goToScreen:'VendorAddNewBanner'
   },
   { 
     icon: <CampaignIcon height={'36'} width={'36'} />,
@@ -79,6 +81,11 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <TermsConditionsIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuTermsandconditions',
+  },
+  {
+    icon: <TermsConditionsIcon height={'36'} width={'36'} />,
+    title: 'Notifications',
+     goToScreen:'NotificationVendor'
   },
   {
     icon: <LogoutIcon height={'36'} width={'36'} />,

@@ -89,6 +89,9 @@ import PaymentList from '@src/screens/dashboard/home/PaymentList';
 import { MoreMenusVendor } from '@src/screens/dashboard/home/MoreMenusVendor';
 import { SettingVendor } from '@src/screens/setting/settingVendor/setting';
 import { VendorProfileEdit } from '@src/screens/setting/settingVendor/profileSetting';
+import { NotificationVendor } from '@src/screens/notificationVendor';
+import { VendorAddNewBanner } from '@src/screens/dashboard/bannerVendor/addNewBanner';
+import { VendorAddItem } from '@src/screens/dashboard/storeItem/addItem';
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -379,8 +382,15 @@ export default function MyStack() {
               component={SubCategories}
             />
 
+         <RootStack.Screen name="NotificationVendor" component={NotificationVendor} />
+
+         <RootStack.Screen name="VendorAddNewBanner" component={VendorAddNewBanner} />
 
 
+         <RootStack.Screen name="VendorAddItem" component={VendorAddItem} />
+
+         
+         
 
           </>
         )}

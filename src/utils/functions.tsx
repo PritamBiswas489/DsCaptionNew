@@ -9,6 +9,8 @@ import {
 
  
 import { deleteAuthTokens } from '@src/config/auth';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from 'src/navigation/types';
 
 export const requestLocationPermission = async () => {
   try {
@@ -138,8 +140,8 @@ export function validatePassword(password:string) {
   return { valid: true, message: "newDeveloper.passwordSuccess" };
 }
 
-
-export const authAuthorizeRedirect  = async (response:any,navigation:any) =>{
+//unauthorize redirect
+export const authAuthorizeRedirect  = async (response:any,navigation:NativeStackNavigationProp<RootStackParamList>) =>{
   if(response?.data?.errors[0]?.code === 'auth-001'){
     clearValue('loggedInUserType')
     await deleteAuthTokens();

@@ -52,8 +52,8 @@ export default function ItemsList({isGrid}: {isGrid: boolean}) {
                   ]}>
                     
                     <Image style={{width:50,height:50}} source={{uri:item.image_full_url}}
-                    onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
-                    onLoad={() => console.log('Image loaded successfully')}
+                    onError={(e) => {}}
+                    onLoad={() => {} }
                     />
                 </View>
                 <Text style={[GlobalStyle.title, styles.textStyle]}>
@@ -76,10 +76,10 @@ export default function ItemsList({isGrid}: {isGrid: boolean}) {
                           : appColors.boxBg,
                       },
                     ]}>
-                     <Image style={{width:50,height:50}} source={{uri:item.image_full_url}}
-                    onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
-                    onLoad={() => console.log('Image loaded successfully')}
-                    />  
+                      <Image style={{width:50,height:50}} source={{uri:item.image_full_url}}
+                    onError={(e) => {}}
+                    onLoad={() => {} }
+                    />
                      
                   </View>
                  

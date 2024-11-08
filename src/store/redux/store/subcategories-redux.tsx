@@ -3,16 +3,16 @@ import { SubCategoriesInterface } from "@src/interfaces/subCategoriesInterface";
 
 
 interface SubCategoryStoreInterface   {
-    data:SubCategoriesInterface[];
-    isFirstTimeLoading: boolean,
-    isNoMoreData: boolean,
+    data: {categoryId:string,subcategories:SubCategoriesInterface[]}[];
+    selected:{categoryId:string,subcategories:SubCategoriesInterface[]}
+    loading:boolean,
+     
 }
-
 
 const initialState: SubCategoryStoreInterface = {
     data:[],
-    isFirstTimeLoading: true,
-    isNoMoreData: true,
+    selected:{categoryId:'',subcategories:[]},
+    loading: true,
 }
 
 interface SetDataPayload {
@@ -30,6 +30,9 @@ const vendorSubCategoriesSlice = createSlice({
       resetState(state: SubCategoryStoreInterface) {
         return initialState;
       },
+      addServiceSubCategories(state, action: PayloadAction<{id:string,subcategories:SubCategoriesInterface[]}>) {
+        state.data.push({categoryId:action.payload.id,subcategories:action.payload.subcategories});
+    },
     },
 });
 

@@ -2,14 +2,9 @@ import axios from 'axios';
 import { getAuthTokens, setAuthTokens } from './auth';
  
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
 import { getStoreAppUrl } from './utility';
 import { getValue } from '@src/utils/localstorage';
-import { clearValue } from '@src/utils/localstorage';
-import { deleteAuthTokens } from '@src/config/auth';
-import { logoutClearReduxState } from '@src/services/logout.service';
+ 
 
 const app_url =  getStoreAppUrl();
 console.log(app_url + '/api/v1');

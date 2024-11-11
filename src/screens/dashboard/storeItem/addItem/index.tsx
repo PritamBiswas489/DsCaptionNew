@@ -19,6 +19,15 @@ import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import { addServiceSubCategory } from '@src/services/services-service';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from 'src/navigation/types';
+import { getVendorCategories, getVendorSubCategories } from '@src/services/store/category.service';
+import { authAuthorizeRedirect } from '@src/utils/functions';
+import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux';
+import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
+import { vendorAttributeActions } from '@src/store/redux/store/attributes-redux';
+import { getAttributesService } from '@src/services/store/attribute.service';
 
 interface Response {
   data: any;
@@ -28,85 +37,140 @@ interface Response {
   config: any;
   request?: any;
 }
+
+
 //Add new banner
+type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function VendorAddItem() {
+  const navigation = useNavigation<ItemsProps>();
+  const [itemTitle, setItemTitle] = useState<string>('')
+  const [errorItemTitle, setErrorItemTitle] = useState<string>('')
+  const [itemDesciption, setItemDescription] = useState<string>('')
+  const [errorItemDescription, setErrorItemDescription] = useState<string>('')
+
+  const [itemPrice, setItemPrice] = useState<string>('')
+  const [errorItemPrice, setErrorItemPrice] = useState<string>('')
+
+  const [discountAmount, setDiscountAmount] = useState<string>('')
+  const [errorDiscountAmount, setErrorDiscountAmount] = useState<string>('')
+
+  const [discountTypes, setDiscountTypes] = useState<string>('')
+  const [errorDiscountTypes, setErrorDiscountTypes] = useState<string>('')
+
+  const [category,setCategory] = useState<string>('')
+  const [errorCategory,setErrorCategory] = useState<string>('')
+
+  const [subCategory,setSubCategory] = useState<string>('')
+  const [errorSubCategory,setErrorSubCategory] = useState<string>('')
+
+  const [selectedAttrbutes,setSelectedAttributes] = useState<number[]>([])
+
+  const [maximumOrderQty,setMaximumOrderQty] = useState<string>('');
+  const [errorMaximumOrderQty,setErrorMaximumOrderQty] = useState<string>('')
+
+  const [tags, setTags] = useState<string[]>([]);
+
+  const [attributeVariants,setAttributeVariants] = useState<{attrbuteId:number,variants:string[]}[]>([])
   
-  const [bannerTitle, setBannerTitle] = useState<string>('')
-  const [errorBannerTitle, setErrorBannerTitle] = useState<string>('')
-  const [bannerUrl,setBannerUrl] = useState<string>('')
-  const [errorBannerUrl,setErrorBannerUrl] = useState<string>('')
-  const [bannerImage,setBannerImage] = useState<string>('')
-  const [bannerImageError,setBannerImageError] = useState<string>('')
- 
+  
 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
-   
 
-  // const handleAddSubCategory = async () => {
-  //   let error = false
-  //   if (selectedParentCategory === '') {
-  //     error = true
-  //     setErrorCategory(t('newDeveloper.Selectparentcategory'))
-  //   }
-  //   if (categoryName.trim() === '') {
-  //     error = true
-  //     setErrorCategoryName(t('newDeveloper.Entercategoryname'))
-  //   }
+  const {
+    isFirstTimeLoading: selectedFirstTimeLoading,
+  } = useSelector(
+    (state: RootState) => state['vendorCategories']
+  );
 
-  //   if (shortDescription.trim() === '') {
-  //     error = true
-  //     setErrorShortDescription(t('newDeveloper.Entershortdescription'))
-  //   }
-  //   if (subcategoryImage === '') {
-  //     error = true
-  //     setErrorSubCategoryImage(t('newDeveloper.Selectimageforcategory'))
-  //   }
+  const {
+    isFirstTimeLoading: attributeSelectedFirstTimeLoading,
+  } = useSelector(
+    (state: RootState) => state['vendorAttribute']
+  );
 
-  //   if (error === false) {
-  //         setProcessingLoader(true)
-  //         const formData = new FormData()
-  //         formData.append('parent_category_id', selectedParentCategory)
-  //         formData.append('name', categoryName)
-  //         formData.append('short_description', shortDescription)
-  //         formData.append('image', {
-  //           uri: subcategoryImage,
-  //           name: 'subcategoryImage.jpg',
-  //           type: 'image/jpeg',
-  //         });
-  //         const response: Response = await addServiceSubCategory(formData)
-  //         if (response?.data?.response_code === 'category_store_200') {
-  //             Toast.show({
-  //               type: 'success',
-  //               text1: 'SUCCESS',
-  //               text2: response?.data?.message,
-  //             });
-  //             setSubcategoryImage('')
-  //             setCategoryName('')
-  //             setShortDescription('')
-  //             setSelectedParentCategory('')
-  //         } else {
-  //           Toast.show({
-  //             type: 'error',
-  //             text1: 'ERROR',
-  //             text2: response?.data?.message,
-  //           });
-  //         }
-  //         setProcessingLoader(false)
+  const {
+    
+    data: SubCategories,
+  } = useSelector(
+    (state: RootState) => state['vendorSubCategories']
+  );
 
-  //   }
+  //load categories
+  const loadCategories = async () =>{
+    setProcessingLoader(true)
+    const response: Response = await getVendorCategories();
+    if (response?.data?.errors) {
+      await authAuthorizeRedirect(response,navigation)
+    }
+    dispatch(vendorCategoriesActions.setData({field:'data',data:response?.data}))
+    dispatch(vendorCategoriesActions.setData({field:'isFirstTimeLoading',data:false}))
+    setProcessingLoader(false)
+  }
 
-  // }
+  useEffect(()=>{
+    if(selectedFirstTimeLoading){
+       loadCategories()
+    }
+  },[selectedFirstTimeLoading])
 
-  const handleCreateBanner = async()=>{
-     Alert.alert('Create banner')
+
+  //load attributes
+  const loadAttributes = async ()=>{
+    // setProcessingLoader(true)
+    const response: Response = await getAttributesService();
+    if (response?.data?.errors) {
+      await authAuthorizeRedirect(response,navigation)
+    }
+    dispatch(vendorAttributeActions.setData({field:'data',data:response?.data}))
+    dispatch(vendorAttributeActions.setData({field:'isFirstTimeLoading',data:false}))
+    // setProcessingLoader(false)
+  }
+
+  useEffect(()=>{
+    if(attributeSelectedFirstTimeLoading){
+       loadAttributes()
+    }
+  },[attributeSelectedFirstTimeLoading])
+
+  //load sub categories
+  const loadSubCategories = async () =>{
+    setProcessingLoader(true)
+    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: '', subcategories: []  } }))
+    const response: Response = await getVendorSubCategories(category);
+    if (response?.data?.errors) {
+      await authAuthorizeRedirect(response,navigation)
+    }
+    
+    dispatch(vendorSubCategoriesActions.addServiceSubCategories({ id: category, subcategories: response?.data }))
+    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: response?.data  } }))
+    dispatch(vendorSubCategoriesActions.setData({ field: 'loading', data: false }))
+    setProcessingLoader(false)
+  }
+
+  //getting subcateories based on category
+  useEffect(()=>{
+    setSubCategory('')
+    if(category){
+        const checkExisting = SubCategories.find(elementDet => elementDet.categoryId === category);
+        if (!checkExisting) {
+          loadSubCategories();
+        } else {
+          dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: checkExisting.subcategories } })) 
+        }
+    }
+  },[category])
+
+  
+
+  const handleCreateBanner = async () => {
+    Alert.alert('Create Item')
   }
 
   return (
     <>
-       
-        <ScrollView
+      <ScrollView
         contentContainerStyle={{ paddingBottom: windowHeight(3) }}
         showsVerticalScrollIndicator={false}
         style={[
@@ -126,18 +190,34 @@ export function VendorAddItem() {
           ]}
         />
         <InputView
-          bannerTitle={bannerTitle}
-          setBannerTitle={setBannerTitle}
-          errorBannerTitle={errorBannerTitle}
-           
-          bannerUrl={bannerUrl}
-          setBannerUrl={setBannerUrl}
-          errorBannerUrl={errorBannerUrl}
-          
-          bannerImage={bannerImage}
-          setBannerImage={setBannerImage}
-          bannerImageError={bannerImageError}
-           
+          itemTitle={itemTitle}
+          setItemTitle={setItemTitle}
+          errorItemTitle={errorItemTitle}
+          itemDesciption={itemDesciption}
+          setItemDescription={setItemDescription}
+          errorItemDescription={errorItemDescription}
+          itemPrice={itemPrice}
+          setItemPrice={setItemPrice}
+          errorItemPrice={errorItemPrice}
+          discountAmount={discountAmount}
+          setDiscountAmount={setDiscountAmount}
+          errorDiscountAmount={errorDiscountAmount}
+          discountTypes={discountTypes}
+          setDiscountTypes={setDiscountTypes}
+          errorDiscountTypes={errorDiscountTypes}
+          category={category}
+          setCategory={setCategory}
+          errorCategory={errorCategory}
+          subCategory={subCategory}
+          setSubCategory={setSubCategory}
+          errorSubCategory={errorSubCategory}
+          selectedAttrbutes={selectedAttrbutes}
+          setSelectedAttributes={setSelectedAttributes}
+          maximumOrderQty={maximumOrderQty}
+          setMaximumOrderQty={setMaximumOrderQty}
+          errorMaximumOrderQty={errorMaximumOrderQty}
+          tags={tags}
+          setTags={setTags}
         />
         <GradientBtn
           label="newDeveloper.CreateItem"
@@ -152,7 +232,7 @@ export function VendorAddItem() {
           textContent={'Processing.....'}
           textStyle={{ color: '#FFF' }}
         />
-      </ScrollView> 
+      </ScrollView>
 
     </>
   );

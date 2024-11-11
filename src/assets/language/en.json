@@ -1266,7 +1266,20 @@
             "AddNewItem":"Add new item",
             "CreateItem":"Create item",
             "itemTitle":"Item title",
-            "itemDescription":"Item description"
+            "itemDescription":"Item description",
+            "discount":"Discount",
+            "discountTypes":"Discount types",
+            "percent":"Percent",
+            "amount":"Amount",
+            "itemPrice":"Price",
+            "categories":"Categories",
+            "subCategories":"Sub categories",
+            "maximumOrderqty":"Maximum order quantity",
+            "uploadThumbnail": "Upload thumbnail (Max size 2MB)",
+            "uploadImages":"Upload image (Max size 2MB)",
+            "addTag":"Add tag",
+            "Add":"Add",
+            "addVariant":"Add variant"
 
 
             

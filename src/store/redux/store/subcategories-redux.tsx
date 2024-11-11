@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SubCategoriesInterface } from "@src/interfaces/subCategoriesInterface";
+import { SubCategoriesInterface } from "@src/interfaces/store/subcategories.interface";
 
 
 interface SubCategoryStoreInterface   {

@@ -61,6 +61,25 @@ export const handleImagePicker = (
   });
 };
 
+
+export const handleImagePickerAllDetails = (
+  options: ImageLibraryOptions,
+  callback: (assets: any) => void,
+) => {
+  launchImageLibrary(options, (response: ImagePickerResponse) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.errorCode) {
+      console.log('Image picker error: ', response.errorMessage);
+    } else {
+       
+      if (response?.assets?.[0]?.uri) {
+        callback(response?.assets?.[0]);
+      }
+    }
+  });
+};
+
 export const getServiceMenCredentials = async () => {
   try {
     const servicemenEmail = await getValue('servicemenEmail');

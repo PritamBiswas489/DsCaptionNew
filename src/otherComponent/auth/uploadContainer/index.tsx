@@ -21,11 +21,13 @@ export default function UploadContainerView({
   onPress,
   image,
   setImage,
-  error
+  error,
+  disableEdit
 }: propsType) {
   const {isDark,t} = useValues();
 
   const openImage = () => {
+    if(disableEdit){ return }
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
       includeBase64: false,

@@ -65,6 +65,7 @@ import vendorSubCategoriesSlice from "./redux/store/subcategories-redux";
 import vendorNotificationListSlice from "./redux/store/notifications-data-redux";
 import vendorBannerListSlice from "./redux/store/banner-redux";
 import vendorAttributeSlice from "./redux/store/attributes-redux";
+import vendorUnitSlice from "./redux/store/units.redux";
 
 const store = configureStore({
     reducer: { 
@@ -134,7 +135,9 @@ const store = configureStore({
         vendorSubCategories:vendorSubCategoriesSlice.reducer,
         vendorNotificationList:vendorNotificationListSlice.reducer,
         vendorBannerList:vendorBannerListSlice.reducer,
-        vendorAttribute:vendorAttributeSlice.reducer
+        vendorAttribute:vendorAttributeSlice.reducer,
+        vendorUnits:vendorUnitSlice.reducer
+
         //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

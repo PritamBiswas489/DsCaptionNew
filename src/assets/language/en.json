@@ -1279,7 +1279,11 @@
             "uploadImages":"Upload image (Max size 2MB)",
             "addTag":"Add tag",
             "Add":"Add",
-            "addVariant":"Add variant"
+            "addVariant":"Add variant",
+            "Variant":"Variant",
+            "VariantPriceText":"Price",
+            "VariantStockText":"Stock",
+            "greaterThantwoMbError":"upload image Size can't be greater than 2mb"
 
 
             

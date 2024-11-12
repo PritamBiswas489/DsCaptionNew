@@ -18,7 +18,7 @@ const VariantInput: React.FC<VariantInputProps> = ({ variants, onVariantsChange,
 
   const addVariant = () => {
     if (text.trim()) {
-      onVariantsChange([...variants, text.trim()]);
+      onVariantsChange([...variants, text.trim().replace(' ','-')]);
       setText('');
     }
   };

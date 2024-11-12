@@ -58,4 +58,30 @@ export const styles = StyleSheet.create({
     width: windowWidth(30),
     right: windowWidth(2),
   },
+  imageContainer: {
+    marginHorizontal: windowWidth(6),
+    marginTop: windowWidth(3),
+    marginBottom: windowHeight(1),
+  },
+  imageView: {
+    marginTop: windowWidth(2),
+    height: windowHeight(10),
+    width: windowWidth(89),
+    resizeMode: 'contain',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  crossButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 15,
+    padding: 5,
+  },
+  imageStyle: {
+    height: windowWidth(20),
+    width: windowWidth(20),
+    borderRadius: windowWidth(2),
+  },
 });

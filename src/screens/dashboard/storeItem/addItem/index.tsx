@@ -28,6 +28,8 @@ import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux
 import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
 import { vendorAttributeActions } from '@src/store/redux/store/attributes-redux';
 import { getAttributesService } from '@src/services/store/attribute.service';
+import { getVendorUnits } from '@src/services/store/units.service';
+import { vendorUnitsActions } from '@src/store/redux/store/units.redux';
 
 interface Response {
   data: any;
@@ -69,10 +71,15 @@ export function VendorAddItem() {
   const [errorMaximumOrderQty,setErrorMaximumOrderQty] = useState<string>('')
 
   const [tags, setTags] = useState<string[]>([]);
-
   const [attributeVariants,setAttributeVariants] = useState<{attrbuteId:number,variants:string[]}[]>([])
   
-  
+  const [variantionsDetails,setVariationDetails] = useState<{type:string,price:number,stock:number}[]>([])
+
+  const [thumbnailImage,setThumbnailImage] = useState<string>('')
+
+  const [errorThumbnailImage,setErrorThumbnailImage] = useState<string>('')
+
+  const [itemImages,setItemImages] = useState<string[]>([])
 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
@@ -91,10 +98,16 @@ export function VendorAddItem() {
   );
 
   const {
-    
     data: SubCategories,
   } = useSelector(
     (state: RootState) => state['vendorSubCategories']
+  );
+
+
+  const {
+    isFirstTimeLoading: selectedUnitFirstTimeLoading,
+  } = useSelector(
+    (state: RootState) => state['vendorUnits']
   );
 
   //load categories
@@ -114,6 +127,25 @@ export function VendorAddItem() {
        loadCategories()
     }
   },[selectedFirstTimeLoading])
+
+
+  //load units
+  const loadUnits = async () =>{
+    setProcessingLoader(true)
+    const response: Response = await getVendorUnits();
+    if (response?.data?.errors) {
+      await authAuthorizeRedirect(response,navigation)
+    }
+    dispatch(vendorUnitsActions.setData({field:'data',data:response?.data}))
+    dispatch(vendorUnitsActions.setData({field:'isFirstTimeLoading',data:false}))
+    setProcessingLoader(false)
+
+  }
+  useEffect(()=>{
+    if(selectedUnitFirstTimeLoading){
+       loadUnits()
+    }
+  },[selectedUnitFirstTimeLoading])
 
 
   //load attributes
@@ -218,6 +250,16 @@ export function VendorAddItem() {
           errorMaximumOrderQty={errorMaximumOrderQty}
           tags={tags}
           setTags={setTags}
+          attributeVariants={attributeVariants}
+          setAttributeVariants={setAttributeVariants}
+          variantionsDetails={variantionsDetails}
+          setVariationDetails={setVariationDetails}
+          thumbanailImage={thumbnailImage}
+          setThumbnailImage={setThumbnailImage}
+          errorThumbnailImage={errorThumbnailImage}
+          itemImages={itemImages}
+          setItemImages={setItemImages}
+
         />
         <GradientBtn
           label="newDeveloper.CreateItem"

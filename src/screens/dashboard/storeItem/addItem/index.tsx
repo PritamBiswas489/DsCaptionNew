@@ -81,9 +81,21 @@ export function VendorAddItem() {
 
   const [itemImages,setItemImages] = useState<string[]>([])
 
+  const [totalStocks,setTotalStocks] = useState<string>('')
+  const [stockUnit,setStockUnit] =  useState<string>('')
+
+  const [errorStockUnit,setErrorStockUnit] = useState<string>('')
+
+
+  const [itemType, setItemType] = useState('noveg');
+
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
+
+
+  
+
 
   const {
     isFirstTimeLoading: selectedFirstTimeLoading,
@@ -259,6 +271,13 @@ export function VendorAddItem() {
           errorThumbnailImage={errorThumbnailImage}
           itemImages={itemImages}
           setItemImages={setItemImages}
+          totalStocks={totalStocks}
+          setTotalStocks={setTotalStocks}
+          stockUnit={stockUnit}
+          setStockUnit={setStockUnit}
+          errorStockUnit={errorStockUnit}
+          itemType={itemType} 
+          setItemType={setItemType} 
 
         />
         <GradientBtn

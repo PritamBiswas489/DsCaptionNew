@@ -167,3 +167,5 @@ export const authAuthorizeRedirect  = async (response:any,navigation:NativeStack
     navigation.replace('AuthNavigation');
   }
 }
+
+ 

@@ -31,6 +31,9 @@ import TagInput from '../tagInput';
 import VariantInput from '../variantInput';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { UnitInterface } from '@src/interfaces/store/units.interface';
+import { RadioButton } from 'react-native-paper';
+import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepickerSelectTimeTwentyFourHours';
+import { FoodVariation } from '../foodVariation';
 
 
 interface DataItem {
@@ -81,7 +84,14 @@ export default function InputView(
     setThumbnailImage,
     errorThumbnailImage,
     itemImages,
-    setItemImages
+    setItemImages,
+    totalStocks,
+    setTotalStocks,
+    stockUnit,
+    setStockUnit,
+    errorStockUnit,
+    itemType,
+    setItemType
   }: {
     itemTitle: string,
     setItemTitle: (value: string) => void,
@@ -119,10 +129,25 @@ export default function InputView(
     setThumbnailImage: (value: string) => void,
     errorThumbnailImage: string,
     itemImages: string[],
-    setItemImages: (value: string[]) => void
+    setItemImages: (value: string[]) => void,
+    totalStocks: string,
+    setTotalStocks: (value: string) => void,
+    stockUnit: string,
+    setStockUnit: (value: string) => void,
+    errorStockUnit: string,
+    itemType: string,
+    setItemType: (value: string) => void,
   }
 ) {
   const { t, isDark } = useValues();
+
+  const { stores: storesList } = useSelector(
+    (state: RootState) => state['storeProfileData']
+  );
+  const { module: storeModuleDetails } = storesList[0]
+  const { module_type } = storeModuleDetails
+
+
   const openThumbnailImage = () => {
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
@@ -130,7 +155,7 @@ export default function InputView(
       maxHeight: 2000,
       maxWidth: 2000,
     };
-    
+
     handleImagePickerAllDetails(options, (imageAssets: any) => {
       if (imageAssets?.uri) {
         const fileSizeInMB = imageAssets.fileSize / (1024 * 1024);
@@ -256,13 +281,13 @@ export default function InputView(
     }
   }, [attributeVariants])
 
-  const removeImage = (imageindex:number) =>{
+  const removeImage = (imageindex: number) => {
     const d = itemImages.filter((_, imgindex) => imgindex !== imageindex);
     setItemImages(d)
   }
 
 
-  const [vendorList, setVendorList] = useState<DataItem[]>([])
+  const [vendorUnits, setVendorUnits] = useState<DataItem[]>([])
 
   const {
     data: vendorUnitList,
@@ -277,13 +302,49 @@ export default function InputView(
       const vendorData: DataItem[] = vendorUnitList.map((dd: UnitInterface, _: number) => {
         return { value: dd.id.toString(), label: dd.unit }
       })
-      setVendorList(vendorData)
+      setVendorUnits(vendorData)
     }
   }, [vendorUnitList])
 
 
+  //set variation price
+  const setVariationPrice = (value: string, variant: Combination) => {
+    const cloneVariantionDetails = [...variantionsDetails]
+    const findTypeIndex = cloneVariantionDetails.findIndex(ele => ele.type === variant.type)
+    if (findTypeIndex !== -1) {
+      cloneVariantionDetails[findTypeIndex] = { ...cloneVariantionDetails[findTypeIndex], price: parseFloat(value) }
+    }
+    setVariationDetails(cloneVariantionDetails)
+  }
+  //set variation stock
+  const setVariationStock = (value: string, variant: Combination) => {
+    const cloneVariantionDetails = [...variantionsDetails]
+    const findTypeIndex = cloneVariantionDetails.findIndex(ele => ele.type === variant.type)
+    if (findTypeIndex !== -1) {
+      cloneVariantionDetails[findTypeIndex] = { ...cloneVariantionDetails[findTypeIndex], stock: parseFloat(value) }
+    }
+    setVariationDetails(cloneVariantionDetails)
+  }
 
-   
+
+  //get total stock from variation array
+  const calculateTotalStock = () => {
+    const totalStock = variantionsDetails.reduce((accumulator: number, variantionsDetail: Combination) => {
+      return accumulator + variantionsDetail.stock;
+    }, 0);
+    setTotalStocks(totalStock > 0 ? totalStock.toString() : '')
+  }
+
+  useEffect(() => {
+    calculateTotalStock()
+  }, [variantionsDetails])
+
+
+  const [fromTimePicker, setFromTimePicker] = useState(false)
+  const [toTimePicker, setToTimePicker] = useState(false)
+
+  const [fromTime, setFromTime] = useState('')
+  const [toTime, setToTime] = useState('')
 
 
 
@@ -312,6 +373,26 @@ export default function InputView(
           inputStyle={styles.inputStyle}
           error={errorItemDescription}
         />
+
+        <RadioButton.Group onValueChange={newValue => setItemType(newValue)} value={itemType}>
+          <View style={styles.radioContainer}>
+            <View style={styles.radioButton}>
+            <RadioButton value="noveg" />
+            <Text style={styles.radioLabel}>{t('newDeveloper.Nonveg')}</Text>
+          </View>
+            <View style={styles.radioButton}>
+              <RadioButton value="veg" />
+              <Text style={styles.radioLabel}>{t('newDeveloper.Veg')}</Text>
+            </View>
+
+          </View>
+        </RadioButton.Group>
+
+
+
+
+
+
         {/* item price  */}
         <TextInputComponent
           placeholder={t('newDeveloper.itemPrice')}
@@ -397,20 +478,20 @@ export default function InputView(
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
               <TextInputComponent
                 placeholder={t('newDeveloper.VariantPriceText')}
-                value={maximumOrderQty}
+                value={variant?.price !== 0 ? variant?.price.toString() : ''}
                 keyboardType='number-pad'
                 onChangeText={value => {
-                  setMaximumOrderQty(value);
+                  setVariationPrice(value, variant);
                 }}
                 containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
                 error={errorMaximumOrderQty}
               />
               <TextInputComponent
                 placeholder={t('newDeveloper.VariantStockText')}
-                value={maximumOrderQty}
+                value={variant?.stock !== 0 ? variant?.stock.toString() : ''}
                 keyboardType='number-pad'
                 onChangeText={value => {
-                  setMaximumOrderQty(value);
+                  setVariationStock(value, variant);
                 }}
                 containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
                 error={errorMaximumOrderQty}
@@ -421,6 +502,34 @@ export default function InputView(
 
 
         {/* Total Stock and unit for product */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+
+          {/* Total Stock */}
+          <TextInputComponent
+            placeholder={t('newDeveloper.totalStock')}
+            value={totalStocks}
+            keyboardType='number-pad'
+            editable={false}
+            onChangeText={value => {
+              setTotalStocks(value);
+            }}
+            containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
+            error={''}
+          />
+
+          {/* Stock units */}
+          <SelectionDropdown
+            data={vendorUnits}
+            value={stockUnit}
+            setValue={(value: string) => {
+              setStockUnit(value)
+            }}
+            label={t('newDeveloper.units')}
+            error={errorStockUnit}
+
+          />
+
+        </View>
 
 
         {/* Maximum order quantity */}
@@ -434,6 +543,50 @@ export default function InputView(
           }}
           error={errorMaximumOrderQty}
         />
+
+        {/* Available time starts and ends */}
+        <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
+          <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
+
+            {t('newDeveloper.AvailableSlots')}
+          </Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+          {/* Available time starts */}
+          <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.9}
+            onPress={() => {
+              setFromTimePicker(true)
+            }}>
+            <TextInputComponent
+              placeholder={t('newDeveloper.Timestarts')}
+              value={fromTime}
+              keyboardType='number-pad'
+              editable={false}
+              onChangeText={value => {
+              }}
+              containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
+              error={''}
+            />
+          </TouchableOpacity>
+          {/* Available time ends */}
+          <TouchableOpacity style={{ flex: 1 }} onPress={() => {
+            setToTimePicker(true)
+          }}>
+            <TextInputComponent
+              placeholder={t('newDeveloper.Timeends')}
+              value={toTime}
+              keyboardType='number-pad'
+              editable={false}
+              onChangeText={value => {
+              }}
+              containerStyle={{ marginHorizontal: windowWidth(2) }}
+              error={''}
+            />
+          </TouchableOpacity>
+          {fromTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setFromTimePicker} setScheduleDate={setFromTime} />}
+          {toTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setToTimePicker} setScheduleDate={setToTime} />}
+        </View>
 
 
         <UploadContainerView
@@ -467,6 +620,7 @@ export default function InputView(
         setImage={handleSetItemImage}
         error={''}
       />
+      <FoodVariation/>
     </>
   );
 }

@@ -1283,7 +1283,14 @@
             "Variant":"Variant",
             "VariantPriceText":"Price",
             "VariantStockText":"Stock",
-            "greaterThantwoMbError":"upload image Size can't be greater than 2mb"
+            "greaterThantwoMbError":"upload image Size can't be greater than 2mb",
+            "units":"Units",
+            "totalStock":"Total Stocks",
+            "Nonveg":"Non veg",
+            "Veg":"Veg",
+            "AvailableSlots":"Available slots",
+            "Timestarts":"Time starts",
+            "Timeends":"Time ends"
 
 
             

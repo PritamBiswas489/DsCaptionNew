@@ -84,4 +84,16 @@ export const styles = StyleSheet.create({
     width: windowWidth(20),
     borderRadius: windowWidth(2),
   },
+  radioContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 10, // Adds space between the radio buttons
+  },
+  radioLabel: {
+    marginLeft: 5, // Adds space between the radio button and the label
+  },
 });

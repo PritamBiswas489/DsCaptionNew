@@ -30,6 +30,7 @@ import { vendorAttributeActions } from '@src/store/redux/store/attributes-redux'
 import { getAttributesService } from '@src/services/store/attribute.service';
 import { getVendorUnits } from '@src/services/store/units.service';
 import { vendorUnitsActions } from '@src/store/redux/store/units.redux';
+import { foodVariations } from '@src/interfaces/store/foodVariations.interface'; 
 
 interface Response {
   data: any;
@@ -88,6 +89,9 @@ export function VendorAddItem() {
 
 
   const [itemType, setItemType] = useState('noveg');
+
+
+  const [foodVars,setFoodVars] = useState<foodVariations[]>([])
 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
@@ -278,6 +282,8 @@ export function VendorAddItem() {
           errorStockUnit={errorStockUnit}
           itemType={itemType} 
           setItemType={setItemType} 
+          foodVars={foodVars}
+          setFoodVars={setFoodVars}
 
         />
         <GradientBtn

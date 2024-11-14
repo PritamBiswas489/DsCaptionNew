@@ -1290,7 +1290,16 @@
             "Veg":"Veg",
             "AvailableSlots":"Available slots",
             "Timestarts":"Time starts",
-            "Timeends":"Time ends"
+            "Timeends":"Time ends",
+            "Variantname":"Variant name",
+            "Single":"Single",
+            "Multiple":"Multiple",
+            "Required":"Required",
+            "OptionName":"Option Name",
+            "Price":"Price",
+            "AddOption":"Add Option",
+            "AddVariants":"Add variants"
+            
 
 
             

@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {windowHeight, windowWidth} from '@theme/appConstant';
 import {fontSizes} from '@theme/appConstant';
+import appColors from '@src/theme/appColors';
 
 export const styles = StyleSheet.create({
   inputStyle: {
@@ -95,5 +96,19 @@ export const styles = StyleSheet.create({
   },
   radioLabel: {
     marginLeft: 5, // Adds space between the radio button and the label
+  },
+  addButton: {
+    borderWidth: 1,
+    borderColor: appColors.success,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    borderRadius: 5,
+    backgroundColor: appColors.success,
+    width:windowWidth(40)
+  },
+  addButtonText: {
+    color: appColors.black,
   },
 });

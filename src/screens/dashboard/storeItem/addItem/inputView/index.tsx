@@ -34,7 +34,7 @@ import { UnitInterface } from '@src/interfaces/store/units.interface';
 import { RadioButton } from 'react-native-paper';
 import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepickerSelectTimeTwentyFourHours';
 import { FoodVariation } from '../foodVariation';
-
+import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
 
 interface DataItem {
   label: string;
@@ -91,7 +91,9 @@ export default function InputView(
     setStockUnit,
     errorStockUnit,
     itemType,
-    setItemType
+    setItemType,
+    foodVars,
+    setFoodVars,
   }: {
     itemTitle: string,
     setItemTitle: (value: string) => void,
@@ -137,6 +139,8 @@ export default function InputView(
     errorStockUnit: string,
     itemType: string,
     setItemType: (value: string) => void,
+    foodVars: foodVariations[],
+    setFoodVars: (value: foodVariations[]) => void,
   }
 ) {
   const { t, isDark } = useValues();
@@ -346,6 +350,38 @@ export default function InputView(
   const [fromTime, setFromTime] = useState('')
   const [toTime, setToTime] = useState('')
 
+  const addFoodVariationPanel = () => {
+      const dd = {
+        name: '',
+        type: 'single',
+        min: '',
+        max: '',
+        required: 'off',
+        values: [{
+          label: '',
+          optionPrice: ''
+        }]
+      }
+      const newVariantData = [...foodVars,dd]
+      setFoodVars(newVariantData)
+  }
+  //update variation state 
+  const updateVaritionsState = (dt:any,index:number) =>{
+       const cloneFoodVars = [...foodVars]
+       if(cloneFoodVars?.[index]){
+        cloneFoodVars[index] = {... cloneFoodVars[index],
+            name:dt?.name, 
+            required:dt.isRequired ? 'on' : 'off',
+            type:dt?.type,
+            values:dt?.options || [],
+            min: dt?.minimumValue,
+            max: dt?.maximumValue,
+        }
+       }
+      //  console.log(JSON.stringify(cloneFoodVars))
+       setFoodVars(cloneFoodVars) 
+  }
+
 
 
   return (
@@ -377,9 +413,9 @@ export default function InputView(
         <RadioButton.Group onValueChange={newValue => setItemType(newValue)} value={itemType}>
           <View style={styles.radioContainer}>
             <View style={styles.radioButton}>
-            <RadioButton value="noveg" />
-            <Text style={styles.radioLabel}>{t('newDeveloper.Nonveg')}</Text>
-          </View>
+              <RadioButton value="noveg" />
+              <Text style={styles.radioLabel}>{t('newDeveloper.Nonveg')}</Text>
+            </View>
             <View style={styles.radioButton}>
               <RadioButton value="veg" />
               <Text style={styles.radioLabel}>{t('newDeveloper.Veg')}</Text>
@@ -620,7 +656,18 @@ export default function InputView(
         setImage={handleSetItemImage}
         error={''}
       />
-      <FoodVariation/>
+     {foodVars.length > 0 && 
+          foodVars.map((foodV:foodVariations,foodindex:number)=>{
+            return (<View key={`foodVariation-${foodindex}`} style={{ flex: 1, marginTop: 20 }}>
+              <FoodVariation updateVaritionsState={updateVaritionsState} foodVariation={foodV} foodVariationIndex={foodindex} />
+            </View>)
+          })  
+      } 
+      <View style={{ flex: 1, marginTop: 10 }}>
+        <TouchableOpacity onPress={addFoodVariationPanel} style={styles.addButton}>
+          <Text style={styles.addButtonText}>{t('newDeveloper.AddVariants')}</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 }

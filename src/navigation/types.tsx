@@ -190,4 +190,5 @@ export type RootStackParamList = {
   NotificationVendor:undefined;
   VendorAddNewBanner:undefined;
   VendorAddItem:undefined;
+  StoreSettings:undefined;
 };

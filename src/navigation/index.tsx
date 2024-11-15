@@ -92,6 +92,7 @@ import { VendorProfileEdit } from '@src/screens/setting/settingVendor/profileSet
 import { NotificationVendor } from '@src/screens/notificationVendor';
 import { VendorAddNewBanner } from '@src/screens/dashboard/bannerVendor/addNewBanner';
 import { VendorAddItem } from '@src/screens/dashboard/storeItem/addItem';
+import { StoreSettings } from '@src/screens/dashboard/home/StoreSettings';
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -377,10 +378,7 @@ export default function MyStack() {
               component={VendorProfileEdit}
             />
 
-<RootStack.Screen
-              name="SubCategories"
-              component={SubCategories}
-            />
+         <RootStack.Screen  name="SubCategories"   component={SubCategories} />
 
          <RootStack.Screen name="NotificationVendor" component={NotificationVendor} />
 
@@ -388,6 +386,10 @@ export default function MyStack() {
 
 
          <RootStack.Screen name="VendorAddItem" component={VendorAddItem} />
+
+
+         <RootStack.Screen name="StoreSettings" component={StoreSettings} />
+         
 
          
          

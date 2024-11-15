@@ -35,6 +35,8 @@ import { RadioButton } from 'react-native-paper';
 import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepickerSelectTimeTwentyFourHours';
 import { FoodVariation } from '../foodVariation';
 import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
+import { AddonInterface } from '@src/interfaces/store/addons.interface';
+import AddonInput from '../addonInput';
 
 interface DataItem {
   label: string;
@@ -94,6 +96,9 @@ export default function InputView(
     setItemType,
     foodVars,
     setFoodVars,
+    selectedAddonsList,
+    setSelectedAddOns
+
   }: {
     itemTitle: string,
     setItemTitle: (value: string) => void,
@@ -141,6 +146,8 @@ export default function InputView(
     setItemType: (value: string) => void,
     foodVars: foodVariations[],
     setFoodVars: (value: foodVariations[]) => void,
+    selectedAddonsList:string[]
+    setSelectedAddOns:(value:string[])=>void
   }
 ) {
   const { t, isDark } = useValues();
@@ -151,7 +158,7 @@ export default function InputView(
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
 
-
+  //open thumbnail image
   const openThumbnailImage = () => {
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
@@ -247,7 +254,7 @@ export default function InputView(
     data: Attributes
   } = useSelector((state: RootState) => state['vendorAttribute'])
 
-
+   //handle variants change
   const handleVariantsChange = (variants: string[], attribute: number) => {
     const variantIndex = attributeVariants.findIndex(ele => ele.attrbuteId === attribute)
     if (variantIndex !== -1) {
@@ -309,6 +316,24 @@ export default function InputView(
       setVendorUnits(vendorData)
     }
   }, [vendorUnitList])
+
+
+  const [vendorAddons, setVendorAddons] = useState<DataItem[]>([])
+
+  const {
+    data: vendorAddOnList,
+  } = useSelector(
+    (state: RootState) => state['vendorAddons']
+  );
+
+  useEffect(() => {
+    if (vendorAddOnList.length > 0) {
+      const vendorData: DataItem[] = vendorAddOnList.map((dd: AddonInterface, _: number) => {
+        return { value: dd.id.toString(), label: dd.name }
+      })
+      setVendorAddons(vendorData)
+    }
+  }, [vendorAddOnList])
 
 
   //set variation price
@@ -378,11 +403,26 @@ export default function InputView(
             max: dt?.maximumValue,
         }
        }
-      //  console.log(JSON.stringify(cloneFoodVars))
+      
        setFoodVars(cloneFoodVars) 
   }
+  //remove variation from state  
+  const removeVariationFromState = (index:number) =>{
+     const newFoodVars = foodVars.filter((_:foodVariations,foodVarIndex:number)=>foodVarIndex!==index)
+     setFoodVars(newFoodVars) 
+  }
+  // handle selected addons
+  const handleSelectedAddons = (value:string) =>{
+      if(!selectedAddonsList.includes(value)){
+        setSelectedAddOns([...selectedAddonsList,value])
+      }
+  }
 
-
+  //remove seleted addons from the list
+  const removeSelectedAddon = (id:string) =>{
+    const updatedAddOn = selectedAddonsList.filter((addOn:string,foodVarIndex:number)=>addOn!==id)
+    setSelectedAddOns(updatedAddOn)
+  }
 
   return (
     <>
@@ -588,6 +628,19 @@ export default function InputView(
           </Text>
         </View>
 
+        {/* addon lising here */}
+        <SelectionDropdown
+            data={vendorAddons}
+            value={''}
+            setValue={(value: string) => {
+              handleSelectedAddons(value)
+            }}
+            label={t('newDeveloper.Addons')}
+            error={''}
+          />
+
+        {selectedAddonsList.length > 0 && <AddonInput removeSelectedAddon={removeSelectedAddon} selectedaddons={selectedAddonsList} />}  
+
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
           {/* Available time starts */}
           <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.9}
@@ -605,6 +658,16 @@ export default function InputView(
               error={''}
             />
           </TouchableOpacity>
+
+
+
+
+       
+
+
+
+
+
           {/* Available time ends */}
           <TouchableOpacity style={{ flex: 1 }} onPress={() => {
             setToTimePicker(true)
@@ -659,7 +722,7 @@ export default function InputView(
      {foodVars.length > 0 && 
           foodVars.map((foodV:foodVariations,foodindex:number)=>{
             return (<View key={`foodVariation-${foodindex}`} style={{ flex: 1, marginTop: 20 }}>
-              <FoodVariation updateVaritionsState={updateVaritionsState} foodVariation={foodV} foodVariationIndex={foodindex} />
+              <FoodVariation removeVariationFromState={removeVariationFromState} updateVaritionsState={updateVaritionsState} foodVariation={foodV} foodVariationIndex={foodindex} />
             </View>)
           })  
       } 

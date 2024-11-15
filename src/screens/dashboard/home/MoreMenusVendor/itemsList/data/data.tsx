@@ -38,6 +38,12 @@ export const categoriesData: Array<HomeCategoryType> = [
     title: 'newDeveloper.AddItem', 
     goToScreen:'VendorAddItem'
   },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Store settings', 
+    goToScreen:'StoreSettings'
+  },
   {
     icon: <PendingItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.PendingItem', 

@@ -2,23 +2,14 @@ import { Alert, ScrollView, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
-import SliderContainer from '@otherComponent/sliderContainer';
-import AddNewImageSection from './addNewImage';
 import { windowHeight, windowWidth } from '@theme/appConstant';
 import InputView from './inputView';
-import StatusSection from './statusSection';
 import GradientBtn from '@commonComponents/gradientBtn';
 import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { CategoriesInterface } from '@src/interfaces/categoriesInterface';
-import { serviceCategoriesDataActions } from '@src/store/redux/service-category-redux';
-import { getCategories } from '@src/services/services-service';
-import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
-import { addServiceSubCategory } from '@src/services/services-service';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
@@ -47,7 +38,8 @@ interface Response {
 
 //Add new banner
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
-export function VendorAddItem() {
+export function StoreSettings() {
+   
   const navigation = useNavigation<ItemsProps>();
   const [itemTitle, setItemTitle] = useState<string>('')
   const [errorItemTitle, setErrorItemTitle] = useState<string>('')
@@ -253,7 +245,7 @@ export function VendorAddItem() {
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
-        <Header showBackArrow={true} title={'newDeveloper.AddNewItem'} />
+        <Header showBackArrow={true} title={'newDeveloper.StoreSettings'} />
 
         <View
           style={[
@@ -265,6 +257,7 @@ export function VendorAddItem() {
             },
           ]}
         />
+        
         <InputView
           itemTitle={itemTitle}
           setItemTitle={setItemTitle}
@@ -317,7 +310,7 @@ export function VendorAddItem() {
 
         />
         <GradientBtn
-          label="newDeveloper.CreateItem"
+          label="newDeveloper.UpdateSettings"
           onPress={handleCreateBanner}
           additionalStyle={{
             marginHorizontal: windowWidth(5),

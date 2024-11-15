@@ -1298,7 +1298,10 @@
             "OptionName":"Option Name",
             "Price":"Price",
             "AddOption":"Add Option",
-            "AddVariants":"Add variants"
+            "AddVariants":"Add variants",
+            "Addons":"Addons",
+            "StoreSettings":"Store settings",
+            "UpdateSettings":"Update settings"
             
 
 

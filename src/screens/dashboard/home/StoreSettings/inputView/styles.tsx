@@ -118,5 +118,13 @@ export const styles = StyleSheet.create({
     fontSize: fontSizes.FONT4,
     width: windowWidth(75),
    
-  }
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  label: {
+    marginLeft: 8,
+  },
 });

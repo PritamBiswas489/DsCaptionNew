@@ -1,4 +1,4 @@
-import { View, Text, Alert, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { styles } from './styles';
 import TextInputComponent from '@otherComponent/auth/textInput';
@@ -23,21 +23,11 @@ import { CategoriesInterface } from '@src/interfaces/categoriesInterface';
 import SelectionDropdown from '@src/otherComponent/selectionDropdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { CategoryInterface } from '@src/interfaces/store/categories.interface';
-import { SubCategoriesInterface } from "@src/interfaces/store/subcategories.interface";
-import StoreAttributes from '@src/otherComponent/home/storeAttributes';
 import appColors from '@src/theme/appColors';
-import TagInput from '../tagInput';
-import VariantInput from '../variantInput';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { UnitInterface } from '@src/interfaces/store/units.interface';
-import { RadioButton } from 'react-native-paper';
+import { Checkbox } from 'react-native-paper';
 import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepickerSelectTimeTwentyFourHours';
-import { FoodVariation } from '../foodVariation';
-import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
-import { AddonInterface } from '@src/interfaces/store/addons.interface';
-import AddonInput from '../addonInput';
-import appFonts from '@src/theme/appFonts';
+
+import SwitchContainer from '@src/otherComponent/switchContainer';
 
 interface DataItem {
   label: string;
@@ -51,161 +41,407 @@ interface Combination {
 
 export default function InputView(
   {
-    itemTitle,
-    setItemTitle,
-    errorItemTitle,
-    itemDesciption,
-    setItemDescription,
-    errorItemDescription,
-    itemPrice,
-    setItemPrice,
-    errorItemPrice,
-    discountAmount,
-    setDiscountAmount,
-    errorDiscountAmount,
-    discountTypes,
-    setDiscountTypes,
-    errorDiscountTypes,
-    category,
-    setCategory,
-    errorCategory,
-    subCategory,
-    setSubCategory,
-    errorSubCategory,
-    selectedAttrbutes,
-    setSelectedAttributes,
-    maximumOrderQty,
-    setMaximumOrderQty,
-    errorMaximumOrderQty,
-    tags,
-    setTags,
-    attributeVariants,
-    setAttributeVariants,
-    variantionsDetails,
-    setVariationDetails,
-    thumbanailImage,
-    setThumbnailImage,
-    errorThumbnailImage,
-    itemImages,
-    setItemImages,
-    totalStocks,
-    setTotalStocks,
-    stockUnit,
-    setStockUnit,
-    errorStockUnit,
+    storeName,
+    setStoreName,
+    errorStoreName,
+    contactNumber,
+    setContactNumber,
+    errorContactNumber,
+    storeAddress,
+    setStoreAddress,
+    errorStoreAddress,
+    minimumOrderAmount,
+    setMinimumOrderAmount,
+    errorMinimumOrderAmount,
+    metaTitle,
+    setMetaTitle,
+    errorMetaTitle,
+    metaDescription,
+    setMetaDescription,
+    errorMetaDescription,
+    gstStatus,
+    setGstStatus,
+    gstPercentageValue,
+    setGstPercentageValue,
+    errorGstPercentageValue,
+    scheduleOrderStatus,
+    setScheduleOrderStatus,
+    deliveryStatus,
+    setDeliveryStatus,
+    takeawayStatus,
+    setTakewayStatus,
+    storeLogo,
+    setStoreLogo,
+    storeCoverPhoto,
+    setStoreCoverPhoto,
+    approxDeliveryMinimumTime,
+    setApproxDeliveryMinimumTime,
+    approxDeliveryMaximumTime,
+    setApproxDeliveryMaximumTime,
+    approxDeliveryType,
+    setApproxDeliveryType,
     itemType,
     setItemType,
-    foodVars,
-    setFoodVars,
-    selectedAddonsList,
-    setSelectedAddOns
-
   }: {
-    itemTitle: string,
-    setItemTitle: (value: string) => void,
-    errorItemTitle: string,
-    itemDesciption: string,
-    setItemDescription: (value: string) => void,
-    errorItemDescription: string,
-    itemPrice: string,
-    setItemPrice: (value: string) => void,
-    errorItemPrice: string,
-    discountAmount: string,
-    setDiscountAmount: (value: string) => void,
-    errorDiscountAmount: string,
-    discountTypes: string,
-    setDiscountTypes: (value: string) => void,
-    errorDiscountTypes: string,
-    category: string,
-    setCategory: (value: string) => void,
-    errorCategory: string,
-    subCategory: string,
-    setSubCategory: (value: string) => void,
-    errorSubCategory: string,
-    selectedAttrbutes: number[],
-    setSelectedAttributes: (value: number[]) => void,
-    maximumOrderQty: string,
-    setMaximumOrderQty: (value: string) => void,
-    errorMaximumOrderQty: string,
-    tags: string[],
-    setTags: (value: string[]) => void,
-    attributeVariants: { attrbuteId: number, variants: string[] }[],
-    setAttributeVariants: (value: { attrbuteId: number, variants: string[] }[]) => void,
-    variantionsDetails: Combination[],
-    setVariationDetails: (value: Combination[]) => void,
-    thumbanailImage: string,
-    setThumbnailImage: (value: string) => void,
-    errorThumbnailImage: string,
-    itemImages: string[],
-    setItemImages: (value: string[]) => void,
-    totalStocks: string,
-    setTotalStocks: (value: string) => void,
-    stockUnit: string,
-    setStockUnit: (value: string) => void,
-    errorStockUnit: string,
-    itemType: string,
-    setItemType: (value: string) => void,
-    foodVars: foodVariations[],
-    setFoodVars: (value: foodVariations[]) => void,
-    selectedAddonsList:string[]
-    setSelectedAddOns:(value:string[])=>void
+    storeName: string,
+    setStoreName: (value: string) => void,
+    errorStoreName: string,
+    contactNumber: string,
+    setContactNumber: (value: string) => void,
+    errorContactNumber: string,
+    storeAddress: string,
+    setStoreAddress: (value: string) => void,
+    errorStoreAddress: string,
+    minimumOrderAmount: number,
+    setMinimumOrderAmount: (value: number) => void,
+    errorMinimumOrderAmount: string,
+    metaTitle: string,
+    setMetaTitle: (value: string) => void,
+    errorMetaTitle: string,
+    metaDescription: string,
+    setMetaDescription: (value: string) => void,
+    errorMetaDescription: string,
+    gstStatus: boolean,
+    setGstStatus: (value: boolean) => void,
+    gstPercentageValue: number,
+    setGstPercentageValue: (value: number) => void,
+    errorGstPercentageValue: string,
+    scheduleOrderStatus: boolean,
+    setScheduleOrderStatus: (value: boolean) => void,
+    deliveryStatus: boolean,
+    setDeliveryStatus: (value: boolean) => void,
+    takeawayStatus: boolean,
+    setTakewayStatus: (value: boolean) => void,
+    storeLogo: string,
+    setStoreLogo: (value: string) => void,
+    storeCoverPhoto: string,
+    setStoreCoverPhoto: (value: string) => void,
+    approxDeliveryMinimumTime: string,
+    setApproxDeliveryMinimumTime: (value: string) => void,
+    approxDeliveryMaximumTime: string,
+    setApproxDeliveryMaximumTime: (value: string) => void,
+    approxDeliveryType: string,
+    setApproxDeliveryType: (value: string) => void,
+    itemType: string[],
+    setItemType: (value: string[]) => void,
   }
 ) {
   const { t, isDark } = useValues();
-
   const { stores: storesList } = useSelector(
     (state: RootState) => state['storeProfileData']
   );
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
-  
+
+  //handle item type
+  const handleItemType = (type: string) => {
+    if (itemType.includes(type)) {
+      setItemType(itemType.filter((value: string) => type !== value))
+    } else {
+      setItemType([...itemType, type])
+    }
+  }
+ //open cover image
+  const openCoverImage = () => {
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    handleImagePickerAllDetails(options, (imageAssets: any) => {
+      if (imageAssets?.uri) {
+        const fileSizeInMB = imageAssets.fileSize / (1024 * 1024);
+        if (fileSizeInMB > 2) {
+          Alert.alert(t('newDeveloper.greaterThantwoMbError'))
+          return
+        }
+        setStoreCoverPhoto(imageAssets.uri)
+      }
+    });
+  };
+ //open store image
+  const openStoreImage = () => {
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    handleImagePickerAllDetails(options, (imageAssets: any) => {
+      if (imageAssets?.uri) {
+        const fileSizeInMB = imageAssets.fileSize / (1024 * 1024);
+        if (fileSizeInMB > 2) {
+          Alert.alert(t('newDeveloper.greaterThantwoMbError'))
+          return
+        }
+        setStoreLogo(imageAssets.uri)
+      }
+    });
+  };
+
   return (
     <>
       <View style={{ flex: 1 }}>
-        {/* item title */}
-        <View>
+        {/* Store name */}
+        <View style={{ marginTop: 5 }}>
           <Text style={[
             styles.inputLabel,
-            {color: isDark ? appColors.white : appColors.darkText}
-            ]}>Store name (English)</Text>
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.Store_name_English')}</Text>
           <TextInputComponent
-            placeholder={t('newDeveloper.itemTitle')}
-            value={itemTitle}
+            placeholder={t('newDeveloper.enterStoreName')}
+            value={storeName}
             onChangeText={value => {
-              setItemTitle(value);
+              setStoreName(value);
             }}
-            error={errorItemTitle}
-            containerStyle={{marginTop:windowHeight(1)}}
+            error={errorStoreName}
+            containerStyle={{ marginTop: windowHeight(1) }}
           />
         </View>
-        
-        
-        {/* item description */}
-        {/* <TextInputComponent
-          placeholder={t('newDeveloper.itemDescription')}
-          value={itemDesciption}
-          onChangeText={value => {
-            setItemDescription(value);
-          }}
-          containerStyle={{ marginBottom: windowHeight(0) }}
-          multiline={true}
-          inputStyle={styles.inputStyle}
-          error={errorItemDescription}
-        /> */}
+        {/* Contact number */}
+        <View style={{ marginTop: 5 }}>
+          <Text style={[
+            styles.inputLabel,
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.Contact_number')}</Text>
+          <TextInputComponent
+            placeholder={t('newDeveloper.enterContactNumber')}
+            value={contactNumber}
+            onChangeText={value => {
+              setContactNumber(value);
+            }}
+            error={errorContactNumber}
+            containerStyle={{ marginTop: windowHeight(1) }}
+          />
+        </View>
+        {/* store address */}
+        <View style={{ marginTop: 5 }}>
+          <Text style={[
+            styles.inputLabel,
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.Store_address')}</Text>
+          <TextInputComponent
+            placeholder={t('newDeveloper.enterAddress')}
+            value={storeAddress}
+            onChangeText={value => {
+              setStoreAddress(value);
+            }}
+            error={errorStoreAddress}
+            containerStyle={{ marginTop: windowHeight(1) }}
+          />
+        </View>
+        {/* Minimum order amount  */}
+        <View style={{ marginTop: 5 }}>
+          <Text style={[
+            styles.inputLabel,
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.MinimumOrderAmount')}</Text>
+          <TextInputComponent
+            keyboardType='number-pad'
+            placeholder={t('newDeveloper.EnterAmount')}
+            value={minimumOrderAmount.toString()}
+            onChangeText={value => {
+              setMinimumOrderAmount(parseFloat(value));
+            }}
+            error={errorMinimumOrderAmount}
+            containerStyle={{ marginTop: windowHeight(1) }}
+          />
+        </View>
 
-        {/* <RadioButton.Group onValueChange={newValue => setItemType(newValue)} value={itemType}>
-          <View style={styles.radioContainer}>
-            <View style={styles.radioButton}>
-              <RadioButton value="noveg" />
-              <Text style={styles.radioLabel}>{t('newDeveloper.Nonveg')}</Text>
-            </View>
-            <View style={styles.radioButton}>
-              <RadioButton value="veg" />
-              <Text style={styles.radioLabel}>{t('newDeveloper.Veg')}</Text>
-            </View>
+        {/* Meta title  */}
+        <View style={{ marginTop: 5 }}>
+          <Text style={[
+            styles.inputLabel,
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.Meta_title')}</Text>
+          <TextInputComponent
+            placeholder={t('newDeveloper.enterMetaTitle')}
+            value={metaTitle}
+            onChangeText={value => {
+              setMetaTitle(value);
+            }}
+            error={errorMetaTitle}
+            containerStyle={{ marginTop: windowHeight(1) }}
+          />
+        </View>
 
+        {/* Meta description  */}
+        <View style={{ marginTop: 5 }}>
+          <Text style={[
+            styles.inputLabel,
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.MetaDescriptionEnglish')}</Text>
+          <TextInputComponent
+            placeholder={t('newDeveloper.enterMetaDescription')}
+            value={metaDescription}
+            onChangeText={value => {
+              setMetaDescription(value);
+            }}
+            containerStyle={{ marginBottom: windowHeight(0) }}
+            multiline={true}
+            inputStyle={styles.inputStyle}
+            error={errorMetaDescription}
+          />
+        </View>
+
+        {/* gst percentage panel */}
+        <View style={{ marginTop: 5 }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText },
+
+            ]}> {t('newDeveloper.Gst')}</Text>
+            <SwitchContainer
+              toggleDarkSwitch={() => { setGstStatus(!gstStatus) }}
+              switchOn={gstStatus}
+            />
           </View>
-        </RadioButton.Group> */}
+          <TextInputComponent
+            keyboardType='number-pad'
+            placeholder={t('newDeveloper.enterGst')}
+            value={gstPercentageValue.toString()}
+            onChangeText={value => {
+              setGstPercentageValue(parseFloat(value));
+            }}
+            error={errorGstPercentageValue}
+            containerStyle={{ marginTop: windowHeight(1) }}
+          />
+        </View>
+        {/* schedule order status  */}
+        <View style={{ marginTop: 15 }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText },
+
+            ]}> {t('newDeveloper.ScheduleOrderStatus')}</Text>
+            <SwitchContainer
+              toggleDarkSwitch={() => { setScheduleOrderStatus(!scheduleOrderStatus) }}
+              switchOn={scheduleOrderStatus}
+            />
+          </View>
+        </View>
+        {/* delivery status */}
+        <View style={{ marginTop: 15 }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText },
+
+            ]}> {t('newDeveloper.deliveryStatus')}</Text>
+            <SwitchContainer
+              toggleDarkSwitch={() => { setDeliveryStatus(!deliveryStatus) }}
+              switchOn={deliveryStatus}
+            />
+          </View>
+        </View>
+
+        {/* take away status */}
+        <View style={{ marginTop: 15 }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText },
+
+            ]}> {t('newDeveloper.takeAwayStatus')}</Text>
+            <SwitchContainer
+              toggleDarkSwitch={() => { setTakewayStatus(!takeawayStatus) }}
+              switchOn={takeawayStatus}
+            />
+          </View>
+        </View>
+
+        {/* approx delivery time */}
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+
+        {/* Total Stock */}
+        <TextInputComponent
+          placeholder={t('Minimum')}
+          value={approxDeliveryMinimumTime.toString()}
+          keyboardType='number-pad'
+          editable={false}
+          onChangeText={value => {
+            setApproxDeliveryMinimumTime(value);
+          }}
+          containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
+          error={''}
+        />
+
+       <TextInputComponent
+          placeholder={t('Maximum')}
+          value={approxDeliveryMaximumTime.toString()}
+          keyboardType='number-pad'
+          editable={false}
+          onChangeText={value => {
+            setApproxDeliveryMaximumTime(value);
+          }}
+          containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
+          error={''}
+        />
+
+          
+          <SelectionDropdown
+            data={[{label:'Minutes',value:'minutes'},{label:'Hours',value:'hours'},{label:'Days',value:'days'}]}
+            value={approxDeliveryType}
+            setValue={(value: string) => {
+              setApproxDeliveryType(value)
+            }}
+            label={''}
+            error={''}
+
+          />
+
+</View>
+
+
+        {/* item type */}
+
+        <SafeAreaView style={styles.container}>
+          <View style={styles.checkboxContainer}>
+            <Checkbox
+              status={itemType.includes('nonveg') ? 'checked' : 'unchecked'}
+              onPress={() => { handleItemType('nonveg') }}
+            />
+            <Text style={styles.label}>{t('newDeveloper.nonVeg')}</Text>
+          </View>
+
+          <View style={styles.checkboxContainer}>
+            <Checkbox
+              status={itemType.includes('veg') ? 'checked' : 'unchecked'}
+              onPress={() => { handleItemType('veg') }}
+            />
+            <Text style={styles.label}>{t('newDeveloper.veg')}</Text>
+          </View>
+        </SafeAreaView>
+
+
+        {/* store logo */}
+        <UploadContainerView
+          title={'newDeveloper.uploadStoreLogotwoMb'}
+          onPress={openStoreImage}
+          image={storeLogo}
+          setImage={setStoreLogo}
+          error={''}
+        />
+       {/* store cover photo */}
+        <UploadContainerView
+          title={'newDeveloper.uploadStoreCoverPhototwoMb'}
+          onPress={openCoverImage}
+          image={storeCoverPhoto}
+          setImage={setStoreCoverPhoto}
+          error={''}
+        />
+
+
+
+
+
 
 
 
@@ -234,8 +470,8 @@ export default function InputView(
           Icon={<Amount />}
           error={errorDiscountAmount}
         /> */}
-       
-      
+
+
         {/* Total Stock and unit for product */}
         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
 
@@ -267,22 +503,22 @@ export default function InputView(
         </View> */}
 
 
-        
-
-      
-        
-         
 
 
-      
+
+
+
+
+
+
 
 
       </View>
-      
-     
-      
-     
-      
+
+
+
+
+
     </>
   );
 }

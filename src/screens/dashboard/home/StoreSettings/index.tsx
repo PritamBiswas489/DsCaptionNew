@@ -13,18 +13,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
-import { getVendorCategories, getVendorSubCategories } from '@src/services/store/category.service';
-import { authAuthorizeRedirect } from '@src/utils/functions';
-import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux';
-import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
-import { vendorAttributeActions } from '@src/store/redux/store/attributes-redux';
-import { getAttributesService } from '@src/services/store/attribute.service';
-import { getVendorUnits } from '@src/services/store/units.service';
-import { vendorUnitsActions } from '@src/store/redux/store/units.redux';
-import { foodVariations } from '@src/interfaces/store/foodVariations.interface'; 
-
-import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
-import { getVendorAddons } from '@src/services/store/addons.service';
 
 interface Response {
   data: any;
@@ -41,196 +29,59 @@ type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function StoreSettings() {
    
   const navigation = useNavigation<ItemsProps>();
-  const [itemTitle, setItemTitle] = useState<string>('')
-  const [errorItemTitle, setErrorItemTitle] = useState<string>('')
-  const [itemDesciption, setItemDescription] = useState<string>('')
-  const [errorItemDescription, setErrorItemDescription] = useState<string>('')
+  //store name
+  const [storeName, setStoreName] = useState<string>('')
+  const [errorStoreName, setErrorStoreName] = useState<string>('') 
 
-  const [itemPrice, setItemPrice] = useState<string>('')
-  const [errorItemPrice, setErrorItemPrice] = useState<string>('')
+  //contact number
+  const [contactNumber,setContactNumber] = useState<string>('')
+  const [errorContactNumber, setErrorContactNumber] = useState<string>('')
 
-  const [discountAmount, setDiscountAmount] = useState<string>('')
-  const [errorDiscountAmount, setErrorDiscountAmount] = useState<string>('')
+  //store address
+  const [storeAddress,setStoreAddress] = useState<string>('')
+  const [errorStoreAddress, setErrorStoreddress] = useState<string>('')
 
-  const [discountTypes, setDiscountTypes] = useState<string>('')
-  const [errorDiscountTypes, setErrorDiscountTypes] = useState<string>('')
-
-  const [category,setCategory] = useState<string>('')
-  const [errorCategory,setErrorCategory] = useState<string>('')
-
-  const [subCategory,setSubCategory] = useState<string>('')
-  const [errorSubCategory,setErrorSubCategory] = useState<string>('')
-
-  const [selectedAttrbutes,setSelectedAttributes] = useState<number[]>([])
-
-  const [maximumOrderQty,setMaximumOrderQty] = useState<string>('');
-  const [errorMaximumOrderQty,setErrorMaximumOrderQty] = useState<string>('')
-
-  const [tags, setTags] = useState<string[]>([]);
-  const [attributeVariants,setAttributeVariants] = useState<{attrbuteId:number,variants:string[]}[]>([])
+  //order minimum amount
+  const [minimumOrderAmount,setMinimumOrderAmount] = useState<number>(0)
+  const [errorMinimumOrderAmount,setErrorMinimumOrderAmount] = useState<string>('')
   
-  const [variantionsDetails,setVariationDetails] = useState<{type:string,price:number,stock:number}[]>([])
+  //meta properties
+  const [metaTitle,setMetaTitle] =  useState<string>('')
+  const [errorMetaTitle,setErrorMetatitle] = useState<string>('')
+  const [metaDescription,setMetaDescription] = useState<string>('')
+  const [errorMetaDescription,setErrorMetaDescription]  = useState<string>('')
 
-  const [thumbnailImage,setThumbnailImage] = useState<string>('')
+  //gst properties
+  const [gstStatus,setGstStatus] = useState<boolean>(false)
+  const [gstPercentageValue,setGstPercentageValue] = useState<number>(0)
+  const [errorGstPercentageValue,setErrorGstPercentageValue] = useState<string>('')
 
-  const [errorThumbnailImage,setErrorThumbnailImage] = useState<string>('')
+  //status change
+  const [scheduleOrderStatus,setScheduleOrderStatus] = useState<boolean>(false)
+  const [deliveryStatus,setDeliveryStatus] = useState<boolean>(false)
+  const [takeawayStatus,setTakewayStatus] = useState<boolean>(false)
 
-  const [itemImages,setItemImages] = useState<string[]>([])
+  //logo 
+  const [storeLogo,setStoreLogo] =  useState<string>('')
+  //cover photo
+  const [storeCoverPhoto,setStoreCoverPhoto] = useState<string>('')
 
-  const [totalStocks,setTotalStocks] = useState<string>('')
-  const [stockUnit,setStockUnit] =  useState<string>('')
+  //approx delivey time
+  const [approxDeliveryMinimumTime,setApproxDeliveryMinimumTime] = useState<string>('')
+  const [approxDeliveryMaximumTime,setApproxDeliveryMaximumTime] = useState<string>('')
+  const [approxDeliveryType,setApproxDeliveryType] =  useState<string>('')
 
-  const [errorStockUnit,setErrorStockUnit] = useState<string>('')
+  // food type
+  const [itemType,setItemType] = useState<string[]>([])
 
 
-  const [itemType, setItemType] = useState('noveg');
 
 
-  const [foodVars,setFoodVars] = useState<foodVariations[]>([])
-
+  
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
 
-  const [selectedAddonsList,setSelectedAddOns] = useState<string[]>([])
-
-  const {
-    isFirstTimeLoading: selectedFirstTimeLoading,
-  } = useSelector(
-    (state: RootState) => state['vendorCategories']
-  );
-
-  const {
-    isFirstTimeLoading: selectedFirstTimeAddonsLoading,
-  } = useSelector(
-    (state: RootState) => state['vendorAddons']
-  );
-
-  const {
-    isFirstTimeLoading: attributeSelectedFirstTimeLoading,
-  } = useSelector(
-    (state: RootState) => state['vendorAttribute']
-  );
-
-  const {
-    data: SubCategories,
-  } = useSelector(
-    (state: RootState) => state['vendorSubCategories']
-  );
-
-
-  const {
-    isFirstTimeLoading: selectedUnitFirstTimeLoading,
-  } = useSelector(
-    (state: RootState) => state['vendorUnits']
-  );
-
-  //load categories
-  const loadCategories = async () =>{
-    setProcessingLoader(true)
-    const response: Response = await getVendorCategories();
-    if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
-    }
-    dispatch(vendorCategoriesActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorCategoriesActions.setData({field:'isFirstTimeLoading',data:false}))
-    setProcessingLoader(false)
-  }
-
-  useEffect(()=>{
-    if(selectedFirstTimeLoading){
-       loadCategories()
-    }
-  },[selectedFirstTimeLoading])
-
-  //load addons
-
-  const loadAddons = async () =>{
-    setProcessingLoader(true)
-    const response: Response = await getVendorAddons();
-    if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
-    }
-    dispatch(vendorAddonsActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorAddonsActions.setData({field:'isFirstTimeLoading',data:false}))
-    setProcessingLoader(false)
-
-  }
-
-  useEffect(()=>{
-    if(selectedFirstTimeAddonsLoading){
-       loadAddons()
-    }
-  },[selectedFirstTimeAddonsLoading])
-
-
-
-  //load units
-  const loadUnits = async () =>{
-    setProcessingLoader(true)
-    const response: Response = await getVendorUnits();
-    if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
-    }
-    dispatch(vendorUnitsActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorUnitsActions.setData({field:'isFirstTimeLoading',data:false}))
-    setProcessingLoader(false)
-
-  }
-  useEffect(()=>{
-    if(selectedUnitFirstTimeLoading){
-       loadUnits()
-    }
-  },[selectedUnitFirstTimeLoading])
-
-
-  //load attributes
-  const loadAttributes = async ()=>{
-    // setProcessingLoader(true)
-    const response: Response = await getAttributesService();
-    if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
-    }
-    dispatch(vendorAttributeActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorAttributeActions.setData({field:'isFirstTimeLoading',data:false}))
-    // setProcessingLoader(false)
-  }
-
-  useEffect(()=>{
-    if(attributeSelectedFirstTimeLoading){
-       loadAttributes()
-    }
-  },[attributeSelectedFirstTimeLoading])
-
-  //load sub categories
-  const loadSubCategories = async () =>{
-    setProcessingLoader(true)
-    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: '', subcategories: []  } }))
-    const response: Response = await getVendorSubCategories(category);
-    if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
-    }
-    
-    dispatch(vendorSubCategoriesActions.addServiceSubCategories({ id: category, subcategories: response?.data }))
-    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: response?.data  } }))
-    dispatch(vendorSubCategoriesActions.setData({ field: 'loading', data: false }))
-    setProcessingLoader(false)
-  }
-
-  //getting subcateories based on category
-  useEffect(()=>{
-    setSubCategory('')
-    if(category){
-        const checkExisting = SubCategories.find(elementDet => elementDet.categoryId === category);
-        if (!checkExisting) {
-          loadSubCategories();
-        } else {
-          dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: checkExisting.subcategories } })) 
-        }
-    }
-  },[category])
-
-  
 
   const handleCreateBanner = async () => {
     Alert.alert('Create Item')
@@ -259,54 +110,48 @@ export function StoreSettings() {
         />
         
         <InputView
-          itemTitle={itemTitle}
-          setItemTitle={setItemTitle}
-          errorItemTitle={errorItemTitle}
-          itemDesciption={itemDesciption}
-          setItemDescription={setItemDescription}
-          errorItemDescription={errorItemDescription}
-          itemPrice={itemPrice}
-          setItemPrice={setItemPrice}
-          errorItemPrice={errorItemPrice}
-          discountAmount={discountAmount}
-          setDiscountAmount={setDiscountAmount}
-          errorDiscountAmount={errorDiscountAmount}
-          discountTypes={discountTypes}
-          setDiscountTypes={setDiscountTypes}
-          errorDiscountTypes={errorDiscountTypes}
-          category={category}
-          setCategory={setCategory}
-          errorCategory={errorCategory}
-          subCategory={subCategory}
-          setSubCategory={setSubCategory}
-          errorSubCategory={errorSubCategory}
-          selectedAttrbutes={selectedAttrbutes}
-          setSelectedAttributes={setSelectedAttributes}
-          maximumOrderQty={maximumOrderQty}
-          setMaximumOrderQty={setMaximumOrderQty}
-          errorMaximumOrderQty={errorMaximumOrderQty}
-          tags={tags}
-          setTags={setTags}
-          attributeVariants={attributeVariants}
-          setAttributeVariants={setAttributeVariants}
-          variantionsDetails={variantionsDetails}
-          setVariationDetails={setVariationDetails}
-          thumbanailImage={thumbnailImage}
-          setThumbnailImage={setThumbnailImage}
-          errorThumbnailImage={errorThumbnailImage}
-          itemImages={itemImages}
-          setItemImages={setItemImages}
-          totalStocks={totalStocks}
-          setTotalStocks={setTotalStocks}
-          stockUnit={stockUnit}
-          setStockUnit={setStockUnit}
-          errorStockUnit={errorStockUnit}
-          itemType={itemType} 
-          setItemType={setItemType} 
-          foodVars={foodVars}
-          setFoodVars={setFoodVars}
-          selectedAddonsList={selectedAddonsList}
-          setSelectedAddOns={setSelectedAddOns}
+          storeName={storeName}
+          setStoreName={setStoreName}
+          errorStoreName={errorStoreName}
+          contactNumber={contactNumber}
+          setContactNumber={setContactNumber}
+          errorContactNumber={errorContactNumber}
+          storeAddress={storeAddress}
+          setStoreAddress={setStoreAddress}
+          errorStoreAddress={errorStoreAddress}
+          minimumOrderAmount={minimumOrderAmount}
+          setMinimumOrderAmount={setMinimumOrderAmount}
+          errorMinimumOrderAmount={errorMinimumOrderAmount}
+          metaTitle={metaTitle}
+          setMetaTitle={setMetaTitle}
+          errorMetaTitle={errorMetaTitle}
+          metaDescription={metaDescription}
+          setMetaDescription={setMetaDescription}
+          errorMetaDescription={errorMetaDescription}
+          gstStatus={gstStatus}
+          setGstStatus={setGstStatus}
+          gstPercentageValue={gstPercentageValue}
+          setGstPercentageValue={setGstPercentageValue}
+          errorGstPercentageValue={errorGstPercentageValue}
+          scheduleOrderStatus={scheduleOrderStatus}
+          setScheduleOrderStatus={setScheduleOrderStatus}
+          deliveryStatus={deliveryStatus}
+          setDeliveryStatus={setDeliveryStatus}
+          takeawayStatus={takeawayStatus}
+          setTakewayStatus={setTakewayStatus}
+          storeLogo={storeLogo}
+          setStoreLogo={setStoreLogo}
+          storeCoverPhoto={storeCoverPhoto}
+          setStoreCoverPhoto={setStoreCoverPhoto}
+          approxDeliveryMinimumTime={approxDeliveryMinimumTime}
+          setApproxDeliveryMinimumTime={setApproxDeliveryMinimumTime}
+          approxDeliveryMaximumTime={approxDeliveryMaximumTime}
+          setApproxDeliveryMaximumTime={setApproxDeliveryMaximumTime}
+          approxDeliveryType={approxDeliveryType}
+          setApproxDeliveryType={setApproxDeliveryType}
+          itemType={itemType}
+          setItemType={setItemType}
+           
 
         />
         <GradientBtn

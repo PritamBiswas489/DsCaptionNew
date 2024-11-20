@@ -30,7 +30,7 @@ import { vendorAttributeActions } from '@src/store/redux/store/attributes-redux'
 import { getAttributesService } from '@src/services/store/attribute.service';
 import { getVendorUnits } from '@src/services/store/units.service';
 import { vendorUnitsActions } from '@src/store/redux/store/units.redux';
-import { foodVariations } from '@src/interfaces/store/foodVariations.interface'; 
+import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
 
 import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
 import { getVendorAddons } from '@src/services/store/addons.service';
@@ -63,44 +63,44 @@ export function VendorAddItem() {
   const [discountTypes, setDiscountTypes] = useState<string>('')
   const [errorDiscountTypes, setErrorDiscountTypes] = useState<string>('')
 
-  const [category,setCategory] = useState<string>('')
-  const [errorCategory,setErrorCategory] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
+  const [errorCategory, setErrorCategory] = useState<string>('')
 
-  const [subCategory,setSubCategory] = useState<string>('')
-  const [errorSubCategory,setErrorSubCategory] = useState<string>('')
+  const [subCategory, setSubCategory] = useState<string>('')
+  const [errorSubCategory, setErrorSubCategory] = useState<string>('')
 
-  const [selectedAttrbutes,setSelectedAttributes] = useState<number[]>([])
+  const [selectedAttrbutes, setSelectedAttributes] = useState<number[]>([])
 
-  const [maximumOrderQty,setMaximumOrderQty] = useState<string>('');
-  const [errorMaximumOrderQty,setErrorMaximumOrderQty] = useState<string>('')
+  const [maximumOrderQty, setMaximumOrderQty] = useState<string>('');
+  const [errorMaximumOrderQty, setErrorMaximumOrderQty] = useState<string>('')
 
   const [tags, setTags] = useState<string[]>([]);
-  const [attributeVariants,setAttributeVariants] = useState<{attrbuteId:number,variants:string[]}[]>([])
-  
-  const [variantionsDetails,setVariationDetails] = useState<{type:string,price:number,stock:number}[]>([])
+  const [attributeVariants, setAttributeVariants] = useState<{ attrbuteId: number, variants: string[] }[]>([])
 
-  const [thumbnailImage,setThumbnailImage] = useState<string>('')
+  const [variantionsDetails, setVariationDetails] = useState<{ type: string, price: number, stock: number }[]>([])
 
-  const [errorThumbnailImage,setErrorThumbnailImage] = useState<string>('')
+  const [thumbnailImage, setThumbnailImage] = useState<string>('')
 
-  const [itemImages,setItemImages] = useState<string[]>([])
+  const [errorThumbnailImage, setErrorThumbnailImage] = useState<string>('')
 
-  const [totalStocks,setTotalStocks] = useState<string>('')
-  const [stockUnit,setStockUnit] =  useState<string>('')
+  const [itemImages, setItemImages] = useState<string[]>([])
 
-  const [errorStockUnit,setErrorStockUnit] = useState<string>('')
+  const [totalStocks, setTotalStocks] = useState<string>('')
+  const [stockUnit, setStockUnit] = useState<string>('')
+
+  const [errorStockUnit, setErrorStockUnit] = useState<string>('')
 
 
   const [itemType, setItemType] = useState('noveg');
 
 
-  const [foodVars,setFoodVars] = useState<foodVariations[]>([])
+  const [foodVars, setFoodVars] = useState<foodVariations[]>([])
 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
 
-  const [selectedAddonsList,setSelectedAddOns] = useState<string[]>([])
+  const [selectedAddonsList, setSelectedAddOns] = useState<string[]>([])
 
   const {
     isFirstTimeLoading: selectedFirstTimeLoading,
@@ -134,111 +134,111 @@ export function VendorAddItem() {
   );
 
   //load categories
-  const loadCategories = async () =>{
+  const loadCategories = async () => {
     setProcessingLoader(true)
     const response: Response = await getVendorCategories();
     if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
+      await authAuthorizeRedirect(response, navigation)
     }
-    dispatch(vendorCategoriesActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorCategoriesActions.setData({field:'isFirstTimeLoading',data:false}))
+    dispatch(vendorCategoriesActions.setData({ field: 'data', data: response?.data }))
+    dispatch(vendorCategoriesActions.setData({ field: 'isFirstTimeLoading', data: false }))
     setProcessingLoader(false)
   }
 
-  useEffect(()=>{
-    if(selectedFirstTimeLoading){
-       loadCategories()
+  useEffect(() => {
+    if (selectedFirstTimeLoading) {
+      loadCategories()
     }
-  },[selectedFirstTimeLoading])
+  }, [selectedFirstTimeLoading])
 
   //load addons
 
-  const loadAddons = async () =>{
+  const loadAddons = async () => {
     setProcessingLoader(true)
     const response: Response = await getVendorAddons();
     if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
+      await authAuthorizeRedirect(response, navigation)
     }
-    dispatch(vendorAddonsActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorAddonsActions.setData({field:'isFirstTimeLoading',data:false}))
+    dispatch(vendorAddonsActions.setData({ field: 'data', data: response?.data }))
+    dispatch(vendorAddonsActions.setData({ field: 'isFirstTimeLoading', data: false }))
     setProcessingLoader(false)
 
   }
 
-  useEffect(()=>{
-    if(selectedFirstTimeAddonsLoading){
-       loadAddons()
+  useEffect(() => {
+    if (selectedFirstTimeAddonsLoading) {
+      loadAddons()
     }
-  },[selectedFirstTimeAddonsLoading])
+  }, [selectedFirstTimeAddonsLoading])
 
 
 
   //load units
-  const loadUnits = async () =>{
+  const loadUnits = async () => {
     setProcessingLoader(true)
     const response: Response = await getVendorUnits();
     if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
+      await authAuthorizeRedirect(response, navigation)
     }
-    dispatch(vendorUnitsActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorUnitsActions.setData({field:'isFirstTimeLoading',data:false}))
+    dispatch(vendorUnitsActions.setData({ field: 'data', data: response?.data }))
+    dispatch(vendorUnitsActions.setData({ field: 'isFirstTimeLoading', data: false }))
     setProcessingLoader(false)
 
   }
-  useEffect(()=>{
-    if(selectedUnitFirstTimeLoading){
-       loadUnits()
+  useEffect(() => {
+    if (selectedUnitFirstTimeLoading) {
+      loadUnits()
     }
-  },[selectedUnitFirstTimeLoading])
+  }, [selectedUnitFirstTimeLoading])
 
 
   //load attributes
-  const loadAttributes = async ()=>{
+  const loadAttributes = async () => {
     // setProcessingLoader(true)
     const response: Response = await getAttributesService();
     if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
+      await authAuthorizeRedirect(response, navigation)
     }
-    dispatch(vendorAttributeActions.setData({field:'data',data:response?.data}))
-    dispatch(vendorAttributeActions.setData({field:'isFirstTimeLoading',data:false}))
+    dispatch(vendorAttributeActions.setData({ field: 'data', data: response?.data }))
+    dispatch(vendorAttributeActions.setData({ field: 'isFirstTimeLoading', data: false }))
     // setProcessingLoader(false)
   }
 
-  useEffect(()=>{
-    if(attributeSelectedFirstTimeLoading){
-       loadAttributes()
+  useEffect(() => {
+    if (attributeSelectedFirstTimeLoading) {
+      loadAttributes()
     }
-  },[attributeSelectedFirstTimeLoading])
+  }, [attributeSelectedFirstTimeLoading])
 
   //load sub categories
-  const loadSubCategories = async () =>{
+  const loadSubCategories = async () => {
     setProcessingLoader(true)
-    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: '', subcategories: []  } }))
+    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: '', subcategories: [] } }))
     const response: Response = await getVendorSubCategories(category);
     if (response?.data?.errors) {
-      await authAuthorizeRedirect(response,navigation)
+      await authAuthorizeRedirect(response, navigation)
     }
-    
+
     dispatch(vendorSubCategoriesActions.addServiceSubCategories({ id: category, subcategories: response?.data }))
-    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: response?.data  } }))
+    dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: response?.data } }))
     dispatch(vendorSubCategoriesActions.setData({ field: 'loading', data: false }))
     setProcessingLoader(false)
   }
 
   //getting subcateories based on category
-  useEffect(()=>{
+  useEffect(() => {
     setSubCategory('')
-    if(category){
-        const checkExisting = SubCategories.find(elementDet => elementDet.categoryId === category);
-        if (!checkExisting) {
-          loadSubCategories();
-        } else {
-          dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: checkExisting.subcategories } })) 
-        }
+    if (category) {
+      const checkExisting = SubCategories.find(elementDet => elementDet.categoryId === category);
+      if (!checkExisting) {
+        loadSubCategories();
+      } else {
+        dispatch(vendorSubCategoriesActions.setData({ field: 'selected', data: { categoryId: category, subcategories: checkExisting.subcategories } }))
+      }
     }
-  },[category])
+  }, [category])
 
-  
+
 
   const handleCreateBanner = async () => {
     Alert.alert('Create Item')
@@ -308,21 +308,13 @@ export function VendorAddItem() {
           stockUnit={stockUnit}
           setStockUnit={setStockUnit}
           errorStockUnit={errorStockUnit}
-          itemType={itemType} 
-          setItemType={setItemType} 
+          itemType={itemType}
+          setItemType={setItemType}
           foodVars={foodVars}
           setFoodVars={setFoodVars}
           selectedAddonsList={selectedAddonsList}
           setSelectedAddOns={setSelectedAddOns}
 
-        />
-        <GradientBtn
-          label="newDeveloper.CreateItem"
-          onPress={handleCreateBanner}
-          additionalStyle={{
-            marginHorizontal: windowWidth(5),
-            marginTop: windowHeight(3),
-          }}
         />
         <Spinner
           visible={processingLoader}
@@ -330,7 +322,14 @@ export function VendorAddItem() {
           textStyle={{ color: '#FFF' }}
         />
       </ScrollView>
-
+      <GradientBtn
+        label="newDeveloper.CreateItem"
+        onPress={handleCreateBanner}
+        additionalStyle={{
+          marginHorizontal: windowWidth(5),
+          marginTop: windowHeight(3),
+        }}
+      />
     </>
   );
 }

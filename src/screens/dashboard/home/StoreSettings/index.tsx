@@ -13,6 +13,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
+import { DashLine } from '@src/commonComponents';
 
 interface Response {
   data: any;
@@ -60,6 +61,7 @@ export function StoreSettings() {
   const [scheduleOrderStatus,setScheduleOrderStatus] = useState<boolean>(false)
   const [deliveryStatus,setDeliveryStatus] = useState<boolean>(false)
   const [takeawayStatus,setTakewayStatus] = useState<boolean>(false)
+  const [cutleryStatus,setCutleryStatus] = useState<boolean>(false)
 
   //logo 
   const [storeLogo,setStoreLogo] =  useState<string>('')
@@ -69,7 +71,7 @@ export function StoreSettings() {
   //approx delivey time
   const [approxDeliveryMinimumTime,setApproxDeliveryMinimumTime] = useState<string>('')
   const [approxDeliveryMaximumTime,setApproxDeliveryMaximumTime] = useState<string>('')
-  const [approxDeliveryType,setApproxDeliveryType] =  useState<string>('')
+  const [approxDeliveryType,setApproxDeliveryType] =  useState<string>('minutes')
 
   // food type
   const [itemType,setItemType] = useState<string[]>([])
@@ -98,16 +100,7 @@ export function StoreSettings() {
         ]}>
         <Header showBackArrow={true} title={'newDeveloper.StoreSettings'} />
 
-        <View
-          style={[
-            GlobalStyle.horizontalLine,
-            {
-              marginTop: windowHeight(3),
-              marginHorizontal: 20,
-              borderColor: isDark ? appColors.darkBorder : appColors.border,
-            },
-          ]}
-        />
+         
         
         <InputView
           storeName={storeName}
@@ -151,23 +144,26 @@ export function StoreSettings() {
           setApproxDeliveryType={setApproxDeliveryType}
           itemType={itemType}
           setItemType={setItemType}
-           
-
+          cutleryStatus={cutleryStatus}
+          setCutleryStatus={setCutleryStatus}
         />
-        <GradientBtn
-          label="newDeveloper.UpdateSettings"
-          onPress={handleCreateBanner}
-          additionalStyle={{
-            marginHorizontal: windowWidth(5),
-            marginTop: windowHeight(3),
-          }}
-        />
+        <DashLine />
         <Spinner
           visible={processingLoader}
           textContent={'Processing.....'}
           textStyle={{ color: '#FFF' }}
         />
       </ScrollView>
+        <GradientBtn
+          label="newDeveloper.UpdateSettings"
+          onPress={handleCreateBanner}
+          additionalStyle={{
+            marginHorizontal: windowWidth(5),
+            marginTop: windowHeight(3),
+             
+          }}
+        />
+       
 
     </>
   );

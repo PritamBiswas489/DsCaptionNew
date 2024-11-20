@@ -146,8 +146,8 @@ export default function InputView(
     setItemType: (value: string) => void,
     foodVars: foodVariations[],
     setFoodVars: (value: foodVariations[]) => void,
-    selectedAddonsList:string[]
-    setSelectedAddOns:(value:string[])=>void
+    selectedAddonsList: string[]
+    setSelectedAddOns: (value: string[]) => void
   }
 ) {
   const { t, isDark } = useValues();
@@ -254,7 +254,7 @@ export default function InputView(
     data: Attributes
   } = useSelector((state: RootState) => state['vendorAttribute'])
 
-   //handle variants change
+  //handle variants change
   const handleVariantsChange = (variants: string[], attribute: number) => {
     const variantIndex = attributeVariants.findIndex(ele => ele.attrbuteId === attribute)
     if (variantIndex !== -1) {
@@ -376,51 +376,52 @@ export default function InputView(
   const [toTime, setToTime] = useState('')
 
   const addFoodVariationPanel = () => {
-      const dd = {
-        name: '',
-        type: 'single',
-        min: '',
-        max: '',
-        required: 'off',
-        values: [{
-          label: '',
-          optionPrice: ''
-        }]
-      }
-      const newVariantData = [...foodVars,dd]
-      setFoodVars(newVariantData)
+    const dd = {
+      name: '',
+      type: 'single',
+      min: '',
+      max: '',
+      required: 'off',
+      values: [{
+        label: '',
+        optionPrice: ''
+      }]
+    }
+    const newVariantData = [...foodVars, dd]
+    setFoodVars(newVariantData)
   }
   //update variation state 
-  const updateVaritionsState = (dt:any,index:number) =>{
-       const cloneFoodVars = [...foodVars]
-       if(cloneFoodVars?.[index]){
-        cloneFoodVars[index] = {... cloneFoodVars[index],
-            name:dt?.name, 
-            required:dt.isRequired ? 'on' : 'off',
-            type:dt?.type,
-            values:dt?.options || [],
-            min: dt?.minimumValue,
-            max: dt?.maximumValue,
-        }
-       }
-      
-       setFoodVars(cloneFoodVars) 
+  const updateVaritionsState = (dt: any, index: number) => {
+    const cloneFoodVars = [...foodVars]
+    if (cloneFoodVars?.[index]) {
+      cloneFoodVars[index] = {
+        ...cloneFoodVars[index],
+        name: dt?.name,
+        required: dt.isRequired ? 'on' : 'off',
+        type: dt?.type,
+        values: dt?.options || [],
+        min: dt?.minimumValue,
+        max: dt?.maximumValue,
+      }
+    }
+
+    setFoodVars(cloneFoodVars)
   }
   //remove variation from state  
-  const removeVariationFromState = (index:number) =>{
-     const newFoodVars = foodVars.filter((_:foodVariations,foodVarIndex:number)=>foodVarIndex!==index)
-     setFoodVars(newFoodVars) 
+  const removeVariationFromState = (index: number) => {
+    const newFoodVars = foodVars.filter((_: foodVariations, foodVarIndex: number) => foodVarIndex !== index)
+    setFoodVars(newFoodVars)
   }
   // handle selected addons
-  const handleSelectedAddons = (value:string) =>{
-      if(!selectedAddonsList.includes(value)){
-        setSelectedAddOns([...selectedAddonsList,value])
-      }
+  const handleSelectedAddons = (value: string) => {
+    if (!selectedAddonsList.includes(value)) {
+      setSelectedAddOns([...selectedAddonsList, value])
+    }
   }
 
   //remove seleted addons from the list
-  const removeSelectedAddon = (id:string) =>{
-    const updatedAddOn = selectedAddonsList.filter((addOn:string,foodVarIndex:number)=>addOn!==id)
+  const removeSelectedAddon = (id: string) => {
+    const updatedAddOn = selectedAddonsList.filter((addOn: string, foodVarIndex: number) => addOn !== id)
     setSelectedAddOns(updatedAddOn)
   }
 
@@ -454,11 +455,11 @@ export default function InputView(
           <View style={styles.radioContainer}>
             <View style={styles.radioButton}>
               <RadioButton value="noveg" />
-              <Text style={styles.radioLabel}>{t('newDeveloper.Nonveg')}</Text>
+              <Text style={[styles.radioLabel, { color: isDark ? appColors.white : appColors.darkText }]}>{t('newDeveloper.Nonveg')}</Text>
             </View>
             <View style={styles.radioButton}>
               <RadioButton value="veg" />
-              <Text style={styles.radioLabel}>{t('newDeveloper.Veg')}</Text>
+              <Text style={[styles.radioLabel, { color: isDark ? appColors.white : appColors.darkText }]}>{t('newDeveloper.Veg')}</Text>
             </View>
 
           </View>
@@ -630,16 +631,16 @@ export default function InputView(
 
         {/* addon lising here */}
         <SelectionDropdown
-            data={vendorAddons}
-            value={''}
-            setValue={(value: string) => {
-              handleSelectedAddons(value)
-            }}
-            label={t('newDeveloper.Addons')}
-            error={''}
-          />
+          data={vendorAddons}
+          value={''}
+          setValue={(value: string) => {
+            handleSelectedAddons(value)
+          }}
+          label={t('newDeveloper.Addons')}
+          error={''}
+        />
 
-        {selectedAddonsList.length > 0 && <AddonInput removeSelectedAddon={removeSelectedAddon} selectedaddons={selectedAddonsList} />}  
+        {selectedAddonsList.length > 0 && <AddonInput removeSelectedAddon={removeSelectedAddon} selectedaddons={selectedAddonsList} />}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
           {/* Available time starts */}
@@ -662,7 +663,7 @@ export default function InputView(
 
 
 
-       
+
 
 
 
@@ -719,13 +720,13 @@ export default function InputView(
         setImage={handleSetItemImage}
         error={''}
       />
-     {foodVars.length > 0 && 
-          foodVars.map((foodV:foodVariations,foodindex:number)=>{
-            return (<View key={`foodVariation-${foodindex}`} style={{ flex: 1, marginTop: 20 }}>
-              <FoodVariation removeVariationFromState={removeVariationFromState} updateVaritionsState={updateVaritionsState} foodVariation={foodV} foodVariationIndex={foodindex} />
-            </View>)
-          })  
-      } 
+      {foodVars.length > 0 &&
+        foodVars.map((foodV: foodVariations, foodindex: number) => {
+          return (<View key={`foodVariation-${foodindex}`} style={{ flex: 1, marginTop: 20 }}>
+            <FoodVariation removeVariationFromState={removeVariationFromState} updateVaritionsState={updateVaritionsState} foodVariation={foodV} foodVariationIndex={foodindex} />
+          </View>)
+        })
+      }
       <View style={{ flex: 1, marginTop: 10 }}>
         <TouchableOpacity onPress={addFoodVariationPanel} style={styles.addButton}>
           <Text style={styles.addButtonText}>{t('newDeveloper.AddVariants')}</Text>

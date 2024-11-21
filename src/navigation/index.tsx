@@ -93,7 +93,9 @@ import { NotificationVendor } from '@src/screens/notificationVendor';
 import { VendorAddNewBanner } from '@src/screens/dashboard/bannerVendor/addNewBanner';
 import { VendorAddItem } from '@src/screens/dashboard/storeItem/addItem';
 import { StoreSettings } from '@src/screens/dashboard/home/StoreSettings';
-
+import { StoreAddCoupon } from '@src/screens/dashboard/home/StoreAddCoupon';
+import { StoreScheduleSettings } from '@src/screens/dashboard/home/StoreScheduleSettings';
+import { VendorCreateAddons } from '@src/screens/dashboard/storeAddons/createAddons';
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
 
@@ -389,11 +391,16 @@ export default function MyStack() {
 
 
          <RootStack.Screen name="StoreSettings" component={StoreSettings} />
+
+         <RootStack.Screen name="StoreAddCoupon" component={StoreAddCoupon} />
+
+
+         <RootStack.Screen name="StoreScheduleSettings" component={StoreScheduleSettings} />
          
 
+         <RootStack.Screen name="VendorCreateAddons" component={VendorCreateAddons} />
          
          
-
           </>
         )}
       </RootStack.Navigator>

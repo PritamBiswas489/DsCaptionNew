@@ -1333,6 +1333,20 @@
             "Schedulefor":"Schedule for",
             "OpenTime":"Open Time",
             "CloseTime":"Close Time",
+            "AddCoupon":"Add Coupon",
+            "CouponTitle":"Coupon title",
+            "CouponCode":"Coupon code",
+            "LimitForSameUser":"Limit for same user",
+            "MinPurchase":"Min purchase",
+            "StartDate":"Start Date",
+            "ExpireDate":"Expire date",
+            "Discount":"Discount",
+            "MaxDiscount":"Max discount",
+            "StoreScheduleUpdate":"Daily Schedule",
+            "AddNewAddOns":"Create addons",
+            "AddonTitle":"Addon title",
+            "AddonPrice":"Addon price"
+
              
    
             

@@ -29,7 +29,7 @@ import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepicke
 import SwitchContainer from '@src/otherComponent/switchContainer';
 import { DashLine } from '@src/commonComponents';
 import DailyScheduleTime from '../dailyScheduleTime';
-
+ 
 
 interface DataItem {
   label: string;
@@ -490,7 +490,16 @@ export default function InputView(
         />
 
       </View>
-
+      <DashLine />
+      {/* Daily schedule time */}
+      <View style={{ marginTop: 15 }}>
+      <Text style={[
+          styles.inputLabel,
+          { color: appColors.primary }
+        ]}> {t('newDeveloper.DailyScheduleTime')}</Text>
+        <DailyScheduleTime />
+      </View>
+      {/* end daily schedule time  */}
     </>
   );
 }

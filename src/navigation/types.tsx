@@ -191,4 +191,7 @@ export type RootStackParamList = {
   VendorAddNewBanner:undefined;
   VendorAddItem:undefined;
   StoreSettings:undefined;
+  StoreAddCoupon:undefined;
+  StoreScheduleSettings:undefined;
+  VendorCreateAddons:undefined;
 };

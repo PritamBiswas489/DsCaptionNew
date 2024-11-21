@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { DashLine } from '@src/commonComponents';
+ 
 
 interface Response {
   data: any;
@@ -50,9 +51,13 @@ export function StoreAddCoupon() {
   const [errorExpireDate,setErrorExpireDate] = useState<string>('')
 
   const [discount,setDiscount] = useState<number>(0)
+  const [errorDiscount,setErrorDiscount] = useState<string>('')
+  
   const [discountType,setDiscounType] = useState<string>('')
 
   const [maxDiscount,setMaxDiscount] =  useState<number>(0) //will show when discount type is percent
+  const [errorMaxDiscount,setErrorMaxDiscount] = useState<string>('')
+
     
 
   
@@ -74,25 +79,42 @@ export function StoreAddCoupon() {
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
-        <Header showBackArrow={true} title={'newDeveloper.StoreSettings'} />
+        <Header showBackArrow={true} title={'newDeveloper.AddCoupon'} />
 
          
         
         <InputView
-          storeName={storeName}
-          setStoreName={setStoreName}
-          errorStoreName={errorStoreName}
+          couponTitle={couponTitle}
+          setCouponTitle={setCouponTitle}
+          errorCoupontitle={errorCoupontitle}
+          couponCode={couponCode}
+          setCouponCode={setCouponCode}
+          errorCouponCode={errorCouponCode}
+          limitSameUser={limitSameUser}
+          setLimitSameUser={setLimitSameUser}
+          errorLimitSameUser={errorLimitSameUser}
+          minPurchase={minPurchase}
+          setMinPurchase={setMinPurchase}
+          errorMinPurchase={errorMinPurchase}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          errorStartDate={errorStartDate}
+          expireDate={expireDate}
+          setExpireDate={setExpireDate}
+          errorExpireDate={errorExpireDate}
+          discount={discount}
+          setDiscount={setDiscount}
+          errorDiscount={errorDiscount}
+          discountType={discountType}
+          setDiscounType={setDiscounType}
+          maxDiscount={maxDiscount}
+          setMaxDiscount={setMaxDiscount}
+          errorMaxDiscount={errorMaxDiscount}
          
         />
         <DashLine />
-        <Spinner
-          visible={processingLoader}
-          textContent={'Processing.....'}
-          textStyle={{ color: '#FFF' }}
-        />
-      </ScrollView>
         <GradientBtn
-          label="newDeveloper.UpdateSettings"
+          label="newDeveloper.Add"
           onPress={handleCreateBanner}
           additionalStyle={{
             marginHorizontal: windowWidth(5),
@@ -100,6 +122,13 @@ export function StoreAddCoupon() {
              
           }}
         />
+        <Spinner
+          visible={processingLoader}
+          textContent={'Processing.....'}
+          textStyle={{ color: '#FFF' }}
+        />
+      </ScrollView>
+       
        
 
     </>

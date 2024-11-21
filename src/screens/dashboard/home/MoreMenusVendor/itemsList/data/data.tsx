@@ -41,9 +41,32 @@ export const categoriesData: Array<HomeCategoryType> = [
 
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Store settings', 
+    title: 'Store settings (For Testing)', 
     goToScreen:'StoreSettings'
   },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Add Coupon (For Testing)', 
+    goToScreen:'StoreAddCoupon'
+  },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Store Schedule (For Testing)', 
+    goToScreen:'StoreScheduleSettings'
+  },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Addon food store (For Testing)', 
+    goToScreen:'VendorCreateAddons'
+    
+    
+  },
+
+
+   
   {
     icon: <PendingItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.PendingItem', 

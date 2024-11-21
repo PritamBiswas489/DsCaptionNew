@@ -2,34 +2,15 @@ import { View, Text, Alert, Image, TouchableOpacity, SafeAreaView } from 'react-
 import React, { useState, useEffect } from 'react';
 import { styles } from './styles';
 import TextInputComponent from '@otherComponent/auth/textInput';
-import UploadContainerView from '@src/otherComponent/auth/uploadContainer';
-import {
-  ServiceName,
-  HomeIcon,
-  SubCategory,
-  Notes,
-  Location,
-  Experience,
-  ServiceMen,
-  Amount,
-  Discount,
-  ReceiptDiscount,
-} from '@utils/icons';
 import { fontSizes, windowHeight, windowWidth } from '@theme/appConstant';
 import { useValues } from '../../../../../../App';
-import { ImageLibraryOptions } from 'react-native-image-picker';
-import { handleImagePicker, handleImagePickerAllDetails } from '@utils/functions';
 import SelectionDropdown from '@src/otherComponent/selectionDropdown';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import appColors from '@src/theme/appColors';
-import { Checkbox } from 'react-native-paper';
-import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepickerSelectTimeTwentyFourHours';
-
-import SwitchContainer from '@src/otherComponent/switchContainer';
 import { DashLine } from '@src/commonComponents';
-import DailyScheduleTime from '../dailyScheduleTime';
- 
+import DatePickerSelector from '@src/commonComponents/dateSelectPicker';
+
 
 interface DataItem {
   label: string;
@@ -43,93 +24,59 @@ interface Combination {
 
 export default function InputView(
   {
-    storeName,
-    setStoreName,
-    errorStoreName,
-    contactNumber,
-    setContactNumber,
-    errorContactNumber,
-    storeAddress,
-    setStoreAddress,
-    errorStoreAddress,
-    minimumOrderAmount,
-    setMinimumOrderAmount,
-    errorMinimumOrderAmount,
-    metaTitle,
-    setMetaTitle,
-    errorMetaTitle,
-    metaDescription,
-    setMetaDescription,
-    errorMetaDescription,
-    gstStatus,
-    setGstStatus,
-    gstPercentageValue,
-    setGstPercentageValue,
-    errorGstPercentageValue,
-    scheduleOrderStatus,
-    setScheduleOrderStatus,
-    deliveryStatus,
-    setDeliveryStatus,
-    takeawayStatus,
-    setTakewayStatus,
-    storeLogo,
-    setStoreLogo,
-    storeCoverPhoto,
-    setStoreCoverPhoto,
-    approxDeliveryMinimumTime,
-    setApproxDeliveryMinimumTime,
-    approxDeliveryMaximumTime,
-    setApproxDeliveryMaximumTime,
-    approxDeliveryType,
-    setApproxDeliveryType,
-    itemType,
-    setItemType,
-    cutleryStatus,
-    setCutleryStatus
+    couponTitle,
+    setCouponTitle,
+    errorCoupontitle,
+    couponCode,
+    setCouponCode,
+    errorCouponCode,
+    limitSameUser,
+    setLimitSameUser,
+    errorLimitSameUser,
+    minPurchase,
+    setMinPurchase,
+    errorMinPurchase,
+    startDate,
+    setStartDate,
+    errorStartDate,
+    expireDate,
+    setExpireDate,
+    errorExpireDate,
+    discount,
+    setDiscount,
+    errorDiscount,
+    discountType,
+    setDiscounType,
+    maxDiscount,
+    setMaxDiscount,
+    errorMaxDiscount,
   }: {
-    storeName: string,
-    setStoreName: (value: string) => void,
-    errorStoreName: string,
-    contactNumber: string,
-    setContactNumber: (value: string) => void,
-    errorContactNumber: string,
-    storeAddress: string,
-    setStoreAddress: (value: string) => void,
-    errorStoreAddress: string,
-    minimumOrderAmount: number,
-    setMinimumOrderAmount: (value: number) => void,
-    errorMinimumOrderAmount: string,
-    metaTitle: string,
-    setMetaTitle: (value: string) => void,
-    errorMetaTitle: string,
-    metaDescription: string,
-    setMetaDescription: (value: string) => void,
-    errorMetaDescription: string,
-    gstStatus: boolean,
-    setGstStatus: (value: boolean) => void,
-    gstPercentageValue: number,
-    setGstPercentageValue: (value: number) => void,
-    errorGstPercentageValue: string,
-    scheduleOrderStatus: boolean,
-    setScheduleOrderStatus: (value: boolean) => void,
-    deliveryStatus: boolean,
-    setDeliveryStatus: (value: boolean) => void,
-    takeawayStatus: boolean,
-    setTakewayStatus: (value: boolean) => void,
-    cutleryStatus: boolean,
-    setCutleryStatus: (value: boolean) => void,
-    storeLogo: string,
-    setStoreLogo: (value: string) => void,
-    storeCoverPhoto: string,
-    setStoreCoverPhoto: (value: string) => void,
-    approxDeliveryMinimumTime: string,
-    setApproxDeliveryMinimumTime: (value: string) => void,
-    approxDeliveryMaximumTime: string,
-    setApproxDeliveryMaximumTime: (value: string) => void,
-    approxDeliveryType: string,
-    setApproxDeliveryType: (value: string) => void,
-    itemType: string[],
-    setItemType: (value: string[]) => void,
+    couponTitle: string,
+    setCouponTitle: (value: string) => void,
+    errorCoupontitle: string,
+    couponCode: string,
+    setCouponCode: (value: string) => void,
+    errorCouponCode: string,
+    limitSameUser: number,
+    setLimitSameUser: (value: number) => void,
+    errorLimitSameUser: string,
+    minPurchase: number,
+    setMinPurchase: (value: number) => void,
+    errorMinPurchase: string,
+    startDate: string,
+    setStartDate: (value: string) => void,
+    errorStartDate: string,
+    expireDate: string,
+    setExpireDate: (value: string) => void,
+    errorExpireDate: string,
+    discount: number,
+    setDiscount: (value: number) => void,
+    errorDiscount: string,
+    discountType: string,
+    setDiscounType: (value: string) => void,
+    maxDiscount: number,
+    setMaxDiscount: (value: number) => void,
+    errorMaxDiscount: string,
   }
 ) {
   const { t, isDark } = useValues();
@@ -139,367 +86,177 @@ export default function InputView(
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
 
-  //handle item type
-  const handleItemType = (type: string) => {
-    if (itemType.includes(type)) {
-      setItemType(itemType.filter((value: string) => type !== value))
-    } else {
-      setItemType([...itemType, type])
-    }
-  }
-  //=== open cover image ===//
-  const openCoverImage = () => {
-    const options: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-    };
+  const [startDatepicker,setStartDatepicker] = useState(false)
+  const [endDatepicker,setEndDatepicker] = useState(false)
+   
 
-    handleImagePickerAllDetails(options, (imageAssets: any) => {
-      if (imageAssets?.uri) {
-        const fileSizeInMB = imageAssets.fileSize / (1024 * 1024);
-        if (fileSizeInMB > 2) {
-          Alert.alert(t('newDeveloper.greaterThantwoMbError'))
-          return
-        }
-        setStoreCoverPhoto(imageAssets.uri)
-      }
-    });
-  };
-  //==== open store image ====//
-  const openStoreImage = () => {
-    const options: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-    };
-
-    handleImagePickerAllDetails(options, (imageAssets: any) => {
-      if (imageAssets?.uri) {
-        const fileSizeInMB = imageAssets.fileSize / (1024 * 1024);
-        if (fileSizeInMB > 2) {
-          Alert.alert(t('newDeveloper.greaterThantwoMbError'))
-          return
-        }
-        setStoreLogo(imageAssets.uri)
-      }
-    });
-  };
 
   return (
     <>
       <View style={{ flex: 1, marginTop: windowHeight(2) }}>
-        {/* Store name */}
+        {/* Coupon title */}
         <View style={{ marginTop: 5 }}>
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.Store_name_English')}</Text>
+          ]}> {t('newDeveloper.CouponTitle')}</Text>
           <TextInputComponent
-            placeholder={t('newDeveloper.enterStoreName')}
-            value={storeName}
+            placeholder={t('newDeveloper.CouponTitle')}
+            value={couponTitle}
             onChangeText={value => {
-              setStoreName(value);
+              setCouponTitle(value);
             }}
-            error={errorStoreName}
+            error={errorCoupontitle}
             containerStyle={{ marginTop: windowHeight(1) }}
           />
         </View>
         <DashLine />
-        {/* Contact number */}
+        {/* Coupon code */}
         <View style={{ marginTop: 5 }}>
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.Contact_number')}</Text>
+          ]}> {t('newDeveloper.CouponCode')}</Text>
           <TextInputComponent
-            placeholder={t('newDeveloper.enterContactNumber')}
-            value={contactNumber}
+            placeholder={t('newDeveloper.CouponCode')}
+            value={couponCode}
             onChangeText={value => {
-              setContactNumber(value);
+              setCouponCode(value);
             }}
-            error={errorContactNumber}
+            error={errorCouponCode}
             containerStyle={{ marginTop: windowHeight(1) }}
           />
         </View>
         <DashLine />
-
-        {/* store address */}
+        {/* Limit for same user */}
         <View style={{ marginTop: 5 }}>
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.Store_address')}</Text>
+          ]}> {t('newDeveloper.LimitForSameUser')}</Text>
           <TextInputComponent
-            placeholder={t('newDeveloper.enterAddress')}
-            value={storeAddress}
+            placeholder={t('newDeveloper.LimitForSameUser')}
+            value={isNaN(limitSameUser) ? limitSameUser.toString() : ''}
             onChangeText={value => {
-              setStoreAddress(value);
+              setLimitSameUser(parseInt(value));
             }}
-            error={errorStoreAddress}
-            containerStyle={{ marginTop: windowHeight(1) }}
-          />
-        </View>
-        <DashLine />
-
-        {/* Minimum order amount  */}
-        <View style={{ marginTop: 5 }}>
-          <Text style={[
-            styles.inputLabel,
-            { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.MinimumOrderAmount')}</Text>
-          <TextInputComponent
             keyboardType='number-pad'
-            placeholder={t('newDeveloper.EnterAmount')}
-            value={minimumOrderAmount.toString()}
-            onChangeText={value => {
-              setMinimumOrderAmount(parseFloat(value));
-            }}
-            error={errorMinimumOrderAmount}
+            error={errorLimitSameUser}
             containerStyle={{ marginTop: windowHeight(1) }}
           />
         </View>
         <DashLine />
-
-        {/* Meta title  */}
+        {/* Minimum puschase */}
         <View style={{ marginTop: 5 }}>
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.Meta_title')}</Text>
+          ]}> {t('newDeveloper.MinPurchase')}</Text>
           <TextInputComponent
-            placeholder={t('newDeveloper.enterMetaTitle')}
-            value={metaTitle}
+            placeholder={t('newDeveloper.MinPurchase')}
+            value={isNaN(minPurchase) ? minPurchase.toString() : ''}
             onChangeText={value => {
-              setMetaTitle(value);
+              setMinPurchase(parseInt(value));
             }}
-            error={errorMetaTitle}
+            keyboardType='number-pad'
+            error={errorMinPurchase}
             containerStyle={{ marginTop: windowHeight(1) }}
           />
         </View>
-
         <DashLine />
+        <View style={{ flexDirection: "row" }}>
+          {/* StartDate */}
+          <TouchableOpacity style={{ flex: 1 }} onPress={() => { setStartDatepicker(true) }}>
+            <View>
+              <Text style={[
+                styles.inputLabel,
+                { color: isDark ? appColors.white : appColors.darkText }
+              ]}> {t('newDeveloper.StartDate')}</Text>
+              <TextInputComponent
+                placeholder={t('newDeveloper.StartDate')}
+                value={startDate}
+                onChangeText={value => {
 
-        {/* Meta description  */}
-        <View style={{ marginTop: 5 }}>
-          <Text style={[
-            styles.inputLabel,
-            { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.MetaDescriptionEnglish')}</Text>
-          <TextInputComponent
-            placeholder={t('newDeveloper.enterMetaDescription')}
-            value={metaDescription}
-            onChangeText={value => {
-              setMetaDescription(value);
-            }}
-            containerStyle={{ marginBottom: windowHeight(0) }}
-            multiline={true}
-            inputStyle={styles.inputStyle}
-            error={errorMetaDescription}
-          />
+                }}
+                editable={false}
+                error={errorStartDate}
+                containerStyle={{ marginTop: windowHeight(1) }}
+              />
+            </View>
+
+          </TouchableOpacity>
+
+          {/* expire Date */}
+          <TouchableOpacity style={{ flex: 1 }} onPress={() => { setEndDatepicker(true) }}>
+            <View style={{ flex: 1 }}>
+              <Text style={[
+                styles.inputLabel,
+                { color: isDark ? appColors.white : appColors.darkText }
+              ]}> {t('newDeveloper.ExpireDate')}</Text>
+              <TextInputComponent
+                placeholder={t('newDeveloper.ExpireDate')}
+                value={expireDate}
+                onChangeText={value => {
+
+                }}
+                editable={false}
+                error={errorExpireDate}
+                containerStyle={{ marginTop: windowHeight(1) }}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
         <DashLine />
-
-        {/* gst percentage panel */}
-        <View style={{ marginTop: 5 }}>
-          <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
             <Text style={[
               styles.inputLabel,
-              { color: isDark ? appColors.white : appColors.darkText },
-
-            ]}> {t('newDeveloper.StoreGst')}</Text>
-            <SwitchContainer
-              toggleDarkSwitch={() => { setGstStatus(!gstStatus) }}
-              switchOn={gstStatus}
+              { color: isDark ? appColors.white : appColors.darkText }
+            ]}> {t('newDeveloper.Discount')}</Text>
+            <TextInputComponent
+              placeholder={t('newDeveloper.Discount')}
+              value={isNaN(discount) ? discount.toString() : ''}
+              onChangeText={value => {
+                setDiscount(parseFloat(value))
+              }}
+              keyboardType='number-pad'
+              error={errorDiscount}
+              containerStyle={{ marginTop: windowHeight(1) }}
             />
           </View>
-          <TextInputComponent
-            keyboardType='number-pad'
-            placeholder={t('newDeveloper.enterGst')}
-            value={!gstStatus ? '' : gstPercentageValue.toString()}
-            onChangeText={value => {
-              setGstPercentageValue(parseFloat(value));
-            }}
-            editable={gstStatus}
-            error={errorGstPercentageValue}
-            containerStyle={{ marginTop: windowHeight(1) }}
-          />
-        </View>
-
-        <DashLine />
-
-
-        {/* schedule order status  */}
-        <View style={{ marginTop: 15 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={[
-              styles.inputLabel,
-              { color: isDark ? appColors.white : appColors.darkText },
-
-            ]}> {t('newDeveloper.ScheduleOrderStatus')}</Text>
-            <SwitchContainer
-              toggleDarkSwitch={() => { setScheduleOrderStatus(!scheduleOrderStatus) }}
-              switchOn={scheduleOrderStatus}
-            />
-          </View>
-        </View>
-
-        <DashLine />
-
-        {/* delivery status */}
-        <View style={{ marginTop: 15 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={[
-              styles.inputLabel,
-              { color: isDark ? appColors.white : appColors.darkText },
-
-            ]}> {t('newDeveloper.deliveryStatus')}</Text>
-            <SwitchContainer
-              toggleDarkSwitch={() => { setDeliveryStatus(!deliveryStatus) }}
-              switchOn={deliveryStatus}
-            />
-          </View>
-        </View>
-        <DashLine />
-
-        {/* take away status */}
-        <View style={{ marginTop: 15 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={[
-              styles.inputLabel,
-              { color: isDark ? appColors.white : appColors.darkText },
-
-            ]}> {t('newDeveloper.takeAwayStatus')}</Text>
-            <SwitchContainer
-              toggleDarkSwitch={() => { setTakewayStatus(!takeawayStatus) }}
-              switchOn={takeawayStatus}
-            />
-          </View>
-        </View>
-        <DashLine />
-
-        {/* cutlery status */}
-        <View style={{ marginTop: 15 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={[
-              styles.inputLabel,
-              { color: isDark ? appColors.white : appColors.darkText },
-
-            ]}> {t('newDeveloper.cutleryStatus')}</Text>
-            <SwitchContainer
-              toggleDarkSwitch={() => { setCutleryStatus(!cutleryStatus) }}
-              switchOn={cutleryStatus}
-            />
-          </View>
-        </View>
-        <DashLine />
-        {/* Approx delivery time */}
-        <Text style={[
-          styles.inputLabel,
-          { color: appColors.primary }
-        ]}> {t('newDeveloper.approxDeliveryTime')}</Text>
-
-        {/* approx delivery time */}
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: windowWidth(1) }}>
-          {/* Minimum approx delivery time */}
-          <TextInputComponent
-            placeholder={t('newDeveloper.Minimum')}
-            value={approxDeliveryMinimumTime.toString()}
-            keyboardType='number-pad'
-
-            onChangeText={value => {
-              setApproxDeliveryMinimumTime(value);
-            }}
-            containerStyle={{ flex: 1, marginHorizontal: 0 }}
-            error={''}
-          />
-
-          <DashLine />
-
-          {/* Maximum approx delivery time */}
-          <TextInputComponent
-            placeholder={t('newDeveloper.Maximum')}
-            value={approxDeliveryMaximumTime.toString()}
-            keyboardType='number-pad'
-            onChangeText={value => {
-              setApproxDeliveryMaximumTime(value);
-            }}
-            containerStyle={{ flex: 1, marginHorizontal: 0 }}
-            error={''}
-          />
-
-          {/* approx delivery time type */}
-          <View style={{}}>
+          <View style={{ flex: 1 }}>
             <SelectionDropdown
               data={[{ label: t('newDeveloper.Minutes'), value: 'minutes' }, { label: t('newDeveloper.Hours'), value: 'hours' }, { label: t('newDeveloper.Days'), value: 'days' }]}
-              value={approxDeliveryType}
+              value={discountType}
               setValue={(value: string) => {
-                setApproxDeliveryType(value)
+                setDiscounType(value)
               }}
               label={''}
               error={''}
-            /></View>
+            />
+          </View>
         </View>
-
         <DashLine />
-
-        {/* item type  veg and non veg */}
-        <Text style={[
-          styles.inputLabel,
-          { color: appColors.primary }
-        ]}> {t('newDeveloper.itemtype')}</Text>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.checkboxContainer}>
-            <Checkbox
-              status={itemType.includes('nonveg') ? 'checked' : 'unchecked'}
-              onPress={() => { handleItemType('nonveg') }}
-            />
-            <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText },]}>{t('newDeveloper.nonVeg')}</Text>
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <Checkbox
-              status={itemType.includes('veg') ? 'checked' : 'unchecked'}
-              onPress={() => { handleItemType('veg') }}
-            />
-            <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText },]}>{t('newDeveloper.veg')}</Text>
-          </View>
-        </SafeAreaView>
-
-        <DashLine />
-
-        {/* store logo */}
-        <UploadContainerView
-          title={'newDeveloper.uploadStoreLogotwoMb'}
-          onPress={openStoreImage}
-          image={storeLogo}
-          setImage={setStoreLogo}
-          error={''}
-        />
-
-        <DashLine />
-        {/* store cover photo */}
-        <UploadContainerView
-          title={'newDeveloper.uploadStoreCoverPhototwoMb'}
-          onPress={openCoverImage}
-          image={storeCoverPhoto}
-          setImage={setStoreCoverPhoto}
-          error={''}
-        />
-
+        {/* Max Discount */}
+        <View style={{ marginTop: 5 }}>
+          <Text style={[
+            styles.inputLabel,
+            { color: isDark ? appColors.white : appColors.darkText }
+          ]}> {t('newDeveloper.MaxDiscount')}</Text>
+          <TextInputComponent
+            placeholder={t('newDeveloper.MaxDiscount')}
+            value={isNaN(maxDiscount) ? maxDiscount.toString() : ''}
+            onChangeText={value => {
+              setMaxDiscount(parseFloat(value));
+            }}
+            keyboardType='number-pad'
+            error={errorMaxDiscount}
+            containerStyle={{ marginTop: windowHeight(1) }}
+          />
+        </View>
       </View>
-      <DashLine />
-      {/* Daily schedule time */}
-      <View style={{ marginTop: 15 }}>
-      <Text style={[
-          styles.inputLabel,
-          { color: appColors.primary }
-        ]}> {t('newDeveloper.DailyScheduleTime')}</Text>
-        <DailyScheduleTime />
-      </View>
-      {/* end daily schedule time  */}
+     {startDatepicker && <DatePickerSelector setDatePicker={setStartDatepicker} setScheduleDate={setStartDate}/>} 
+     {endDatepicker && <DatePickerSelector setDatePicker={setEndDatepicker} setScheduleDate={setExpireDate}/>} 
     </>
   );
 }

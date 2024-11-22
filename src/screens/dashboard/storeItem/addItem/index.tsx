@@ -316,13 +316,7 @@ export function VendorAddItem() {
           setSelectedAddOns={setSelectedAddOns}
 
         />
-        <Spinner
-          visible={processingLoader}
-          textContent={'Processing.....'}
-          textStyle={{ color: '#FFF' }}
-        />
-      </ScrollView>
-      <GradientBtn
+        <GradientBtn
         label="newDeveloper.CreateItem"
         onPress={handleCreateBanner}
         additionalStyle={{
@@ -330,6 +324,13 @@ export function VendorAddItem() {
           marginTop: windowHeight(3),
         }}
       />
+        <Spinner
+          visible={processingLoader}
+          textContent={'Processing.....'}
+          textStyle={{ color: '#FFF' }}
+        />
+      </ScrollView>
+      
     </>
   );
 }

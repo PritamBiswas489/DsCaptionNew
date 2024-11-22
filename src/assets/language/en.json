@@ -1345,14 +1345,9 @@
             "StoreScheduleUpdate":"Daily Schedule",
             "AddNewAddOns":"Create addons",
             "AddonTitle":"Addon title",
-            "AddonPrice":"Addon price"
-
-             
-   
-            
-
-
-            
+            "AddonPrice":"Addon price",
+            "invalidTimeRangeSelected":"Invalid time range selected",
+            "overlappedError":"This schedule is overlapped with another schedule"
         }
     }
 }

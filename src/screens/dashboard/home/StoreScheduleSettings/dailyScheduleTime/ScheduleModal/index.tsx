@@ -30,9 +30,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     const handleAdd = () => {
         onAdd(openTime, closeTime);
-        setOpenTime('');
-        setCloseTime('');
-        onClose();
+        // setOpenTime('');
+        // setCloseTime('');
+        // onClose();
     };
 
     const {t} = useValues()

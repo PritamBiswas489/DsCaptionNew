@@ -53,7 +53,7 @@ export const categoriesData: Array<HomeCategoryType> = [
 
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Store Schedule (For Testing)', 
+    title: 'Schedule food store (For Testing)', 
     goToScreen:'StoreScheduleSettings'
   },
 

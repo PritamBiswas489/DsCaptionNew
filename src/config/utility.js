@@ -554,3 +554,45 @@ export function base64ToUtf8(base64) {
   return new TextDecoder().decode(utf8Bytes);   
 }
 
+//compare times
+
+export function compareTimes(t1,t2){
+      const [hours1, minutes1] = t1.split(":").map(Number);
+      const [hours2, minutes2] = t2.split(":").map(Number);
+
+      if (hours1 > hours2 || (hours1 === hours2 && minutes1 > minutes2)) {
+          return -1; // t1 is greater than t2
+      } else if (hours1 < hours2 || (hours1 === hours2 && minutes1 < minutes2)) {
+          return 1; // t1 is less than t2
+      } else {
+          return 0; // t1 is equal to t2
+      }
+}
+
+export function parseTime(time) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+export function isTimeRangeWithin(timeRange, ranges) {
+  const [startTime, endTime] = timeRange.split("-").map(parseTime);
+
+  console.log({startTime,endTime})
+  
+  for (const range of ranges) {
+      const [rangeStart, rangeEnd] = range.split("-").map(parseTime);
+
+      console.log({rangeStart,rangeEnd})
+      
+      // Check if any part of the timeRange falls within the range
+      if ((startTime >= rangeStart && startTime <= rangeEnd) ||
+          (endTime >= rangeStart && endTime <= rangeEnd) ||
+          (startTime <= rangeStart && endTime >= rangeEnd)) {
+          return true;
+      }
+  }
+  
+  return false;
+}
+
+

@@ -9,7 +9,7 @@ interface Translation {
     updated_at: string | null;
 }
 
-interface Schedule {
+export interface Schedule {
     id: number;
     store_id: number;
     day: number;

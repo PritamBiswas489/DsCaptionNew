@@ -1,5 +1,5 @@
 import appColors from '@src/theme/appColors';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,15 +11,21 @@ import {
 } from 'react-native';
 import {  IconButton } from 'react-native-paper';
 import ScheduleModal from './ScheduleModal';
-
 import { useValues } from '../../../../../../App';
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { Schedule as ScheduleInterface } from '@src/interfaces/store/store.profile.interface';
+import { compareTimes } from '@src/config/utility';
+import { isTimeRangeWithin } from '@src/config/utility';
 type FieldsState = {
-  [day: string]: string[];
+  [day: string]: {openingTime:string,closingTime:string,scheduleId:number}[];
 };
 
+//Daily schedule time
 const DailyScheduleTime: React.FC = () => {
+  const {stores} = useSelector((state: RootState)=>state['storeProfileData'])
+  const {schedules} = stores[0]
+  //days of week
   const daysOfWeek: string[] = [
     'Sunday',
     'Monday',
@@ -35,43 +41,79 @@ const DailyScheduleTime: React.FC = () => {
   const {t} = useValues()
 
   const handleAddSchedule = (openTime: string, closeTime: string) => {
+        
+        const resCompareTime = compareTimes(openTime,closeTime) 
+         
+        if(resCompareTime <=0){ //checking selected
+           Alert.alert(t('newDeveloper.invalidTimeRangeSelected'))
+           return
+        }else{
+            //selected range fall into other range 
+            const selectedrange = `${openTime}-${closeTime}`
+            const ranges = fields[selectedDay].map((d:{openingTime:string,closingTime:string,scheduleId:number})=>`${d.openingTime.slice(0,-3)}-${d.closingTime.slice(0,-3)}`);  
+            if(isTimeRangeWithin(selectedrange,ranges)){
+              Alert.alert(t('newDeveloper.overlappedError'))
+              return 
+            }
+        }
+        Alert.alert('Let start saving process')
+        const insertOpenTime = `${openTime}:00`
+        const insertCloseTime = `${closeTime}:00`
+
+        console.log(insertOpenTime,insertCloseTime)
+
+ 
+      // request send here before add to list and then will add to list
+
+       
      
-     addField(selectedDay,`${openTime} - ${closeTime}`)
+    //  addField(selectedDay,`${openTime} - ${closeTime}`)
   };
 
   const [fields, setFields] = useState<FieldsState>(
     daysOfWeek.reduce((acc, day) => ({ ...acc, [day]: [] }), {})
   );
 
-  const addField = (day: string,value:string): void => {
+  const addField = (day: string,openingTime:string,closingTime:string,scheduleId:number): void => {
     setFields((prev) => ({
       ...prev,
-      [day]: [...prev[day], value],
-    }));
-  };
-
-  const updateField = (day: string, index: number, value: string): void => {
-    const updatedFields = [...fields[day]];
-    updatedFields[index] = value;
-    setFields((prev) => ({
-      ...prev,
-      [day]: updatedFields,
+      [day]: [...prev[day], {openingTime,closingTime,scheduleId}],
     }));
   };
 
   const removeField = (day: string, index: number): void => {
-    const updatedFields = fields[day].filter((_, i) => i !== index);
-    setFields((prev) => ({
-      ...prev,
-      [day]: updatedFields,
-    }));
+    // const updatedFields = fields[day].filter((_, i) => i !== index);
+    // setFields((prev) => ({
+    //   ...prev,
+    //   [day]: updatedFields,
+    // }));
+
+      Alert.alert('Remove')
   };
 
    //handle add schedule time
   const handleAddScheduleTime = (selectedDay:string)=>{
       setSelectedDay(selectedDay)
       setModalVisible(true)
+      
   }
+
+  useEffect(()=>{
+      if(schedules.length > 0){
+        schedules.forEach((scDt:ScheduleInterface,scIndex:number)=>{
+             const scheduleid = scDt.id
+             const openingTime = scDt.opening_time
+             const closingTime = scDt.closing_time
+             const weekDay = scDt.day
+             const checkIndex = fields[daysOfWeek[weekDay]].findIndex(ele=>ele.scheduleId === scheduleid)
+             if(checkIndex === -1){
+                addField(daysOfWeek[weekDay],openingTime,closingTime,scheduleid)
+             } 
+            //  console.log({scheduleid,openingTime,closingTime,weekDay:daysOfWeek[weekDay]})
+        })
+      }
+    },[schedules]
+  );
 
   return (
     <>
@@ -85,9 +127,8 @@ const DailyScheduleTime: React.FC = () => {
                 style={styles.textInput}
                 placeholder={`Select ${day}`}
                 placeholderTextColor={'black'}
-                value={field}
+                value={`${field.openingTime.slice(0,-3)} - ${field.closingTime.slice(0,-3)}`}
                 editable={false}
-                onChangeText={(value) => updateField(day, index, value)}
               />
               <IconButton
                             icon="close"

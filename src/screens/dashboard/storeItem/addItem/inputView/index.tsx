@@ -727,7 +727,7 @@ export default function InputView(
           </View>)
         })
       }
-      <View style={{ flex: 1, marginTop: 10 }}>
+      <View style={{ flex: 1, marginTop: 10, marginLeft:windowWidth(6) }}>
         <TouchableOpacity onPress={addFoodVariationPanel} style={styles.addButton}>
           <Text style={styles.addButtonText}>{t('newDeveloper.AddVariants')}</Text>
         </TouchableOpacity>

@@ -148,12 +148,6 @@ export function StoreSettings() {
           setCutleryStatus={setCutleryStatus}
         />
         <DashLine />
-        <Spinner
-          visible={processingLoader}
-          textContent={'Processing.....'}
-          textStyle={{ color: '#FFF' }}
-        />
-      </ScrollView>
         <GradientBtn
           label="newDeveloper.UpdateSettings"
           onPress={handleCreateBanner}
@@ -163,6 +157,13 @@ export function StoreSettings() {
              
           }}
         />
+        <Spinner
+          visible={processingLoader}
+          textContent={'Processing.....'}
+          textStyle={{ color: '#FFF' }}
+        />
+      </ScrollView>
+        
        
 
     </>

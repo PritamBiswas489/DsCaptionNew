@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
 import { windowHeight, windowWidth } from '@theme/appConstant';
-import InputView from './inputView';
 import GradientBtn from '@commonComponents/gradientBtn';
 import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
@@ -25,22 +24,13 @@ interface Response {
   request?: any;
 }
 
-
 //Add new banner
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function StoreScheduleSettings() {
-   
   const navigation = useNavigation<ItemsProps>();
-   
-
-
-
-
-  
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
-
 
   const handleCreateBanner = async () => {
     Alert.alert('Create Item')
@@ -56,20 +46,14 @@ export function StoreScheduleSettings() {
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
         <Header showBackArrow={true} title={'newDeveloper.StoreScheduleUpdate'} />
-
         <DailyScheduleTime/>
-        
-        
-        
+      
         <Spinner
           visible={processingLoader}
           textContent={'Processing.....'}
           textStyle={{ color: '#FFF' }}
         />
       </ScrollView>
-         
-       
-
     </>
   );
 }

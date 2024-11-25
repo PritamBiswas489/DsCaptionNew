@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useValues } from '../../../../../../../App';
 import TimepickerSelectTimeTwentyFourHours from '@src/commonComponents/timepickerSelectTimeTwentyFourHours';
+ 
 
 interface ScheduleModalProps {
     visible: boolean;
@@ -85,6 +86,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             </View>
             {fromTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setFromTimePicker} setScheduleDate={setOpenTime} />}
           {toTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setToTimePicker} setScheduleDate={setCloseTime} />}
+       
+          
         </Modal>
         
           

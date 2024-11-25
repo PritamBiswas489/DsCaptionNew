@@ -17,3 +17,12 @@ export const getVendorAddons = async(): Promise<Response> => {
 		return error.response;
 	}
 }
+
+export const createVendorAddons = async(formData:FormData): Promise<Response> => {
+	try {
+		const response = await api.post('/vendor/addon/store',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}

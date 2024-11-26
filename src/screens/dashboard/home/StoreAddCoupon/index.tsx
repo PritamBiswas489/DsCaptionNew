@@ -1,5 +1,5 @@
 import { Alert, ScrollView, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
 import { windowHeight, windowWidth } from '@theme/appConstant';
@@ -14,7 +14,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { DashLine } from '@src/commonComponents';
- 
+import Toast from 'react-native-toast-message';
+import { createCoupon } from '@src/services/store/coupon.service';
+
 
 interface Response {
   data: any;
@@ -26,48 +28,208 @@ interface Response {
 }
 
 
+interface State {
+  couponTitle: string;
+  errorCoupontitle: string;
+  couponCode: string;
+  errorCouponCode: string;
+  limitSameUser: number;
+  errorLimitSameUser: string;
+  minPurchase: number;
+  errorMinPurchase: string;
+  startDate: string;
+  errorStartDate: string;
+  expireDate: string;
+  errorExpireDate: string;
+  discount: number;
+  errorDiscount: string;
+  discountType: string;
+  maxDiscount: number;
+  errorMaxDiscount: string;
+}
+
+const initialState = {
+  couponTitle: '',
+  errorCoupontitle: '',
+  couponCode: '',
+  errorCouponCode: '',
+  limitSameUser: 0,
+  errorLimitSameUser: '',
+  minPurchase: 0,
+  errorMinPurchase: '',
+  startDate: '',
+  errorStartDate: '',
+  expireDate: '',
+  errorExpireDate: '',
+  discount: 0,
+  errorDiscount: '',
+  discountType: 'percent',
+  maxDiscount: 0,
+  errorMaxDiscount: ''
+};
+
+type Action =
+  | { type: 'SET_COUPON_TITLE'; payload: string }
+  | { type: 'SET_ERROR_COUPON_TITLE'; payload: string }
+  | { type: 'SET_COUPON_CODE'; payload: string }
+  | { type: 'SET_ERROR_COUPON_CODE'; payload: string }
+  | { type: 'SET_LIMIT_SAME_USER'; payload: number }
+  | { type: 'SET_ERROR_LIMIT_SAME_USER'; payload: string }
+  | { type: 'SET_MIN_PURCHASE'; payload: number }
+  | { type: 'SET_ERROR_MIN_PURCHASE'; payload: string }
+  | { type: 'SET_START_DATE'; payload: string }
+  | { type: 'SET_ERROR_START_DATE'; payload: string }
+  | { type: 'SET_EXPIRE_DATE'; payload: string }
+  | { type: 'SET_ERROR_EXPIRE_DATE'; payload: string }
+  | { type: 'SET_DISCOUNT'; payload: number }
+  | { type: 'SET_ERROR_DISCOUNT'; payload: string }
+  | { type: 'SET_DISCOUNT_TYPE'; payload: string }
+  | { type: 'SET_MAX_DISCOUNT'; payload: number }
+  | { type: 'SET_ERROR_MAX_DISCOUNT'; payload: string }
+  | { type: 'RESET_ERRORS' }
+  | { type: 'RESET_ALL' };
+
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'SET_COUPON_TITLE':
+      return { ...state, couponTitle: action.payload };
+    case 'SET_ERROR_COUPON_TITLE':
+      return { ...state, errorCoupontitle: action.payload };
+    case 'SET_COUPON_CODE':
+      return { ...state, couponCode: action.payload };
+    case 'SET_ERROR_COUPON_CODE':
+      return { ...state, errorCouponCode: action.payload };
+    case 'SET_LIMIT_SAME_USER':
+      return { ...state, limitSameUser: action.payload };
+    case 'SET_ERROR_LIMIT_SAME_USER':
+      return { ...state, errorLimitSameUser: action.payload };
+    case 'SET_MIN_PURCHASE':
+      return { ...state, minPurchase: action.payload };
+    case 'SET_ERROR_MIN_PURCHASE':
+      return { ...state, errorMinPurchase: action.payload };
+    case 'SET_START_DATE':
+      return { ...state, startDate: action.payload };
+    case 'SET_ERROR_START_DATE':
+      return { ...state, errorStartDate: action.payload };
+    case 'SET_EXPIRE_DATE':
+      return { ...state, expireDate: action.payload };
+    case 'SET_ERROR_EXPIRE_DATE':
+      return { ...state, errorExpireDate: action.payload };
+    case 'SET_DISCOUNT':
+      return { ...state, discount: action.payload };
+    case 'SET_ERROR_DISCOUNT':
+      return { ...state, errorDiscount: action.payload };
+    case 'SET_MAX_DISCOUNT':
+      return { ...state, maxDiscount: action.payload };
+    case 'SET_ERROR_MAX_DISCOUNT':
+      return { ...state, errorMaxDiscount: action.payload };
+    case 'RESET_ERRORS':
+      return {
+         ...state,
+         errorCoupontitle: '', 
+         errorCouponCode: '',
+         errorLimitSameUser: '',
+         errorMinPurchase: '',
+         errorStartDate: '',
+         errorExpireDate: '',
+         errorDiscount: '',
+         errorMaxDiscount: '',
+        };
+        case 'RESET_ALL':
+          return {
+             ...initialState
+            };    
+    default:
+      return state;
+  }
+};
+
 //Add new banner
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function StoreAddCoupon() {
-   
   const navigation = useNavigation<ItemsProps>();
-  //store name
-  const [couponTitle, setCouponTitle] = useState<string>('')
-  const [errorCoupontitle, setErrorCouponTitle] = useState<string>('')
   
-  const [couponCode,setCouponCode] = useState<string>('')
-  const [errorCouponCode,setErrorCouponCode] = useState<string>('')
-  
-  const [limitSameUser,setLimitSameUser] = useState<number>(0)
-  const [errorLimitSameUser,setErrorLimitSameUser] = useState<string>('')
+  const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
 
-  const [minPurchase,setMinPurchase] = useState<number>(0)
-  const [errorMinPurchase,setErrorMinPurchase]  = useState<string>('')
 
-  const [startDate,setStartDate] = useState<string>('')
-  const [errorStartDate,setErrorStartDate] = useState<string>('')
-
-  const [expireDate,setExpireDate] = useState<string>('')
-  const [errorExpireDate,setErrorExpireDate] = useState<string>('')
-
-  const [discount,setDiscount] = useState<number>(0)
-  const [errorDiscount,setErrorDiscount] = useState<string>('')
-  
-  const [discountType,setDiscounType] = useState<string>('')
-
-  const [maxDiscount,setMaxDiscount] =  useState<number>(0) //will show when discount type is percent
-  const [errorMaxDiscount,setErrorMaxDiscount] = useState<string>('')
-
-    
-
-  
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
 
+  //validate form
+  const VALIDATE_FORM = (): boolean => {
+    let valid = true;
+    FORM_DISPATCH({ type: 'RESET_ERRORS' });
 
-  const handleCreateBanner = async () => {
-    Alert.alert('Create Item')
+    if (FORM_STATE.couponTitle.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERROR_COUPON_TITLE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+    if (FORM_STATE.couponCode.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERROR_COUPON_CODE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+    if (FORM_STATE.startDate.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERROR_START_DATE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+    if (FORM_STATE.expireDate.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERROR_EXPIRE_DATE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+    if (FORM_STATE.expireDate.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERROR_EXPIRE_DATE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    if(FORM_STATE.discount <=0){
+        FORM_DISPATCH({ type: 'SET_ERROR_DISCOUNT', payload: t('newDeveloper.Required') });
+        valid = false;
+    }
+    
+
+    return valid;
+  };
+
+  //create coupon handle
+  const handleCreateCoupon = async () => {
+    if(VALIDATE_FORM()){
+          const formData = new FormData()
+          formData.append('code', FORM_STATE.couponCode)
+          formData.append('start_date', FORM_STATE.startDate)
+          formData.append('expire_date', FORM_STATE.expireDate)
+          formData.append('coupon_type', 'default')
+          formData.append('discount', FORM_STATE.discount)
+          formData.append('discount_type',FORM_STATE.discountType)
+          formData.append('translations',JSON.stringify([{locale:"en",key:'name',value:FORM_STATE.couponTitle}]))
+          formData.append('limit',FORM_STATE.limitSameUser)
+          formData.append('min_purchase',FORM_STATE.minPurchase)
+          formData.append('max_discount',FORM_STATE.discountType === 'percent' ? FORM_STATE.maxDiscount : 0)
+          setProcessingLoader(true)
+          const response: Response = await createCoupon(formData)
+          if (response?.data?.message) {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Success',
+                  text2: response?.data?.message,
+                });
+                FORM_DISPATCH({ type: 'RESET_ALL' });
+          } else if (response?.data?.errors) {  
+              Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: response?.data?.errors?.[0]?.message,
+              });
+          } else {
+              Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: "Process failed",
+              });
+          }
+          setProcessingLoader(false)
+    }
   }
 
   return (
@@ -81,45 +243,70 @@ export function StoreAddCoupon() {
         ]}>
         <Header showBackArrow={true} title={'newDeveloper.AddCoupon'} />
 
-         
-        
+
+
         <InputView
-          couponTitle={couponTitle}
-          setCouponTitle={setCouponTitle}
-          errorCoupontitle={errorCoupontitle}
-          couponCode={couponCode}
-          setCouponCode={setCouponCode}
-          errorCouponCode={errorCouponCode}
-          limitSameUser={limitSameUser}
-          setLimitSameUser={setLimitSameUser}
-          errorLimitSameUser={errorLimitSameUser}
-          minPurchase={minPurchase}
-          setMinPurchase={setMinPurchase}
-          errorMinPurchase={errorMinPurchase}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          errorStartDate={errorStartDate}
-          expireDate={expireDate}
-          setExpireDate={setExpireDate}
-          errorExpireDate={errorExpireDate}
-          discount={discount}
-          setDiscount={setDiscount}
-          errorDiscount={errorDiscount}
-          discountType={discountType}
-          setDiscounType={setDiscounType}
-          maxDiscount={maxDiscount}
-          setMaxDiscount={setMaxDiscount}
-          errorMaxDiscount={errorMaxDiscount}
-         
+          couponTitle={FORM_STATE.couponTitle}
+          setCouponTitle={(value) => {
+            FORM_DISPATCH({ type: 'SET_COUPON_TITLE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_COUPON_TITLE', payload: '' })
+          }} 
+          errorCoupontitle={FORM_STATE.errorCoupontitle}
+          couponCode={FORM_STATE.couponCode}
+          setCouponCode={(value) => {
+            FORM_DISPATCH({ type: 'SET_COUPON_CODE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_COUPON_CODE', payload: '' })
+          }} 
+          errorCouponCode={FORM_STATE.errorCouponCode}
+          limitSameUser={FORM_STATE.limitSameUser}
+          setLimitSameUser={(value) => {
+            FORM_DISPATCH({ type: 'SET_LIMIT_SAME_USER', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_LIMIT_SAME_USER', payload: '' })
+          }} 
+          errorLimitSameUser={FORM_STATE.errorLimitSameUser}
+          minPurchase={FORM_STATE.minPurchase}
+          setMinPurchase={(value) => {
+            FORM_DISPATCH({ type: 'SET_MIN_PURCHASE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_MIN_PURCHASE', payload: '' })
+          }} 
+          errorMinPurchase={FORM_STATE.errorMinPurchase}
+          startDate={FORM_STATE.startDate}
+          setStartDate={(value) => {
+            FORM_DISPATCH({ type: 'SET_START_DATE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_START_DATE', payload: '' })
+          }} 
+          errorStartDate={FORM_STATE.errorStartDate}
+          expireDate={FORM_STATE.expireDate}
+          setExpireDate={(value) => {
+            FORM_DISPATCH({ type: 'SET_EXPIRE_DATE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_EXPIRE_DATE', payload: '' })
+          }} 
+          errorExpireDate={FORM_STATE.errorExpireDate}
+          discount={FORM_STATE.discount}
+          setDiscount={(value) => {
+            FORM_DISPATCH({ type: 'SET_DISCOUNT', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERROR_DISCOUNT', payload: '' })
+          }} 
+          errorDiscount={FORM_STATE.errorDiscount}
+          discountType={FORM_STATE.discountType}
+          setDiscounType={(value) => {
+            FORM_DISPATCH({ type: 'SET_DISCOUNT_TYPE', payload: value })
+          }}
+          maxDiscount={FORM_STATE.maxDiscount}
+          setMaxDiscount={(value) => {
+            FORM_DISPATCH({ type: 'SET_MAX_DISCOUNT', payload: value })
+          }}
+          errorMaxDiscount={FORM_STATE.errorMaxDiscount}
+
         />
         <DashLine />
         <GradientBtn
           label="newDeveloper.Add"
-          onPress={handleCreateBanner}
+          onPress={handleCreateCoupon}
           additionalStyle={{
             marginHorizontal: windowWidth(5),
             marginTop: windowHeight(3),
-             
+
           }}
         />
         <Spinner
@@ -128,8 +315,8 @@ export function StoreAddCoupon() {
           textStyle={{ color: '#FFF' }}
         />
       </ScrollView>
-       
-       
+
+
 
     </>
   );

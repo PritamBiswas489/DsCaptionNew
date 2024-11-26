@@ -86,9 +86,9 @@ export default function InputView(
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
 
-  const [startDatepicker,setStartDatepicker] = useState(false)
-  const [endDatepicker,setEndDatepicker] = useState(false)
-   
+  const [startDatepicker, setStartDatepicker] = useState(false)
+  const [endDatepicker, setEndDatepicker] = useState(false)
+
 
 
   return (
@@ -99,7 +99,7 @@ export default function InputView(
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.CouponTitle')}</Text>
+          ]}> {t('newDeveloper.CouponTitle')} <Text style={{color:'red'}}>*</Text></Text>
           <TextInputComponent
             placeholder={t('newDeveloper.CouponTitle')}
             value={couponTitle}
@@ -116,7 +116,7 @@ export default function InputView(
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.CouponCode')}</Text>
+          ]}> {t('newDeveloper.CouponCode')} <Text style={{color:'red'}}>*</Text></Text>
           <TextInputComponent
             placeholder={t('newDeveloper.CouponCode')}
             value={couponCode}
@@ -128,50 +128,51 @@ export default function InputView(
           />
         </View>
         <DashLine />
-        {/* Limit for same user */}
-        <View style={{ marginTop: 5 }}>
-          <Text style={[
-            styles.inputLabel,
-            { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.LimitForSameUser')}</Text>
-          <TextInputComponent
-            placeholder={t('newDeveloper.LimitForSameUser')}
-            value={isNaN(limitSameUser) ? limitSameUser.toString() : ''}
-            onChangeText={value => {
-              setLimitSameUser(parseInt(value));
-            }}
-            keyboardType='number-pad'
-            error={errorLimitSameUser}
-            containerStyle={{ marginTop: windowHeight(1) }}
-          />
-        </View>
-        <DashLine />
-        {/* Minimum puschase */}
-        <View style={{ marginTop: 5 }}>
-          <Text style={[
-            styles.inputLabel,
-            { color: isDark ? appColors.white : appColors.darkText }
-          ]}> {t('newDeveloper.MinPurchase')}</Text>
-          <TextInputComponent
-            placeholder={t('newDeveloper.MinPurchase')}
-            value={isNaN(minPurchase) ? minPurchase.toString() : ''}
-            onChangeText={value => {
-              setMinPurchase(parseInt(value));
-            }}
-            keyboardType='number-pad'
-            error={errorMinPurchase}
-            containerStyle={{ marginTop: windowHeight(1) }}
-          />
+        <View style={{ flexDirection: "row" }}>
+          {/* Limit for same user */}
+          <View style={{ flex: 1 }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText }
+            ]}> {t('newDeveloper.LimitForSameUser')}</Text>
+            <TextInputComponent
+              placeholder={t('newDeveloper.LimitForSameUser')}
+              value={!isNaN(limitSameUser)  ? limitSameUser.toString() : ''}
+              onChangeText={value => {
+                setLimitSameUser(parseInt(value));
+              }}
+              keyboardType='number-pad'
+              error={errorLimitSameUser}
+              containerStyle={{ marginTop: windowHeight(1) }}
+            />
+          </View>
+          {/* Minimum puschase */}
+          <View style={{ flex: 1 }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText }
+            ]}> {t('newDeveloper.MinPurchase')}</Text>
+            <TextInputComponent
+              placeholder={t('newDeveloper.MinPurchase')}
+              value={!isNaN(minPurchase) ? minPurchase.toString() : ''}
+              onChangeText={value => {
+                setMinPurchase(parseInt(value));
+              }}
+              keyboardType='number-pad'
+              error={errorMinPurchase}
+              containerStyle={{ marginTop: windowHeight(1) }}
+            />
+          </View>
         </View>
         <DashLine />
         <View style={{ flexDirection: "row" }}>
-          {/* StartDate */}
+          {/* Start Date */}
           <TouchableOpacity style={{ flex: 1 }} onPress={() => { setStartDatepicker(true) }}>
             <View>
               <Text style={[
                 styles.inputLabel,
                 { color: isDark ? appColors.white : appColors.darkText }
-              ]}> {t('newDeveloper.StartDate')}</Text>
+              ]}> {t('newDeveloper.StartDate')} <Text style={{color:'red'}}>*</Text></Text>
               <TextInputComponent
                 placeholder={t('newDeveloper.StartDate')}
                 value={startDate}
@@ -183,16 +184,15 @@ export default function InputView(
                 containerStyle={{ marginTop: windowHeight(1) }}
               />
             </View>
-
           </TouchableOpacity>
 
-          {/* expire Date */}
+          {/* Expire Date */}
           <TouchableOpacity style={{ flex: 1 }} onPress={() => { setEndDatepicker(true) }}>
             <View style={{ flex: 1 }}>
               <Text style={[
                 styles.inputLabel,
                 { color: isDark ? appColors.white : appColors.darkText }
-              ]}> {t('newDeveloper.ExpireDate')}</Text>
+              ]}> {t('newDeveloper.ExpireDate')} <Text style={{color:'red'}}>*</Text></Text>
               <TextInputComponent
                 placeholder={t('newDeveloper.ExpireDate')}
                 value={expireDate}
@@ -207,15 +207,16 @@ export default function InputView(
           </TouchableOpacity>
         </View>
         <DashLine />
+        {/* Discount value */}
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: 1 }}>
             <Text style={[
               styles.inputLabel,
               { color: isDark ? appColors.white : appColors.darkText }
-            ]}> {t('newDeveloper.Discount')}</Text>
+            ]}> {t('newDeveloper.Discount')} <Text style={{color:'red'}}>*</Text></Text>
             <TextInputComponent
               placeholder={t('newDeveloper.Discount')}
-              value={isNaN(discount) ? discount.toString() : ''}
+              value={!isNaN(discount) ? discount.toString() : ''}
               onChangeText={value => {
                 setDiscount(parseFloat(value))
               }}
@@ -224,9 +225,17 @@ export default function InputView(
               containerStyle={{ marginTop: windowHeight(1) }}
             />
           </View>
+          {/* Discount type */}
           <View style={{ flex: 1 }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText }
+            ]}> {t('newDeveloper.Discounttype')} <Text style={{color:'red'}}>*</Text></Text>
             <SelectionDropdown
-              data={[{ label: t('newDeveloper.Minutes'), value: 'minutes' }, { label: t('newDeveloper.Hours'), value: 'hours' }, { label: t('newDeveloper.Days'), value: 'days' }]}
+              data={[
+                { label: t('newDeveloper.percent'), value: 'percent' },
+                { label: t('newDeveloper.amount'), value: 'amount' }
+              ]}
               value={discountType}
               setValue={(value: string) => {
                 setDiscounType(value)
@@ -236,9 +245,9 @@ export default function InputView(
             />
           </View>
         </View>
-        <DashLine />
-        {/* Max Discount */}
-        <View style={{ marginTop: 5 }}>
+
+        {/* Max Discount when discount type percent */}
+        {discountType === 'percent' && <><DashLine /><View style={{ marginTop: 5 }}>
           <Text style={[
             styles.inputLabel,
             { color: isDark ? appColors.white : appColors.darkText }
@@ -253,10 +262,10 @@ export default function InputView(
             error={errorMaxDiscount}
             containerStyle={{ marginTop: windowHeight(1) }}
           />
-        </View>
+        </View></>}
       </View>
-     {startDatepicker && <DatePickerSelector setDatePicker={setStartDatepicker} setScheduleDate={setStartDate}/>} 
-     {endDatepicker && <DatePickerSelector setDatePicker={setEndDatepicker} setScheduleDate={setExpireDate}/>} 
+      {startDatepicker && <DatePickerSelector setDatePicker={setStartDatepicker} setScheduleDate={setStartDate} />}
+      {endDatepicker && <DatePickerSelector setDatePicker={setEndDatepicker} setScheduleDate={setExpireDate} />}
     </>
   );
 }

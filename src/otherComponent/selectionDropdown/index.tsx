@@ -125,7 +125,7 @@ const pickerSelectStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    padding: 16,
+    padding: 8,
   },
   label: {
     position: 'absolute',

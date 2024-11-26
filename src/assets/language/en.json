@@ -1336,7 +1336,7 @@
             "AddCoupon":"Add Coupon",
             "CouponTitle":"Coupon title",
             "CouponCode":"Coupon code",
-            "LimitForSameUser":"Limit for same user",
+            "LimitForSameUser":"Limit same user",
             "MinPurchase":"Min purchase",
             "StartDate":"Start Date",
             "ExpireDate":"Expire date",
@@ -1351,7 +1351,9 @@
             "AreWantToDeleteThisSchedule":"Are you want to delete this schedule?",
             "successfullyDeleted":"Schedule successfully deleted",
             "EnterAddonTitle":"Enter Addon title",
-            "EnterValidAddonPrice":"Enter valid addon price"
+            "EnterValidAddonPrice":"Enter valid addon price",
+            "Discounttype":"Discount type"
+
         }
     }
 }

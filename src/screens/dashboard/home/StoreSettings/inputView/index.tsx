@@ -63,8 +63,8 @@ export default function InputView(
     errorMetaDescription,
     gstStatus,
     setGstStatus,
-    gstPercentageValue,
-    setGstPercentageValue,
+    gstCode,
+    setGstCode,
     errorGstPercentageValue,
     scheduleOrderStatus,
     setScheduleOrderStatus,
@@ -73,8 +73,10 @@ export default function InputView(
     takeawayStatus,
     setTakewayStatus,
     storeLogo,
+    errorStoreLogo,
     setStoreLogo,
     storeCoverPhoto,
+    errorStoreCoverPhoto,
     setStoreCoverPhoto,
     approxDeliveryMinimumTime,
     setApproxDeliveryMinimumTime,
@@ -85,7 +87,9 @@ export default function InputView(
     itemType,
     setItemType,
     cutleryStatus,
-    setCutleryStatus
+    setCutleryStatus,
+    prescriptionStatus,
+    setPrescriptionStatus
   }: {
     storeName: string,
     setStoreName: (value: string) => void,
@@ -107,8 +111,8 @@ export default function InputView(
     errorMetaDescription: string,
     gstStatus: boolean,
     setGstStatus: (value: boolean) => void,
-    gstPercentageValue: number,
-    setGstPercentageValue: (value: number) => void,
+    gstCode: string,
+    setGstCode: (value: string) => void,
     errorGstPercentageValue: string,
     scheduleOrderStatus: boolean,
     setScheduleOrderStatus: (value: boolean) => void,
@@ -118,9 +122,13 @@ export default function InputView(
     setTakewayStatus: (value: boolean) => void,
     cutleryStatus: boolean,
     setCutleryStatus: (value: boolean) => void,
+    prescriptionStatus:boolean,
+    setPrescriptionStatus:(value: boolean) => void,
     storeLogo: string,
+    errorStoreLogo:string;
     setStoreLogo: (value: string) => void,
     storeCoverPhoto: string,
+    errorStoreCoverPhoto:string;
     setStoreCoverPhoto: (value: string) => void,
     approxDeliveryMinimumTime: string,
     setApproxDeliveryMinimumTime: (value: string) => void,
@@ -138,7 +146,7 @@ export default function InputView(
   );
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
-
+  
   //handle item type
   const handleItemType = (type: string) => {
     if (itemType.includes(type)) {
@@ -316,11 +324,10 @@ export default function InputView(
             />
           </View>
           <TextInputComponent
-            keyboardType='number-pad'
-            placeholder={t('newDeveloper.enterGst')}
-            value={!gstStatus ? '' : gstPercentageValue.toString()}
+            placeholder={t('newDeveloper.StoreGst')}
+            value={!gstStatus ? '' : gstCode.toString()}
             onChangeText={value => {
-              setGstPercentageValue(parseFloat(value));
+              setGstCode(value);
             }}
             editable={gstStatus}
             error={errorGstPercentageValue}
@@ -395,6 +402,24 @@ export default function InputView(
           </View>
         </View>
         <DashLine />
+
+        {/* prescription status */}
+        <View style={{ marginTop: 15 }}>
+                  <View style={{ flexDirection: 'row' }}>
+            <Text style={[
+              styles.inputLabel,
+              { color: isDark ? appColors.white : appColors.darkText },
+
+            ]}> {t('newDeveloper.prescriptionStatus')}</Text>
+            <SwitchContainer
+              toggleDarkSwitch={() => { setPrescriptionStatus(!prescriptionStatus) }}
+              switchOn={prescriptionStatus}
+            />
+          </View>
+        </View>
+        <DashLine />
+
+        <DashLine />
         {/* Approx delivery time */}
         <Text style={[
           styles.inputLabel,
@@ -433,7 +458,7 @@ export default function InputView(
           {/* approx delivery time type */}
           <View style={{}}>
             <SelectionDropdown
-              data={[{ label: t('newDeveloper.Minutes'), value: 'minutes' }, { label: t('newDeveloper.Hours'), value: 'hours' }, { label: t('newDeveloper.Days'), value: 'days' }]}
+              data={[{ label: t('newDeveloper.Minutes'), value: 'min' }, { label: t('newDeveloper.Hours'), value: 'hours' }, { label: t('newDeveloper.Days'), value: 'days' }]}
               value={approxDeliveryType}
               setValue={(value: string) => {
                 setApproxDeliveryType(value)
@@ -476,7 +501,7 @@ export default function InputView(
           onPress={openStoreImage}
           image={storeLogo}
           setImage={setStoreLogo}
-          error={''}
+          error={errorStoreLogo}
         />
 
         <DashLine />
@@ -486,7 +511,7 @@ export default function InputView(
           onPress={openCoverImage}
           image={storeCoverPhoto}
           setImage={setStoreCoverPhoto}
-          error={''}
+          error={errorStoreCoverPhoto}
         />
 
       </View>

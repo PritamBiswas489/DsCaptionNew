@@ -1352,7 +1352,8 @@
             "successfullyDeleted":"Schedule successfully deleted",
             "EnterAddonTitle":"Enter Addon title",
             "EnterValidAddonPrice":"Enter valid addon price",
-            "Discounttype":"Discount type"
+            "Discounttype":"Discount type",
+            "prescriptionStatus":"Prescription order"
 
         }
     }

@@ -19,6 +19,17 @@ export const updateProfileData = async (data:FormData): Promise<Response> => {
 }
  
 
+export const updateVendorStoreData = async (data:FormData): Promise<Response> => {
+    data.append('_method','PUT')
+	try {
+		const response = await api.post('/vendor/update-business-setup',data);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+ 
+
 //save fcm token process
 // export const saveFcmTokenProcess = async (formData:FormData):Promise<Response> => { 
 // 	formData.append('_method','PUT')

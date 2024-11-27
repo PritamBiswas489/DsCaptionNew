@@ -1,5 +1,5 @@
 import { Alert, ScrollView, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
 import { windowHeight, windowWidth } from '@theme/appConstant';
@@ -14,6 +14,10 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { DashLine } from '@src/commonComponents';
+import { updateVendorStoreData } from '@src/services/store/profile.service';
+import Toast from 'react-native-toast-message';
+import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
+import { getAuthUserService as storeAuthService } from '@src/services/store/auth.service';
 
 interface Response {
   data: any;
@@ -24,69 +28,367 @@ interface Response {
   request?: any;
 }
 
+interface State {
+  storeName: string;
+  errorStoreName: string;
+  contactNumber: string;
+  errorContactNumber: string;
+  storeAddress: string;
+  errorStoreAddress: string;
+  minimumOrderAmount: number;
+  errorMinimumOrderAmount: string;
+  metaTitle: string;
+  errorMetaTitle: string;
+  metaDescription: string;
+  errorMetaDescription: string;
+  gstStatus: boolean;
+  gstCode: string;
+  errorGstPercentageValue: string;
+  scheduleOrderStatus: boolean;
+  deliveryStatus: boolean;
+  takeawayStatus: boolean;
+  cutleryStatus: boolean;
+  prescriptionStatus:boolean;
+  storeLogo: string;
+  errorStoreLogo: string;
+  storeCoverPhoto: string;
+  errorStoreCoverPhoto: string;
+  approxDeliveryMinimumTime: string;
+  approxDeliveryMaximumTime: string;
+  approxDeliveryType: string;
+  itemType: string[];
+}
+
+const initialState = {
+  storeName: '',
+  errorStoreName: '',
+  contactNumber: '',
+  errorContactNumber: '',
+  storeAddress: '',
+  errorStoreAddress: '',
+  minimumOrderAmount: 0,
+  errorMinimumOrderAmount: '',
+  metaTitle: '',
+  errorMetaTitle: '',
+  metaDescription: '',
+  errorMetaDescription: '',
+  gstStatus: false,
+  gstCode: '',
+  errorGstPercentageValue: '',
+  scheduleOrderStatus: false,
+  deliveryStatus: false,
+  takeawayStatus: false,
+  cutleryStatus: false,
+  prescriptionStatus:false,
+  storeLogo: '',
+  errorStoreLogo: '',
+  storeCoverPhoto: '',
+  errorStoreCoverPhoto: '',
+  approxDeliveryMinimumTime: '',
+  approxDeliveryMaximumTime: '',
+  approxDeliveryType: 'min',
+  itemType: [],
+}
+
+type Action =
+  | { type: 'SET_STORENAME'; payload: typeof initialState.storeName }
+  | { type: 'SET_ERRORSTORENAME'; payload: typeof initialState.errorStoreName }
+  | { type: 'SET_CONTACTNUMBER'; payload: typeof initialState.contactNumber }
+  | { type: 'SET_ERRORCONTACTNUMBER'; payload: typeof initialState.errorContactNumber }
+  | { type: 'SET_STOREADDRESS'; payload: typeof initialState.storeAddress }
+  | { type: 'SET_ERRORSTOREADDRESS'; payload: typeof initialState.errorStoreAddress }
+  | { type: 'SET_MINIMUMORDERAMOUNT'; payload: typeof initialState.minimumOrderAmount }
+  | { type: 'SET_ERRORMINIMUMORDERAMOUNT'; payload: typeof initialState.errorMinimumOrderAmount }
+  | { type: 'SET_METATITLE'; payload: typeof initialState.metaTitle }
+  | { type: 'SET_ERRORMETATITLE'; payload: typeof initialState.errorMetaTitle }
+  | { type: 'SET_METADESCRIPTION'; payload: typeof initialState.metaDescription }
+  | { type: 'SET_ERRORMETADESCRIPTION'; payload: typeof initialState.errorMetaDescription }
+  | { type: 'SET_GSTSTATUS'; payload: typeof initialState.gstStatus }
+  | { type: 'SET_GSTCODE'; payload: typeof initialState.gstCode }
+  | { type: 'SET_ERRORGSTPERCENTAGEVALUE'; payload: typeof initialState.errorGstPercentageValue }
+  | { type: 'SET_SCHEDULEORDERSTATUS'; payload: typeof initialState.scheduleOrderStatus }
+  | { type: 'SET_DELIVERYSTATUS'; payload: typeof initialState.deliveryStatus }
+  | { type: 'SET_TAKEAWAYSTATUS'; payload: typeof initialState.takeawayStatus }
+  | { type: 'SET_CUTLERYSTATUS'; payload: typeof initialState.cutleryStatus }
+  | { type: 'SET_PRESCRIPTIONSTATUS'; payload: typeof initialState.prescriptionStatus }
+  | { type: 'SET_STORELOGO'; payload: typeof initialState.storeLogo }
+  | { type: 'SET_ERRORSTORELOGO'; payload: typeof initialState.errorStoreLogo }
+  | { type: 'SET_STORECOVERPHOTO'; payload: typeof initialState.storeCoverPhoto }
+  | { type: 'SET_ERRORSTORECOVERPHOTO'; payload: typeof initialState.errorStoreCoverPhoto }
+  | { type: 'SET_APPROXDELIVERYMINIMUMTIME'; payload: typeof initialState.approxDeliveryMinimumTime }
+  | { type: 'SET_APPROXDELIVERYMAXIMUMTIME'; payload: typeof initialState.approxDeliveryMaximumTime }
+  | { type: 'SET_APPROXDELIVERYTYPE'; payload: typeof initialState.approxDeliveryType }
+  | { type: 'SET_ITEMTYPE'; payload: string[] }
+  | { type: 'RESET_ERRORS' }
+  | { type: 'RESET_ALL' };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'SET_STORENAME':
+      return { ...state, storeName: action.payload };
+    case 'SET_ERRORSTORENAME':
+      return { ...state, errorStoreName: action.payload };
+    case 'SET_CONTACTNUMBER':
+      return { ...state, contactNumber: action.payload };
+    case 'SET_ERRORCONTACTNUMBER':
+      return { ...state, errorContactNumber: action.payload };
+    case 'SET_STOREADDRESS':
+      return { ...state, storeAddress: action.payload };
+    case 'SET_ERRORSTOREADDRESS':
+      return { ...state, errorStoreAddress: action.payload };
+    case 'SET_MINIMUMORDERAMOUNT':
+      return { ...state, minimumOrderAmount: action.payload };
+    case 'SET_ERRORMINIMUMORDERAMOUNT':
+      return { ...state, errorMinimumOrderAmount: action.payload };
+    case 'SET_METATITLE':
+      return { ...state, metaTitle: action.payload };
+    case 'SET_ERRORMETATITLE':
+      return { ...state, errorMetaTitle: action.payload };
+    case 'SET_METADESCRIPTION':
+      return { ...state, metaDescription: action.payload };
+    case 'SET_ERRORMETADESCRIPTION':
+      return { ...state, errorMetaDescription: action.payload };
+    case 'SET_GSTSTATUS':
+      return { ...state, gstStatus: action.payload };
+    case 'SET_GSTCODE':
+      return { ...state, gstCode: action.payload };
+    case 'SET_ERRORGSTPERCENTAGEVALUE':
+      return { ...state, errorGstPercentageValue: action.payload };
+    case 'SET_SCHEDULEORDERSTATUS':
+      return { ...state, scheduleOrderStatus: action.payload };
+    case 'SET_DELIVERYSTATUS':
+      return { ...state, deliveryStatus: action.payload };
+    case 'SET_TAKEAWAYSTATUS':
+      return { ...state, takeawayStatus: action.payload };
+    case 'SET_CUTLERYSTATUS':
+      return { ...state, cutleryStatus: action.payload };
+    case   'SET_PRESCRIPTIONSTATUS':
+      return { ...state, prescriptionStatus: action.payload };
+    case 'SET_STORELOGO':
+      return { ...state, storeLogo: action.payload };
+    case 'SET_ERRORSTORELOGO':
+      return { ...state, errorStoreLogo: action.payload };
+    case 'SET_STORECOVERPHOTO':
+      return { ...state, storeCoverPhoto: action.payload };
+    case 'SET_ERRORSTORECOVERPHOTO':
+      return { ...state, errorStoreCoverPhoto: action.payload };
+    case 'SET_APPROXDELIVERYMINIMUMTIME':
+      return { ...state, approxDeliveryMinimumTime: action.payload };
+    case 'SET_APPROXDELIVERYMAXIMUMTIME':
+      return { ...state, approxDeliveryMaximumTime: action.payload };
+    case 'SET_APPROXDELIVERYTYPE':
+      return { ...state, approxDeliveryType: action.payload };
+    case 'SET_ITEMTYPE':
+      return { ...state, itemType: action.payload };
+    case 'RESET_ERRORS':
+      return {
+        ...state,
+        errorStoreName: '',
+        errorContactNumber: '',
+        errorStoreAddress: '',
+        errorMinimumOrderAmount: '',
+        errorMetaTitle: '',
+        errorMetaDescription: '',
+        errorGstPercentageValue: '',
+        errorStoreLogo: '',
+        errorStoreCoverPhoto: '',
+      };
+    case 'RESET_ALL':
+      return initialState;
+    default:
+      return state;
+  }
+}
 
 //Add new banner
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 export function StoreSettings() {
-   
+
   const navigation = useNavigation<ItemsProps>();
-  //store name
-  const [storeName, setStoreName] = useState<string>('')
-  const [errorStoreName, setErrorStoreName] = useState<string>('') 
-
-  //contact number
-  const [contactNumber,setContactNumber] = useState<string>('')
-  const [errorContactNumber, setErrorContactNumber] = useState<string>('')
-
-  //store address
-  const [storeAddress,setStoreAddress] = useState<string>('')
-  const [errorStoreAddress, setErrorStoreddress] = useState<string>('')
-
-  //order minimum amount
-  const [minimumOrderAmount,setMinimumOrderAmount] = useState<number>(0)
-  const [errorMinimumOrderAmount,setErrorMinimumOrderAmount] = useState<string>('')
-  
-  //meta properties
-  const [metaTitle,setMetaTitle] =  useState<string>('')
-  const [errorMetaTitle,setErrorMetatitle] = useState<string>('')
-  const [metaDescription,setMetaDescription] = useState<string>('')
-  const [errorMetaDescription,setErrorMetaDescription]  = useState<string>('')
-
-  //gst properties
-  const [gstStatus,setGstStatus] = useState<boolean>(false)
-  const [gstPercentageValue,setGstPercentageValue] = useState<number>(0)
-  const [errorGstPercentageValue,setErrorGstPercentageValue] = useState<string>('')
-
-  //status change
-  const [scheduleOrderStatus,setScheduleOrderStatus] = useState<boolean>(false)
-  const [deliveryStatus,setDeliveryStatus] = useState<boolean>(false)
-  const [takeawayStatus,setTakewayStatus] = useState<boolean>(false)
-  const [cutleryStatus,setCutleryStatus] = useState<boolean>(false)
-
-  //logo 
-  const [storeLogo,setStoreLogo] =  useState<string>('')
-  //cover photo
-  const [storeCoverPhoto,setStoreCoverPhoto] = useState<string>('')
-
-  //approx delivey time
-  const [approxDeliveryMinimumTime,setApproxDeliveryMinimumTime] = useState<string>('')
-  const [approxDeliveryMaximumTime,setApproxDeliveryMaximumTime] = useState<string>('')
-  const [approxDeliveryType,setApproxDeliveryType] =  useState<string>('minutes')
-
-  // food type
-  const [itemType,setItemType] = useState<string[]>([])
-
-
-
-
-  
+  const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
 
+  const { stores } = useSelector((state: RootState) => state['storeProfileData'])
+  const STORE_DETAILS = stores[0]
 
-  const handleCreateBanner = async () => {
-    Alert.alert('Create Item')
+  useEffect(() => {
+    const {
+      name,
+      phone,
+      address,
+      minimum_order,
+      logo_full_url,
+      cover_photo_full_url,
+      meta_title,
+      meta_description,
+      delivery,
+      take_away,
+      schedule_order,
+      cutlery,
+      delivery_time,
+      veg,
+      non_veg,
+      gst_status,
+      gst_code,
+      prescription_order
+    } = STORE_DETAILS
+
+     
+
+
+    //SET FROM DATA
+    FORM_DISPATCH({ type: 'SET_STORENAME', payload: name })
+    FORM_DISPATCH({ type: 'SET_CONTACTNUMBER', payload: phone })
+    FORM_DISPATCH({ type: 'SET_STOREADDRESS', payload: address })
+    FORM_DISPATCH({ type: 'SET_MINIMUMORDERAMOUNT', payload: minimum_order })
+    FORM_DISPATCH({ type: 'SET_METATITLE', payload: meta_title || '' })
+    FORM_DISPATCH({ type: 'SET_METADESCRIPTION', payload: meta_description || '' })
+    FORM_DISPATCH({ type: 'SET_DELIVERYSTATUS', payload: delivery })
+    FORM_DISPATCH({ type: 'SET_TAKEAWAYSTATUS', payload: take_away })
+    FORM_DISPATCH({ type: 'SET_CUTLERYSTATUS', payload: cutlery })
+    FORM_DISPATCH({ type: 'SET_PRESCRIPTIONSTATUS', payload: prescription_order })
+    
+    FORM_DISPATCH({ type: 'SET_SCHEDULEORDERSTATUS', payload: schedule_order })
+    FORM_DISPATCH({ type: 'SET_STORELOGO', payload: logo_full_url || '' })
+    FORM_DISPATCH({ type: 'SET_STORECOVERPHOTO', payload: cover_photo_full_url || '' })
+    FORM_DISPATCH({ type: 'SET_GSTSTATUS', payload: gst_status })
+    FORM_DISPATCH({ type: 'SET_GSTCODE', payload: gst_code })
+
+    const tt = [...FORM_STATE.itemType]
+    if (veg === 1) {
+      tt.push('veg')
+    }
+    if (non_veg === 1) {
+      tt.push('nonveg')
+    }
+
+    FORM_DISPATCH({ type: 'SET_ITEMTYPE', payload: tt})
+
+    const splitDelivery = delivery_time.split('-')
+    const secondSplit = splitDelivery?.[1].split(' ')
+     
+
+    FORM_DISPATCH({ type: 'SET_APPROXDELIVERYMINIMUMTIME', payload: splitDelivery?.[0] })
+    FORM_DISPATCH({ type: 'SET_APPROXDELIVERYMAXIMUMTIME', payload: secondSplit?.[0] })
+
+    if (secondSplit?.[1] === 'min') {
+      FORM_DISPATCH({ type: 'SET_APPROXDELIVERYTYPE', payload: 'min' })
+    }
+    if (secondSplit?.[1] === 'hours') {
+      FORM_DISPATCH({ type: 'SET_APPROXDELIVERYTYPE', payload: 'hours' })
+    }
+
+    if (secondSplit?.[1] === 'days') {
+      FORM_DISPATCH({ type: 'SET_APPROXDELIVERYTYPE', payload: 'days' })
+    }
+
+
+  }, [STORE_DETAILS])
+
+
+  const VALIDATE_FORM = (): boolean => {
+    let valid = true;
+
+    FORM_DISPATCH({ type: 'RESET_ERRORS' });
+
+    if (FORM_STATE.storeName.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERRORSTORENAME', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    if (FORM_STATE.contactNumber.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERRORCONTACTNUMBER', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    if (FORM_STATE.storeAddress.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERRORSTOREADDRESS', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    if (FORM_STATE.gstStatus && FORM_STATE.gstCode.trim() === '') {
+      FORM_DISPATCH({ type: 'SET_ERRORGSTPERCENTAGEVALUE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    if (FORM_STATE.storeLogo === '') {
+      FORM_DISPATCH({ type: 'SET_ERRORSTORELOGO', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    if (FORM_STATE.storeCoverPhoto === '') {
+      FORM_DISPATCH({ type: 'SET_ERRORSTORECOVERPHOTO', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
+
+    return valid
+  }
+
+  //handle update store settings 
+  const handleUpdateStoreSettings = async () => {
+    if (VALIDATE_FORM()) {
+       
+          const formData = new FormData()
+          formData.append('contact_number',FORM_STATE.contactNumber)
+          formData.append('delivery', (FORM_STATE.deliveryStatus ? '1' : '0'))
+          formData.append('take_away',FORM_STATE.takeawayStatus)
+          formData.append('schedule_order',FORM_STATE.scheduleOrderStatus)
+          formData.append('minimum_order',FORM_STATE.minimumOrderAmount)
+          formData.append('gst_status',FORM_STATE.gstStatus)
+          formData.append('gst',FORM_STATE.gstCode)
+          formData.append('veg',FORM_STATE.itemType.includes('veg') ? 1 : 0)
+          formData.append('non_veg',FORM_STATE.itemType.includes('nonveg') ? 1 : 0)
+          formData.append('minimum_delivery_time',parseFloat(FORM_STATE.approxDeliveryMinimumTime)) 
+          formData.append('maximum_delivery_time',parseFloat(FORM_STATE.approxDeliveryMaximumTime)) 
+          formData.append('delivery_time_type',FORM_STATE.approxDeliveryType)
+          formData.append('prescription_order',FORM_STATE.prescriptionStatus)
+          formData.append('cutlery',FORM_STATE.cutleryStatus)
+
+          const dTrans = [
+            {locale:"en",key:'name',value:FORM_STATE.storeName},
+            {locale:"en",key:'address',value:FORM_STATE.storeAddress},
+            
+          ]
+          if(FORM_STATE.metaTitle){
+             dTrans.push({locale:"en",key:'meta_title',value:FORM_STATE.metaTitle})
+          }
+          if(FORM_STATE.metaDescription){
+            dTrans.push({locale:"en",key:'meta_description',value:FORM_STATE.metaDescription})
+         }
+          formData.append('translations',JSON.stringify(dTrans))
+
+          console.log(formData)
+
+          setProcessingLoader(true)
+          const response: Response = await updateVendorStoreData(formData)
+          console.log(response?.data)
+          if (response?.data?.message) {
+            const responseuser = await storeAuthService()
+            if (responseuser?.data?.id) {
+              dispatch(storeProfileDataActions.setData(responseuser?.data))
+            }
+            Toast.show({
+              type: 'success',
+              text1: 'Success',
+              text2: response?.data?.message,
+            });
+          } else if (response?.data?.errors) {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: response?.data?.errors?.[0]?.message,
+            });
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: "Process failed",
+            });
+          }
+          setProcessingLoader(false)
+    }
   }
 
   return (
@@ -100,61 +402,109 @@ export function StoreSettings() {
         ]}>
         <Header showBackArrow={true} title={'newDeveloper.StoreSettings'} />
 
-         
-        
         <InputView
-          storeName={storeName}
-          setStoreName={setStoreName}
-          errorStoreName={errorStoreName}
-          contactNumber={contactNumber}
-          setContactNumber={setContactNumber}
-          errorContactNumber={errorContactNumber}
-          storeAddress={storeAddress}
-          setStoreAddress={setStoreAddress}
-          errorStoreAddress={errorStoreAddress}
-          minimumOrderAmount={minimumOrderAmount}
-          setMinimumOrderAmount={setMinimumOrderAmount}
-          errorMinimumOrderAmount={errorMinimumOrderAmount}
-          metaTitle={metaTitle}
-          setMetaTitle={setMetaTitle}
-          errorMetaTitle={errorMetaTitle}
-          metaDescription={metaDescription}
-          setMetaDescription={setMetaDescription}
-          errorMetaDescription={errorMetaDescription}
-          gstStatus={gstStatus}
-          setGstStatus={setGstStatus}
-          gstPercentageValue={gstPercentageValue}
-          setGstPercentageValue={setGstPercentageValue}
-          errorGstPercentageValue={errorGstPercentageValue}
-          scheduleOrderStatus={scheduleOrderStatus}
-          setScheduleOrderStatus={setScheduleOrderStatus}
-          deliveryStatus={deliveryStatus}
-          setDeliveryStatus={setDeliveryStatus}
-          takeawayStatus={takeawayStatus}
-          setTakewayStatus={setTakewayStatus}
-          storeLogo={storeLogo}
-          setStoreLogo={setStoreLogo}
-          storeCoverPhoto={storeCoverPhoto}
-          setStoreCoverPhoto={setStoreCoverPhoto}
-          approxDeliveryMinimumTime={approxDeliveryMinimumTime}
-          setApproxDeliveryMinimumTime={setApproxDeliveryMinimumTime}
-          approxDeliveryMaximumTime={approxDeliveryMaximumTime}
-          setApproxDeliveryMaximumTime={setApproxDeliveryMaximumTime}
-          approxDeliveryType={approxDeliveryType}
-          setApproxDeliveryType={setApproxDeliveryType}
-          itemType={itemType}
-          setItemType={setItemType}
-          cutleryStatus={cutleryStatus}
-          setCutleryStatus={setCutleryStatus}
+          storeName={FORM_STATE.storeName}
+          setStoreName={(value) => {
+            FORM_DISPATCH({ type: 'SET_STORENAME', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORSTORENAME', payload: '' })
+          }}
+          errorStoreName={FORM_STATE.errorStoreName}
+          contactNumber={FORM_STATE.contactNumber}
+          setContactNumber={(value) => {
+            FORM_DISPATCH({ type: 'SET_CONTACTNUMBER', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORCONTACTNUMBER', payload: '' })
+          }}
+          errorContactNumber={FORM_STATE.errorContactNumber}
+          storeAddress={FORM_STATE.storeAddress}
+          setStoreAddress={(value) => {
+            FORM_DISPATCH({ type: 'SET_STOREADDRESS', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORSTOREADDRESS', payload: '' })
+          }}
+          errorStoreAddress={FORM_STATE.errorStoreAddress}
+          minimumOrderAmount={FORM_STATE.minimumOrderAmount}
+          setMinimumOrderAmount={(value) => {
+            FORM_DISPATCH({ type: 'SET_MINIMUMORDERAMOUNT', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORMINIMUMORDERAMOUNT', payload: '' })
+          }}
+          errorMinimumOrderAmount={FORM_STATE.errorMinimumOrderAmount}
+          metaTitle={FORM_STATE.metaTitle}
+          setMetaTitle={(value) => {
+            FORM_DISPATCH({ type: 'SET_METATITLE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORMETATITLE', payload: '' })
+          }}
+          errorMetaTitle={FORM_STATE.errorMetaTitle}
+          metaDescription={FORM_STATE.metaDescription}
+          setMetaDescription={(value) => {
+            FORM_DISPATCH({ type: 'SET_METADESCRIPTION', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORMETADESCRIPTION', payload: '' })
+          }}
+          errorMetaDescription={FORM_STATE.errorMetaDescription}
+          gstStatus={FORM_STATE.gstStatus}
+          
+          setGstStatus={(value) => {
+            FORM_DISPATCH({ type: 'SET_GSTSTATUS', payload: value })
+          }}
+          prescriptionStatus={FORM_STATE.prescriptionStatus}
+          setPrescriptionStatus={(value) => {
+            FORM_DISPATCH({ type: 'SET_PRESCRIPTIONSTATUS', payload: value })
+          }}
+          gstCode={FORM_STATE.gstCode}
+          setGstCode={(value) => {
+            FORM_DISPATCH({ type: 'SET_GSTCODE', payload: value })
+            FORM_DISPATCH({ type: 'SET_ERRORGSTPERCENTAGEVALUE', payload: '' })
+          }}
+          errorGstPercentageValue={FORM_STATE.errorGstPercentageValue}
+          scheduleOrderStatus={FORM_STATE.scheduleOrderStatus}
+          setScheduleOrderStatus={(value) => {
+            FORM_DISPATCH({ type: 'SET_SCHEDULEORDERSTATUS', payload: value })
+          }}
+          deliveryStatus={FORM_STATE.deliveryStatus}
+          setDeliveryStatus={(value) => {
+            FORM_DISPATCH({ type: 'SET_DELIVERYSTATUS', payload: value })
+          }}
+          takeawayStatus={FORM_STATE.takeawayStatus}
+          setTakewayStatus={(value) => {
+            FORM_DISPATCH({ type: 'SET_TAKEAWAYSTATUS', payload: value })
+          }}
+          storeLogo={FORM_STATE.storeLogo}
+          errorStoreLogo={FORM_STATE.errorStoreLogo}
+          setStoreLogo={(value) => {
+            FORM_DISPATCH({ type: 'SET_STORELOGO', payload: value })
+          }}
+          storeCoverPhoto={FORM_STATE.storeCoverPhoto}
+          errorStoreCoverPhoto={FORM_STATE.errorStoreCoverPhoto}
+          setStoreCoverPhoto={(value) => {
+            FORM_DISPATCH({ type: 'SET_STORECOVERPHOTO', payload: value })
+          }}
+          approxDeliveryMinimumTime={FORM_STATE.approxDeliveryMinimumTime}
+          setApproxDeliveryMinimumTime={(value) => {
+            FORM_DISPATCH({ type: 'SET_APPROXDELIVERYMINIMUMTIME', payload: value })
+          }}
+          approxDeliveryMaximumTime={FORM_STATE.approxDeliveryMaximumTime}
+          setApproxDeliveryMaximumTime={(value) => {
+            FORM_DISPATCH({ type: 'SET_APPROXDELIVERYMAXIMUMTIME', payload: value })
+          }}
+          approxDeliveryType={FORM_STATE.approxDeliveryType}
+          setApproxDeliveryType={(value) => {
+            FORM_DISPATCH({ type: 'SET_APPROXDELIVERYTYPE', payload: value })
+          }}
+          itemType={FORM_STATE.itemType}
+          setItemType={(value) => {
+            FORM_DISPATCH({ type: 'SET_ITEMTYPE', payload: value })
+          }}
+          cutleryStatus={FORM_STATE.cutleryStatus}
+          setCutleryStatus={(value) => {
+            FORM_DISPATCH({ type: 'SET_CUTLERYSTATUS', payload: value })
+          }}
         />
         <DashLine />
         <GradientBtn
           label="newDeveloper.UpdateSettings"
-          onPress={handleCreateBanner}
+          onPress={handleUpdateStoreSettings}
           additionalStyle={{
             marginHorizontal: windowWidth(5),
             marginTop: windowHeight(3),
-             
+
           }}
         />
         <Spinner
@@ -163,9 +513,11 @@ export function StoreSettings() {
           textStyle={{ color: '#FFF' }}
         />
       </ScrollView>
-        
-       
+
+
 
     </>
   );
 }
+ 
+

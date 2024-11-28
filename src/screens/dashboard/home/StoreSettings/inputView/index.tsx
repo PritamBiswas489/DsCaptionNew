@@ -73,11 +73,16 @@ export default function InputView(
     takeawayStatus,
     setTakewayStatus,
     storeLogo,
+
     errorStoreLogo,
     setStoreLogo,
+    uploadedStoreLogo,
+    setUploadedStoreLogo,
     storeCoverPhoto,
     errorStoreCoverPhoto,
     setStoreCoverPhoto,
+    uploadedCoverPhoto,
+    setUploadedCoverPhoto,
     approxDeliveryMinimumTime,
     setApproxDeliveryMinimumTime,
     approxDeliveryMaximumTime,
@@ -100,8 +105,8 @@ export default function InputView(
     storeAddress: string,
     setStoreAddress: (value: string) => void,
     errorStoreAddress: string,
-    minimumOrderAmount: number,
-    setMinimumOrderAmount: (value: number) => void,
+    minimumOrderAmount: string,
+    setMinimumOrderAmount: (value: string) => void,
     errorMinimumOrderAmount: string,
     metaTitle: string,
     setMetaTitle: (value: string) => void,
@@ -122,14 +127,18 @@ export default function InputView(
     setTakewayStatus: (value: boolean) => void,
     cutleryStatus: boolean,
     setCutleryStatus: (value: boolean) => void,
-    prescriptionStatus:boolean,
-    setPrescriptionStatus:(value: boolean) => void,
+    prescriptionStatus: boolean,
+    setPrescriptionStatus: (value: boolean) => void,
     storeLogo: string,
-    errorStoreLogo:string;
+    errorStoreLogo: string;
     setStoreLogo: (value: string) => void,
+    uploadedStoreLogo: string; //uploaded store logo
+    setUploadedStoreLogo: (value: string) => void,//set uploaded store logo
     storeCoverPhoto: string,
-    errorStoreCoverPhoto:string;
+    errorStoreCoverPhoto: string;
     setStoreCoverPhoto: (value: string) => void,
+    uploadedCoverPhoto: string; //uploaded cover photo
+    setUploadedCoverPhoto: (value: string) => void, //set uploaded cover photo
     approxDeliveryMinimumTime: string,
     setApproxDeliveryMinimumTime: (value: string) => void,
     approxDeliveryMaximumTime: string,
@@ -146,7 +155,8 @@ export default function InputView(
   );
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
-  
+
+
   //handle item type
   const handleItemType = (type: string) => {
     if (itemType.includes(type)) {
@@ -171,7 +181,7 @@ export default function InputView(
           Alert.alert(t('newDeveloper.greaterThantwoMbError'))
           return
         }
-        setStoreCoverPhoto(imageAssets.uri)
+        setUploadedCoverPhoto(imageAssets.uri)
       }
     });
   };
@@ -191,7 +201,7 @@ export default function InputView(
           Alert.alert(t('newDeveloper.greaterThantwoMbError'))
           return
         }
-        setStoreLogo(imageAssets.uri)
+        setUploadedStoreLogo(imageAssets.uri)
       }
     });
   };
@@ -263,7 +273,8 @@ export default function InputView(
             placeholder={t('newDeveloper.EnterAmount')}
             value={minimumOrderAmount.toString()}
             onChangeText={value => {
-              setMinimumOrderAmount(parseFloat(value));
+              setMinimumOrderAmount( (value));
+               
             }}
             error={errorMinimumOrderAmount}
             containerStyle={{ marginTop: windowHeight(1) }}
@@ -324,7 +335,7 @@ export default function InputView(
             />
           </View>
           <TextInputComponent
-            placeholder={t('newDeveloper.StoreGst')}
+            placeholder={t('newDeveloper.StoreGstCode')}
             value={!gstStatus ? '' : gstCode.toString()}
             onChangeText={value => {
               setGstCode(value);
@@ -336,6 +347,31 @@ export default function InputView(
         </View>
 
         <DashLine />
+
+         {/* item type  veg and non veg */}
+         {module_type === 'food' && <><Text style={[
+          styles.inputLabel,
+          { color: appColors.primary }
+        ]}> {t('newDeveloper.itemtype')}</Text>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.checkboxContainer}>
+              <Checkbox
+                status={itemType.includes('nonveg') ? 'checked' : 'unchecked'}
+                onPress={() => { handleItemType('nonveg') }}
+              />
+              <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText },]}>{t('newDeveloper.nonVeg')}</Text>
+            </View>
+
+            <View style={styles.checkboxContainer}>
+              <Checkbox
+                status={itemType.includes('veg') ? 'checked' : 'unchecked'}
+                onPress={() => { handleItemType('veg') }}
+              />
+              <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText },]}>{t('newDeveloper.veg')}</Text>
+            </View>
+          </SafeAreaView>
+
+          <DashLine /></>}
 
 
         {/* schedule order status  */}
@@ -388,7 +424,7 @@ export default function InputView(
         <DashLine />
 
         {/* cutlery status */}
-        <View style={{ marginTop: 15 }}>
+        {module_type === 'food' && <><View style={{ marginTop: 15 }}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={[
               styles.inputLabel,
@@ -401,11 +437,11 @@ export default function InputView(
             />
           </View>
         </View>
-        <DashLine />
+          <DashLine /></>}
 
         {/* prescription status */}
-        <View style={{ marginTop: 15 }}>
-                  <View style={{ flexDirection: 'row' }}>
+        {module_type === 'pharmacy' && <><View style={{ marginTop: 15 }}>
+          <View style={{ flexDirection: 'row' }}>
             <Text style={[
               styles.inputLabel,
               { color: isDark ? appColors.white : appColors.darkText },
@@ -417,9 +453,9 @@ export default function InputView(
             />
           </View>
         </View>
-        <DashLine />
+          <DashLine /></>}
 
-        <DashLine />
+        
         {/* Approx delivery time */}
         <Text style={[
           styles.inputLabel,
@@ -470,31 +506,11 @@ export default function InputView(
 
         <DashLine />
 
-        {/* item type  veg and non veg */}
+       
         <Text style={[
           styles.inputLabel,
           { color: appColors.primary }
-        ]}> {t('newDeveloper.itemtype')}</Text>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.checkboxContainer}>
-            <Checkbox
-              status={itemType.includes('nonveg') ? 'checked' : 'unchecked'}
-              onPress={() => { handleItemType('nonveg') }}
-            />
-            <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText },]}>{t('newDeveloper.nonVeg')}</Text>
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <Checkbox
-              status={itemType.includes('veg') ? 'checked' : 'unchecked'}
-              onPress={() => { handleItemType('veg') }}
-            />
-            <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText },]}>{t('newDeveloper.veg')}</Text>
-          </View>
-        </SafeAreaView>
-
-        <DashLine />
-
+        ]}> {t('newDeveloper.uploadStoreLogo')}</Text>
         {/* store logo */}
         <UploadContainerView
           title={'newDeveloper.uploadStoreLogotwoMb'}
@@ -505,7 +521,12 @@ export default function InputView(
         />
 
         <DashLine />
+        <Text style={[
+          styles.inputLabel,
+          { color: appColors.primary }
+        ]}> {t('newDeveloper.uploadCoverPhoto')}</Text>
         {/* store cover photo */}
+
         <UploadContainerView
           title={'newDeveloper.uploadStoreCoverPhototwoMb'}
           onPress={openCoverImage}

@@ -18,7 +18,7 @@ import { updateVendorStoreData } from '@src/services/store/profile.service';
 import Toast from 'react-native-toast-message';
 import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
 import { getAuthUserService as storeAuthService } from '@src/services/store/auth.service';
-
+import { isFileProtocol } from '@src/utils/functions';
 interface Response {
   data: any;
   status: number;
@@ -35,7 +35,7 @@ interface State {
   errorContactNumber: string;
   storeAddress: string;
   errorStoreAddress: string;
-  minimumOrderAmount: number;
+  minimumOrderAmount: string;
   errorMinimumOrderAmount: string;
   metaTitle: string;
   errorMetaTitle: string;
@@ -50,8 +50,10 @@ interface State {
   cutleryStatus: boolean;
   prescriptionStatus:boolean;
   storeLogo: string;
+  uploadedStoreLogo:string;
   errorStoreLogo: string;
   storeCoverPhoto: string;
+  uploadedCoverPhoto:string;
   errorStoreCoverPhoto: string;
   approxDeliveryMinimumTime: string;
   approxDeliveryMaximumTime: string;
@@ -66,7 +68,7 @@ const initialState = {
   errorContactNumber: '',
   storeAddress: '',
   errorStoreAddress: '',
-  minimumOrderAmount: 0,
+  minimumOrderAmount: '',
   errorMinimumOrderAmount: '',
   metaTitle: '',
   errorMetaTitle: '',
@@ -81,8 +83,10 @@ const initialState = {
   cutleryStatus: false,
   prescriptionStatus:false,
   storeLogo: '',
+  uploadedStoreLogo:'',
   errorStoreLogo: '',
   storeCoverPhoto: '',
+  uploadedCoverPhoto:'',
   errorStoreCoverPhoto: '',
   approxDeliveryMinimumTime: '',
   approxDeliveryMaximumTime: '',
@@ -112,8 +116,14 @@ type Action =
   | { type: 'SET_CUTLERYSTATUS'; payload: typeof initialState.cutleryStatus }
   | { type: 'SET_PRESCRIPTIONSTATUS'; payload: typeof initialState.prescriptionStatus }
   | { type: 'SET_STORELOGO'; payload: typeof initialState.storeLogo }
+
+  | { type: 'SET_UPLOADEDSTORELOGO'; payload: typeof initialState.uploadedStoreLogo }
+
   | { type: 'SET_ERRORSTORELOGO'; payload: typeof initialState.errorStoreLogo }
   | { type: 'SET_STORECOVERPHOTO'; payload: typeof initialState.storeCoverPhoto }
+
+  | { type: 'SET_UPLOADEDCOVERPHOTO'; payload: typeof initialState.uploadedCoverPhoto }
+
   | { type: 'SET_ERRORSTORECOVERPHOTO'; payload: typeof initialState.errorStoreCoverPhoto }
   | { type: 'SET_APPROXDELIVERYMINIMUMTIME'; payload: typeof initialState.approxDeliveryMinimumTime }
   | { type: 'SET_APPROXDELIVERYMAXIMUMTIME'; payload: typeof initialState.approxDeliveryMaximumTime }
@@ -166,10 +176,14 @@ function reducer(state: State, action: Action): State {
       return { ...state, prescriptionStatus: action.payload };
     case 'SET_STORELOGO':
       return { ...state, storeLogo: action.payload };
+    case 'SET_UPLOADEDSTORELOGO':
+        return { ...state, uploadedStoreLogo: action.payload }; 
     case 'SET_ERRORSTORELOGO':
       return { ...state, errorStoreLogo: action.payload };
     case 'SET_STORECOVERPHOTO':
       return { ...state, storeCoverPhoto: action.payload };
+    case 'SET_UPLOADEDCOVERPHOTO':
+        return { ...state, uploadedCoverPhoto: action.payload }; 
     case 'SET_ERRORSTORECOVERPHOTO':
       return { ...state, errorStoreCoverPhoto: action.payload };
     case 'SET_APPROXDELIVERYMINIMUMTIME':
@@ -242,7 +256,7 @@ export function StoreSettings() {
     FORM_DISPATCH({ type: 'SET_STORENAME', payload: name })
     FORM_DISPATCH({ type: 'SET_CONTACTNUMBER', payload: phone })
     FORM_DISPATCH({ type: 'SET_STOREADDRESS', payload: address })
-    FORM_DISPATCH({ type: 'SET_MINIMUMORDERAMOUNT', payload: minimum_order })
+    FORM_DISPATCH({ type: 'SET_MINIMUMORDERAMOUNT', payload: minimum_order.toString() })
     FORM_DISPATCH({ type: 'SET_METATITLE', payload: meta_title || '' })
     FORM_DISPATCH({ type: 'SET_METADESCRIPTION', payload: meta_description || '' })
     FORM_DISPATCH({ type: 'SET_DELIVERYSTATUS', payload: delivery })
@@ -286,6 +300,25 @@ export function StoreSettings() {
 
 
   }, [STORE_DETAILS])
+
+
+  //for New Uploaded store logo
+  useEffect(()=>{
+    if(isFileProtocol(FORM_STATE.storeLogo)){
+      FORM_DISPATCH({ type: 'SET_UPLOADEDSTORELOGO', payload: FORM_STATE.storeLogo })
+    }else{
+      FORM_DISPATCH({ type: 'SET_UPLOADEDSTORELOGO', payload: ''})
+    }
+  },[FORM_STATE.storeLogo])
+
+  //for New Uploaded cover photo
+  useEffect(()=>{
+    if(isFileProtocol(FORM_STATE.storeCoverPhoto)){
+      FORM_DISPATCH({ type: 'SET_UPLOADEDCOVERPHOTO', payload: FORM_STATE.storeCoverPhoto })
+    }else{
+      FORM_DISPATCH({ type: 'SET_UPLOADEDCOVERPHOTO', payload: ''})
+    }
+  },[FORM_STATE.storeCoverPhoto])
 
 
   const VALIDATE_FORM = (): boolean => {
@@ -332,38 +365,50 @@ export function StoreSettings() {
        
           const formData = new FormData()
           formData.append('contact_number',FORM_STATE.contactNumber)
-          formData.append('delivery', (FORM_STATE.deliveryStatus ? '1' : '0'))
-          formData.append('take_away',FORM_STATE.takeawayStatus)
-          formData.append('schedule_order',FORM_STATE.scheduleOrderStatus)
+          formData.append('delivery', (FORM_STATE.deliveryStatus ? 1 : 0))
+          formData.append('take_away',FORM_STATE.takeawayStatus ? 1 : 0)
+          formData.append('schedule_order',FORM_STATE.scheduleOrderStatus ? 1 : 0)
           formData.append('minimum_order',FORM_STATE.minimumOrderAmount)
-          formData.append('gst_status',FORM_STATE.gstStatus)
+          formData.append('gst_status',FORM_STATE.gstStatus ? 1 : 0)
           formData.append('gst',FORM_STATE.gstCode)
           formData.append('veg',FORM_STATE.itemType.includes('veg') ? 1 : 0)
           formData.append('non_veg',FORM_STATE.itemType.includes('nonveg') ? 1 : 0)
           formData.append('minimum_delivery_time',parseFloat(FORM_STATE.approxDeliveryMinimumTime)) 
           formData.append('maximum_delivery_time',parseFloat(FORM_STATE.approxDeliveryMaximumTime)) 
           formData.append('delivery_time_type',FORM_STATE.approxDeliveryType)
-          formData.append('prescription_order',FORM_STATE.prescriptionStatus)
-          formData.append('cutlery',FORM_STATE.cutleryStatus)
+          formData.append('prescription_order',FORM_STATE.prescriptionStatus ?  1 : 0)
+          formData.append('cutlery',FORM_STATE.cutleryStatus ? 1 : 0)
+          formData.append('extra_packaging_amount',0)
+          //uploadedCoverPhoto
+          if(FORM_STATE.uploadedStoreLogo!==''){
+            formData.append('logo', {
+                uri: FORM_STATE.uploadedStoreLogo,
+                name: 'storeLogo.jpg',
+                type: 'image/jpeg',
+            });
+          }
+
+          //uploadedCoverPhoto
+          if(FORM_STATE.uploadedCoverPhoto!==''){
+            formData.append('cover_photo', {
+              uri: FORM_STATE.uploadedCoverPhoto,
+              name: 'storeCoverPhoto.jpg',
+              type: 'image/jpeg',
+          });
+          }
 
           const dTrans = [
             {locale:"en",key:'name',value:FORM_STATE.storeName},
             {locale:"en",key:'address',value:FORM_STATE.storeAddress},
             
           ]
-          if(FORM_STATE.metaTitle){
-             dTrans.push({locale:"en",key:'meta_title',value:FORM_STATE.metaTitle})
-          }
-          if(FORM_STATE.metaDescription){
-            dTrans.push({locale:"en",key:'meta_description',value:FORM_STATE.metaDescription})
-         }
+          dTrans.push({locale:"en",key:'meta_title',value:FORM_STATE.metaTitle})
+          dTrans.push({locale:"en",key:'meta_description',value:FORM_STATE.metaDescription})
           formData.append('translations',JSON.stringify(dTrans))
-
-          console.log(formData)
 
           setProcessingLoader(true)
           const response: Response = await updateVendorStoreData(formData)
-          console.log(response?.data)
+          
           if (response?.data?.message) {
             const responseuser = await storeAuthService()
             if (responseuser?.data?.id) {
@@ -374,6 +419,8 @@ export function StoreSettings() {
               text1: 'Success',
               text2: response?.data?.message,
             });
+            FORM_DISPATCH({ type: 'SET_UPLOADEDSTORELOGO', payload: '' })
+            FORM_DISPATCH({ type: 'SET_UPLOADEDCOVERPHOTO', payload: '' })
           } else if (response?.data?.errors) {
             Toast.show({
               type: 'error',
@@ -421,7 +468,7 @@ export function StoreSettings() {
             FORM_DISPATCH({ type: 'SET_ERRORSTOREADDRESS', payload: '' })
           }}
           errorStoreAddress={FORM_STATE.errorStoreAddress}
-          minimumOrderAmount={FORM_STATE.minimumOrderAmount}
+          minimumOrderAmount={FORM_STATE.minimumOrderAmount.toString()}
           setMinimumOrderAmount={(value) => {
             FORM_DISPATCH({ type: 'SET_MINIMUMORDERAMOUNT', payload: value })
             FORM_DISPATCH({ type: 'SET_ERRORMINIMUMORDERAMOUNT', payload: '' })
@@ -467,14 +514,23 @@ export function StoreSettings() {
             FORM_DISPATCH({ type: 'SET_TAKEAWAYSTATUS', payload: value })
           }}
           storeLogo={FORM_STATE.storeLogo}
+          
           errorStoreLogo={FORM_STATE.errorStoreLogo}
           setStoreLogo={(value) => {
             FORM_DISPATCH({ type: 'SET_STORELOGO', payload: value })
+          }}
+          uploadedStoreLogo={FORM_STATE.uploadedStoreLogo}
+          setUploadedStoreLogo={(value) => {
+            FORM_DISPATCH({ type: 'SET_UPLOADEDSTORELOGO', payload: value })
           }}
           storeCoverPhoto={FORM_STATE.storeCoverPhoto}
           errorStoreCoverPhoto={FORM_STATE.errorStoreCoverPhoto}
           setStoreCoverPhoto={(value) => {
             FORM_DISPATCH({ type: 'SET_STORECOVERPHOTO', payload: value })
+          }}
+          uploadedCoverPhoto={FORM_STATE.uploadedCoverPhoto}
+          setUploadedCoverPhoto={(value) => {
+            FORM_DISPATCH({ type: 'SET_UPLOADEDCOVERPHOTO', payload: value })
           }}
           approxDeliveryMinimumTime={FORM_STATE.approxDeliveryMinimumTime}
           setApproxDeliveryMinimumTime={(value) => {

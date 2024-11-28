@@ -1,5 +1,5 @@
 import { Alert, ScrollView, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
 import SliderContainer from '@otherComponent/sliderContainer';
@@ -19,6 +19,7 @@ import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import { addServiceSubCategory } from '@src/services/services-service';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
+import { uploadBanner } from '@src/services/store/banner.service';
 
 interface Response {
   data: any;
@@ -28,85 +29,140 @@ interface Response {
   config: any;
   request?: any;
 }
+interface State {
+  bannerTitle: string;
+  errorBannerTitle: string;
+  bannerUrl: string;
+  errorBannerUrl: string;
+  bannerImage: string;
+  bannerImageError: string;
+}
+//initial state
+const initialState = {
+  bannerTitle: '',
+  errorBannerTitle: '',
+  bannerUrl: '',
+  errorBannerUrl: '',
+  bannerImage: '',
+  bannerImageError: ''
+}
+
+type Action =
+  | { type: 'SET__BANNER__TITLE'; payload: typeof initialState.bannerTitle }
+  | { type: 'SET__ERROR__BANNER__TITLE'; payload: typeof initialState.errorBannerTitle }
+  | { type: 'SET__BANNER__URL'; payload: typeof initialState.bannerUrl }
+  | { type: 'SET__ERROR__BANNER__URL'; payload: typeof initialState.errorBannerUrl }
+  | { type: 'SET__BANNER__IMAGE'; payload: typeof initialState.bannerImage }
+  | { type: 'SET__BANNER__IMAGE__ERROR'; payload: typeof initialState.bannerImageError }
+  | { type: 'RESET_ERRORS' }
+  | { type: 'RESET_ALL' };
+
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'SET__BANNER__TITLE':
+      return { ...state, bannerTitle: action.payload };
+    case 'SET__ERROR__BANNER__TITLE':
+      return { ...state, errorBannerTitle: action.payload };
+    case 'SET__BANNER__URL':
+      return { ...state, bannerUrl: action.payload };
+    case 'SET__ERROR__BANNER__URL':
+      return { ...state, errorBannerUrl: action.payload };
+    case 'SET__BANNER__IMAGE':
+      return { ...state, bannerImage: action.payload };
+    case 'SET__BANNER__IMAGE__ERROR':
+      return { ...state, bannerImageError: action.payload };
+
+    case 'RESET_ERRORS':
+      return {
+        ...state,
+        errorBannerTitle: '',
+        errorBannerUrl: '',
+        bannerImageError: '',
+      };
+    case 'RESET_ALL':
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+
 //Add new banner
 export function VendorAddNewBanner() {
-    
-  const [bannerTitle, setBannerTitle] = useState<string>('')
-  const [errorBannerTitle, setErrorBannerTitle] = useState<string>('')
-  const [bannerUrl,setBannerUrl] = useState<string>('')
-  const [errorBannerUrl,setErrorBannerUrl] = useState<string>('')
-  const [bannerImage,setBannerImage] = useState<string>('')
-  const [bannerImageError,setBannerImageError] = useState<string>('')
- 
+
+  const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
+
 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
-   
 
-  // const handleAddSubCategory = async () => {
-  //   let error = false
-  //   if (selectedParentCategory === '') {
-  //     error = true
-  //     setErrorCategory(t('newDeveloper.Selectparentcategory'))
-  //   }
-  //   if (categoryName.trim() === '') {
-  //     error = true
-  //     setErrorCategoryName(t('newDeveloper.Entercategoryname'))
-  //   }
+  const VALIDATE_FORM = (): boolean => {
+    let valid = true;
 
-  //   if (shortDescription.trim() === '') {
-  //     error = true
-  //     setErrorShortDescription(t('newDeveloper.Entershortdescription'))
-  //   }
-  //   if (subcategoryImage === '') {
-  //     error = true
-  //     setErrorSubCategoryImage(t('newDeveloper.Selectimageforcategory'))
-  //   }
+    FORM_DISPATCH({ type: 'RESET_ERRORS' });
 
-  //   if (error === false) {
-  //         setProcessingLoader(true)
-  //         const formData = new FormData()
-  //         formData.append('parent_category_id', selectedParentCategory)
-  //         formData.append('name', categoryName)
-  //         formData.append('short_description', shortDescription)
-  //         formData.append('image', {
-  //           uri: subcategoryImage,
-  //           name: 'subcategoryImage.jpg',
-  //           type: 'image/jpeg',
-  //         });
-  //         const response: Response = await addServiceSubCategory(formData)
-  //         if (response?.data?.response_code === 'category_store_200') {
-  //             Toast.show({
-  //               type: 'success',
-  //               text1: 'SUCCESS',
-  //               text2: response?.data?.message,
-  //             });
-  //             setSubcategoryImage('')
-  //             setCategoryName('')
-  //             setShortDescription('')
-  //             setSelectedParentCategory('')
-  //         } else {
-  //           Toast.show({
-  //             type: 'error',
-  //             text1: 'ERROR',
-  //             text2: response?.data?.message,
-  //           });
-  //         }
-  //         setProcessingLoader(false)
 
-  //   }
+    if (FORM_STATE.bannerTitle.trim() === '') {
+      FORM_DISPATCH({ type: 'SET__ERROR__BANNER__TITLE', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
 
-  // }
+    if (FORM_STATE.bannerImage === '') {
+      FORM_DISPATCH({ type: 'SET__BANNER__IMAGE__ERROR', payload: t('newDeveloper.Required') });
+      valid = false;
+    }
 
-  const handleCreateBanner = async()=>{
-     Alert.alert('Create banner')
+
+    return valid
+
+  }
+
+
+  //handle   create a banner
+  const handleCreateBanner = async () => {
+    if (VALIDATE_FORM()) {
+      const formData = new FormData()
+      formData.append('title', FORM_STATE.bannerTitle)
+      formData.append('default_link', FORM_STATE.bannerUrl)
+      formData.append('image', {
+        uri: FORM_STATE.bannerImage,
+        name: 'banner.jpg',
+        type: 'image/jpeg',
+      });
+
+      setProcessingLoader(true)
+      const response: Response = await uploadBanner(formData)
+      if (response?.data?.message) {
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: response?.data?.message,
+        });
+        FORM_DISPATCH({ type: 'RESET_ALL' })
+
+      } else if (response?.data?.errors) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: response?.data?.errors?.[0]?.message,
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: "Process failed",
+        });
+      }
+      setProcessingLoader(false)
+    }
   }
 
   return (
     <>
-       
-        <ScrollView
+
+      <ScrollView
         contentContainerStyle={{ paddingBottom: windowHeight(3) }}
         showsVerticalScrollIndicator={false}
         style={[
@@ -126,18 +182,24 @@ export function VendorAddNewBanner() {
           ]}
         />
         <InputView
-          bannerTitle={bannerTitle}
-          setBannerTitle={setBannerTitle}
-          errorBannerTitle={errorBannerTitle}
-           
-          bannerUrl={bannerUrl}
-          setBannerUrl={setBannerUrl}
-          errorBannerUrl={errorBannerUrl}
-          
-          bannerImage={bannerImage}
-          setBannerImage={setBannerImage}
-          bannerImageError={bannerImageError}
-           
+          bannerTitle={FORM_STATE.bannerTitle}
+          setBannerTitle={(value) => {
+            FORM_DISPATCH({ type: 'SET__BANNER__TITLE', payload: value })
+            FORM_DISPATCH({ type: 'SET__ERROR__BANNER__TITLE', payload: '' })
+          }}
+          errorBannerTitle={FORM_STATE.errorBannerTitle}
+          bannerUrl={FORM_STATE.bannerUrl}
+          setBannerUrl={(value) => {
+            FORM_DISPATCH({ type: 'SET__BANNER__URL', payload: value })
+            FORM_DISPATCH({ type: 'SET__ERROR__BANNER__URL', payload: '' })
+          }}
+          errorBannerUrl={FORM_STATE.errorBannerUrl}
+          bannerImage={FORM_STATE.bannerImage}
+          setBannerImage={(value) => {
+            FORM_DISPATCH({ type: 'SET__BANNER__IMAGE', payload: value })
+            FORM_DISPATCH({ type: 'SET__BANNER__IMAGE__ERROR', payload: '' })
+          }}
+          bannerImageError={FORM_STATE.bannerImageError}
         />
         <GradientBtn
           label="newDeveloper.AddBanner"
@@ -152,7 +214,7 @@ export function VendorAddNewBanner() {
           textContent={'Processing.....'}
           textStyle={{ color: '#FFF' }}
         />
-      </ScrollView> 
+      </ScrollView>
 
     </>
   );

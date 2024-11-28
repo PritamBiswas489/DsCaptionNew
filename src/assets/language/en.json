@@ -1353,7 +1353,10 @@
             "EnterAddonTitle":"Enter Addon title",
             "EnterValidAddonPrice":"Enter valid addon price",
             "Discounttype":"Discount type",
-            "prescriptionStatus":"Prescription order"
+            "prescriptionStatus":"Prescription order",
+            "uploadStoreLogo":"Upload store logo (upto 2MB)",
+            "uploadCoverPhoto":"Upload store cover photo (upto 2MB)",
+            "StoreGstCode":"Enter GST code"
 
         }
     }

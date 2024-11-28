@@ -168,4 +168,7 @@ export const authAuthorizeRedirect  = async (response:any,navigation:NativeStack
   }
 }
 
- 
+export function isFileProtocol(url:string) {
+  const regex = /^file:\/\//;
+  return regex.test(url);
+}

@@ -32,7 +32,7 @@ interface State {
   addOnNameError: string;
   addOnPriceError: string;
 }
-const initialState = {
+const initialState:State = {
   addOnName: '',
   addOnPrice: '',
   addOnNameError: '',

@@ -97,7 +97,11 @@ export default function InputView(
     foodVars,
     setFoodVars,
     selectedAddonsList,
-    setSelectedAddOns
+    setSelectedAddOns,
+    fromTime,
+    toTime,
+    setFromTime,
+    setToTime
 
   }: {
     itemTitle: string,
@@ -128,8 +132,8 @@ export default function InputView(
     errorMaximumOrderQty: string,
     tags: string[],
     setTags: (value: string[]) => void,
-    attributeVariants: { attrbuteId: number, variants: string[] }[],
-    setAttributeVariants: (value: { attrbuteId: number, variants: string[] }[]) => void,
+    attributeVariants: { attrbuteId: number, attributeName:string, variants: string[] }[],
+    setAttributeVariants: (value: { attrbuteId: number, attributeName:string, variants: string[] }[]) => void,
     variantionsDetails: Combination[],
     setVariationDetails: (value: Combination[]) => void,
     thumbanailImage: string,
@@ -147,7 +151,11 @@ export default function InputView(
     foodVars: foodVariations[],
     setFoodVars: (value: foodVariations[]) => void,
     selectedAddonsList: string[]
-    setSelectedAddOns: (value: string[]) => void
+    setSelectedAddOns: (value: string[]) => void,
+    fromTime: string,
+    toTime: string,
+    setFromTime: (value: string) => void,
+    setToTime: (value: string) => void,
   }
 ) {
   const { t, isDark } = useValues();
@@ -166,7 +174,6 @@ export default function InputView(
       maxHeight: 2000,
       maxWidth: 2000,
     };
-
     handleImagePickerAllDetails(options, (imageAssets: any) => {
       if (imageAssets?.uri) {
         const fileSizeInMB = imageAssets.fileSize / (1024 * 1024);
@@ -255,14 +262,18 @@ export default function InputView(
   } = useSelector((state: RootState) => state['vendorAttribute'])
 
   //handle variants change
-  const handleVariantsChange = (variants: string[], attribute: number) => {
+  const handleVariantsChange = (variants: string[], attribute: number,attributeName:string) => {
     const variantIndex = attributeVariants.findIndex(ele => ele.attrbuteId === attribute)
     if (variantIndex !== -1) {
       const cloneAttributeVariants = [...attributeVariants]
       cloneAttributeVariants[variantIndex] = { ...cloneAttributeVariants[variantIndex], variants }
       setAttributeVariants(cloneAttributeVariants)
     } else {
-      setAttributeVariants([...attributeVariants, { attrbuteId: attribute, variants }])
+      setAttributeVariants([...attributeVariants, { 
+        attrbuteId: attribute,
+        attributeName:attributeName, 
+        variants 
+      }])
     }
   }
   //generate variant combinations
@@ -372,8 +383,7 @@ export default function InputView(
   const [fromTimePicker, setFromTimePicker] = useState(false)
   const [toTimePicker, setToTimePicker] = useState(false)
 
-  const [fromTime, setFromTime] = useState('')
-  const [toTime, setToTime] = useState('')
+   
 
   const addFoodVariationPanel = () => {
     const dd = {
@@ -542,7 +552,7 @@ export default function InputView(
           }
           return <View key={`attribute${attribute}`} style={{ marginTop: 10, }}>
             <Text style={{ fontSize: windowHeight(2), marginLeft: windowWidth(5), marginBottom: windowHeight(1), color: appColors.primary }}>Add variant for {attributeName}</Text>
-            <VariantInput placeholderText={t('newDeveloper.addVariant')} variants={variants} onVariantsChange={(variants: string[]) => handleVariantsChange(variants, attribute)} />
+            <VariantInput placeholderText={t('newDeveloper.addVariant')} variants={variants} onVariantsChange={(variants: string[]) => handleVariantsChange(variants, attribute,attributeName)} />
           </View>
         })}
         {/* variant pricing and stock panel */}
@@ -621,13 +631,6 @@ export default function InputView(
           error={errorMaximumOrderQty}
         />
 
-        {/* Available time starts and ends */}
-        <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
-          <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
-
-            {t('newDeveloper.AvailableSlots')}
-          </Text>
-        </View>
 
         {/* addon lising here */}
         <SelectionDropdown
@@ -642,12 +645,22 @@ export default function InputView(
 
         {selectedAddonsList.length > 0 && <AddonInput removeSelectedAddon={removeSelectedAddon} selectedaddons={selectedAddonsList} />}
 
+
+        {/* Available time starts and ends */}
+        <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
+          <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
+            {t('newDeveloper.AvailableSlots')}
+          </Text>
+        </View>
+
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
           {/* Available time starts */}
+
           <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.9}
             onPress={() => {
               setFromTimePicker(true)
             }}>
+
             <TextInputComponent
               placeholder={t('newDeveloper.Timestarts')}
               value={fromTime}
@@ -687,7 +700,11 @@ export default function InputView(
           {fromTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setFromTimePicker} setScheduleDate={setFromTime} />}
           {toTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setToTimePicker} setScheduleDate={setToTime} />}
         </View>
-
+        <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
+          <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
+            {t('newDeveloper.MainThumbnailImage')}
+          </Text>
+        </View>
 
         <UploadContainerView
           title={'newDeveloper.uploadThumbnail'}
@@ -727,7 +744,7 @@ export default function InputView(
           </View>)
         })
       }
-      <View style={{ flex: 1, marginTop: 10, marginLeft:windowWidth(6) }}>
+      <View style={{ flex: 1, marginTop: 10, marginLeft: windowWidth(6) }}>
         <TouchableOpacity onPress={addFoodVariationPanel} style={styles.addButton}>
           <Text style={styles.addButtonText}>{t('newDeveloper.AddVariants')}</Text>
         </TouchableOpacity>

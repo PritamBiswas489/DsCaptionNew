@@ -38,7 +38,7 @@ interface State {
   bannerImageError: string;
 }
 //initial state
-const initialState = {
+const initialState:State = {
   bannerTitle: '',
   errorBannerTitle: '',
   bannerUrl: '',

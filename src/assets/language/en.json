@@ -1288,7 +1288,7 @@
             "totalStock":"Total Stocks",
             "Nonveg":"Non veg",
             "Veg":"Veg",
-            "AvailableSlots":"Available slots",
+            "AvailableSlots":"Available start and end time",
             "Timestarts":"Time starts",
             "Timeends":"Time ends",
             "Variantname":"Variant name",
@@ -1356,7 +1356,8 @@
             "prescriptionStatus":"Prescription order",
             "uploadStoreLogo":"Upload store logo (upto 2MB)",
             "uploadCoverPhoto":"Upload store cover photo (upto 2MB)",
-            "StoreGstCode":"Enter GST code"
+            "StoreGstCode":"Enter GST code",
+            "MainThumbnailImage":"Main thumbnail image"
 
         }
     }

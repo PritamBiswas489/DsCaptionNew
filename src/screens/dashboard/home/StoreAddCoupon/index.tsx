@@ -48,7 +48,7 @@ interface State {
   errorMaxDiscount: string;
 }
 
-const initialState = {
+const initialState:State = {
   couponTitle: '',
   errorCoupontitle: '',
   couponCode: '',

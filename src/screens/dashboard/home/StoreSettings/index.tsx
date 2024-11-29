@@ -61,7 +61,7 @@ interface State {
   itemType: string[];
 }
 
-const initialState = {
+const initialState:State = {
   storeName: '',
   errorStoreName: '',
   contactNumber: '',

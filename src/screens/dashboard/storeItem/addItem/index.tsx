@@ -379,21 +379,32 @@ export function VendorAddItem() {
 
 
   //handle add item function
+  interface CustomData {
+    choice_no: string;
+    choice: string;
+    [key: string]: string | number;
+}
   const handleAddItem = async () => {
-    console.log(FORM_STATE.selectedAttrbutes) //	attributes
-    console.log(FORM_STATE.variantionsDetails) //variations
-    const reqUpdateAttributeVariants = FORM_STATE.attributeVariants.map((dUpdatedAttr, dUpdatedindex) => {
-      return {
-        name: `choice_${dUpdatedAttr.attrbuteId}`,
-        title: dUpdatedAttr.attributeName,
-        options: dUpdatedAttr.variants
-      }
-    }) //choice_options
-    console.log(reqUpdateAttributeVariants)
-    console.log(JSON.stringify(FORM_STATE.foodVars)) //food_variations
-    
-    //================= Item Insertion process here ====================================//
+  
+    //================= ITEM INSERTION PROCESS HERE ====================================//
+   
     const formData = new FormData()
+  
+    const choice: string[] = []
+    if(FORM_STATE.attributeVariants.length > 0){
+      FORM_STATE.attributeVariants.map((dUpdatedAttr, dUpdatedindex) => {
+          choice.push(dUpdatedAttr.attributeName)
+          formData.append(`choice_options_${dUpdatedAttr.attrbuteId}`,JSON.stringify([dUpdatedAttr.variants.join(',')]))
+      })
+    }
+    if(FORM_STATE.variantionsDetails.length > 0){
+          FORM_STATE.variantionsDetails.forEach(function(combination) {
+            formData.append('price_' + combination.type.replace('.', '_'), combination.price);
+            formData.append('stock_' + combination.type.replace('.', '_'),  combination.stock);
+         });
+    }
+    formData.append('choice_no', JSON.stringify(FORM_STATE.selectedAttrbutes));
+    formData.append('choice', JSON.stringify(choice));     
     formData.append('category_id', FORM_STATE.category)
     formData.append('sub_category_id', FORM_STATE.subCategory)
     formData.append('translations', JSON.stringify([
@@ -408,7 +419,9 @@ export function VendorAddItem() {
         value: FORM_STATE.itemDesciption
       }
     ]))
-    
+     
+     
+    formData.append('attribute_id',JSON.stringify(FORM_STATE.selectedAttrbutes)) 
     formData.append('price', parseFloat(FORM_STATE.itemPrice))
     formData.append('discount', FORM_STATE.discountAmount ? parseFloat(FORM_STATE.discountAmount) : 0)
     formData.append('discount_type', FORM_STATE.discountTypes)
@@ -419,7 +432,7 @@ export function VendorAddItem() {
     formData.append('maximum_cart_quantity',FORM_STATE.maximumOrderQty ? parseFloat(FORM_STATE.maximumOrderQty) : 0)
     formData.append('available_time_starts',FORM_STATE.fromTime)
     formData.append('available_time_ends',FORM_STATE.toTime)
-    //thumbnail image
+    //thumbnail images
     if(FORM_STATE.thumbnailImage){
       formData.append('image', {
         uri: FORM_STATE.thumbnailImage,
@@ -427,9 +440,7 @@ export function VendorAddItem() {
         type: 'image/jpeg',
       });
     }
-
-     
-     //item images
+    //item images
     if(FORM_STATE.itemImages.length > 0){
       FORM_STATE.itemImages.forEach((itemimage,itemindex)=>{
         formData.append('item_images[]', {
@@ -440,15 +451,18 @@ export function VendorAddItem() {
       })
        
     }
-    
-
+    //food item type
     if (FORM_STATE.itemType === 'noveg') {
       formData.append('veg', 0)
     } else {
       formData.append('veg', 1)
     }
+
+    if(FORM_STATE.foodVars.length > 0){
+      formData.append('options', JSON.stringify(FORM_STATE.foodVars))
+    }
     const response: Response = await createVendorItems(formData)
-    console.log(response?.data)
+    console.log(JSON.stringify(response?.data))
     //========================== End Item Insertion Process here ==============================//
   }
 

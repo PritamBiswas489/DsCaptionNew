@@ -1357,7 +1357,23 @@
             "uploadStoreLogo":"Upload store logo (upto 2MB)",
             "uploadCoverPhoto":"Upload store cover photo (upto 2MB)",
             "StoreGstCode":"Enter GST code",
-            "MainThumbnailImage":"Main thumbnail image"
+            "MainThumbnailImage":"Main thumbnail image",
+            "Price_must_be_a_number":"Price must be a number",
+            "Price_cannot_be_negative":"Price cannot be negative",
+            "Price_can_only_have_up_to_two_decimal_places":"Price can only have up to two decimal places",
+            "invalidStock":"Invalid stock",
+            "variantNameRequired":"Variant name required",
+            "validMinimumAndMaximumValueRequired":"Valid minimum and maximum value required",
+            "variantionOptionLabelRequired":"Variantion option label required",
+            "itemTitleRequired":"Item title required",
+            "itemDescriptionRequired":"Item description required",
+            "discountRequired":"Discount required",
+            "selectCategory":"Select category",
+            "enterTotalStocks":"Enter total stocks",
+            "selectUnit":"Select unit",
+            "chooseAvailableTimeSlot":"Choose available time slot",
+             "selecteditemImage":"Select product main image"
+
 
         }
     }

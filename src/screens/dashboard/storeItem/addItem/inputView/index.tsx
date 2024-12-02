@@ -132,8 +132,8 @@ export default function InputView(
     errorMaximumOrderQty: string,
     tags: string[],
     setTags: (value: string[]) => void,
-    attributeVariants: { attrbuteId: number, attributeName:string, variants: string[] }[],
-    setAttributeVariants: (value: { attrbuteId: number, attributeName:string, variants: string[] }[]) => void,
+    attributeVariants: { attrbuteId: number, attributeName: string, variants: string[] }[],
+    setAttributeVariants: (value: { attrbuteId: number, attributeName: string, variants: string[] }[]) => void,
     variantionsDetails: Combination[],
     setVariationDetails: (value: Combination[]) => void,
     thumbanailImage: string,
@@ -166,6 +166,7 @@ export default function InputView(
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
 
+   
   //open thumbnail image
   const openThumbnailImage = () => {
     const options: ImageLibraryOptions = {
@@ -262,17 +263,17 @@ export default function InputView(
   } = useSelector((state: RootState) => state['vendorAttribute'])
 
   //handle variants change
-  const handleVariantsChange = (variants: string[], attribute: number,attributeName:string) => {
+  const handleVariantsChange = (variants: string[], attribute: number, attributeName: string) => {
     const variantIndex = attributeVariants.findIndex(ele => ele.attrbuteId === attribute)
     if (variantIndex !== -1) {
       const cloneAttributeVariants = [...attributeVariants]
       cloneAttributeVariants[variantIndex] = { ...cloneAttributeVariants[variantIndex], variants }
       setAttributeVariants(cloneAttributeVariants)
     } else {
-      setAttributeVariants([...attributeVariants, { 
+      setAttributeVariants([...attributeVariants, {
         attrbuteId: attribute,
-        attributeName:attributeName, 
-        variants 
+        attributeName: attributeName,
+        variants
       }])
     }
   }
@@ -383,7 +384,7 @@ export default function InputView(
   const [fromTimePicker, setFromTimePicker] = useState(false)
   const [toTimePicker, setToTimePicker] = useState(false)
 
-   
+
 
   const addFoodVariationPanel = () => {
     const dd = {
@@ -460,7 +461,7 @@ export default function InputView(
           inputStyle={styles.inputStyle}
           error={errorItemDescription}
         />
-
+        {/* nonveg and veg */}
         <RadioButton.Group onValueChange={newValue => setItemType(newValue)} value={itemType}>
           <View style={styles.radioContainer}>
             <View style={styles.radioButton}>
@@ -475,11 +476,7 @@ export default function InputView(
           </View>
         </RadioButton.Group>
 
-
-
-
-
-
+        
         {/* item price  */}
         <TextInputComponent
           placeholder={t('newDeveloper.itemPrice')}
@@ -538,7 +535,7 @@ export default function InputView(
 
 
         {/* adding attributes panel  */}
-        <StoreAttributes selectedAttrbutes={selectedAttrbutes} setSelectedAttributes={setSelectedAttributes} />
+        {module_type !== 'food' && <StoreAttributes selectedAttrbutes={selectedAttrbutes} setSelectedAttributes={setSelectedAttributes} />}
 
 
         {selectedAttrbutes.length > 0 && selectedAttrbutes.map((attribute: number, _: number) => {
@@ -552,12 +549,12 @@ export default function InputView(
           }
           return <View key={`attribute${attribute}`} style={{ marginTop: 10, }}>
             <Text style={{ fontSize: windowHeight(2), marginLeft: windowWidth(5), marginBottom: windowHeight(1), color: appColors.primary }}>Add variant for {attributeName}</Text>
-            <VariantInput placeholderText={t('newDeveloper.addVariant')} variants={variants} onVariantsChange={(variants: string[]) => handleVariantsChange(variants, attribute,attributeName)} />
+            <VariantInput placeholderText={t('newDeveloper.addVariant')} variants={variants} onVariantsChange={(variants: string[]) => handleVariantsChange(variants, attribute, attributeName)} />
           </View>
         })}
         {/* variant pricing and stock panel */}
         {variantionsDetails.length > 0 && variantionsDetails.map((variant: Combination, variantindex: number) => (
-          <>
+          <View key={`Variant${variantindex}`}>
             <View style={{ marginTop: 10, marginLeft: windowWidth(5), marginBottom: windowHeight(1) }}>
               <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>{t('newDeveloper.Variant')}: <Text style={{ fontSize: windowHeight(2), marginVertical: windowWidth(5), color: isDark ? appColors.white : appColors.darkText }}>{variant.type}</Text></Text>
 
@@ -565,7 +562,7 @@ export default function InputView(
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
               <TextInputComponent
                 placeholder={t('newDeveloper.VariantPriceText')}
-                value={variant?.price !== 0 ? variant?.price.toString() : ''}
+                value={!isNaN(variant?.price) && variant?.price !== 0 ? variant?.price.toString() : ''}
                 keyboardType='number-pad'
                 onChangeText={value => {
                   setVariationPrice(value, variant);
@@ -575,7 +572,7 @@ export default function InputView(
               />
               <TextInputComponent
                 placeholder={t('newDeveloper.VariantStockText')}
-                value={variant?.stock !== 0 ? variant?.stock.toString() : ''}
+                value={!isNaN(variant?.stock) && variant?.stock !== 0 ? variant?.stock.toString() : ''}
                 keyboardType='number-pad'
                 onChangeText={value => {
                   setVariationStock(value, variant);
@@ -584,11 +581,12 @@ export default function InputView(
                 error={errorMaximumOrderQty}
               />
             </View>
-          </>))}
+          </View>))}
 
 
 
         {/* Total Stock and unit for product */}
+        {module_type !== 'food' && 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
 
           {/* Total Stock */}
@@ -596,7 +594,7 @@ export default function InputView(
             placeholder={t('newDeveloper.totalStock')}
             value={totalStocks}
             keyboardType='number-pad'
-            editable={false}
+            editable={variantionsDetails.length >  0 ? false :true}
             onChangeText={value => {
               setTotalStocks(value);
             }}
@@ -617,7 +615,7 @@ export default function InputView(
           />
 
         </View>
-
+         }
 
         {/* Maximum order quantity */}
 
@@ -647,59 +645,53 @@ export default function InputView(
 
 
         {/* Available time starts and ends */}
-        <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
-          <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
-            {t('newDeveloper.AvailableSlots')}
-          </Text>
-        </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-          {/* Available time starts */}
-
-          <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.9}
-            onPress={() => {
-              setFromTimePicker(true)
+        {module_type === 'food' && 
+         <>
+          <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
+            <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
+              {t('newDeveloper.AvailableSlots')}
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+            {/* Available time starts */}
+            <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.9}
+              onPress={() => {
+                setFromTimePicker(true)
+              }}>
+              <TextInputComponent
+                placeholder={t('newDeveloper.Timestarts')}
+                value={fromTime}
+                keyboardType='number-pad'
+                editable={false}
+                onChangeText={value => {
+                }}
+                containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
+                error={''}
+              />
+            </TouchableOpacity>
+            {/* Available time ends */}
+            <TouchableOpacity style={{ flex: 1 }} onPress={() => {
+              setToTimePicker(true)
             }}>
-
-            <TextInputComponent
-              placeholder={t('newDeveloper.Timestarts')}
-              value={fromTime}
-              keyboardType='number-pad'
-              editable={false}
-              onChangeText={value => {
-              }}
-              containerStyle={{ flex: 1, marginHorizontal: windowWidth(2) }}
-              error={''}
-            />
-          </TouchableOpacity>
-
-
-
-
-
-
+              <TextInputComponent
+                placeholder={t('newDeveloper.Timeends')}
+                value={toTime}
+                keyboardType='number-pad'
+                editable={false}
+                onChangeText={value => {
+                }}
+                containerStyle={{ marginHorizontal: windowWidth(2) }}
+                error={''}
+              />
+            </TouchableOpacity>
+            {fromTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setFromTimePicker} setScheduleDate={setFromTime} />}
+            {toTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setToTimePicker} setScheduleDate={setToTime} />}
+          </View>
+        </>
+        }
 
 
-
-
-          {/* Available time ends */}
-          <TouchableOpacity style={{ flex: 1 }} onPress={() => {
-            setToTimePicker(true)
-          }}>
-            <TextInputComponent
-              placeholder={t('newDeveloper.Timeends')}
-              value={toTime}
-              keyboardType='number-pad'
-              editable={false}
-              onChangeText={value => {
-              }}
-              containerStyle={{ marginHorizontal: windowWidth(2) }}
-              error={''}
-            />
-          </TouchableOpacity>
-          {fromTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setFromTimePicker} setScheduleDate={setFromTime} />}
-          {toTimePicker && <TimepickerSelectTimeTwentyFourHours setDatePicker={setToTimePicker} setScheduleDate={setToTime} />}
-        </View>
+        {/* Product main thumbnail image will be upload */}
         <View style={{ marginTop: 10, marginLeft: windowWidth(5), }}>
           <Text style={{ fontSize: windowHeight(2), color: appColors.primary }}>
             {t('newDeveloper.MainThumbnailImage')}
@@ -722,6 +714,7 @@ export default function InputView(
       </View>
       {itemImages.length > 0 && itemImages.map((itemImage: string, indexItem: number) => {
         return <TouchableOpacity
+          key={`itemImage${indexItem}`}
           activeOpacity={0.9}
           style={styles.imageContainer}>
           <Image source={{ uri: itemImage }} style={styles.imageStyle} />
@@ -737,18 +730,18 @@ export default function InputView(
         setImage={handleSetItemImage}
         error={''}
       />
-      {foodVars.length > 0 &&
+      {foodVars.length > 0 && module_type === 'food' &&
         foodVars.map((foodV: foodVariations, foodindex: number) => {
           return (<View key={`foodVariation-${foodindex}`} style={{ flex: 1, marginTop: 20 }}>
             <FoodVariation removeVariationFromState={removeVariationFromState} updateVaritionsState={updateVaritionsState} foodVariation={foodV} foodVariationIndex={foodindex} />
           </View>)
         })
       }
-      <View style={{ flex: 1, marginTop: 10, marginLeft: windowWidth(6) }}>
+      {module_type === 'food' && <View style={{ flex: 1, marginTop: 10, marginLeft: windowWidth(6) }}>
         <TouchableOpacity onPress={addFoodVariationPanel} style={styles.addButton}>
           <Text style={styles.addButtonText}>{t('newDeveloper.AddVariants')}</Text>
         </TouchableOpacity>
-      </View>
+      </View>}
     </>
   );
 }

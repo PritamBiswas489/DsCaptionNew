@@ -35,6 +35,7 @@ import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
 import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
 import { getVendorAddons } from '@src/services/store/addons.service';
 import { createVendorItems } from '@src/services/store/item.service';
+import { compareTimes } from '@src/config/utility';
 
 interface Response {
   data: any;
@@ -243,6 +244,13 @@ export function VendorAddItem() {
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
 
+
+  const { stores: storesList } = useSelector(
+    (state: RootState) => state['storeProfileData']
+  );
+  const { module: storeModuleDetails } = storesList[0]
+  const { module_type } = storeModuleDetails
+
   const {
     isFirstTimeLoading: selectedFirstTimeLoading,
   } = useSelector(
@@ -377,34 +385,197 @@ export function VendorAddItem() {
     }
   }, [FORM_STATE.category])
 
+  function isNumber(value:any) {
+    return !isNaN(value) && typeof value === 'number';
+  }
+
+  const validatePrice = (price: any)=> {
+    // Check if price is a valid number
+    if (isNaN(price)) {
+      return   'newDeveloper.Price_must_be_a_number'
+    }
+  
+    
+    price = parseFloat(price);
+  
+    
+    if (price < 0) {
+      return 'newDeveloper.Price_cannot_be_negative';
+    }
+  
+    
+    if (!/^\d+(\.\d{1,2})?$/.test(price)) {
+      return   'newDeveloper.Price_can_only_have_up_to_two_decimal_places';
+    }
+  
+    return '';  
+  }
+  //validate form for add item
+  function showToastError(messageKey:string) {
+    Toast.show({
+      type: 'error',
+      text1: 'Error',
+      text2: t(messageKey),
+    });
+  }
+  function validateVariantNonFoodProduct(){
+    for (let i = 0; i < FORM_STATE.variantionsDetails.length; i++) {
+        const varDet = FORM_STATE.variantionsDetails[i];
+        const validPrice = validatePrice(varDet.price)
+        if (validPrice) {
+          showToastError(validPrice)
+          return false;
+        }
+        if(!isNumber(varDet.stock)){
+          showToastError('newDeveloper.invalidStock');
+          return false;
+        }
+    }
+    return true;
+  }
+  function validateFoodVars(foodVars:foodVariations[]) {
+    for (let i = 0; i < foodVars.length; i++) {
+      const foodVarDet = foodVars[i];
+      
+      if (foodVarDet.name.trim() === '') {
+        showToastError('newDeveloper.variantNameRequired');
+        return false;
+      }
+      
+      if (foodVarDet.type === 'multi') {
+        const min = parseFloat(foodVarDet.min);
+        const max = parseFloat(foodVarDet.max);
+  
+        if (!isNumber(min) || !isNumber(max)) {
+          showToastError('newDeveloper.validMinimumAndMaximumValueRequired');
+          return false;
+        }
+  
+        if (min > max) {
+          showToastError('newDeveloper.validMinimumAndMaximumValueRequired');
+          return false;
+        }
+      }
+  
+      for (let v = 0; v < foodVarDet.values.length; v++) {
+        const foodVarOptions = foodVarDet.values[v];
+  
+        if (foodVarOptions.label.trim() === '') {
+          showToastError('newDeveloper.variantionOptionLabelRequired');
+          return false;
+        }
+  
+        const validPrice = validatePrice(foodVarOptions.optionPrice);
+        if (validPrice) {
+          showToastError(validPrice)
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  }
+  const VALIDATE_FORM = (): boolean => {
+     
+    let valid = true;
+     
+    if(FORM_STATE.itemTitle.trim() === ''){
+      showToastError('newDeveloper.itemTitleRequired');
+      return false;
+    }
+    if(FORM_STATE.itemDesciption.trim() ===''){
+        showToastError('newDeveloper.itemDescriptionRequired');
+        return false
+    }
+    const validPrice = validatePrice(FORM_STATE.itemPrice)
+
+    if(validPrice){
+        showToastError(validPrice);
+        return false
+    }
+    if(FORM_STATE.discountAmount ===''){
+        showToastError('newDeveloper.discountRequired');
+        return false
+    }
+    if(FORM_STATE.category ===''){
+          showToastError('newDeveloper.selectCategory');
+          return false
+    }
+    //validtion for module type not equal food
+    if(module_type !=='food'){
+      if(FORM_STATE.variantionsDetails.length > 0){
+        validateVariantNonFoodProduct()
+        const isValid = validateVariantNonFoodProduct();
+        if (!isValid) {
+          return false;
+        }
+         
+      }
+      if(!isNumber(parseFloat(FORM_STATE.totalStocks))){
+        showToastError('newDeveloper.enterTotalStocks');
+        return false
+      }
+      if(FORM_STATE.stockUnit === ''){
+        showToastError('newDeveloper.selectUnit');
+        return false 
+      }
+      
+    }
+    //validation for module type food
+    if(module_type === 'food'){
+      if(FORM_STATE.fromTime ==='' ||  FORM_STATE.toTime===''){
+        showToastError('newDeveloper.chooseAvailableTimeSlot');
+        return false
+      }
+      if(FORM_STATE.fromTime!=='' && FORM_STATE.toTime!==''){
+            const resCompareTime = compareTimes(
+              FORM_STATE.fromTime, 
+              FORM_STATE.toTime
+            )
+            if (resCompareTime <= 0) { //compare result two selected
+              showToastError('newDeveloper.invalidTimeRangeSelected');
+              return false
+            } 
+      }
+      //validating food variation field entry
+      if (FORM_STATE.foodVars.length > 0) {
+        const isValid = validateFoodVars(FORM_STATE.foodVars);
+        if (!isValid) {
+          return false;
+        }
+      }
+    }
+    
+    if(FORM_STATE.thumbnailImage===''){
+        showToastError('newDeveloper.selecteditemImage');
+        return false
+    }
+
+    return valid
+   }
+
 
   //handle add item function
-  interface CustomData {
-    choice_no: string;
-    choice: string;
-    [key: string]: string | number;
-}
   const handleAddItem = async () => {
-  
+    if(!VALIDATE_FORM()) { return }
     //================= ITEM INSERTION PROCESS HERE ====================================//
-   
     const formData = new FormData()
-  
+    //choice array
     const choice: string[] = []
-    if(FORM_STATE.attributeVariants.length > 0){
+    if (FORM_STATE.attributeVariants.length > 0) {
       FORM_STATE.attributeVariants.map((dUpdatedAttr, dUpdatedindex) => {
-          choice.push(dUpdatedAttr.attributeName)
-          formData.append(`choice_options_${dUpdatedAttr.attrbuteId}`,JSON.stringify([dUpdatedAttr.variants.join(',')]))
+        choice.push(dUpdatedAttr.attributeName)
+        formData.append(`choice_options_${dUpdatedAttr.attrbuteId}`, JSON.stringify([dUpdatedAttr.variants.join(',')]))
       })
     }
-    if(FORM_STATE.variantionsDetails.length > 0){
-          FORM_STATE.variantionsDetails.forEach(function(combination) {
-            formData.append('price_' + combination.type.replace('.', '_'), combination.price);
-            formData.append('stock_' + combination.type.replace('.', '_'),  combination.stock);
-         });
+    if (FORM_STATE.variantionsDetails.length > 0) {
+      FORM_STATE.variantionsDetails.forEach(function (combination) {
+        formData.append('price_' + combination.type.replace('.', '_'), combination.price);
+        formData.append('stock_' + combination.type.replace('.', '_'), combination.stock);
+      });
     }
     formData.append('choice_no', JSON.stringify(FORM_STATE.selectedAttrbutes));
-    formData.append('choice', JSON.stringify(choice));     
+    formData.append('choice', JSON.stringify(choice));
     formData.append('category_id', FORM_STATE.category)
     formData.append('sub_category_id', FORM_STATE.subCategory)
     formData.append('translations', JSON.stringify([
@@ -419,21 +590,20 @@ export function VendorAddItem() {
         value: FORM_STATE.itemDesciption
       }
     ]))
-     
-     
-    formData.append('attribute_id',JSON.stringify(FORM_STATE.selectedAttrbutes)) 
+
+    formData.append('attribute_id', JSON.stringify(FORM_STATE.selectedAttrbutes))
     formData.append('price', parseFloat(FORM_STATE.itemPrice))
     formData.append('discount', FORM_STATE.discountAmount ? parseFloat(FORM_STATE.discountAmount) : 0)
     formData.append('discount_type', FORM_STATE.discountTypes)
-    formData.append('addon_ids',FORM_STATE.selectedAddonsList.join(','))
-    formData.append('tags',FORM_STATE.tags.join(','))
-    formData.append('current_stock',FORM_STATE.totalStocks ? parseFloat(FORM_STATE.totalStocks) : 0)
-    formData.append('unit_id', FORM_STATE.stockUnit)
-    formData.append('maximum_cart_quantity',FORM_STATE.maximumOrderQty ? parseFloat(FORM_STATE.maximumOrderQty) : 0)
-    formData.append('available_time_starts',FORM_STATE.fromTime)
-    formData.append('available_time_ends',FORM_STATE.toTime)
+    formData.append('addon_ids', FORM_STATE.selectedAddonsList.join(','))
+    formData.append('tags', FORM_STATE.tags.join(','))
+    formData.append('current_stock', FORM_STATE.totalStocks ? parseFloat(FORM_STATE.totalStocks) : 0)
+    formData.append('unit', FORM_STATE.stockUnit)
+    formData.append('maximum_cart_quantity', FORM_STATE.maximumOrderQty ? parseFloat(FORM_STATE.maximumOrderQty) : 0)
+    formData.append('available_time_starts', FORM_STATE.fromTime)
+    formData.append('available_time_ends', FORM_STATE.toTime)
     //thumbnail images
-    if(FORM_STATE.thumbnailImage){
+    if (FORM_STATE.thumbnailImage) {
       formData.append('image', {
         uri: FORM_STATE.thumbnailImage,
         name: 'banner.jpg',
@@ -441,15 +611,14 @@ export function VendorAddItem() {
       });
     }
     //item images
-    if(FORM_STATE.itemImages.length > 0){
-      FORM_STATE.itemImages.forEach((itemimage,itemindex)=>{
+    if (FORM_STATE.itemImages.length > 0) {
+      FORM_STATE.itemImages.forEach((itemimage, itemindex) => {
         formData.append('item_images[]', {
           uri: itemimage,
           name: `itemImage${itemindex}.jpg`,
           type: 'image/jpeg',
         });
       })
-       
     }
     //food item type
     if (FORM_STATE.itemType === 'noveg') {
@@ -457,12 +626,33 @@ export function VendorAddItem() {
     } else {
       formData.append('veg', 1)
     }
-
-    if(FORM_STATE.foodVars.length > 0){
+    //variations for food vendor section
+    if (FORM_STATE.foodVars.length > 0) {
       formData.append('options', JSON.stringify(FORM_STATE.foodVars))
     }
+    setProcessingLoader(true)
     const response: Response = await createVendorItems(formData)
-    console.log(JSON.stringify(response?.data))
+    if (response?.data?.message) {
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: response?.data?.message,
+      });
+      FORM_DISPATCH({ type: 'RESET_ALL' })
+    } else if (response?.data?.errors) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response?.data?.errors?.[0]?.message,
+      });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: "Process failed",
+      });
+    }
+    setProcessingLoader(false)
     //========================== End Item Insertion Process here ==============================//
   }
 

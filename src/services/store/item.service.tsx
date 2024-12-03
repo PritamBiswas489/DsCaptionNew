@@ -8,7 +8,7 @@ interface Response {
 	request?: any;
 }
 
-//create vendor items
+ 
 export const createVendorItems = async(formData:FormData): Promise<Response> => {
 	try {
 		const response = await api.post('/vendor/item/store',formData);
@@ -16,4 +16,15 @@ export const createVendorItems = async(formData:FormData): Promise<Response> => 
 	} catch (error:any) {
 		return error.response;
 	}
+}
+
+///vendor/item/details
+export const retrieveItemDetails  = async (itemid:string) : Promise<Response> => {
+	try {
+		const response = await api.get(`/vendor/item/details/${itemid}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
 }

@@ -37,6 +37,10 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
       navigate('ContentPages', { content_key: 'terms_and_conditions' });
     } else if (screen === 'refund_policy') {
       navigate('ContentPages', { content_key: 'refund_policy' });
+    } else if (screen === 'VendorEditItem_32820') {
+      navigate('EditVendorItem', { id: '32820' }); //32822
+    } else if (screen === 'VendorEditItem_32822') {
+      navigate('EditVendorItem', { id: '32822' }); //32822
     } else {
       // @ts-ignore
       navigate(screen);

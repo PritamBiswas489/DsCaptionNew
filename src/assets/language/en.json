@@ -1372,9 +1372,14 @@
             "enterTotalStocks":"Enter total stocks",
             "selectUnit":"Select unit",
             "chooseAvailableTimeSlot":"Choose available time slot",
-             "selecteditemImage":"Select product main image"
-
-
+             "selecteditemImage":"Select product main image",
+             "Aboutus":"About us",
+             "PrivacyPolicy":"Privacy policy",
+             "TermsAndConditions":"Terms And Conditions",
+             "AnnouncementUpdate":"Announcement update",
+             "AnnouncementMessage":"Announcement Message",
+             "AccouncementStatus":"Announcement status",
+             "MessagefieldRequired":"Message field required"
         }
     }
 }

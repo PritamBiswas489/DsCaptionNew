@@ -96,6 +96,11 @@ import { StoreSettings } from '@src/screens/dashboard/home/StoreSettings';
 import { StoreAddCoupon } from '@src/screens/dashboard/home/StoreAddCoupon';
 import { StoreScheduleSettings } from '@src/screens/dashboard/home/StoreScheduleSettings';
 import { VendorCreateAddons } from '@src/screens/dashboard/storeAddons/createAddons';
+import AboutUsContent from '@src/screens/dashboard/home/StoreContentPage/AboutUs';
+import PrivacyPolicyContent from '@src/screens/dashboard/home/StoreContentPage/PrivacyPolicy';
+import TermsAndConditionsContent from '@src/screens/dashboard/home/StoreContentPage/TermsAndConditions';
+import { StoreUpdateAnnouncement } from '@src/screens/dashboard/home/storeUpdateAnnouncement';
+
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
 
@@ -400,6 +405,16 @@ export default function MyStack() {
 
          <RootStack.Screen name="VendorCreateAddons" component={VendorCreateAddons} />
          
+         <RootStack.Screen name="AboutUsContent" component={AboutUsContent} />
+
+         <RootStack.Screen name="PrivacyPolicyContent" component={PrivacyPolicyContent} />
+         
+         <RootStack.Screen name="TermsAndConditionsContent" component={TermsAndConditionsContent} />
+         
+
+         <RootStack.Screen name="StoreUpdateAnnouncement" component={StoreUpdateAnnouncement} />
+         
+         <RootStack.Screen name="EditVendorItem" component={VendorAddItem} />
          
           </>
         )}

@@ -38,6 +38,42 @@ export const categoriesData: Array<HomeCategoryType> = [
     title: 'newDeveloper.AddItem', 
     goToScreen:'VendorAddItem'
   },
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Edit item 32820 fashion', 
+    goToScreen:'VendorEditItem_32820'
+  },
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Edit item 32822 food', 
+    goToScreen:'VendorEditItem_32822'
+  },
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'About us (For Testing)', 
+    goToScreen:'AboutUsContent'
+  },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Privacy Policy (For Testing)', 
+    goToScreen:'PrivacyPolicyContent'
+     
+  },
+   
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Terms and conditions (For Testing)', 
+    goToScreen:'TermsAndConditionsContent'
+     
+  },
+  //
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Update  Announcement (For Testing)', 
+    goToScreen:'StoreUpdateAnnouncement'
+     
+  },
 
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,

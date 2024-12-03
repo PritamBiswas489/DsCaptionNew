@@ -194,4 +194,10 @@ export type RootStackParamList = {
   StoreAddCoupon:undefined;
   StoreScheduleSettings:undefined;
   VendorCreateAddons:undefined;
+  AboutUsContent:undefined;
+  PrivacyPolicyContent:undefined;
+  TermsAndConditionsContent:undefined;
+  StoreUpdateAnnouncement:undefined;
+  EditVendorItem:{id:string};
+
 };

@@ -462,7 +462,7 @@ export default function InputView(
           error={errorItemDescription}
         />
         {/* nonveg and veg */}
-        <RadioButton.Group onValueChange={newValue => setItemType(newValue)} value={itemType}>
+        {module_type === 'food' &&    <RadioButton.Group onValueChange={newValue => setItemType(newValue)} value={itemType}>
           <View style={styles.radioContainer}>
             <View style={styles.radioButton}>
               <RadioButton value="noveg" />
@@ -474,7 +474,7 @@ export default function InputView(
             </View>
 
           </View>
-        </RadioButton.Group>
+        </RadioButton.Group> }
 
         
         {/* item price  */}
@@ -631,7 +631,7 @@ export default function InputView(
 
 
         {/* addon lising here */}
-        <SelectionDropdown
+     {module_type === 'food' && <SelectionDropdown
           data={vendorAddons}
           value={''}
           setValue={(value: string) => {
@@ -639,9 +639,9 @@ export default function InputView(
           }}
           label={t('newDeveloper.Addons')}
           error={''}
-        />
+        />}   
 
-        {selectedAddonsList.length > 0 && <AddonInput removeSelectedAddon={removeSelectedAddon} selectedaddons={selectedAddonsList} />}
+        {selectedAddonsList.length > 0 && module_type === 'food' && <AddonInput removeSelectedAddon={removeSelectedAddon} selectedaddons={selectedAddonsList} />}
 
 
         {/* Available time starts and ends */}

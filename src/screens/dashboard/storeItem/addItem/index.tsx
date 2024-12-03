@@ -19,7 +19,7 @@ import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import { addServiceSubCategory } from '@src/services/services-service';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { getVendorCategories, getVendorSubCategories } from '@src/services/store/category.service';
@@ -34,7 +34,7 @@ import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
 
 import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
 import { getVendorAddons } from '@src/services/store/addons.service';
-import { createVendorItems } from '@src/services/store/item.service';
+import { createVendorItems, retrieveItemDetails } from '@src/services/store/item.service';
 import { compareTimes } from '@src/config/utility';
 
 interface Response {
@@ -47,6 +47,7 @@ interface Response {
 }
 
 interface State {
+  itemId:string;
   itemTitle: string;
   errorItemTitle: string;
   itemDesciption: string;
@@ -81,6 +82,7 @@ interface State {
 }
 
 const initialState: State = {
+  itemId:'',
   itemTitle: '',
   errorItemTitle: '',
   itemDesciption: '',
@@ -115,6 +117,7 @@ const initialState: State = {
 }
 
 type Action =
+  | { type: 'SET_ITEM_ID'; payload: typeof initialState.itemId }
   | { type: 'SET_ITEM_TITLE'; payload: typeof initialState.itemTitle }
   | { type: 'SET_ERROR_ITEM_TITLE'; payload: typeof initialState.errorItemTitle }
   | { type: 'SET_ITEM_DESCRIPTION'; payload: typeof initialState.itemDesciption }
@@ -152,6 +155,8 @@ type Action =
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case 'SET_ITEM_ID':
+      return { ...state, itemTitle: action.payload };
     case 'SET_ITEM_TITLE':
       return { ...state, itemTitle: action.payload };
     case 'SET_ERROR_ITEM_TITLE':
@@ -236,13 +241,40 @@ function reducer(state: State, action: Action): State {
 
 //Add new banner
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
+type EditServiceMenRouteProp = RouteProp<RootStackParamList, 'EditVendorItem'>;
+
 export function VendorAddItem() {
   const navigation = useNavigation<ItemsProps>();
+  const route = useRoute<EditServiceMenRouteProp>();
+  const getItemDetails = async ()=>{
+      setProcessingLoader(true)
+      const response:Response = await retrieveItemDetails(route?.params?.id)
+      setProcessingLoader(false)
+      console.log("=========== response =================")
+      if(response?.data?.id){
+        FORM_DISPATCH({ type: 'SET_ITEM_ID',payload:response?.data?.id })
+        FORM_DISPATCH({ type: 'SET_ITEM_TITLE',payload:response?.data?.name })
+        FORM_DISPATCH({ type: 'SET_ITEM_DESCRIPTION',payload:response?.data?.description })
+      }else{
+        FORM_DISPATCH({ type: 'RESET_ALL' })
+      }
+  }
+  useEffect(()=>{
+  if(route?.params?.id){
+      getItemDetails()
+  }else{
+    FORM_DISPATCH({ type: 'RESET_ALL' })
+  }
+  },[route?.params?.id])
+
+  
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
+
+
 
 
   const { stores: storesList } = useSelector(

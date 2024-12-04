@@ -81,6 +81,7 @@ export default function InputView(
     attributeVariants,
     setAttributeVariants,
     variantionsDetails,
+    choiceOptions,
     setVariationDetails,
     thumbanailImage,
     setThumbnailImage,
@@ -135,6 +136,7 @@ export default function InputView(
     attributeVariants: { attrbuteId: number, attributeName: string, variants: string[] }[],
     setAttributeVariants: (value: { attrbuteId: number, attributeName: string, variants: string[] }[]) => void,
     variantionsDetails: Combination[],
+    choiceOptions:Combination[],
     setVariationDetails: (value: Combination[]) => void,
     thumbanailImage: string,
     setThumbnailImage: (value: string) => void,
@@ -166,6 +168,7 @@ export default function InputView(
   const { module: storeModuleDetails } = storesList[0]
   const { module_type } = storeModuleDetails
 
+   
    
   //open thumbnail image
   const openThumbnailImage = () => {
@@ -289,20 +292,23 @@ export default function InputView(
   }
 
   useEffect(() => {
+    setVariationDetails([])
     if (attributeVariants.length > 0) {
       const variantsArray: string[][] = attributeVariants.map(attr => attr.variants);
       const combinations: string[][] = generateCombinations(variantsArray);
-      const variationOutput: Combination[] = combinations.map(combo => ({
-        type: combo.join('-'),
-        stock: 0,
-        price: 0,
-      }));
-
+      const variationOutput: Combination[] = combinations.map((combo) => {
+        const typeCons = combo.join('-')
+        const filterData = choiceOptions.find(ele=>typeCons === ele.type)
+        return {
+          type: typeCons,
+          stock: filterData?.stock ?? 0,
+          price: filterData?.price ?? 0,
+        }
+      });
+     
       setVariationDetails(variationOutput)
-    } else {
-      setVariationDetails([])
     }
-  }, [attributeVariants])
+  }, [attributeVariants,choiceOptions])
 
   const removeImage = (imageindex: number) => {
     const d = itemImages.filter((_, imgindex) => imgindex !== imageindex);
@@ -378,6 +384,7 @@ export default function InputView(
 
   useEffect(() => {
     calculateTotalStock()
+     
   }, [variantionsDetails])
 
 

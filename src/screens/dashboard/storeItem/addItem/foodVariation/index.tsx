@@ -29,8 +29,8 @@ export const FoodVariation = (
   const [isRequired, setIsRequired] = useState(foodVariation.required === 'on' ? true : false);
   const [type, setType] = useState(foodVariation.type);
   const [options, setOptions] = useState<foodVariationOption[]>(foodVariation.values);
-  const [minimumValue,setMinimumValue] = useState('')
-  const [maximumValue,setMaximumValue] = useState('')
+  const [minimumValue,setMinimumValue] = useState(foodVariation.min || '')
+  const [maximumValue,setMaximumValue] = useState(foodVariation.max || '')
   const { t, isDark } = useValues();
 
   const addOption = () => {

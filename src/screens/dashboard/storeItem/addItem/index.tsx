@@ -12,18 +12,14 @@ import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
-import { CategoriesInterface } from '@src/interfaces/categoriesInterface';
-import { serviceCategoriesDataActions } from '@src/store/redux/service-category-redux';
-import { getCategories } from '@src/services/services-service';
-import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
-import { addServiceSubCategory } from '@src/services/services-service';
+
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { getVendorCategories, getVendorSubCategories } from '@src/services/store/category.service';
-import { authAuthorizeRedirect } from '@src/utils/functions';
+import { authAuthorizeRedirect, isFileProtocol } from '@src/utils/functions';
 import { vendorCategoriesActions } from '@src/store/redux/store/categories.redux';
 import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories-redux';
 import { vendorAttributeActions } from '@src/store/redux/store/attributes-redux';
@@ -34,7 +30,7 @@ import { foodVariations } from '@src/interfaces/store/foodVariations.interface';
 
 import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
 import { getVendorAddons } from '@src/services/store/addons.service';
-import { createVendorItems, retrieveItemDetails } from '@src/services/store/item.service';
+import { createVendorItems, retrieveItemDetails, updateVendorItems } from '@src/services/store/item.service';
 import { compareTimes } from '@src/config/utility';
 
 interface Response {
@@ -47,7 +43,7 @@ interface Response {
 }
 
 interface State {
-  itemId:string;
+  itemId: string;
   itemTitle: string;
   errorItemTitle: string;
   itemDesciption: string;
@@ -68,6 +64,7 @@ interface State {
   tags: string[];
   attributeVariants: { attrbuteId: number, attributeName: string, variants: string[] }[];
   variantionsDetails: { type: string, price: number, stock: number }[];
+  choiceOptions: { type: string, price: number, stock: number }[];
   thumbnailImage: string;
   errorThumbnailImage: string;
   itemImages: string[];
@@ -82,7 +79,7 @@ interface State {
 }
 
 const initialState: State = {
-  itemId:'',
+  itemId: '',
   itemTitle: '',
   errorItemTitle: '',
   itemDesciption: '',
@@ -103,6 +100,7 @@ const initialState: State = {
   tags: [],
   attributeVariants: [],
   variantionsDetails: [],
+  choiceOptions: [],
   thumbnailImage: '',
   errorThumbnailImage: '',
   itemImages: [],
@@ -138,6 +136,7 @@ type Action =
   | { type: 'SET_TAGS'; payload: typeof initialState.tags }
   | { type: 'SET_ATTRIBUTE_VARIANTS'; payload: typeof initialState.attributeVariants }
   | { type: 'SET_VARIATIONS_DETAILS'; payload: typeof initialState.variantionsDetails }
+  | { type: 'SET_CHOICE_OPTIONS'; payload: typeof initialState.choiceOptions }
   | { type: 'SET_THUMBNAIL_IMAGE'; payload: typeof initialState.thumbnailImage }
   | { type: 'SET_ERROR_THUMBNAIL_IMAGE'; payload: typeof initialState.errorThumbnailImage }
   | { type: 'SET_ITEM_IMAGES'; payload: typeof initialState.itemImages }
@@ -156,7 +155,7 @@ type Action =
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET_ITEM_ID':
-      return { ...state, itemTitle: action.payload };
+      return { ...state, itemId: action.payload };
     case 'SET_ITEM_TITLE':
       return { ...state, itemTitle: action.payload };
     case 'SET_ERROR_ITEM_TITLE':
@@ -195,6 +194,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, attributeVariants: action.payload };
     case 'SET_VARIATIONS_DETAILS':
       return { ...state, variantionsDetails: action.payload };
+    case 'SET_CHOICE_OPTIONS':
+      return { ...state, choiceOptions: action.payload };
     case 'SET_THUMBNAIL_IMAGE':
       return { ...state, thumbnailImage: action.payload };
     case 'SET_ERROR_THUMBNAIL_IMAGE':
@@ -246,28 +247,83 @@ type EditServiceMenRouteProp = RouteProp<RootStackParamList, 'EditVendorItem'>;
 export function VendorAddItem() {
   const navigation = useNavigation<ItemsProps>();
   const route = useRoute<EditServiceMenRouteProp>();
-  const getItemDetails = async ()=>{
-      setProcessingLoader(true)
-      const response:Response = await retrieveItemDetails(route?.params?.id)
-      setProcessingLoader(false)
-      console.log("=========== response =================")
-      if(response?.data?.id){
-        FORM_DISPATCH({ type: 'SET_ITEM_ID',payload:response?.data?.id })
-        FORM_DISPATCH({ type: 'SET_ITEM_TITLE',payload:response?.data?.name })
-        FORM_DISPATCH({ type: 'SET_ITEM_DESCRIPTION',payload:response?.data?.description })
-      }else{
-        FORM_DISPATCH({ type: 'RESET_ALL' })
-      }
-  }
-  useEffect(()=>{
-  if(route?.params?.id){
-      getItemDetails()
-  }else{
+  //get Item Details for update
+  const getItemDetails = async () => {
     FORM_DISPATCH({ type: 'RESET_ALL' })
-  }
-  },[route?.params?.id])
+    setProcessingLoader(true)
+    const response: Response = await retrieveItemDetails(route?.params?.id)
 
-  
+    setProcessingLoader(false)
+
+    if (response?.data?.id) {
+      
+      FORM_DISPATCH({ type: 'SET_ITEM_ID', payload: response?.data?.id })
+      FORM_DISPATCH({ type: 'SET_ITEM_TITLE', payload: response?.data?.name })
+      FORM_DISPATCH({ type: 'SET_ITEM_DESCRIPTION', payload: response?.data?.description })
+      FORM_DISPATCH({ type: 'SET_ITEM_PRICE', payload: response?.data?.price ? response?.data?.price.toString() : '' })
+      FORM_DISPATCH({ type: 'SET_DISCOUNT_AMOUNT', payload: response?.data?.discount ? response?.data?.discount.toString() : '' })
+      FORM_DISPATCH({ type: 'SET_DISCOUNT_TYPES', payload: response?.data?.discount_type })
+      FORM_DISPATCH({ type: 'SET_CATEGORY', payload: response?.data?.category_ids[0]?.id || '' })
+      FORM_DISPATCH({ type: 'SET_SUB_CATEGORY', payload: response?.data?.category_ids[1]?.id  || '' })
+      FORM_DISPATCH({ type: 'SET_MAXIMUM_ORDER_QTY', payload: response?.data?.maximum_cart_quantity ? response?.data?.maximum_cart_quantity.toString() : '' })
+      FORM_DISPATCH({ type: 'SET_FROM_TIME', payload: response?.data?.available_time_starts || '' })
+      FORM_DISPATCH({ type: 'SET_TO_TIME', payload: response?.data?.available_time_ends || '' })
+      FORM_DISPATCH({ type: 'SET_TOTAL_STOCKS', payload: response?.data?.stock ? response?.data?.stock.toString() : '' })
+      FORM_DISPATCH({ type: 'SET_STOCK_UNIT', payload: response?.data?.unit_id ? response?.data?.unit_id.toString() : '' })
+      FORM_DISPATCH({ type: 'SET_ITEM_TYPE', payload: response?.data?.veg === 0 ? 'noveg' : 'veg' })
+      FORM_DISPATCH({ type: 'SET_SELECTED_ATTRIBUTES', payload: response?.data?.attributes })
+      if (response?.data?.choice_options) {
+        const attributeVariants = response?.data?.choice_options.map((chOpt: any, _: number) => {
+          if (chOpt?.name) {
+            return { attrbuteId: parseInt(chOpt?.name.split('choice_')[1] || 0), attributeName: chOpt?.title, variants: chOpt?.options }
+          }
+        })
+        FORM_DISPATCH({ type: 'SET_ATTRIBUTE_VARIANTS', payload: attributeVariants })
+      }
+      if (response?.data?.variations) {
+        FORM_DISPATCH({ type: 'SET_CHOICE_OPTIONS', payload: response?.data?.variations })
+      }
+      if (response?.data?.tags) {
+        const tagData = response?.data?.tags.map((tagDt: any, _: number) => {
+          return tagDt?.tag
+        })
+        FORM_DISPATCH({ type: 'SET_TAGS', payload: tagData })
+      }
+      if (response?.data?.add_ons) {
+        const addOnData = response?.data?.add_ons.map((addOnDt: any, _: number) => {
+          return addOnDt?.id
+        })
+        FORM_DISPATCH({ type: 'SET_SELECTED_ADDONS_LIST', payload: addOnData })
+      }
+      //SET_FOOD_VARS
+      if (response?.data?.food_variations) {
+        const fVar = response?.data?.food_variations.map((dt: any, _: number) => {
+          if (dt?.name) {
+            return dt
+          }
+        })
+        FORM_DISPATCH({ type: 'SET_FOOD_VARS', payload: fVar })
+      }
+      //thumbnail image
+      FORM_DISPATCH({ type: 'SET_THUMBNAIL_IMAGE', payload: response?.data?.image_full_url || '' })
+      //item other images
+      FORM_DISPATCH({ type: 'SET_ITEM_IMAGES', payload: response?.data?.images_full_url || [] })
+
+
+
+    } else {
+      FORM_DISPATCH({ type: 'RESET_ALL' })
+    }
+  }
+  useEffect(() => {
+    if (route?.params?.id) {
+      getItemDetails()
+    } else {
+      FORM_DISPATCH({ type: 'RESET_ALL' })
+    }
+  }, [route?.params?.id])
+
+
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
 
   const { isDark, t } = useValues();
@@ -348,6 +404,7 @@ export function VendorAddItem() {
 
   useEffect(() => {
     if (selectedFirstTimeAddonsLoading) {
+
       loadAddons()
     }
   }, [selectedFirstTimeAddonsLoading])
@@ -406,7 +463,7 @@ export function VendorAddItem() {
   }
   /**** getting subcateories based on category *****/
   useEffect(() => {
-    FORM_DISPATCH({ type: 'SET_SUB_CATEGORY', payload: '' });
+    
     if (FORM_STATE.category) {
       const checkExisting = SubCategories.find(elementDet => elementDet.categoryId === FORM_STATE.category);
       if (!checkExisting) {
@@ -417,86 +474,86 @@ export function VendorAddItem() {
     }
   }, [FORM_STATE.category])
 
-  function isNumber(value:any) {
+  function isNumber(value: any) {
     return !isNaN(value) && typeof value === 'number';
   }
 
-  const validatePrice = (price: any)=> {
+  const validatePrice = (price: any) => {
     // Check if price is a valid number
     if (isNaN(price)) {
-      return   'newDeveloper.Price_must_be_a_number'
+      return 'newDeveloper.Price_must_be_a_number'
     }
-  
-    
+
+
     price = parseFloat(price);
-  
-    
+
+
     if (price < 0) {
       return 'newDeveloper.Price_cannot_be_negative';
     }
-  
-    
+
+
     if (!/^\d+(\.\d{1,2})?$/.test(price)) {
-      return   'newDeveloper.Price_can_only_have_up_to_two_decimal_places';
+      return 'newDeveloper.Price_can_only_have_up_to_two_decimal_places';
     }
-  
-    return '';  
+
+    return '';
   }
   //validate form for add item
-  function showToastError(messageKey:string) {
+  function showToastError(messageKey: string) {
     Toast.show({
       type: 'error',
       text1: 'Error',
       text2: t(messageKey),
     });
   }
-  function validateVariantNonFoodProduct(){
+  function validateVariantNonFoodProduct() {
     for (let i = 0; i < FORM_STATE.variantionsDetails.length; i++) {
-        const varDet = FORM_STATE.variantionsDetails[i];
-        const validPrice = validatePrice(varDet.price)
-        if (validPrice) {
-          showToastError(validPrice)
-          return false;
-        }
-        if(!isNumber(varDet.stock)){
-          showToastError('newDeveloper.invalidStock');
-          return false;
-        }
+      const varDet = FORM_STATE.variantionsDetails[i];
+      const validPrice = validatePrice(varDet.price)
+      if (validPrice) {
+        showToastError(validPrice)
+        return false;
+      }
+      if (!isNumber(varDet.stock)) {
+        showToastError('newDeveloper.invalidStock');
+        return false;
+      }
     }
     return true;
   }
-  function validateFoodVars(foodVars:foodVariations[]) {
+  function validateFoodVars(foodVars: foodVariations[]) {
     for (let i = 0; i < foodVars.length; i++) {
       const foodVarDet = foodVars[i];
-      
+
       if (foodVarDet.name.trim() === '') {
         showToastError('newDeveloper.variantNameRequired');
         return false;
       }
-      
+
       if (foodVarDet.type === 'multi') {
         const min = parseFloat(foodVarDet.min);
         const max = parseFloat(foodVarDet.max);
-  
+
         if (!isNumber(min) || !isNumber(max)) {
           showToastError('newDeveloper.validMinimumAndMaximumValueRequired');
           return false;
         }
-  
+
         if (min > max) {
           showToastError('newDeveloper.validMinimumAndMaximumValueRequired');
           return false;
         }
       }
-  
+
       for (let v = 0; v < foodVarDet.values.length; v++) {
         const foodVarOptions = foodVarDet.values[v];
-  
+
         if (foodVarOptions.label.trim() === '') {
           showToastError('newDeveloper.variantionOptionLabelRequired');
           return false;
         }
-  
+
         const validPrice = validatePrice(foodVarOptions.optionPrice);
         if (validPrice) {
           showToastError(validPrice)
@@ -504,70 +561,70 @@ export function VendorAddItem() {
         }
       }
     }
-    
+
     return true;
   }
   const VALIDATE_FORM = (): boolean => {
-     
+
     let valid = true;
-     
-    if(FORM_STATE.itemTitle.trim() === ''){
+
+    if (FORM_STATE.itemTitle.trim() === '') {
       showToastError('newDeveloper.itemTitleRequired');
       return false;
     }
-    if(FORM_STATE.itemDesciption.trim() ===''){
-        showToastError('newDeveloper.itemDescriptionRequired');
-        return false
+    if (FORM_STATE.itemDesciption.trim() === '') {
+      showToastError('newDeveloper.itemDescriptionRequired');
+      return false
     }
     const validPrice = validatePrice(FORM_STATE.itemPrice)
 
-    if(validPrice){
-        showToastError(validPrice);
-        return false
+    if (validPrice) {
+      showToastError(validPrice);
+      return false
     }
-    if(FORM_STATE.discountAmount ===''){
-        showToastError('newDeveloper.discountRequired');
-        return false
+    if (FORM_STATE.discountAmount === '') {
+      showToastError('newDeveloper.discountRequired');
+      return false
     }
-    if(FORM_STATE.category ===''){
-          showToastError('newDeveloper.selectCategory');
-          return false
+    if (FORM_STATE.category === '') {
+      showToastError('newDeveloper.selectCategory');
+      return false
     }
     //validtion for module type not equal food
-    if(module_type !=='food'){
-      if(FORM_STATE.variantionsDetails.length > 0){
+    if (module_type !== 'food') {
+      if (FORM_STATE.variantionsDetails.length > 0) {
         validateVariantNonFoodProduct()
         const isValid = validateVariantNonFoodProduct();
         if (!isValid) {
           return false;
         }
-         
+
       }
-      if(!isNumber(parseFloat(FORM_STATE.totalStocks))){
+      if (!isNumber(parseFloat(FORM_STATE.totalStocks))) {
         showToastError('newDeveloper.enterTotalStocks');
         return false
       }
-      if(FORM_STATE.stockUnit === ''){
+      if (FORM_STATE.stockUnit === '') {
         showToastError('newDeveloper.selectUnit');
-        return false 
+        return false
       }
-      
+
     }
     //validation for module type food
-    if(module_type === 'food'){
-      if(FORM_STATE.fromTime ==='' ||  FORM_STATE.toTime===''){
+    if (module_type === 'food') {
+      if (FORM_STATE.fromTime === '' || FORM_STATE.toTime === '') {
         showToastError('newDeveloper.chooseAvailableTimeSlot');
         return false
       }
-      if(FORM_STATE.fromTime!=='' && FORM_STATE.toTime!==''){
-            const resCompareTime = compareTimes(
-              FORM_STATE.fromTime, 
-              FORM_STATE.toTime
-            )
-            if (resCompareTime <= 0) { //compare result two selected
-              showToastError('newDeveloper.invalidTimeRangeSelected');
-              return false
-            } 
+      if (FORM_STATE.fromTime !== '' && FORM_STATE.toTime !== '') {
+        const resCompareTime = compareTimes(
+          FORM_STATE.fromTime,
+          FORM_STATE.toTime
+        )
+        if (resCompareTime <= 0) { //compare result two selected
+          showToastError('newDeveloper.invalidTimeRangeSelected');
+          return false
+        }
       }
       //validating food variation field entry
       if (FORM_STATE.foodVars.length > 0) {
@@ -577,19 +634,19 @@ export function VendorAddItem() {
         }
       }
     }
-    
-    if(FORM_STATE.thumbnailImage===''){
-        showToastError('newDeveloper.selecteditemImage');
-        return false
+
+    if (FORM_STATE.thumbnailImage === '') {
+      showToastError('newDeveloper.selecteditemImage');
+      return false
     }
 
     return valid
-   }
+  }
 
 
   //handle add item function
   const handleAddItem = async () => {
-    if(!VALIDATE_FORM()) { return }
+    if (!VALIDATE_FORM()) { return }
     //================= ITEM INSERTION PROCESS HERE ====================================//
     const formData = new FormData()
     //choice array
@@ -609,7 +666,9 @@ export function VendorAddItem() {
     formData.append('choice_no', JSON.stringify(FORM_STATE.selectedAttrbutes));
     formData.append('choice', JSON.stringify(choice));
     formData.append('category_id', FORM_STATE.category)
+   
     formData.append('sub_category_id', FORM_STATE.subCategory)
+    
     formData.append('translations', JSON.stringify([
       {
         locale: "en",
@@ -618,10 +677,23 @@ export function VendorAddItem() {
       },
       {
         locale: "en",
-        key: 'name',
+        key: 'description',
         value: FORM_STATE.itemDesciption
       }
     ]))
+
+    // console.log(JSON.stringify([
+    //   {
+    //     locale: "en",
+    //     key: 'name',
+    //     value: FORM_STATE.itemTitle
+    //   },
+    //   {
+    //     locale: "en",
+    //     key: 'name',
+    //     value: FORM_STATE.itemDesciption
+    //   }
+    // ]));  return
 
     formData.append('attribute_id', JSON.stringify(FORM_STATE.selectedAttrbutes))
     formData.append('price', parseFloat(FORM_STATE.itemPrice))
@@ -635,7 +707,7 @@ export function VendorAddItem() {
     formData.append('available_time_starts', FORM_STATE.fromTime)
     formData.append('available_time_ends', FORM_STATE.toTime)
     //thumbnail images
-    if (FORM_STATE.thumbnailImage) {
+    if (FORM_STATE.thumbnailImage && isFileProtocol(FORM_STATE.thumbnailImage)) {
       formData.append('image', {
         uri: FORM_STATE.thumbnailImage,
         name: 'banner.jpg',
@@ -643,14 +715,26 @@ export function VendorAddItem() {
       });
     }
     //item images
+    let editimages:{img:string,storage:string}[]= [];
     if (FORM_STATE.itemImages.length > 0) {
       FORM_STATE.itemImages.forEach((itemimage, itemindex) => {
-        formData.append('item_images[]', {
-          uri: itemimage,
-          name: `itemImage${itemindex}.jpg`,
-          type: 'image/jpeg',
-        });
+        if (isFileProtocol(itemimage)) {
+          formData.append('item_images[]', {
+            uri: itemimage,
+            name: `itemImage${itemindex}.jpg`,
+            type: 'image/jpeg',
+          });
+        }
+        if (FORM_STATE.itemId) {
+          if (!isFileProtocol(itemimage)) {
+            editimages = [...editimages,{img:itemimage.substring(itemimage.lastIndexOf('/') + 1),storage:'public'}]
+          }
+        }
       })
+      
+      formData.append('images',  JSON.stringify(editimages)  )
+    }else{
+      formData.append('images',  JSON.stringify([])  )
     }
     //food item type
     if (FORM_STATE.itemType === 'noveg') {
@@ -663,14 +747,33 @@ export function VendorAddItem() {
       formData.append('options', JSON.stringify(FORM_STATE.foodVars))
     }
     setProcessingLoader(true)
-    const response: Response = await createVendorItems(formData)
+    let response: Response = {
+      data: undefined,
+      status: 0,
+      statusText: '',
+      headers: undefined,
+      config: undefined
+    }
+
+    if (FORM_STATE.itemId) {
+      formData.append('id', FORM_STATE.itemId)
+      response = await updateVendorItems(formData)
+    } else {
+      response = await createVendorItems(formData)
+    }
+    
+   
     if (response?.data?.message) {
       Toast.show({
         type: 'success',
         text1: 'Success',
         text2: response?.data?.message,
       });
-      FORM_DISPATCH({ type: 'RESET_ALL' })
+      if (!FORM_STATE.itemId) {
+        FORM_DISPATCH({ type: 'RESET_ALL' })
+      } else {
+        navigation.replace('EditVendorItem', { id: FORM_STATE.itemId });
+      }
     } else if (response?.data?.errors) {
       Toast.show({
         type: 'error',
@@ -687,6 +790,8 @@ export function VendorAddItem() {
     setProcessingLoader(false)
     //========================== End Item Insertion Process here ==============================//
   }
+
+  
 
   return (
     <>
@@ -746,7 +851,7 @@ export function VendorAddItem() {
             FORM_DISPATCH({ type: 'SET_ERROR_CATEGORY', payload: '' })
           }}
           errorCategory={FORM_STATE.errorCategory}
-          subCategory={FORM_STATE.subCategory}
+          subCategory={FORM_STATE.subCategory.toString()}
           setSubCategory={(value) => {
             FORM_DISPATCH({ type: 'SET_SUB_CATEGORY', payload: value })
             FORM_DISPATCH({ type: 'SET_ERROR_SUB_CATEGORY', payload: '' })
@@ -771,6 +876,7 @@ export function VendorAddItem() {
             FORM_DISPATCH({ type: 'SET_ATTRIBUTE_VARIANTS', payload: value })
           }}
           variantionsDetails={FORM_STATE.variantionsDetails}
+          choiceOptions={FORM_STATE.choiceOptions}
           setVariationDetails={(value) => {
             FORM_DISPATCH({ type: 'SET_VARIATIONS_DETAILS', payload: value })
           }}

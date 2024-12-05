@@ -11,15 +11,12 @@ import GradientBtn from '@commonComponents/gradientBtn';
 import { useValues } from '../../../../../App';
 import appColors from '@theme/appColors';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@src/store';
-import { CategoriesInterface } from '@src/interfaces/categoriesInterface';
-import { serviceCategoriesDataActions } from '@src/store/redux/service-category-redux';
-import { getCategories } from '@src/services/services-service';
-import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
-import { addServiceSubCategory } from '@src/services/services-service';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
-import { uploadBanner } from '@src/services/store/banner.service';
+import { updateBanner, uploadBanner } from '@src/services/store/banner.service';
+import { isFileProtocol } from '@src/utils/functions';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '@src/navigation/types';
 
 interface Response {
   data: any;
@@ -30,6 +27,7 @@ interface Response {
   request?: any;
 }
 interface State {
+  bannerId:string;
   bannerTitle: string;
   errorBannerTitle: string;
   bannerUrl: string;
@@ -39,6 +37,7 @@ interface State {
 }
 //initial state
 const initialState:State = {
+  bannerId:'',
   bannerTitle: '',
   errorBannerTitle: '',
   bannerUrl: '',
@@ -48,6 +47,7 @@ const initialState:State = {
 }
 
 type Action =
+  | { type: 'SET__BANNER__ID'; payload: typeof initialState.bannerId }
   | { type: 'SET__BANNER__TITLE'; payload: typeof initialState.bannerTitle }
   | { type: 'SET__ERROR__BANNER__TITLE'; payload: typeof initialState.errorBannerTitle }
   | { type: 'SET__BANNER__URL'; payload: typeof initialState.bannerUrl }
@@ -60,6 +60,8 @@ type Action =
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case 'SET__BANNER__ID':
+      return { ...state, bannerId: action.payload };
     case 'SET__BANNER__TITLE':
       return { ...state, bannerTitle: action.payload };
     case 'SET__ERROR__BANNER__TITLE':
@@ -89,14 +91,22 @@ function reducer(state: State, action: Action): State {
 
 
 //Add new banner
+type EditAddonRouteProp = RouteProp<RootStackParamList, 'EditVendorBanner'>;
 export function VendorAddNewBanner() {
-
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
-
-
+  const route = useRoute<EditAddonRouteProp>();
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
+
+  useEffect(()=>{
+    if(route?.params?.id){
+      FORM_DISPATCH({ type: 'SET__BANNER__ID', payload: route?.params?.id });
+      FORM_DISPATCH({ type: 'SET__BANNER__TITLE', payload: route?.params?.title });
+      FORM_DISPATCH({ type: 'SET__BANNER__IMAGE', payload: route?.params?.image });
+      FORM_DISPATCH({ type: 'SET__BANNER__URL', payload: route?.params?.bannerLink });
+    }
+  },[route?.params?.id])
 
   const VALIDATE_FORM = (): boolean => {
     let valid = true;
@@ -114,26 +124,38 @@ export function VendorAddNewBanner() {
       valid = false;
     }
 
-
     return valid
 
   }
 
-
-  //handle   create a banner
+  //handle create a banner
   const handleCreateBanner = async () => {
     if (VALIDATE_FORM()) {
       const formData = new FormData()
       formData.append('title', FORM_STATE.bannerTitle)
       formData.append('default_link', FORM_STATE.bannerUrl)
-      formData.append('image', {
-        uri: FORM_STATE.bannerImage,
-        name: 'banner.jpg',
-        type: 'image/jpeg',
-      });
-
+      if(isFileProtocol(FORM_STATE.bannerImage)){
+          formData.append('image', {
+              uri: FORM_STATE.bannerImage,
+              name: 'banner.jpg',
+              type: 'image/jpeg',
+          });
+      }
       setProcessingLoader(true)
-      const response: Response = await uploadBanner(formData)
+      
+      let response: Response = {
+        data: undefined,
+        status: 0,
+        statusText: '',
+        headers: undefined,
+        config: undefined
+      }
+      if(FORM_STATE.bannerId){
+        formData.append('id', FORM_STATE.bannerId)
+        response = await updateBanner(formData) //update coupon
+      }else{
+        response = await uploadBanner(formData)
+      }
       if (response?.data?.message) {
         Toast.show({
           type: 'success',
@@ -169,7 +191,7 @@ export function VendorAddNewBanner() {
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
-        <Header showBackArrow={true} title={'newDeveloper.AddNewBanner'} />
+        <Header showBackArrow={true} title={FORM_STATE.bannerId ? 'newDeveloper.EditNewBanner' : 'newDeveloper.AddNewBanner'} />
 
         <View
           style={[
@@ -202,7 +224,7 @@ export function VendorAddNewBanner() {
           bannerImageError={FORM_STATE.bannerImageError}
         />
         <GradientBtn
-          label="newDeveloper.AddBanner"
+          label={FORM_STATE.bannerId ? "newDeveloper.update" : "newDeveloper.AddBanner"}
           onPress={handleCreateBanner}
           additionalStyle={{
             marginHorizontal: windowWidth(5),

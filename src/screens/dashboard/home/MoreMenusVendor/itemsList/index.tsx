@@ -38,13 +38,26 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
     } else if (screen === 'refund_policy') {
       navigate('ContentPages', { content_key: 'refund_policy' });
     } else if (screen === 'VendorEditItem_32820') {
-      navigate('EditVendorItem', { id: '32820' }); //32822
+      navigate('EditVendorItem', { id: '32820' });  
     } else if (screen === 'VendorEditItem_32822') {
-      navigate('EditVendorItem', { id: '32822' }); //32822
-    } else {
+      navigate('EditVendorItem', { id: '32822' });  
+    }else if(screen === 'EditVendorCoupon_112'){
+      navigate('EditVendorCoupon', { id: '112' });  
+    }else if (screen == 'VendorEditAddons'){
+      navigate('EditVendorAddon', { id: '845', name:'Testing new', price:'30.00' }); 
+    }else if (screen == 'EditVendorBanner'){
+      navigate('EditVendorBanner', { 
+        id: '767', 
+        title:'Testing banner', 
+        image:'https://ai.dorkarmall.in/storage/app/public/banner/2024-12-05-6751c0e740bf4.png',
+        bannerLink:''
+       }); 
+    }else {
       // @ts-ignore
       navigate(screen);
     }
+
+    //EditVendorBanner
 
   };
   return (

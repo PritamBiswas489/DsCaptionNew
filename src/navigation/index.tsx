@@ -390,8 +390,10 @@ export default function MyStack() {
          <RootStack.Screen name="NotificationVendor" component={NotificationVendor} />
 
          <RootStack.Screen name="VendorAddNewBanner" component={VendorAddNewBanner} />
+         <RootStack.Screen name="EditVendorBanner" component={VendorAddNewBanner} />
 
 
+ 
          <RootStack.Screen name="VendorAddItem" component={VendorAddItem} />
 
 
@@ -399,12 +401,18 @@ export default function MyStack() {
 
          <RootStack.Screen name="StoreAddCoupon" component={StoreAddCoupon} />
 
+         <RootStack.Screen name="EditVendorCoupon" component={StoreAddCoupon} />
+         
+
 
          <RootStack.Screen name="StoreScheduleSettings" component={StoreScheduleSettings} />
          
 
          <RootStack.Screen name="VendorCreateAddons" component={VendorCreateAddons} />
+         <RootStack.Screen name="EditVendorAddon" component={VendorCreateAddons} />
          
+
+
          <RootStack.Screen name="AboutUsContent" component={AboutUsContent} />
 
          <RootStack.Screen name="PrivacyPolicyContent" component={PrivacyPolicyContent} />

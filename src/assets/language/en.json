@@ -1379,7 +1379,14 @@
              "AnnouncementUpdate":"Announcement update",
              "AnnouncementMessage":"Announcement Message",
              "AccouncementStatus":"Announcement status",
-             "MessagefieldRequired":"Message field required"
+             "MessagefieldRequired":"Message field required",
+             "EditItem":"Edit item",
+             "EditCoupon":"Edit coupon",
+             "edit":"Edit",
+             "UpdateItem":"Update item",
+             "update":"Update",
+             "EditAddOns":"Edit addons",
+             "EditNewBanner":"Edit banner"
         }
     }
 }

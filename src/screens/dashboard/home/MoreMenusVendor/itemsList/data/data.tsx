@@ -89,6 +89,12 @@ export const categoriesData: Array<HomeCategoryType> = [
 
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'EditCoupon (id 112) (Testing)', 
+    goToScreen:'EditVendorCoupon_112'
+  },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
     title: 'Schedule food store (For Testing)', 
     goToScreen:'StoreScheduleSettings'
   },
@@ -97,12 +103,12 @@ export const categoriesData: Array<HomeCategoryType> = [
     icon: <AddItemIcon height={'36'} width={'36'} />,
     title: 'Addon food store (For Testing)', 
     goToScreen:'VendorCreateAddons'
-    
-    
   },
-
-
-   
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'Edit Addon food store (For Testing)', 
+    goToScreen:'VendorEditAddons'
+  },
   {
     icon: <PendingItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.PendingItem', 
@@ -116,6 +122,11 @@ export const categoriesData: Array<HomeCategoryType> = [
     icon: <BannerIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Banner', 
     goToScreen:'VendorAddNewBanner'
+  },
+  { 
+    icon: <BannerIcon height={'36'} width={'36'} />,
+    title: 'Edit Banner (For testing)', 
+    goToScreen:'EditVendorBanner'
   },
   { 
     icon: <CampaignIcon height={'36'} width={'36'} />,

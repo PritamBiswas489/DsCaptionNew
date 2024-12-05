@@ -1,7 +1,7 @@
-import {ImageSourcePropType} from 'react-native';
-import {Float} from 'react-native/Libraries/Types/CodegenTypes';
+import { ImageSourcePropType } from 'react-native';
+import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
- 
+
 
 export type newAddressProp = {
   addressData: any;
@@ -89,7 +89,7 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   CompanyDetails: undefined;
   CompanyLocation: undefined;
-  AddressCurrentLocation:undefined;
+  AddressCurrentLocation: undefined;
   ProviderDetails: undefined;
   Register: locationProp | undefined;
   CurrentLocation: CurrentLocationProp | undefined;
@@ -97,7 +97,7 @@ export type RootStackParamList = {
   Subscription: undefined;
   SubscriptionPlan: undefined;
   BottomTab: undefined;
-  BottomTabSeller:undefined;
+  BottomTabSeller: undefined;
   Earnings: undefined;
   History: undefined;
   AddNewService: undefined;
@@ -105,7 +105,7 @@ export type RootStackParamList = {
   Notification: undefined;
   EmptyNotification: undefined;
   ServiceList: undefined;
-  ServiceDetail: {id:string};
+  ServiceDetail: { id: string };
   LocationList: undefined;
   AddNewAddress: newAddressProp;
   FreelancerDetail: undefined;
@@ -114,23 +114,23 @@ export type RootStackParamList = {
   Categories: undefined;
   ServiceMenList: undefined;
   AddNewServiceMen: undefined;
-  EditServiceMen: {id:string};
+  EditServiceMen: { id: string };
   LatestBlog: undefined;
   BlogDetail: BlogDetailScreenProp;
   PopularServiceView: undefined;
-  MySubscriptions:{id:string|undefined};
-  ServiceMenDetail: {id:string};
+  MySubscriptions: { id: string | undefined };
+  ServiceMenDetail: { id: string };
   Booking: undefined;
-  PendingBooking: {id:string};
-  OngoingBooking: {id:string};
-  AcceptedBooking: {id:string};
-  CompletedBooking: {id:string};
-  CancelledBooking: {id:string};
+  PendingBooking: { id: string };
+  OngoingBooking: { id: string };
+  AcceptedBooking: { id: string };
+  CompletedBooking: { id: string };
+  CancelledBooking: { id: string };
   AssignedBooking: undefined;
   PendingApproval: undefined;
   HoldBooking: undefined;
   MapView: undefined;
-  Chat: {id:string,toUserName:string};
+  Chat: { id: string, toUserName: string };
   MultipleServiceMenList: undefined;
   AddExtraCharges: undefined;
   ServiceProof: serviceProofProp;
@@ -157,47 +157,49 @@ export type RootStackParamList = {
   ProviderInfo: undefined;
   FreeLancerDetails: undefined;
   LoaderScreen: undefined;
-  CoverLocationList:{zone:string[]};
-  EditBooking:{id:string};
-  MoreMenus:undefined;
-  ProfileSettings:undefined;
-  ContentPages:{content_key:string}
-  BusinessInformation:undefined;
-  BusinessSettings:undefined;
-  ProfileAccountInformation:undefined;
-  ReportMenus:undefined;
-  TransactionReports:undefined;
-  BookingReports:undefined;
-  BusinessReports:undefined;
-  WithdrawRequest:undefined;
-  WithdrawList:undefined;
-  AdjustBalance:undefined;
-  RazorPay:undefined;
-  PaymentList:undefined;
+  CoverLocationList: { zone: string[] };
+  EditBooking: { id: string };
+  MoreMenus: undefined;
+  ProfileSettings: undefined;
+  ContentPages: { content_key: string }
+  BusinessInformation: undefined;
+  BusinessSettings: undefined;
+  ProfileAccountInformation: undefined;
+  ReportMenus: undefined;
+  TransactionReports: undefined;
+  BookingReports: undefined;
+  BusinessReports: undefined;
+  WithdrawRequest: undefined;
+  WithdrawList: undefined;
+  AdjustBalance: undefined;
+  RazorPay: undefined;
+  PaymentList: undefined;
 
-  StoreRegister:undefined;
-  StoreCompanyLocation:undefined;
-  StoreProviderDetails:undefined;
-  StoreCompanyDetails:undefined;
-  StoreForgotPassword:undefined;
-  StoreVerifyOtp:undefined;
-  StoreAddressCurrentLocation:undefined;
-  MoreMenusVendor:undefined;
-  StoreResetPassword:undefined;
-  VendorProfileSettings:undefined;
-  VendorProfileEdit:undefined;
-  SubCategories: {id:string,categoryname:string};
-  NotificationVendor:undefined;
-  VendorAddNewBanner:undefined;
-  VendorAddItem:undefined;
-  StoreSettings:undefined;
-  StoreAddCoupon:undefined;
-  StoreScheduleSettings:undefined;
-  VendorCreateAddons:undefined;
-  AboutUsContent:undefined;
-  PrivacyPolicyContent:undefined;
-  TermsAndConditionsContent:undefined;
-  StoreUpdateAnnouncement:undefined;
-  EditVendorItem:{id:string};
-
+  StoreRegister: undefined;
+  StoreCompanyLocation: undefined;
+  StoreProviderDetails: undefined;
+  StoreCompanyDetails: undefined;
+  StoreForgotPassword: undefined;
+  StoreVerifyOtp: undefined;
+  StoreAddressCurrentLocation: undefined;
+  MoreMenusVendor: undefined;
+  StoreResetPassword: undefined;
+  VendorProfileSettings: undefined;
+  VendorProfileEdit: undefined;
+  SubCategories: { id: string, categoryname: string };
+  NotificationVendor: undefined;
+  VendorAddNewBanner: undefined;
+  VendorAddItem: undefined;
+  StoreSettings: undefined;
+  StoreAddCoupon: undefined;
+  StoreScheduleSettings: undefined;
+  VendorCreateAddons: undefined;
+  AboutUsContent: undefined;
+  PrivacyPolicyContent: undefined;
+  TermsAndConditionsContent: undefined;
+  StoreUpdateAnnouncement: undefined;
+  EditVendorItem: { id: string };
+  EditVendorCoupon: { id: string };
+  EditVendorAddon: { id: string, name: string, price: string };
+  EditVendorBanner: { id: string, title: string, image: string, bannerLink: string }
 };

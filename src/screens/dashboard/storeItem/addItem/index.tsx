@@ -682,18 +682,7 @@ export function VendorAddItem() {
       }
     ]))
 
-    // console.log(JSON.stringify([
-    //   {
-    //     locale: "en",
-    //     key: 'name',
-    //     value: FORM_STATE.itemTitle
-    //   },
-    //   {
-    //     locale: "en",
-    //     key: 'name',
-    //     value: FORM_STATE.itemDesciption
-    //   }
-    // ]));  return
+     
 
     formData.append('attribute_id', JSON.stringify(FORM_STATE.selectedAttrbutes))
     formData.append('price', parseFloat(FORM_STATE.itemPrice))
@@ -802,7 +791,7 @@ export function VendorAddItem() {
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
-        <Header showBackArrow={true} title={'newDeveloper.AddNewItem'} />
+        <Header showBackArrow={true} title={FORM_STATE.itemId ? 'newDeveloper.EditItem' : 'newDeveloper.AddNewItem'} />
 
         <View
           style={[
@@ -920,7 +909,7 @@ export function VendorAddItem() {
           }}
         />
         <GradientBtn
-          label="newDeveloper.CreateItem"
+          label={FORM_STATE.itemId ? "newDeveloper.UpdateItem" : "newDeveloper.CreateItem"}
           onPress={handleAddItem}
           additionalStyle={{
             marginHorizontal: windowWidth(5),

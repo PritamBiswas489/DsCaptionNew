@@ -254,7 +254,7 @@ export default function InputView(
           ]}> {t('newDeveloper.MaxDiscount')}</Text>
           <TextInputComponent
             placeholder={t('newDeveloper.MaxDiscount')}
-            value={isNaN(maxDiscount) ? maxDiscount.toString() : ''}
+            value={!isNaN(maxDiscount) ? maxDiscount.toString() : ''}
             onChangeText={value => {
               setMaxDiscount(parseFloat(value));
             }}

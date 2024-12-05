@@ -11,10 +11,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
-import { createVendorAddons } from '@src/services/store/addons.service';
+import { createVendorAddons, updateVendorAddons } from '@src/services/store/addons.service';
 
 
 interface Response {
@@ -27,12 +27,14 @@ interface Response {
 }
 
 interface State {
+  addOnId:string;
   addOnName: string;
   addOnPrice: string;
   addOnNameError: string;
   addOnPriceError: string;
 }
 const initialState:State = {
+  addOnId:'',
   addOnName: '',
   addOnPrice: '',
   addOnNameError: '',
@@ -40,6 +42,7 @@ const initialState:State = {
 };
 
 type Action =
+  | { type: 'SET_ID'; payload: string }
   | { type: 'SET_NAME'; payload: string }
   | { type: 'SET_PRICE'; payload: string }
   | { type: 'SET_NAME_ERROR'; payload: string }
@@ -49,6 +52,8 @@ type Action =
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case 'SET_ID':
+      return { ...state, addOnId: action.payload };
     case 'SET_NAME':
       return { ...state, addOnName: action.payload };
     case 'SET_PRICE':
@@ -66,11 +71,23 @@ const reducer = (state: State, action: Action): State => {
 
 //Create new addons
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
-
+type EditAddonRouteProp = RouteProp<RootStackParamList, 'EditVendorAddon'>;
 export function VendorCreateAddons() {
+
   const navigation = useNavigation<ItemsProps>();
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
+  const route = useRoute<EditAddonRouteProp>();
 
+
+  useEffect(()=>{
+    if(route?.params?.id){
+      FORM_DISPATCH({ type: 'SET_ID', payload: route?.params?.id });
+      FORM_DISPATCH({ type: 'SET_NAME', payload: route?.params?.name });
+      FORM_DISPATCH({ type: 'SET_PRICE', payload: route?.params?.price });
+    }
+
+  },[route?.params?.id])
+  
   const { isDark, t } = useValues();
   const [processingLoader, setProcessingLoader] = useState(false)
 
@@ -102,8 +119,20 @@ export function VendorCreateAddons() {
       formData.append('translations[0][key]', 'name')
       formData.append('translations[0][value]', FORM_STATE.addOnName)
       setProcessingLoader(true)
-      const response: Response = await createVendorAddons(formData)
-       
+      let response: Response = {
+        data: undefined,
+        status: 0,
+        statusText: '',
+        headers: undefined,
+        config: undefined
+      }
+      if(FORM_STATE.addOnId){
+        formData.append('id', FORM_STATE.addOnId)
+        response = await updateVendorAddons(formData) //update coupon
+      }else{
+        response = await createVendorAddons(formData)
+      }
+     
       if (response?.data?.message) {
         Toast.show({
           type: 'success',
@@ -138,7 +167,7 @@ export function VendorCreateAddons() {
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
-        <Header showBackArrow={true} title={'newDeveloper.AddNewAddOns'} />
+        <Header showBackArrow={true} title={FORM_STATE.addOnId ? 'newDeveloper.EditAddOns' : 'newDeveloper.AddNewAddOns'} />
 
         <View
           style={[
@@ -170,7 +199,7 @@ export function VendorCreateAddons() {
           textStyle={{ color: '#FFF' }}
         />
         <GradientBtn
-          label="newDeveloper.Add"
+          label={FORM_STATE.addOnId ? "newDeveloper.update" : "newDeveloper.Add"}
           onPress={handleCreateAddon}
           additionalStyle={{
             marginHorizontal: windowWidth(5),

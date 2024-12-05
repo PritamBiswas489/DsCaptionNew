@@ -15,7 +15,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { DashLine } from '@src/commonComponents';
 import Toast from 'react-native-toast-message';
-import { createCoupon } from '@src/services/store/coupon.service';
+import { createCoupon, getCouponDetails, updateCoupon } from '@src/services/store/coupon.service';
+import { RouteProp,  useRoute } from '@react-navigation/native';
 
 
 interface Response {
@@ -29,6 +30,7 @@ interface Response {
 
 
 interface State {
+  couponId:string;
   couponTitle: string;
   errorCoupontitle: string;
   couponCode: string;
@@ -49,6 +51,7 @@ interface State {
 }
 
 const initialState:State = {
+  couponId:'',
   couponTitle: '',
   errorCoupontitle: '',
   couponCode: '',
@@ -69,6 +72,7 @@ const initialState:State = {
 };
 
 type Action =
+  | { type: 'SET_COUPON_ID'; payload: string }
   | { type: 'SET_COUPON_TITLE'; payload: string }
   | { type: 'SET_ERROR_COUPON_TITLE'; payload: string }
   | { type: 'SET_COUPON_CODE'; payload: string }
@@ -92,6 +96,8 @@ type Action =
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case  'SET_COUPON_ID':
+      return { ...state, couponId: action.payload };
     case 'SET_COUPON_TITLE':
       return { ...state, couponTitle: action.payload };
     case 'SET_ERROR_COUPON_TITLE':
@@ -147,15 +153,40 @@ const reducer = (state: State, action: Action): State => {
 
 //Add new banner
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
+type EditCouponRouteProp = RouteProp<RootStackParamList, 'EditVendorCoupon'>;
 export function StoreAddCoupon() {
   const navigation = useNavigation<ItemsProps>();
+  const route = useRoute<EditCouponRouteProp>();
   
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
-
-
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
+
+  //loading coupon details for edit
+  const loadCouponDetails = async (couponId:string)=>{
+    setProcessingLoader(true)
+    const response:Response = await getCouponDetails(couponId)
+    if(response?.data?.[0]?.id){ 
+        FORM_DISPATCH({ type: 'SET_COUPON_ID', payload: response?.data?.[0]?.id });
+        FORM_DISPATCH({ type: 'SET_COUPON_TITLE', payload: response?.data?.[0]?.title });
+        FORM_DISPATCH({ type: 'SET_COUPON_CODE', payload: response?.data?.[0]?.code });
+        FORM_DISPATCH({ type: 'SET_LIMIT_SAME_USER', payload: response?.data?.[0]?.limit });
+        FORM_DISPATCH({ type: 'SET_MIN_PURCHASE', payload: response?.data?.[0]?.min_purchase });
+        FORM_DISPATCH({ type: 'SET_START_DATE', payload: response?.data?.[0]?.start_date });
+        FORM_DISPATCH({ type: 'SET_EXPIRE_DATE', payload: response?.data?.[0]?.expire_date });
+        FORM_DISPATCH({ type: 'SET_DISCOUNT', payload: response?.data?.[0]?.discount });
+        FORM_DISPATCH({ type: 'SET_DISCOUNT_TYPE', payload: response?.data?.[0]?.discount_type });
+        FORM_DISPATCH({ type: 'SET_MAX_DISCOUNT', payload: response?.data?.[0]?.max_discount });
+    }
+    setProcessingLoader(false)
+  }
+
+  useEffect(() => {
+    if (route?.params?.id) {
+      loadCouponDetails(route?.params?.id)
+    }  
+  }, [route?.params?.id])
 
   //validate form
   const VALIDATE_FORM = (): boolean => {
@@ -207,14 +238,30 @@ export function StoreAddCoupon() {
           formData.append('min_purchase',FORM_STATE.minPurchase)
           formData.append('max_discount',FORM_STATE.discountType === 'percent' ? FORM_STATE.maxDiscount : 0)
           setProcessingLoader(true)
-          const response: Response = await createCoupon(formData)
+          let response: Response = {
+            data: undefined,
+            status: 0,
+            statusText: '',
+            headers: undefined,
+            config: undefined
+          }
+          if (FORM_STATE.couponId) {
+              formData.append('coupon_id', FORM_STATE.couponId)
+              response = await updateCoupon(formData) //update coupon
+          } else {
+              response = await createCoupon(formData) //create coupon
+          }
           if (response?.data?.message) {
                 Toast.show({
                   type: 'success',
                   text1: 'Success',
                   text2: response?.data?.message,
                 });
-                FORM_DISPATCH({ type: 'RESET_ALL' });
+                if (FORM_STATE.couponId) {
+                  navigation.navigate('EditVendorCoupon', { id: FORM_STATE.couponId });
+                }else{ 
+                  FORM_DISPATCH({ type: 'RESET_ALL' });  
+                }
           } else if (response?.data?.errors) {  
               Toast.show({
                 type: 'error',
@@ -241,7 +288,7 @@ export function StoreAddCoupon() {
           GlobalStyle.mainView,
           { backgroundColor: isDark ? appColors.darkCard : appColors.white },
         ]}>
-        <Header showBackArrow={true} title={'newDeveloper.AddCoupon'} />
+        <Header showBackArrow={true} title={FORM_STATE.couponId ? 'newDeveloper.EditCoupon' : 'newDeveloper.AddCoupon'} />
 
 
 
@@ -301,7 +348,7 @@ export function StoreAddCoupon() {
         />
         <DashLine />
         <GradientBtn
-          label="newDeveloper.Add"
+          label={FORM_STATE.couponId ? "newDeveloper.update" : "newDeveloper.Add"}
           onPress={handleCreateCoupon}
           additionalStyle={{
             marginHorizontal: windowWidth(5),

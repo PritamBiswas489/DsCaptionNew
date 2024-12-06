@@ -100,6 +100,7 @@ import AboutUsContent from '@src/screens/dashboard/home/StoreContentPage/AboutUs
 import PrivacyPolicyContent from '@src/screens/dashboard/home/StoreContentPage/PrivacyPolicy';
 import TermsAndConditionsContent from '@src/screens/dashboard/home/StoreContentPage/TermsAndConditions';
 import { StoreUpdateAnnouncement } from '@src/screens/dashboard/home/storeUpdateAnnouncement';
+import StoreCouponList from '@src/screens/dashboard/home/StoreCouponList';
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -341,89 +342,93 @@ export default function MyStack() {
               component={BusinessReports}
             />
             <RootStack.Screen
-                 name="WithdrawRequest"
-                 component={WithdrawRequest}
-            />
-             <RootStack.Screen
-                 name="WithdrawList"
-                 component={WithdrawList}
+              name="WithdrawRequest"
+              component={WithdrawRequest}
             />
             <RootStack.Screen
-                 name="AdjustBalance"
-                 component={AdjustBalance}
+              name="WithdrawList"
+              component={WithdrawList}
+            />
+            <RootStack.Screen
+              name="AdjustBalance"
+              component={AdjustBalance}
             />
 
             <RootStack.Screen
-                 name="RazorPay"
-                 component={RazorPay}
+              name="RazorPay"
+              component={RazorPay}
             />
             <RootStack.Screen
-                 name="PaymentList"
-                 component={PaymentList}
+              name="PaymentList"
+              component={PaymentList}
             />
-            {/****************  Store seller app menu **********************/}  
-          <RootStack.Screen
-                 name="BottomTabSeller"
-                 component={BottomTabSeller}
-          />
-          <RootStack.Screen
-                 name="StoreAddressCurrentLocation"
-                 component={StoreAddressCurrentLocation}
+            {/****************  Store seller app menu **********************/}
+            <RootStack.Screen
+              name="BottomTabSeller"
+              component={BottomTabSeller}
             />
-           <RootStack.Screen
-                 name="MoreMenusVendor"
-                 component={MoreMenusVendor}
+            <RootStack.Screen
+              name="StoreAddressCurrentLocation"
+              component={StoreAddressCurrentLocation}
+            />
+            <RootStack.Screen
+              name="MoreMenusVendor"
+              component={MoreMenusVendor}
             />
 
-           <RootStack.Screen
+            <RootStack.Screen
               name="VendorProfileSettings"
               component={SettingVendor}
             />
 
-          <RootStack.Screen
+            <RootStack.Screen
               name="VendorProfileEdit"
               component={VendorProfileEdit}
             />
 
-         <RootStack.Screen  name="SubCategories"   component={SubCategories} />
+            <RootStack.Screen name="SubCategories" component={SubCategories} />
 
-         <RootStack.Screen name="NotificationVendor" component={NotificationVendor} />
+            <RootStack.Screen name="NotificationVendor" component={NotificationVendor} />
 
-         <RootStack.Screen name="VendorAddNewBanner" component={VendorAddNewBanner} />
-         <RootStack.Screen name="EditVendorBanner" component={VendorAddNewBanner} />
-
-
- 
-         <RootStack.Screen name="VendorAddItem" component={VendorAddItem} />
+            <RootStack.Screen name="VendorAddNewBanner" component={VendorAddNewBanner} />
+            <RootStack.Screen name="EditVendorBanner" component={VendorAddNewBanner} />
 
 
-         <RootStack.Screen name="StoreSettings" component={StoreSettings} />
 
-         <RootStack.Screen name="StoreAddCoupon" component={StoreAddCoupon} />
-
-         <RootStack.Screen name="EditVendorCoupon" component={StoreAddCoupon} />
-         
+            <RootStack.Screen name="VendorAddItem" component={VendorAddItem} />
 
 
-         <RootStack.Screen name="StoreScheduleSettings" component={StoreScheduleSettings} />
-         
+            <RootStack.Screen name="StoreSettings" component={StoreSettings} />
 
-         <RootStack.Screen name="VendorCreateAddons" component={VendorCreateAddons} />
-         <RootStack.Screen name="EditVendorAddon" component={VendorCreateAddons} />
-         
+            <RootStack.Screen name="StoreAddCoupon" component={StoreAddCoupon} />
+
+            <RootStack.Screen name="EditVendorCoupon" component={StoreAddCoupon} />
 
 
-         <RootStack.Screen name="AboutUsContent" component={AboutUsContent} />
 
-         <RootStack.Screen name="PrivacyPolicyContent" component={PrivacyPolicyContent} />
-         
-         <RootStack.Screen name="TermsAndConditionsContent" component={TermsAndConditionsContent} />
-         
+            <RootStack.Screen name="StoreScheduleSettings" component={StoreScheduleSettings} />
 
-         <RootStack.Screen name="StoreUpdateAnnouncement" component={StoreUpdateAnnouncement} />
-         
-         <RootStack.Screen name="EditVendorItem" component={VendorAddItem} />
-         
+
+            <RootStack.Screen name="VendorCreateAddons" component={VendorCreateAddons} />
+            <RootStack.Screen name="EditVendorAddon" component={VendorCreateAddons} />
+
+
+
+            <RootStack.Screen name="AboutUsContent" component={AboutUsContent} />
+
+            <RootStack.Screen name="PrivacyPolicyContent" component={PrivacyPolicyContent} />
+
+            <RootStack.Screen name="TermsAndConditionsContent" component={TermsAndConditionsContent} />
+
+
+            <RootStack.Screen name="StoreUpdateAnnouncement" component={StoreUpdateAnnouncement} />
+
+            <RootStack.Screen name="EditVendorItem" component={VendorAddItem} />
+
+
+            <RootStack.Screen name="StoreCouponList" component={StoreCouponList} />
+
+
           </>
         )}
       </RootStack.Navigator>

@@ -1386,7 +1386,20 @@
              "UpdateItem":"Update item",
              "update":"Update",
              "EditAddOns":"Edit addons",
-             "EditNewBanner":"Edit banner"
+             "EditNewBanner":"Edit banner",
+             "CouponList":"Coupons",
+             "Nodatafound":"No data found",
+             "noCouponFound":"No coupon found in your listing",
+             "Close":"Close",
+             "Edit":"Edit",
+             "Delete":"Delete",
+             "OFF":"OFF",
+             "Code":"Code",
+             "To":"To",
+             "Totalusers":"Total users",
+             "Validuntil":"Valid until",
+             "Areyousureyouwanttoproceed":"Are you sure you want to proceed?",
+
         }
     }
 }

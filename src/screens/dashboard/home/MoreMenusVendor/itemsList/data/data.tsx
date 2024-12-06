@@ -81,17 +81,7 @@ export const categoriesData: Array<HomeCategoryType> = [
     goToScreen:'StoreSettings'
   },
 
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Add Coupon (For Testing)', 
-    goToScreen:'StoreAddCoupon'
-  },
-
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'EditCoupon (id 112) (Testing)', 
-    goToScreen:'EditVendorCoupon_112'
-  },
+  
 
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
@@ -149,6 +139,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <CouponIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Coupon',
+    goToScreen:'StoreCouponList'
   },
   {
     icon: <PrivacyPolicyIcon height={'36'} width={'36'} />,

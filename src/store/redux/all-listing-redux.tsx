@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BookingListingInterface } from "@src/interfaces/bookingListingInterface";
 import { SearchBookingInterface } from "@src/interfaces/searchBookingInterface";
 
  

@@ -17,6 +17,7 @@ import { DashLine } from '@src/commonComponents';
 import Toast from 'react-native-toast-message';
 import { createCoupon, getCouponDetails, updateCoupon } from '@src/services/store/coupon.service';
 import { RouteProp,  useRoute } from '@react-navigation/native';
+import { couponActions } from '@src/store/redux/store/coupon-redux';
 
 
 interface Response {
@@ -126,6 +127,8 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, discount: action.payload };
     case 'SET_ERROR_DISCOUNT':
       return { ...state, errorDiscount: action.payload };
+    case 'SET_DISCOUNT_TYPE':
+      return { ...state, discountType: action.payload };   
     case 'SET_MAX_DISCOUNT':
       return { ...state, maxDiscount: action.payload };
     case 'SET_ERROR_MAX_DISCOUNT':
@@ -257,11 +260,16 @@ export function StoreAddCoupon() {
                   text1: 'Success',
                   text2: response?.data?.message,
                 });
-                if (FORM_STATE.couponId) {
-                  navigation.navigate('EditVendorCoupon', { id: FORM_STATE.couponId });
-                }else{ 
-                  FORM_DISPATCH({ type: 'RESET_ALL' });  
-                }
+                dispatch(couponActions.setData({field:'data',data:[]}))
+                dispatch(couponActions.setData({field:'isFirstTimeLoading',data:true}))
+                dispatch(couponActions.setData({field:'isNoMoreData',data:false}))
+
+                // if (FORM_STATE.couponId) {
+                //   navigation.navigate('EditVendorCoupon', { id: FORM_STATE.couponId });
+                // }else{ 
+                //   FORM_DISPATCH({ type: 'RESET_ALL' });  
+                // }
+                 navigation.navigate('StoreCouponList')
           } else if (response?.data?.errors) {  
               Toast.show({
                 type: 'error',
@@ -337,6 +345,7 @@ export function StoreAddCoupon() {
           errorDiscount={FORM_STATE.errorDiscount}
           discountType={FORM_STATE.discountType}
           setDiscounType={(value) => {
+            console.log(value)
             FORM_DISPATCH({ type: 'SET_DISCOUNT_TYPE', payload: value })
           }}
           maxDiscount={FORM_STATE.maxDiscount}

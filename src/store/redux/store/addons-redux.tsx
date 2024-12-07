@@ -28,6 +28,9 @@ const vendorAddonsSlice = createSlice({
       resetState(state: AddonStoreInterface) {
         return initialState;
       },
+      deleteAddonById(state, action: PayloadAction<number>) {
+        state.data = state.data.filter( (addOn: AddonInterface) => addOn.id !== action.payload);
+    },
     },
 });
 

@@ -203,4 +203,6 @@ export type RootStackParamList = {
   EditVendorAddon: { id: string, name: string, price: string };
   EditVendorBanner: { id: string, title: string, image: string, bannerLink: string };
   StoreCouponList:undefined;
+  ListAddons:undefined;
+  ListBanners:undefined;
 };

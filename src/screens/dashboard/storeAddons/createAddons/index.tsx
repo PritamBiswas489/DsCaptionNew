@@ -15,7 +15,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { createVendorAddons, updateVendorAddons } from '@src/services/store/addons.service';
-
+import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
 
 interface Response {
   data: any;
@@ -27,14 +27,14 @@ interface Response {
 }
 
 interface State {
-  addOnId:string;
+  addOnId: string;
   addOnName: string;
   addOnPrice: string;
   addOnNameError: string;
   addOnPriceError: string;
 }
-const initialState:State = {
-  addOnId:'',
+const initialState: State = {
+  addOnId: '',
   addOnName: '',
   addOnPrice: '',
   addOnNameError: '',
@@ -78,16 +78,18 @@ export function VendorCreateAddons() {
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
   const route = useRoute<EditAddonRouteProp>();
 
+  const dispatch = useDispatch()
 
-  useEffect(()=>{
-    if(route?.params?.id){
+
+  useEffect(() => {
+    if (route?.params?.id) {
       FORM_DISPATCH({ type: 'SET_ID', payload: route?.params?.id });
       FORM_DISPATCH({ type: 'SET_NAME', payload: route?.params?.name });
       FORM_DISPATCH({ type: 'SET_PRICE', payload: route?.params?.price });
     }
 
-  },[route?.params?.id])
-  
+  }, [route?.params?.id])
+
   const { isDark, t } = useValues();
   const [processingLoader, setProcessingLoader] = useState(false)
 
@@ -111,7 +113,7 @@ export function VendorCreateAddons() {
   //handle create new add on process
   const handleCreateAddon = async () => {
     if (VALIDATE_FORM()) {
-      
+
       const formData = new FormData()
       formData.append('name', FORM_STATE.addOnName)
       formData.append('price', FORM_STATE.addOnPrice)
@@ -126,22 +128,24 @@ export function VendorCreateAddons() {
         headers: undefined,
         config: undefined
       }
-      if(FORM_STATE.addOnId){
+      if (FORM_STATE.addOnId) {
         formData.append('id', FORM_STATE.addOnId)
         response = await updateVendorAddons(formData) //update coupon
-      }else{
+      } else {
         response = await createVendorAddons(formData)
       }
-     
+
       if (response?.data?.message) {
         Toast.show({
           type: 'success',
           text1: 'Success',
           text2: response?.data?.message,
         });
-        FORM_DISPATCH({ type: 'SET_NAME', payload: '' })
-        FORM_DISPATCH({ type: 'SET_PRICE', payload: '' })
-      } else if (response?.data?.errors) {  
+        // FORM_DISPATCH({ type: 'SET_NAME', payload: '' })
+        // FORM_DISPATCH({ type: 'SET_PRICE', payload: '' })
+        dispatch(vendorAddonsActions.resetState())
+        navigation.navigate('ListAddons')
+      } else if (response?.data?.errors) {
         Toast.show({
           type: 'error',
           text1: 'Error',

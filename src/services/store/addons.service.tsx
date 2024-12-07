@@ -8,7 +8,6 @@ interface Response {
 	request?: any;
 }
 
-
 export const getVendorAddons = async(): Promise<Response> => {
 	try {
 		const response = await api.get('/vendor/addon');
@@ -33,6 +32,15 @@ export const updateVendorAddons = async(formData:FormData): Promise<Response> =>
 	formData.append('_method','PUT')
 	try {
 		const response = await api.post('/vendor/addon/update',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+export const deleteAddon = async(addonID:number): Promise<Response> => {
+	try {
+		const response = await api.delete(`/vendor/addon/delete?id=${addonID}`);
 		return response;
 	} catch (error:any) {
 		return error.response;

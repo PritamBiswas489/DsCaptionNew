@@ -101,6 +101,9 @@ import PrivacyPolicyContent from '@src/screens/dashboard/home/StoreContentPage/P
 import TermsAndConditionsContent from '@src/screens/dashboard/home/StoreContentPage/TermsAndConditions';
 import { StoreUpdateAnnouncement } from '@src/screens/dashboard/home/storeUpdateAnnouncement';
 import StoreCouponList from '@src/screens/dashboard/home/StoreCouponList';
+import ListAddons from '@src/screens/dashboard/storeAddons/listAddons';
+import ListBanners from '@src/screens/dashboard/bannerVendor/listBanner';
+
 
 export default function MyStack() {
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
@@ -428,7 +431,11 @@ export default function MyStack() {
 
             <RootStack.Screen name="StoreCouponList" component={StoreCouponList} />
 
+            <RootStack.Screen name="ListAddons" component={ListAddons} />
 
+            <RootStack.Screen name="ListBanners" component={ListBanners} />
+
+            
           </>
         )}
       </RootStack.Navigator>

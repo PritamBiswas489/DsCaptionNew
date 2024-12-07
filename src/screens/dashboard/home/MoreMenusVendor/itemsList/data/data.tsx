@@ -35,8 +35,30 @@ export const categoriesData: Array<HomeCategoryType> = [
   },
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'newDeveloper.StoreSettings', 
+    goToScreen:'StoreSettings'
+  },
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'newDeveloper.updateSchedule', 
+    goToScreen:'StoreScheduleSettings'
+  },
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'newDeveloper.UpdateAnnouncement', 
+    goToScreen:'StoreUpdateAnnouncement'
+     
+  },
+
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.AddItem', 
     goToScreen:'VendorAddItem'
+  },
+  {
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'newDeveloper.Addons', 
+    goToScreen:'ListAddons'
   },
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
@@ -48,57 +70,20 @@ export const categoriesData: Array<HomeCategoryType> = [
     title: 'Edit item 32822 food', 
     goToScreen:'VendorEditItem_32822'
   },
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'About us (For Testing)', 
-    goToScreen:'AboutUsContent'
-  },
+  
 
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Privacy Policy (For Testing)', 
-    goToScreen:'PrivacyPolicyContent'
-     
-  },
    
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Terms and conditions (For Testing)', 
-    goToScreen:'TermsAndConditionsContent'
-     
-  },
-  //
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Update  Announcement (For Testing)', 
-    goToScreen:'StoreUpdateAnnouncement'
-     
-  },
-
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Store settings (For Testing)', 
-    goToScreen:'StoreSettings'
-  },
+   
+   
+ 
+  
 
   
 
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Schedule food store (For Testing)', 
-    goToScreen:'StoreScheduleSettings'
-  },
+  
 
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Addon food store (For Testing)', 
-    goToScreen:'VendorCreateAddons'
-  },
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Edit Addon food store (For Testing)', 
-    goToScreen:'VendorEditAddons'
-  },
+  
+   
   {
     icon: <PendingItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.PendingItem', 
@@ -142,12 +127,19 @@ export const categoriesData: Array<HomeCategoryType> = [
     goToScreen:'StoreCouponList'
   },
   {
-    icon: <PrivacyPolicyIcon height={'36'} width={'36'} />,
-    title: 'newDeveloper.moreMenuPrivacyPolicy',
+    icon: <AddItemIcon height={'36'} width={'36'} />,
+    title: 'newDeveloper.Aboutus', 
+    goToScreen:'AboutUsContent'
+  },
+  {
+     icon: <PrivacyPolicyIcon height={'36'} width={'36'} />,
+     title: 'newDeveloper.moreMenuPrivacyPolicy',
+     goToScreen:'PrivacyPolicyContent'
   },
   {
     icon: <TermsConditionsIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuTermsandconditions',
+    goToScreen:'TermsAndConditionsContent'
   },
   {
     icon: <TermsConditionsIcon height={'36'} width={'36'} />,

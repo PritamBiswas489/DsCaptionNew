@@ -1399,6 +1399,10 @@
              "Totalusers":"Total users",
              "Validuntil":"Valid until",
              "Areyousureyouwanttoproceed":"Are you sure you want to proceed?",
+             "ListAddons":"Addons",
+             "UpdateAnnouncement":"Update Announcement",
+             "updateSchedule":"Schedule update"
+             
 
         }
     }

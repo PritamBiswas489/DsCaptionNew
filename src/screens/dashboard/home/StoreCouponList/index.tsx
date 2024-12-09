@@ -51,7 +51,7 @@ export default function StoreCouponList() {
     //drag screen refresh page
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        couponActions.resetState()
+        dispatch(couponActions.resetState())
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
@@ -59,7 +59,8 @@ export default function StoreCouponList() {
     //async coupon load for data show
     const asyncLoadCoupons = async () => {
         const response: Response = await listCoupons(limit, offset)
-        if (response?.data[0]?.id) {
+        
+        if (response?.data && response?.data?.length > 0) {
             dispatch(couponActions.addCouponArr(response?.data))
         } else {
             dispatch(couponActions.setData({
@@ -82,7 +83,7 @@ export default function StoreCouponList() {
 
     //handle scroll processing
     const handleScrollProcessing = () => {
-        if(isNoMoreData) return
+        if (isNoMoreData){ return; }
         setScrollPaging(true)
         dispatch(couponActions.setData({
             field: 'offset',
@@ -155,7 +156,7 @@ export default function StoreCouponList() {
                         additionalStyle={{ bottom: windowHeight(2) }}
                         label={'common.refresh'}
                         onPress={() => {
-                            couponActions.resetState()
+                            dispatch(couponActions.resetState())
                         }} />} infoImage={undefined} />}
 
                 {!isFirstTimeLoading && couponList.length > 0 &&

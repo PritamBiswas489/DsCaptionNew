@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { GlobalStyle } from '@style/styles';
 import { categoriesData } from './data/data';
@@ -9,7 +9,8 @@ import { RightArrow } from '@utils/icons';
 import { styles } from './styles';
 import { useValues } from '../../../../../../App';
 import appColors from '@theme/appColors';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
 import { deleteAuthTokens } from '@src/config/auth';
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
@@ -20,6 +21,12 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
   const { navigate, replace } = useNavigation<ItemsProps>();
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
+  const { stores: storesList } = useSelector(
+    (state: RootState) => state['storeProfileData']
+  );
+  const { module: storeModuleDetails } = storesList[0]
+  const { module_type } = storeModuleDetails
+  const [menuCategoryData,setMenuCategoryData] = useState(categoriesData)
   const handleNavigation = async (
     screen: string,
 
@@ -60,12 +67,23 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
     //EditVendorBanner
 
   };
+  useEffect(()=>{
+    let caData = [...menuCategoryData]
+    if( !['food','pharmacy'].includes(module_type)){ //schedule update only for food pharmacy
+        caData = caData.filter(ele=>ele.title!=='newDeveloper.updateSchedule')
+    }
+    if( !['food'].includes(module_type)){ //schedue update only for food
+      caData = caData.filter(ele=>ele.title!=='newDeveloper.Addons')
+    }
+    setMenuCategoryData(caData)
+
+  },[module_type])
   return (
     <View style={[styles.container, isGrid && styles.mainVIew]}>
       <FlatList
         showsVerticalScrollIndicator={!isGrid && false}
         contentContainerStyle={!isGrid && styles.containerStyle}
-        data={categoriesData}
+        data={menuCategoryData}
         key={isGrid ? 'h' : 'v'}
         numColumns={isGrid ? 4 : 0}
         renderItem={({ item }) =>

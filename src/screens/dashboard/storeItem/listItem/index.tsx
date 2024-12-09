@@ -12,21 +12,14 @@ import { useValues } from '../../../../../App';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import BannerCard from './bannerCard';
-
-
-
+import PanelCard from './panelCard';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import NoDataFound from '@src/commonComponents/noDataFound';
 import { noNotification, wifi } from '@src/utils/images';
 import { windowHeight } from '@src/theme/appConstant';
 import GradientBtn from '@src/commonComponents/gradientBtn';
- 
-
-import { getBanners } from '@src/services/store/banner.service';
-import { vendorBannerActions } from '@src/store/redux/store/banner-redux';
-import { BannerInterface } from '@src/interfaces/store/banner.interface';
-import { deleteBanner } from '@src/services/store/banner.service';
+import { getItemList } from '@src/services/store/item.service';
+import { storeItemsActions } from '@src/store/redux/store/store-item-redux';
 interface Response {
     data: any;
     status: number;
@@ -37,53 +30,61 @@ interface Response {
 }
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
-//List banners
-export default function ListBanners() {
+//List items
+export default function ListItem() {
     const dispatch = useDispatch()
     const { isDark, t } = useValues();
     const [refreshing, setRefreshing] = React.useState(false);
     const {
-        data: bannerList,
+        data: storeItemList,
+        offset,
+        limit,
         isFirstTimeLoading,
-    } = useSelector((state: RootState) => state['vendorBannerList'])
+        isNoMoreData,
+    } = useSelector((state: RootState) => state['storeItem'])
+
+    const [scrollPaging, setScrollPaging] = useState(false)
 
     //drag screen refresh page
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        dispatch(vendorBannerActions.resetState())
+        dispatch(storeItemsActions.resetState())
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
     }, []);
     //async addons load for data show
-    const asyncBanners = async () => {
-        const response: Response = await getBanners()
-        if (response?.data[0]?.id) {
-            dispatch(vendorBannerActions.setData({ field: 'data', data: response?.data }))
+    const asyncLoadItems = async () => {
+        const response: Response = await getItemList(limit, offset)
+        console.log(JSON.stringify(response?.data));
+        if (response?.data?.items && response?.data?.items.length > 0) {
+            dispatch(storeItemsActions.addItemArr(response?.data?.items))
+        } else {
+            dispatch(storeItemsActions.setData({
+                field: 'isNoMoreData',
+                data: true
+            }));
         }
-        dispatch(vendorBannerActions.setData({
+        setScrollPaging(false);
+        dispatch(storeItemsActions.setData({
             field: 'isFirstTimeLoading',
             data: false
         }));
     }
     useEffect(() => {
-        console.log(isFirstTimeLoading)
-        if (isFirstTimeLoading) {
-            asyncBanners()
+        if ((isFirstTimeLoading || scrollPaging) && !isNoMoreData) {
+            asyncLoadItems()
         }
-    }, [isFirstTimeLoading])
+    }, [isFirstTimeLoading, scrollPaging, isNoMoreData])
+
 
     const { navigate } = useNavigation<routeProps>();
 
-    const navigateToEditPage = (banner:BannerInterface) => {
-        navigate('EditVendorBanner', { 
-            id: String(banner.id), 
-            title:banner.title, 
-            image:banner.image_full_url,
-            bannerLink:banner.default_link
-           }); 
+    const navigateToEditPage = (id: string, name: string, price: string) => {
+        navigate('EditVendorAddon', { id, name, price });
+
     }
-    const deleteBannerFromList = (bannerId: number) => {
+    const deleteAddonFromList = (addonid: number) => {
         Alert.alert(
             "Confirmation",
             t('newDeveloper.Areyousureyouwanttoproceed'),
@@ -96,8 +97,8 @@ export default function ListBanners() {
                 {
                     text: "OK",
                     onPress: () => {
-                        dispatch(vendorBannerActions.deleteBannerById(bannerId))
-                        deleteBanner(bannerId)
+                        // dispatch(vendorAddonsActions.deleteAddonById(addonid))
+                        // deleteAddon(addonid)
                     }
                 }
             ],
@@ -105,16 +106,23 @@ export default function ListBanners() {
         );
     }
 
-
+    const handleScrollProcessing = () => {
+        if (isNoMoreData){ return; }
+        setScrollPaging(true)
+        dispatch(storeItemsActions.setData({
+            field: 'offset',
+            data: offset + 1
+        }));
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
             <Header
                 showBackArrow={true}
-                title={'newDeveloper.ListBanners'}
+                title={'newDeveloper.ListItem'}
                 content={''}
                 trailIcon1={<AddItemIcon />}
-                onTrailIcon={() => { navigate('VendorAddNewBanner') }}
+                onTrailIcon={() => { navigate('VendorAddItem') }}
             />
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -130,7 +138,7 @@ export default function ListBanners() {
                 ]}
             >
                 {isFirstTimeLoading && <SkeletonLoader />}
-                {!isFirstTimeLoading && bannerList.length === 0 && <NoDataFound
+                {!isFirstTimeLoading && storeItemList.length === 0 && <NoDataFound
                     headerTitle="home.noInternet"
                     image={noNotification}
                     title="newDeveloper.Nodatafound"
@@ -139,18 +147,33 @@ export default function ListBanners() {
                         additionalStyle={{ bottom: windowHeight(2) }}
                         label={'common.refresh'}
                         onPress={() => {
-                            dispatch(vendorBannerActions.resetState())
+                            dispatch(storeItemsActions.resetState())
                         }} />} infoImage={undefined} />}
 
-                {!isFirstTimeLoading && bannerList.length > 0 && bannerList.map((banner, index) => (
-                <BannerCard
-                banner={banner}
-                navigateToEditPage={navigateToEditPage}
-                deleteBannerFromList={deleteBannerFromList}
-                />
-                ))}
+                {!isFirstTimeLoading && storeItemList.length > 0 &&
+                    <FlatList
+                        style={{ marginTop: 10 }}
+                        data={storeItemList}
+                        onEndReached={handleScrollProcessing}
+                        renderItem={({ item }) => (
+                            <>
+                                <PanelCard
+                                    title={item.name}
+                                    imageUrl="https://via.placeholder.com/80"
+                                    price={93}
+                                    originalPrice={103}
+                                    discount="10% OFF"
+                                    rating={4.5}
+                                    reviews={10}
+                                    onEdit={() => { }}
+                                    onDelete={() => { }}
+                                />
+                            </>
+                        )} />
+                }
                 <View style={GlobalStyle.blankView} />
             </ScrollView>
+            {scrollPaging && <ActivityIndicator />}
         </View>
     );
 }

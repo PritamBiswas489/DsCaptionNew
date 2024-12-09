@@ -205,4 +205,5 @@ export type RootStackParamList = {
   StoreCouponList:undefined;
   ListAddons:undefined;
   ListBanners:undefined;
+  ListItem:undefined;
 };

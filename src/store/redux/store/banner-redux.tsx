@@ -27,8 +27,8 @@ const vendorBannerListSlice = createSlice({
         resetState(state: bannerDataInterface) {
             return initialState;
         },  
-        addBannersArr(state, action: PayloadAction<BannerInterface[]>) {
-            state.data.push(...action.payload);
+        deleteBannerById(state, action: PayloadAction<number>) {
+            state.data = state.data.filter( (banner: BannerInterface) => banner.id !== action.payload);
         },
     },
 })

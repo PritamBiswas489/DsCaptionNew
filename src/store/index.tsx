@@ -68,7 +68,9 @@ import vendorAttributeSlice from "./redux/store/attributes-redux";
 import vendorUnitSlice from "./redux/store/units.redux";
 import vendorAddonsSlice from "./redux/store/addons-redux";
 import couponSlice from "./redux/store/coupon-redux";
+import storeItemSlice from "./redux/store/store-item-redux";
 
+//configure store
 const store = configureStore({
     reducer: { 
         serviceProviderAccountData:serviceProviderAccountDataSlice.reducer,
@@ -140,7 +142,8 @@ const store = configureStore({
         vendorAttribute:vendorAttributeSlice.reducer,
         vendorUnits:vendorUnitSlice.reducer,
         vendorAddons:vendorAddonsSlice.reducer,
-        coupon:couponSlice.reducer
+        coupon:couponSlice.reducer,
+        storeItem:storeItemSlice.reducer
         //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

@@ -51,6 +51,7 @@ import { vendorSubCategoriesActions } from '@src/store/redux/store/subcategories
 import { vendorNotificationsActions } from '@src/store/redux/store/notifications-data-redux';
 import { vendorBannerActions } from '@src/store/redux/store/banner-redux';
 import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
+import { couponActions } from '@src/store/redux/store/coupon-redux';
 //logout clear redux function
 
 
@@ -107,4 +108,5 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(vendorNotificationsActions.resetState())
       dispatch(vendorBannerActions.resetState())
       dispatch(vendorAddonsActions.resetState())
+      dispatch(couponActions.resetState())
 }

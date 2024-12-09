@@ -1,177 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Switch, TouchableOpacity, Button, Alert } from 'react-native';
-import { useValues } from '../../../../../App';
+// components/Banner.js
+import { BannerInterface } from '@src/interfaces/store/banner.interface';
 import appColors from '@src/theme/appColors';
-import { windowHeight } from '@src/theme/appConstant';
-import Modal from 'react-native-modal';
-import SwitchContainer from '@src/otherComponent/switchContainer';
-import { AddonInterface } from '@src/interfaces/store/addons.interface';
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-
-const BannerCard = ({ item, navigateToEditPage, deleteAddonFromList }: {
-    item: AddonInterface,
-    navigateToEditPage: (t: string,n:string,p:string) => void,
-    deleteAddonFromList: (t: number) => void,
-
+const BannerCard = ({banner, navigateToEditPage, deleteBannerFromList}:{banner:BannerInterface
+    navigateToEditPage:(d:BannerInterface)=>void
+    deleteBannerFromList:(id:number)=>void
 }) => {
-    const { isDark, t, currSymbol } = useValues();
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const toggleModal = () => {
-        setIsModalVisible(!isModalVisible);
-    };
-
     return (
-        <View style={[styles.container,
-        {
-            backgroundColor: isDark
-                ? appColors.darkTheme
-                : appColors.white,
-            borderColor: appColors.border,
-        },
-
-        ]}>
-
-            <View style={styles.detailsContainer}>
-                <Text style={[styles.discountText,
-                { color: appColors.primary }
-                ]}>{item.name}</Text>
-                <Text style={[styles.codeText,
-                { color: isDark ? appColors.white : appColors.darkText }
-                ]}>{currSymbol}{item.price}</Text>
-
-            </View>
-
-            <TouchableOpacity
-                style={styles.moreOptions}
-                onPress={toggleModal}
-            >
-                <Text style={styles.moreOptionsText}>⋮</Text>
+        <View style={styles.bannerContainer}>
+            <TouchableOpacity style={styles.banner}>
+                {banner.image_full_url && <Image source={{ uri: banner.image_full_url }} style={styles.bannerImage} />}
+                <Text style={styles.bannerTitle}>{banner.title}</Text>
+                {banner.default_link && <Text style={styles.bannerLink}>{banner.default_link}</Text>}
             </TouchableOpacity>
-            <Modal style={styles.bottomModal} isVisible={isModalVisible} onBackdropPress={toggleModal}>
-                <View style={styles.modalContent}>
-                    <TouchableOpacity
-                        style={styles.actionButton}
-                        onPress={() => navigateToEditPage(
-                            String(item.id),
-                            item.name,
-                            String(item.price)
-                        )}
-                    >
-                        <Text style={styles.actionButtonText}>{t('newDeveloper.Edit')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.actionButton2}
-                        onPress={() => {
-                            deleteAddonFromList(item.id)
-                            setIsModalVisible(false)
-                        }}
-                    >
-                        <Text style={styles.actionButtonText}>{t('newDeveloper.Delete')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButtonClose} onPress={toggleModal}>
-                        <Text style={styles.actionButtonText}>{t('newDeveloper.Close')}</Text>
-                    </TouchableOpacity>
-                </View>
-            </Modal>
+            <View style={styles.iconContainer}>
+                <TouchableOpacity onPress={()=>navigateToEditPage(banner)}>
+                    <Icon name="edit" size={24} color={appColors.success} style={styles.icon} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() =>deleteBannerFromList(banner.id)}>
+                    <Icon name="delete" size={24} color={appColors.error} style={styles.icon} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        padding: 16,
+    bannerContainer: {
+        marginBottom: 20,
+        position: 'relative',
+        marginTop: 20
+    },
+    banner: {
         borderRadius: 10,
-        elevation: 3,
-        alignItems: 'center',
-        marginTop: windowHeight(2),
-        marginHorizontal: windowHeight(1),
-        borderWidth: 1
+        overflow: 'hidden',
+        borderColor: appColors.primary,
+        borderWidth: 1,
     },
-    iconContainer: {
-        backgroundColor: appColors.primary,
-        borderRadius: 25,
+    bannerImage: {
+        width: '100%',
+        height: 200,
+    },
+    bannerTitle: {
         padding: 10,
-        marginRight: 16,
-    },
-    icon: {
-        fontSize: 24,
-        color: appColors.white,
-    },
-    detailsContainer: {
-        flex: 1,
-    },
-    discountText: {
         fontSize: 18,
         fontWeight: 'bold',
+        textAlign: 'center',
+        backgroundColor: appColors.primary,
     },
-    codeText: {
-        fontSize: 16,
-
-    },
-    usersText: {
-        fontSize: 12,
-
-    },
-    validityText: {
-        fontSize: 12,
-
-    },
-    switch: {
-        marginRight: 16,
-    },
-    moreOptions: {
-        padding: 8,
-        marginLeft: 10
-    },
-    moreOptionsText: {
-        fontSize: 18,
-    },
-    bottomModal: {
-        justifyContent: 'flex-end',
-        margin: 0,
-    },
-    modalContent: {
-        backgroundColor: 'white',
+    bannerLink:{
         padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 4,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        backgroundColor: appColors.lightGreen,
+        color:appColors.black
     },
-    modalText: {
-        fontSize: 18,
-        marginBottom: 12,
+    iconContainer: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        flexDirection: 'row',
     },
-    actionButton: {
-        backgroundColor: appColors.success,
-        padding: 12,
-        marginVertical: 6,
-        borderRadius: 10,
-        alignItems: 'center',
-        width: '100%',
-    },
-    actionButton2: {
-        backgroundColor: appColors.error,
-        padding: 12,
-        marginVertical: 6,
-        borderRadius: 10,
-        alignItems: 'center',
-        width: '100%',
-
-    },
-    actionButtonClose: {
-        backgroundColor: appColors.gradientBtn,
-        padding: 12,
-        marginVertical: 6,
-        borderRadius: 10,
-        alignItems: 'center',
-        width: '100%',
-
-    },
-    actionButtonText: {
-        color: 'white',
-        fontSize: 16,
+    icon: {
+        marginLeft: 10,
     },
 });
 

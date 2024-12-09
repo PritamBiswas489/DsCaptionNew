@@ -15,8 +15,10 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import { updateBanner, uploadBanner } from '@src/services/store/banner.service';
 import { isFileProtocol } from '@src/utils/functions';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@src/navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { vendorBannerActions } from '@src/store/redux/store/banner-redux';
 
 interface Response {
   data: any;
@@ -27,7 +29,7 @@ interface Response {
   request?: any;
 }
 interface State {
-  bannerId:string;
+  bannerId: string;
   bannerTitle: string;
   errorBannerTitle: string;
   bannerUrl: string;
@@ -36,8 +38,8 @@ interface State {
   bannerImageError: string;
 }
 //initial state
-const initialState:State = {
-  bannerId:'',
+const initialState: State = {
+  bannerId: '',
   bannerTitle: '',
   errorBannerTitle: '',
   bannerUrl: '',
@@ -92,22 +94,25 @@ function reducer(state: State, action: Action): State {
 
 //Add new banner
 type EditAddonRouteProp = RouteProp<RootStackParamList, 'EditVendorBanner'>;
+type routeProps = NativeStackNavigationProp<RootStackParamList>;
 export function VendorAddNewBanner() {
+  const { navigate } = useNavigation<routeProps>();
+
   const [FORM_STATE, FORM_DISPATCH] = useReducer(reducer, initialState);
   const route = useRoute<EditAddonRouteProp>();
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const [processingLoader, setProcessingLoader] = useState(false)
 
-  useEffect(()=>{
-    if(route?.params?.id){
+  useEffect(() => {
+    if (route?.params?.id) {
       FORM_DISPATCH({ type: 'SET__BANNER__ID', payload: route?.params?.id });
       FORM_DISPATCH({ type: 'SET__BANNER__TITLE', payload: route?.params?.title });
       FORM_DISPATCH({ type: 'SET__BANNER__IMAGE', payload: route?.params?.image });
       FORM_DISPATCH({ type: 'SET__BANNER__URL', payload: route?.params?.bannerLink });
     }
-  },[route?.params?.id])
-
+  }, [route?.params?.id])
+  //validate form
   const VALIDATE_FORM = (): boolean => {
     let valid = true;
 
@@ -134,15 +139,15 @@ export function VendorAddNewBanner() {
       const formData = new FormData()
       formData.append('title', FORM_STATE.bannerTitle)
       formData.append('default_link', FORM_STATE.bannerUrl)
-      if(isFileProtocol(FORM_STATE.bannerImage)){
-          formData.append('image', {
-              uri: FORM_STATE.bannerImage,
-              name: 'banner.jpg',
-              type: 'image/jpeg',
-          });
+      if (isFileProtocol(FORM_STATE.bannerImage)) {
+        formData.append('image', {
+          uri: FORM_STATE.bannerImage,
+          name: 'banner.jpg',
+          type: 'image/jpeg',
+        });
       }
       setProcessingLoader(true)
-      
+
       let response: Response = {
         data: undefined,
         status: 0,
@@ -150,10 +155,10 @@ export function VendorAddNewBanner() {
         headers: undefined,
         config: undefined
       }
-      if(FORM_STATE.bannerId){
+      if (FORM_STATE.bannerId) {
         formData.append('id', FORM_STATE.bannerId)
         response = await updateBanner(formData) //update coupon
-      }else{
+      } else {
         response = await uploadBanner(formData)
       }
       if (response?.data?.message) {
@@ -163,6 +168,8 @@ export function VendorAddNewBanner() {
           text2: response?.data?.message,
         });
         FORM_DISPATCH({ type: 'RESET_ALL' })
+        dispatch(vendorBannerActions.resetState())
+        navigate('ListBanners')
 
       } else if (response?.data?.errors) {
         Toast.show({

@@ -48,7 +48,7 @@ export default function ListAddons() {
     //drag screen refresh page
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        vendorAddonsActions.resetState()
+        dispatch(vendorAddonsActions.resetState())
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
@@ -130,7 +130,7 @@ export default function ListAddons() {
                         additionalStyle={{ bottom: windowHeight(2) }}
                         label={'common.refresh'}
                         onPress={() => {
-                            vendorAddonsActions.resetState()
+                            dispatch(vendorAddonsActions.resetState())
                         }} />} infoImage={undefined} />}
 
                 {!isFirstTimeLoading && addonList.length > 0 &&

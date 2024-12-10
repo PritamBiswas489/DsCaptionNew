@@ -69,6 +69,7 @@ import vendorUnitSlice from "./redux/store/units.redux";
 import vendorAddonsSlice from "./redux/store/addons-redux";
 import couponSlice from "./redux/store/coupon-redux";
 import storeItemSlice from "./redux/store/store-item-redux";
+import itemStatusUpdateSlice from "./redux/store/itemstatus-update-redux";
 
 //configure store
 const store = configureStore({
@@ -143,7 +144,8 @@ const store = configureStore({
         vendorUnits:vendorUnitSlice.reducer,
         vendorAddons:vendorAddonsSlice.reducer,
         coupon:couponSlice.reducer,
-        storeItem:storeItemSlice.reducer
+        storeItem:storeItemSlice.reducer,
+        itemUpdateStatus:itemStatusUpdateSlice.reducer
         //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

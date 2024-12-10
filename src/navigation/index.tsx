@@ -104,6 +104,7 @@ import StoreCouponList from '@src/screens/dashboard/home/StoreCouponList';
 import ListAddons from '@src/screens/dashboard/storeAddons/listAddons';
 import ListBanners from '@src/screens/dashboard/bannerVendor/listBanner';
 import ListItem from '@src/screens/dashboard/storeItem/listItem';
+import VendorLogout from '@src/screens/dashboard/home/VendorLogout';
 
 
 export default function MyStack() {
@@ -437,6 +438,9 @@ export default function MyStack() {
             <RootStack.Screen name="ListBanners" component={ListBanners} />
 
             <RootStack.Screen name="ListItem" component={ListItem} />
+
+            <RootStack.Screen name="VendorLogout" component={VendorLogout} />
+            
             
           </>
         )}

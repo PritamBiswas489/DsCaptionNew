@@ -49,7 +49,6 @@ export const categoriesData: Array<HomeCategoryType> = [
     goToScreen:'StoreUpdateAnnouncement'
      
   },
-
   {
     icon: <AddItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.ListItem', 
@@ -59,16 +58,6 @@ export const categoriesData: Array<HomeCategoryType> = [
     icon: <AddItemIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Addons', 
     goToScreen:'ListAddons'
-  },
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Edit item 32820 fashion', 
-    goToScreen:'VendorEditItem_32820'
-  },
-  {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
-    title: 'Edit item 32822 food', 
-    goToScreen:'VendorEditItem_32822'
   },
   {
     icon: <PendingItemIcon height={'36'} width={'36'} />,

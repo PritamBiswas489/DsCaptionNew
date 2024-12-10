@@ -20,7 +20,7 @@ import SwitchContainer from '@src/otherComponent/switchContainer';
 
 
 export function ActiveServiceMen({ data }: { data?: serviceMenType[] }) {
-
+ 
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
   const navigation =

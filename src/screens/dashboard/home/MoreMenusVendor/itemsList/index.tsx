@@ -32,10 +32,7 @@ export default function ItemsList({ isGrid }: { isGrid: boolean }) {
 
   ) => {
     if (screen === 'logoutProcess') {
-      clearValue('loggedInUserType')
-      const response = await deleteAuthTokens();
-      logoutClearReduxState(dispatch)
-      replace('AuthNavigation');
+      replace('VendorLogout');
     } else if (screen === 'about_us') {
       navigate('ContentPages', { content_key: 'about_us' });
     } else if (screen === 'privacy_policy') {

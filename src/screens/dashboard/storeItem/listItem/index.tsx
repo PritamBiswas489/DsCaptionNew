@@ -16,10 +16,12 @@ import PanelCard from './panelCard';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 import NoDataFound from '@src/commonComponents/noDataFound';
 import { noNotification, wifi } from '@src/utils/images';
-import { windowHeight } from '@src/theme/appConstant';
+import { windowHeight, windowWidth } from '@src/theme/appConstant';
 import GradientBtn from '@src/commonComponents/gradientBtn';
-import { getItemList } from '@src/services/store/item.service';
+import { deleteItem, getItemList, updateStatus } from '@src/services/store/item.service';
 import { storeItemsActions } from '@src/store/redux/store/store-item-redux';
+import FilterComponent from './FilterComponent';
+import { itemStatusActions } from '@src/store/redux/store/itemstatus-update-redux';
 interface Response {
     data: any;
     status: number;
@@ -33,15 +35,34 @@ type routeProps = NativeStackNavigationProp<RootStackParamList>;
 //List items
 export default function ListItem() {
     const dispatch = useDispatch()
-    const { isDark, t } = useValues();
+    const { isDark, t, currSymbol } = useValues();
     const [refreshing, setRefreshing] = React.useState(false);
+    const [selectedFilter, setSelectedFilter] = useState<string>('All');
+
+    const { stores: storesList } = useSelector(
+        (state: RootState) => state['storeProfileData']
+    );
+    const { module: storeModuleDetails } = storesList[0]
+    const { module_type } = storeModuleDetails
+
+
+    //process filter
+    const processFilter = (value: string) => {
+        if (selectedFilter !== value) {
+            setSelectedFilter(value)
+            dispatch(storeItemsActions.resetState())
+        }
+    }
+    
     const {
         data: storeItemList,
         offset,
         limit,
         isFirstTimeLoading,
         isNoMoreData,
+
     } = useSelector((state: RootState) => state['storeItem'])
+
 
     const [scrollPaging, setScrollPaging] = useState(false)
 
@@ -55,8 +76,13 @@ export default function ListItem() {
     }, []);
     //async addons load for data show
     const asyncLoadItems = async () => {
-        const response: Response = await getItemList(limit, offset)
-        console.log(JSON.stringify(response?.data));
+        let type = 'all'
+        if (selectedFilter === 'Non-Veg') {
+            type = 'non_veg'
+        } else if (selectedFilter === 'Veg') {
+            type = 'veg'
+        }
+        const response: Response = await getItemList(limit, offset, type)
         if (response?.data?.items && response?.data?.items.length > 0) {
             dispatch(storeItemsActions.addItemArr(response?.data?.items))
         } else {
@@ -73,18 +99,20 @@ export default function ListItem() {
     }
     useEffect(() => {
         if ((isFirstTimeLoading || scrollPaging) && !isNoMoreData) {
-            asyncLoadItems()
+            const timeoutId = setTimeout(() => {
+                asyncLoadItems();
+            }, 1000);
+            return () => clearTimeout(timeoutId);
         }
-    }, [isFirstTimeLoading, scrollPaging, isNoMoreData])
-
+    }, [isFirstTimeLoading, scrollPaging, isNoMoreData]);
 
     const { navigate } = useNavigation<routeProps>();
 
-    const navigateToEditPage = (id: string, name: string, price: string) => {
-        navigate('EditVendorAddon', { id, name, price });
+    const navigateToEditPage = (id: string) => {
+        navigate('EditVendorItem', { id });
 
     }
-    const deleteAddonFromList = (addonid: number) => {
+    const deleteItemFromList = (itemId: number) => {
         Alert.alert(
             "Confirmation",
             t('newDeveloper.Areyousureyouwanttoproceed'),
@@ -97,17 +125,17 @@ export default function ListItem() {
                 {
                     text: "OK",
                     onPress: () => {
-                        // dispatch(vendorAddonsActions.deleteAddonById(addonid))
-                        // deleteAddon(addonid)
+                        dispatch(storeItemsActions.deleteItemById(itemId))
+                        deleteItem(itemId)
                     }
                 }
             ],
             { cancelable: false } // prevents the alert from being dismissed by tapping outside
         );
     }
-
+    //handle scroll processing
     const handleScrollProcessing = () => {
-        if (isNoMoreData){ return; }
+        if (isNoMoreData) { return; }
         setScrollPaging(true)
         dispatch(storeItemsActions.setData({
             field: 'offset',
@@ -124,6 +152,10 @@ export default function ListItem() {
                 trailIcon1={<AddItemIcon />}
                 onTrailIcon={() => { navigate('VendorAddItem') }}
             />
+            {module_type === 'food' && <View style={{ marginTop: 5 }}>
+                <FilterComponent selectedFilter={selectedFilter} setSelectedFilter={processFilter} />
+            </View>}
+
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 showsVerticalScrollIndicator={false}
@@ -152,28 +184,46 @@ export default function ListItem() {
 
                 {!isFirstTimeLoading && storeItemList.length > 0 &&
                     <FlatList
-                        style={{ marginTop: 10 }}
+                        style={{ marginTop: 5, padding: windowWidth(2) }}
                         data={storeItemList}
                         onEndReached={handleScrollProcessing}
-                        renderItem={({ item }) => (
-                            <>
+                        renderItem={({ item }) => {
+                            const price = item?.price
+                            let discountedPrice = price
+                            if (Number(item.discount) > 0) {
+                                if (item.discount_type === 'amount') {
+                                    discountedPrice = price - item.discount
+                                }
+                                if (item.discount_type === 'percent') {
+                                    discountedPrice = price * (1 - (item.discount / 100))
+                                }
+                            }
+
+
+
+                            return <>
                                 <PanelCard
+                                    id={item.id}
                                     title={item.name}
-                                    imageUrl="https://via.placeholder.com/80"
-                                    price={93}
-                                    originalPrice={103}
-                                    discount="10% OFF"
-                                    rating={4.5}
-                                    reviews={10}
-                                    onEdit={() => { }}
-                                    onDelete={() => { }}
+                                    imageUrl={item.image_full_url ? item.image_full_url : "https://via.placeholder.com/80"}
+                                    price={discountedPrice}
+                                    originalPrice={item.discount > 0 ? price : 0}
+                                    discount={Number(item.discount) > 0 ? item.discount_type === 'percent' ? `${Number(item.discount)}% OFF` : `${Number(item.discount)}${currSymbol} OFF` : ''}
+                                    rating={Number(item?.avg_rating)}
+                                    reviews={Number(item?.rating_count)}
+                                    status={item.status}
+                                    onEdit={() => {
+                                        navigateToEditPage(String(item.id))
+                                    }}
+                                    onDelete={() => { deleteItemFromList(item.id) }}
+
                                 />
                             </>
-                        )} />
+                        }} />
                 }
                 <View style={GlobalStyle.blankView} />
+                {scrollPaging && <ActivityIndicator />}
             </ScrollView>
-            {scrollPaging && <ActivityIndicator />}
         </View>
     );
 }

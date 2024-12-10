@@ -7,6 +7,7 @@ interface ItemsInterface {
     limit: number;
     isFirstTimeLoading: boolean;
     isNoMoreData: boolean;
+    
 }
 
 
@@ -19,9 +20,10 @@ interface SetDataPayload {
 const initialState: ItemsInterface = {
     data: [],
     offset: 1,
-    limit: 5,
+    limit: 25,
     isFirstTimeLoading: true,
     isNoMoreData: false,
+ 
 }
 
 const storeItemSlice = createSlice({
@@ -43,6 +45,25 @@ const storeItemSlice = createSlice({
         deleteItemById(state, action: PayloadAction<number>) {
             state.data = state.data.filter( (item: StoreItemInterface) => item.id !== action.payload);
         },
+        changeStatusById(state, action: PayloadAction<number>){ //change status id
+            state.data = state.data.map( (item: StoreItemInterface) =>{
+                if(item.id !== action.payload){
+                    return item
+                }else{
+                    const cloneCoupon = {...item}
+                    cloneCoupon.status = Number(!Boolean(cloneCoupon.status))
+                    return cloneCoupon
+                }
+            });
+        },
+        
+        statusStore(state, action: PayloadAction<{itemId:number,status:boolean}>){
+            const { itemId, status } = action.payload;
+            const index = state.data.findIndex(serviceMan => serviceMan.id === itemId);
+            if (index !== -1) {
+                state.data[index].status = Number(status);
+            }
+        }
     }
      
 })

@@ -40,13 +40,30 @@ export const retrieveItemDetails  = async (itemid:string) : Promise<Response> =>
 
 }
  
-export const getItemList = async(limit:number,offset:number) : Promise<Response> => {
+export const getItemList = async(limit:number,offset:number,type:string) : Promise<Response> => {
 	try {
-		const response = await api.get(`/vendor/get-items-list?limit=${limit}&offset=${offset}`);
+		const response = await api.get(`/vendor/get-items-list?limit=${limit}&offset=${offset}&type=${type}`);
 		return response;
 	} catch (error:any) {
 		return error.response;
 	}
+}
+//delete vendor store item
+export const deleteItem = async (itemid:number) : Promise<Response> => {
+	try {
+		const response = await api.delete(`/vendor/item/delete?id=${itemid}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
 
+export const updateStatus = async(status:boolean,id:number): Promise<Response> => {
+	try {
+		const response = await api.get(`/vendor/item/status?id=${id}&status=${Number(status)}` );
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
 
 }

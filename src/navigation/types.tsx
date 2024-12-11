@@ -207,4 +207,7 @@ export type RootStackParamList = {
   ListBanners:undefined;
   ListItem:undefined;
   VendorLogout:undefined;
+  StoreOrders:undefined;
+  StoreExpenseReports:undefined;
+  StoreWallet:undefined;
 };

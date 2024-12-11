@@ -105,6 +105,9 @@ import ListAddons from '@src/screens/dashboard/storeAddons/listAddons';
 import ListBanners from '@src/screens/dashboard/bannerVendor/listBanner';
 import ListItem from '@src/screens/dashboard/storeItem/listItem';
 import VendorLogout from '@src/screens/dashboard/home/VendorLogout';
+import StoreOrders from '@src/screens/dashboard/home/StoreOrders';
+import StoreExpenseReports from '@src/screens/dashboard/home/StoreExpenseReports';
+import  StoreWallet  from '@src/screens/dashboard/home/StoreWallet';
 
 
 export default function MyStack() {
@@ -440,7 +443,14 @@ export default function MyStack() {
             <RootStack.Screen name="ListItem" component={ListItem} />
 
             <RootStack.Screen name="VendorLogout" component={VendorLogout} />
+
+
+            <RootStack.Screen name="StoreOrders" component={StoreOrders} />
+
+            <RootStack.Screen name="StoreExpenseReports" component={StoreExpenseReports} />
             
+            <RootStack.Screen name="StoreWallet" component={StoreWallet} />
+             
             
           </>
         )}

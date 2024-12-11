@@ -1403,9 +1403,10 @@
              "UpdateAnnouncement":"Update Announcement",
              "updateSchedule":"Schedule update",
              "ListBanners":"List banners",
-             "ListItem":"Items"
-             
-
+             "ListItem":"Items",
+             "StoreOrderHistory":"Order History",
+             "ExpenseReports":"Expense reports",
+             "StoreWallet":"Wallet"
         }
     }
 }

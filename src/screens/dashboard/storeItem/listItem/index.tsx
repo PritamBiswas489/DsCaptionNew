@@ -20,8 +20,8 @@ import { windowHeight, windowWidth } from '@src/theme/appConstant';
 import GradientBtn from '@src/commonComponents/gradientBtn';
 import { deleteItem, getItemList, updateStatus } from '@src/services/store/item.service';
 import { storeItemsActions } from '@src/store/redux/store/store-item-redux';
-import FilterComponent from './FilterComponent';
-import { itemStatusActions } from '@src/store/redux/store/itemstatus-update-redux';
+import FilterComponent from '@src/screens/dashboard/storeItem/listItem/filterComponent';
+ 
 interface Response {
     data: any;
     status: number;

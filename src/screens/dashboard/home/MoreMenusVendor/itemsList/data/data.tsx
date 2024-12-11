@@ -28,6 +28,24 @@ import {HomeCategoryType} from './types';
 
 
 export const categoriesData: Array<HomeCategoryType> = [
+  
+  {
+    icon: <ProfileIcon height={'36'} width={'36'} />,
+    title: 'Store Wallet testing (testing)', 
+    goToScreen:'StoreWallet'
+  },
+  {
+    icon: <ProfileIcon height={'36'} width={'36'} />,
+    title: 'Expense Reports (testing)', 
+    goToScreen:'StoreExpenseReports'
+  },
+  {
+    icon: <ProfileIcon height={'36'} width={'36'} />,
+    title: 'Store Order (testing)', 
+    goToScreen:'StoreOrders'
+  },
+ 
+  
   {
     icon: <ProfileIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuProfile', 

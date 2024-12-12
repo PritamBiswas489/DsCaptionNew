@@ -4,6 +4,7 @@ import AuthNavigation from './authNavigation';
 import { RootStack } from './RootStackNavigator';
 import { BottomTab } from './tabNavigation';
 import { BottomTabSeller } from './tabNavigationStore';
+import StoreOrderDetails from '@src/screens/dashboard/home/StoreOrderDetails';
 import {
   AddNewAddress,
   AddNewService,
@@ -108,6 +109,7 @@ import VendorLogout from '@src/screens/dashboard/home/VendorLogout';
 import StoreOrders from '@src/screens/dashboard/home/StoreOrders';
 import StoreExpenseReports from '@src/screens/dashboard/home/StoreExpenseReports';
 import  StoreWallet  from '@src/screens/dashboard/home/StoreWallet';
+import StoreHome from '@src/screens/dashboard/home/StoreHome';
 
 
 export default function MyStack() {
@@ -450,7 +452,10 @@ export default function MyStack() {
             <RootStack.Screen name="StoreExpenseReports" component={StoreExpenseReports} />
             
             <RootStack.Screen name="StoreWallet" component={StoreWallet} />
-             
+
+            <RootStack.Screen name="StoreHome" component={StoreHome} />
+
+            <RootStack.Screen name="StoreOrderDetails" component={StoreOrderDetails} />
             
           </>
         )}

@@ -6797,6 +6797,11 @@ react-native-svg@*, react-native-svg@^15.3.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
+react-native-swipe-button@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/react-native-swipe-button/-/react-native-swipe-button-0.0.4.tgz"
+  integrity sha512-H224EZWJ24+mVqcpksAOsYiZXxCJpgoguKvSL+62jNcyKf4bC91V4FzzPXy6TY4z8JEHELcfAoZXn3nQU319Mg==
+
 react-native-swipe-gestures@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz"

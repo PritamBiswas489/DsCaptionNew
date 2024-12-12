@@ -13,10 +13,11 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/navigation/types';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import WithdrawBalance from './withdrawBalance';
-import BalanceInfo from './balanceInfo';
-import EarningsCard from './earningsCard';
-import TransactionHistory from './transactionHistory';
+import StoreStatus from './storeStatus';
+import OrderStatusList from './statusList';
+import OrderList from './orderList';
+import CampaignFilter from './campaignFilter';
+
 
 interface Response {
   data: any;
@@ -31,7 +32,7 @@ interface Response {
 type ItemsProps = NativeStackNavigationProp<RootStackParamList>;
 type EditCouponRouteProp = RouteProp<RootStackParamList, 'EditVendorCoupon'>;
 // Store wallet
-export default function StoreWallet() {
+export default function StoreHome() {
   const navigation = useNavigation<ItemsProps>();
   const route = useRoute<EditCouponRouteProp>();
   const { isDark, t } = useValues();
@@ -49,7 +50,7 @@ export default function StoreWallet() {
   return (
     <>
       <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
-        <Header showBackArrow={true} title={'newDeveloper.StoreWallet'} />
+        <Header showBackArrow={true} title={'newDeveloper.StoreHome'} />
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           showsVerticalScrollIndicator={false}
@@ -64,10 +65,10 @@ export default function StoreWallet() {
             },
           ]}
         >
-          <View><WithdrawBalance /></View>
-          <View><BalanceInfo /></View>
-          <View><EarningsCard/></View>
-          <View><TransactionHistory/></View>
+          <View><StoreStatus /></View>
+          <View><OrderStatusList /></View>
+          <View><CampaignFilter /></View>
+          <View><OrderList /></View>
           <Spinner
             visible={processingLoader}
             textContent={'Processing.....'}

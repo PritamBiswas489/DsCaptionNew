@@ -1,20 +1,23 @@
+import appColors from '@src/theme/appColors';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useValues } from '../../../../../App';
 
 const EarningsCard = () => {
+  const { isDark, t } = useValues();
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
+      <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
         <Text style={styles.amount}>₹ 0</Text>
-        <Text style={styles.label}>Pending Withdraw</Text>
+        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>Pending Withdraw</Text>
       </View>
-      <View style={styles.card}>
+      <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
         <Text style={styles.amount}>₹ 255</Text>
-        <Text style={styles.label}>Already Withdrawn</Text>
+        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>Already Withdrawn</Text>
       </View>
-      <View style={styles.card}>
+      <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
         <Text style={styles.amount}>₹ 1,364</Text>
-        <Text style={styles.label}>Total Earning</Text>
+        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>Total Earning</Text>
       </View>
     </View>
   );
@@ -23,10 +26,9 @@ const EarningsCard = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#f8f8f8', // Background color for the screen
   },
   card: {
-    backgroundColor: '#fff',
+
     borderRadius: 8,
     padding: 16,
     marginBottom: 12,
@@ -38,12 +40,11 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 20,
-    color: '#4CAF50', // Green color
+    color: appColors.primary, // Green color
     fontWeight: 'bold',
   },
   label: {
     fontSize: 14,
-    color: '#666',
     marginTop: 4,
   },
 });

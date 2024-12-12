@@ -28,7 +28,16 @@ import {HomeCategoryType} from './types';
 
 
 export const categoriesData: Array<HomeCategoryType> = [
-  
+  {
+    icon: <ProfileIcon height={'36'} width={'36'} />,
+    title: 'Store order details (testing)', 
+    goToScreen:'StoreOrderDetails'
+  },
+  {
+    icon: <ProfileIcon height={'36'} width={'36'} />,
+    title: 'Store Home (testing)', 
+    goToScreen:'StoreHome'
+  },
   {
     icon: <ProfileIcon height={'36'} width={'36'} />,
     title: 'Store Wallet testing (testing)', 

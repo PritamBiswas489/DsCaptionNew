@@ -70,6 +70,7 @@
     "react-native-step-indicator": "^1.0.3",
     "react-native-styled-datepicker": "^1.2.1",
     "react-native-svg": "^15.3.0",
+    "react-native-swipe-button": "^0.0.4",
     "react-native-switch": "^1.5.1",
     "react-native-tag-input": "^0.0.21",
     "react-native-toast-message": "^2.2.0",

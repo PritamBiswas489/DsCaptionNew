@@ -7,7 +7,7 @@ import { useValues } from '../../../../../App';
 const OrderFilterCard = (
     {selectedFilter, setSelectedFilter}:{selectedFilter:string,setSelectedFilter:(value:string)=>void}
 ) => {
-  const filters: string[] = ['All', 'Delivered', 'Refunded'];
+  const filters: string[] = ['allOrder', 'deliveredOrder', 'refundedOrder'];
   const { isDark, t, currSymbol } = useValues();
   return (
     <View style={styles.container}>
@@ -29,7 +29,7 @@ const OrderFilterCard = (
               selectedFilter === filter && styles.selectedFilterText
             ]}
           >
-            {filter}
+            {t(`newDeveloper.${filter}`)}
           </Text>
         </TouchableOpacity>
       ))}

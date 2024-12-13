@@ -1,6 +1,6 @@
 import { TouchableOpacity, View, Alert, StyleSheet, RefreshControl, ActivityIndicator, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { GlobalStyle } from '@style/styles';
 import { Notification, Search, BookingFilterIcon, AddItemIcon } from '@utils/icons';
 import Header from '@commonComponents/header';
@@ -15,15 +15,56 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import OrderCard from '@src/screens/dashboard/home/StoreOrders/orderCard';
 import OrderFilterCard from '@src/screens/dashboard/home/StoreOrders/orderFilterCard';
 import StatusCard from '@src/screens/dashboard/home/StoreOrders/statusCard';
-import { deleteCoupon, listCoupons, updateStatus } from '@src/services/store/coupon.service';
-import { couponActions } from '@src/store/redux/store/coupon-redux';
-import Spinner from 'react-native-loading-spinner-overlay';
-import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
-import NoDataFound from '@src/commonComponents/noDataFound';
-import { noNotification, wifi } from '@src/utils/images';
-import { windowHeight } from '@src/theme/appConstant';
 import GradientBtn from '@src/commonComponents/gradientBtn';
-
+import { getAllOrders, getCompleteOrders } from '@src/services/store/order.service';
+import { StoreOrderInterface } from '@src/interfaces/store/order.interface';
+import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
+import { getAuthUserService as storeAuthService } from '@src/services/store/auth.service';
+import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
+import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
+//ORDER STATE
+interface OrderState {
+    selectedFilter: string;
+    limit: number;
+    offset: number;
+    orders: StoreOrderInterface[];
+    
+}
+//INITIAL STATE
+const initialState: OrderState = {
+    selectedFilter: 'allOrder',
+    limit: 30,
+    offset: 1,
+    orders: [],
+    
+}
+//ACTION
+type Action =
+    | { type: 'SET_SELECTED_FILTER'; payload: typeof initialState.selectedFilter }
+    | { type: 'SET_LIMIT'; payload: typeof initialState.limit }
+    | { type: 'SET_OFFSET'; payload: typeof initialState.offset }
+    | { type: 'SET_ORDERS'; payload: typeof initialState.orders }
+    | { type: 'RESET_ALL' };
+;
+//REDUCER
+const reducer = (state: OrderState, action: Action): OrderState => {
+    switch (action.type) {
+        case 'SET_SELECTED_FILTER':
+            return { ...state, selectedFilter: action.payload };
+        case 'SET_LIMIT':
+            return { ...state, limit: action.payload };
+        case 'SET_OFFSET':
+            return { ...state, offset: action.payload };
+        case 'SET_ORDERS':
+            return { ...state, orders: action.payload };
+        case 'RESET_ALL':
+            return {
+                ...initialState
+            };
+        default:
+            return state;
+    }
+}
 
 interface Response {
     data: any;
@@ -36,118 +77,90 @@ interface Response {
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
 
 
-//store order list screen
+//Store Order Listing view
 export default function StoreOrders() {
-    const dispatch = useDispatch()
     const { isDark, t } = useValues();
+    const dispatch = useDispatch()
     const [refreshing, setRefreshing] = React.useState(false);
-    const [selectedFilter, setSelectedFilter] = useState<string>('All');
-
-    const {
-        data: couponList,
-        offset,
-        limit,
-        isFirstTimeLoading,
-        isNoMoreData,
-    } = useSelector((state: RootState) => state['coupon'])
-
     const [scrollPaging, setScrollPaging] = useState(false)
+    const [noMoreData,setNoMoreData] = useState(false)
+    const [isFirstTimeLoading,setIsFirstTimeLoading] =  useState(true)
+    const [ORDER_STATE, ORDER_DISPATCH] = useReducer(reducer, initialState);
+   
 
+    //profile reset for total statistics
+    const profileReset = async  ()=>{
+        const responseuser = await storeAuthService()
+            if (responseuser?.data?.id) {
+                dispatch(storeProfileDataActions.setData(responseuser?.data))
+            }
+
+    }
     //drag screen refresh page
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        dispatch(couponActions.resetState())
+        reset()
+        profileReset()
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
     }, []);
-    //async coupon load for data show
-    const asyncLoadCoupons = async () => {
-        const response: Response = await listCoupons(limit, offset)
 
-        if (response?.data && response?.data?.length > 0) {
-            dispatch(couponActions.addCouponArr(response?.data))
-        } else {
-            dispatch(couponActions.setData({
-                field: 'isNoMoreData',
-                data: true
-            }));
-        }
-        setScrollPaging(false);
-        dispatch(couponActions.setData({
-            field: 'isFirstTimeLoading',
-            data: false
-        }));
-    }
-    //onload coupon load 
-    useEffect(() => {
-        if ((isFirstTimeLoading || scrollPaging) && !isNoMoreData) {
-            asyncLoadCoupons()
-        }
-    }, [isFirstTimeLoading, scrollPaging, isNoMoreData])
-
-    //handle scroll processing
-    const handleScrollProcessing = () => {
-        if (isNoMoreData) { return; }
-        setScrollPaging(true)
-        dispatch(couponActions.setData({
-            field: 'offset',
-            data: offset + 1
-        }));
-    }
 
     const { navigate } = useNavigation<routeProps>();
 
-    const navigateToEditPage = (couponId: string) => {
-        navigate('EditVendorCoupon', { id: couponId });
-
+    //navigate order details page
+    const navigateToOrderDetailsPage = (OrderId: number) => {
+        navigate('StoreOrderDetails',{OrderId:String(OrderId)});
     }
-    const deleteCouponFromList = (couponId: number) => {
-        Alert.alert(
-            "Confirmation",
-            t('newDeveloper.Areyousureyouwanttoproceed'),
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel" // sets the text style to cancel
-                },
-                {
-                    text: "OK",
-                    onPress: () => {
-                        dispatch(couponActions.deleteCouponById(couponId))
-                        deleteCoupon(couponId)
-                    }
-                }
-            ],
-            { cancelable: false } // prevents the alert from being dismissed by tapping outside
-        );
-    }
-    const updateCouponStatus = (status: boolean, couponId: number) => {
-        dispatch(couponActions.changeStatusById(couponId))
-        updateStatus(status, couponId)
 
+    //load order onload
+    const loadOrderOnload = async () => {
+        let status = 'all'
+        if(ORDER_STATE.selectedFilter === 'deliveredOrder'){
+          status = 'delivered'
+        }
+        if(ORDER_STATE.selectedFilter === 'refundedOrder'){
+           status = 'refunded'
+        }
+        const [completedOrder] = await Promise.all([getCompleteOrders(ORDER_STATE.limit, ORDER_STATE.offset,status)])
+        if(completedOrder?.data?.orders && completedOrder?.data?.orders.length > 0){
+            const cloneOrders = [...ORDER_STATE.orders, ...completedOrder?.data?.orders];
+            ORDER_DISPATCH({ type: 'SET_ORDERS', payload: cloneOrders })
+            ORDER_DISPATCH({ type: 'SET_OFFSET', payload: ORDER_STATE.offset+1 })
+        }else{
+            setNoMoreData(true)
+        }
+        setIsFirstTimeLoading(false)
+        setScrollPaging(false);
     }
-    type Order = {
-        id: string;
-        date: string;
-        time: string;
-        type: string;
-        status: string;
-    };
 
-    const processFilter = (value: string) => {
-        if (selectedFilter !== value) {
-            setSelectedFilter(value)
+    useEffect(() => {
+      if((isFirstTimeLoading || scrollPaging) && !noMoreData){
+        loadOrderOnload()
+      }  
+    },[isFirstTimeLoading,scrollPaging])
+
+    const reset = ()=>{
+            setNoMoreData(false)
+            setIsFirstTimeLoading(true)
+            ORDER_DISPATCH({ type: 'SET_ORDERS', payload: [] });
+            ORDER_DISPATCH({ type: 'SET_OFFSET', payload: 1 });
+    }
+     //process filter
+     const processFilter = (value: string) => {
+        if (ORDER_STATE.selectedFilter !== value) {
+            ORDER_DISPATCH({ type: 'SET_SELECTED_FILTER', payload: value });
+            reset()
         }
     }
+    //handle scroll processing
+    const handleScrollProcessing = () => {
+        if (noMoreData){ return; }
+        setScrollPaging(true)
+    }
 
-    const orders: Order[] = [
-        { id: '#104063', date: '20 Jun 2024', time: '00:17', type: 'Delivery', status: 'Delivered' },
-        { id: '#101606', date: '29 Mar 2024', time: '11:48', type: 'Take Away', status: 'Delivered' },
-        { id: '#101581', date: '27 Mar 2024', time: '17:48', type: 'Delivery', status: 'Delivered' },
-        { id: '#101280', date: '13 Mar 2024', time: '09:35', type: 'Delivery', status: 'Delivered' },
-    ];
+     
     return (
         <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
             <Header
@@ -156,10 +169,10 @@ export default function StoreOrders() {
                 content={''}
             />
             <View style={{ marginTop: 5 }}>
-                <StatusCard/>
+                <StatusCard />
             </View>
             <View style={{ marginTop: 5 }}>
-                <OrderFilterCard selectedFilter={selectedFilter} setSelectedFilter={processFilter} />
+                <OrderFilterCard selectedFilter={ORDER_STATE.selectedFilter} setSelectedFilter={processFilter} />
             </View>
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -168,34 +181,25 @@ export default function StoreOrders() {
                     GlobalStyle.contentContainerStyle,
                 ]}
                 style={[
-                    GlobalStyle.mainView, {  backgroundColor: isDark ? appColors.darkTheme : appColors.white,  },
+                    GlobalStyle.mainView, { backgroundColor: isDark ? appColors.darkTheme : appColors.white, },
                 ]}
             >
-                {/* {isFirstTimeLoading && <SkeletonLoader />}
-                {!isFirstTimeLoading && couponList.length === 0 && <NoDataFound
-                    headerTitle="home.noInternet"
-                    image={noNotification}
-                    title="newDeveloper.Nodatafound"
-                    content="newDeveloper.noCouponFound"
-                    gradiantBtn={<GradientBtn
-                        additionalStyle={{ bottom: windowHeight(2) }}
-                        label={'common.refresh'}
-                        onPress={() => {
-                            dispatch(couponActions.resetState())
-                        }} />} infoImage={undefined} />} */}
+                  {isFirstTimeLoading && <SkeletonLoader />}  
+                {!isFirstTimeLoading && ORDER_STATE.orders.length === 0 && <HomeNoFataFound message={t('Nodatafound')}/>} 
 
-                {/* {!isFirstTimeLoading && couponList.length > 0 && */}
+                {!isFirstTimeLoading && ORDER_STATE.orders.length > 0 &&
                 <FlatList
-                    data={orders}
+                    onEndReached={handleScrollProcessing}
+                    data={ORDER_STATE.orders}
                     renderItem={({ item }) => {
-                        return <OrderCard item={item} />
+                        return <TouchableOpacity onPress={()=>{navigateToOrderDetailsPage(item.id)}}><OrderCard item={item} /></TouchableOpacity>
                     }}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item:StoreOrderInterface) => String(item.id)}
                 />
-                {/* } */}
+                 }  
                 <View style={GlobalStyle.blankView} />
             </ScrollView>
-            {/* {scrollPaging && <ActivityIndicator />} */}
+            {scrollPaging && <ActivityIndicator />}
         </View>
     );
 }
@@ -217,3 +221,5 @@ const styles = StyleSheet.create({
         elevation: 3
     },
 });
+
+

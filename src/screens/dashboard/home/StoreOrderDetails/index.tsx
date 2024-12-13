@@ -18,7 +18,7 @@ const StoreOrderDetails = () => {
     }, []);
     return (
         <View style={[styles.container, { backgroundColor: isDark ? appColors.darkTheme : appColors.white, }]}>
-            <Header showBackArrow={true} title={'newDeveloper.StoreHome'} />
+            <Header showBackArrow={true} title={'newDeveloper.OrderDetails'} />
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 showsVerticalScrollIndicator={false}
@@ -29,25 +29,25 @@ const StoreOrderDetails = () => {
                     GlobalStyle.mainView,
                     {
                         backgroundColor: isDark ? appColors.darkTheme : appColors.white,
-                        marginTop: 10
+                        marginTop: 20
                     },
                 ]}
             >
                 <View style={[styles.headerContainer]}>
-                    <Text style={[styles.orderId]}>Order ID: 108373</Text>
-                    <Text style={[styles.dateTime]}>16 Oct 2024  14:50</Text>
+                    <Text style={[styles.orderId,{color: isDark ? appColors.white : appColors.darkText,}]}>Order ID: 108373</Text>
+                    <Text style={[styles.dateTime,{color: isDark ? appColors.white : appColors.darkText,}]}>16 Oct 2024  14:50</Text>
                 </View>
 
                 {/* Delivery Info */}
                 <View style={[styles.deliveryContainer, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
-                    <Text style={[styles.deliveryLabel]}>Delivery</Text>
-                    <Text style={[styles.cashOnDelivery]}>Cash On Delivery</Text>
+                    <Text style={[styles.deliveryLabel,{color: isDark ? appColors.white : appColors.darkText,}]}>Delivery</Text>
+                    <Text style={[styles.cashOnDelivery,{color: isDark ? appColors.white : appColors.darkText,}]}>Cash On Delivery</Text>
                 </View>
 
                 {/* Item Details */}
                 <View style={[styles.itemContainer, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
                     <View style={[styles.itemHeader]}>
-                        <Text style={[styles.itemLabel]}>Item: 1</Text>
+                        <Text style={[styles.itemLabel,{color: isDark ? appColors.white : appColors.darkText,}]}>Item: 1</Text>
                         <Text style={[styles.processing]}>Processing</Text>
                     </View>
 
@@ -57,24 +57,24 @@ const StoreOrderDetails = () => {
                             style={[styles.itemImage]}
                         />
                         <View style={[styles.itemInfo]}>
-                            <Text style={[styles.itemName]}>Champs</Text>
-                            <Text style={[styles.itemPrice]}>419</Text>
-                            <Text style={[styles.itemVariation]}>Variations: COLOR - White, Size - 5</Text>
+                            <Text style={[styles.itemName,{color: isDark ? appColors.white : appColors.darkText,}]}>Champs</Text>
+                            <Text style={[styles.itemPrice,{color: isDark ? appColors.white : appColors.darkText,}]}>419</Text>
+                            <Text style={[styles.itemVariation,{color: isDark ? appColors.white : appColors.darkText,}]}>Variations: COLOR - White, Size - 5</Text>
                         </View>
                     </View>
                 </View>
 
                 {/* Customer Details */}
                 <View style={[styles.customerContainer, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
-                    <Text style={[styles.customerLabel]}>Customer Details</Text>
+                    <Text style={[styles.customerLabel,{color: isDark ? appColors.white : appColors.darkText,}]}>Customer Details</Text>
                     <View style={[styles.customerDetails]}>
                         <Image
                             source={{ uri: 'https://via.placeholder.com/60' }} // Replace with actual image URL
                             style={[styles.itemImage]}
                         />
                         <View>
-                            <Text style={[styles.customerName]}>Demo Demo</Text>
-                            <Text style={[styles.customerAddress]}>Bidhanagar, Kolkata, West Bengal, India</Text>
+                            <Text style={[styles.customerName,{color: isDark ? appColors.white : appColors.darkText,}]}>Demo Demo</Text>
+                            <Text style={[styles.customerAddress,{color: isDark ? appColors.white : appColors.darkText,}]}>Bidhanagar, Kolkata, West Bengal, India</Text>
                         </View>
                         <TouchableOpacity style={[styles.chatButton]}>
                             <Text style={[styles.chatText]}>Chat</Text>
@@ -84,13 +84,13 @@ const StoreOrderDetails = () => {
 
                 {/* Pricing Details */}
                 <View style={[styles.pricingContainer, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
-                    <View style={[styles.priceRow]}><Text>Item Price</Text><Text>419</Text></View>
-                    <View style={[styles.priceRow]}><Text>Discount</Text><Text>(-) 4</Text></View>
-                    <View style={[styles.priceRow]}><Text>VAT/Tax</Text><Text>(+) 0</Text></View>
-                    <View style={[styles.priceRow]}><Text>Delivery Man Tips</Text><Text>(+) 0</Text></View>
-                    <View style={[styles.priceRow]}><Text>Platform Charge</Text><Text>(+) 3</Text></View>
-                    <View style={[styles.priceRow]}><Text>Delivery Fee</Text><Text>(+) 0</Text></View>
-                    <View style={[styles.totalRow]}><Text>Total Amount</Text><Text>418</Text></View>
+                    <View style={[styles.priceRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>Item Price</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>419</Text></View>
+                    <View style={[styles.priceRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>Discount</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>(-) 4</Text></View>
+                    <View style={[styles.priceRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>VAT/Tax</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>(+) 0</Text></View>
+                    <View style={[styles.priceRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>Delivery Man Tips</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>(+) 0</Text></View>
+                    <View style={[styles.priceRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>Platform Charge</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>(+) 3</Text></View>
+                    <View style={[styles.priceRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>Delivery Fee</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>(+) 0</Text></View>
+                    <View style={[styles.totalRow]}><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>Total Amount</Text><Text style={{color: isDark ? appColors.white : appColors.darkText,}}>418</Text></View>
                 </View>
 
                 {/* Actions */}
@@ -231,6 +231,9 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         paddingHorizontal: 12,
         borderRadius: 8,
+        position:'absolute',
+        right:0,
+        bottom:60
     },
     chatText: {
         color: '#fff',

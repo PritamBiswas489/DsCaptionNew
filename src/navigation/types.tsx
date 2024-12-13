@@ -211,5 +211,5 @@ export type RootStackParamList = {
   StoreExpenseReports:undefined;
   StoreWallet:undefined;
   StoreHome:undefined;
-  StoreOrderDetails:undefined
+  StoreOrderDetails:{ OrderId: string }
 };

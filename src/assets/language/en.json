@@ -1407,7 +1407,15 @@
              "StoreOrderHistory":"Order History",
              "ExpenseReports":"Expense reports",
              "StoreWallet":"Wallet",
-             "StoreHome":"Home"
+             "StoreHome":"Home",
+             "OrderDetails":"OrderDetails",
+            "allOrder":"All",
+            "deliveredOrder":"Delivered",
+            "refundedOrder":"Refunded",
+            "take_away":"Take away",
+            "delivery":"Delivery",
+            "delivered":"Delivered",
+            "refunded":"Refunded"
         }
     }
 }

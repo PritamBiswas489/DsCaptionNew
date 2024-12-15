@@ -1,6 +1,6 @@
 import { TouchableOpacity, View, Alert, StyleSheet, RefreshControl, ActivityIndicator, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { GlobalStyle } from '@style/styles';
 import { Notification, Search, BookingFilterIcon, AddItemIcon } from '@utils/icons';
 import Header from '@commonComponents/header';
@@ -14,7 +14,7 @@ import { RootState, AppDispatch } from '@src/store';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExpenseItemCard from './expenseCard';
 import SearchExpense from './searchExpense';
-import { deleteCoupon, listCoupons, updateStatus } from '@src/services/store/coupon.service';
+
 import { couponActions } from '@src/store/redux/store/coupon-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
@@ -22,6 +22,10 @@ import NoDataFound from '@src/commonComponents/noDataFound';
 import { noNotification, wifi } from '@src/utils/images';
 import { windowHeight } from '@src/theme/appConstant';
 import GradientBtn from '@src/commonComponents/gradientBtn';
+import { getExpense } from '@src/services/store/expense.service';
+import { ExpenseInterface } from '@src/interfaces/store/expense.interface';
+import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
+import DateRangePicker from '@src/commonComponents/dateRangePicker';
 
 interface Response {
     data: any;
@@ -31,100 +35,148 @@ interface Response {
     config: any;
     request?: any;
 }
+const currentDate = new Date();
+const previousDate = new Date();
+previousDate.setDate(currentDate.getDate() - 600);
+const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+//Expense interface
+interface ExpenseState {
+    limit: number;
+    offset: number;
+    from: string;
+    to: string;
+    search: string,
+    expenses: ExpenseInterface[];
+}
+//Expense state
+const initialState: ExpenseState = {
+    limit: 30,
+    offset: 1,
+    from: formatDate(previousDate),
+    to: formatDate(currentDate),
+    search: '',
+    expenses: [],
+}
+
+type Action =
+    | { type: 'SET_LIMIT'; payload: typeof initialState.limit }
+    | { type: 'SET_OFFSET'; payload: typeof initialState.offset }
+    | { type: 'SET_FROM'; payload: typeof initialState.from }
+    | { type: 'SET_TO'; payload: typeof initialState.to }
+    | { type: 'SET_SEARCH'; payload: typeof initialState.search }
+    | { type: 'SET_EXPENSES'; payload: typeof initialState.expenses }
+    | { type: 'RESET_ALL' };
+;
+
+const reducer = (state: ExpenseState, action: Action): ExpenseState => {
+    switch (action.type) {
+        case 'SET_LIMIT':
+            return { ...state, limit: action.payload };
+        case 'SET_OFFSET':
+            return { ...state, offset: action.payload };
+        case 'SET_FROM':
+            return { ...state, from: action.payload };
+        case 'SET_TO':
+            return { ...state, to: action.payload };
+        case 'SET_SEARCH':
+            return { ...state, search: action.payload };
+        case 'SET_EXPENSES':
+            return { ...state, expenses: action.payload };
+        case 'RESET_ALL':
+            return {
+                ...initialState
+            };
+        default:
+            return state;
+    }
+}
+
 type routeProps = NativeStackNavigationProp<RootStackParamList>;
-
-
-//store coupon list
+//Store Expense Reports
 export default function StoreExpenseReports() {
-    const dispatch = useDispatch()
     const { isDark, t } = useValues();
+    const { navigate } = useNavigation<routeProps>();
+    const dispatch = useDispatch()
     const [refreshing, setRefreshing] = React.useState(false);
-    const {
-        data: couponList,
-        offset,
-        limit,
-        isFirstTimeLoading,
-        isNoMoreData,
-    } = useSelector((state: RootState) => state['coupon'])
-
     const [scrollPaging, setScrollPaging] = useState(false)
+    const [noMoreData, setNoMoreData] = useState(false)
+    const [isFirstTimeLoading, setIsFirstTimeLoading] = useState(true)
+    const [dateRangerShow,setDateRangeShow] =  useState(false)
+    const [EXPENSE_STATE, EXPENSE_DISPATCH] = useReducer(reducer, initialState);
 
     //drag screen refresh page
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        dispatch(couponActions.resetState())
+        reset()
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
     }, []);
-    //async coupon load for data show
-    const asyncLoadCoupons = async () => {
-        const response: Response = await listCoupons(limit, offset)
-
-        if (response?.data && response?.data?.length > 0) {
-            dispatch(couponActions.addCouponArr(response?.data))
+    //async expense load for data show
+    const loadExpenseDataOnload = async () => {
+        const [getExpenses] = await Promise.all([getExpense(EXPENSE_STATE.limit, EXPENSE_STATE.offset, EXPENSE_STATE.from, EXPENSE_STATE.to, EXPENSE_STATE.search)])
+        if (getExpenses?.data?.expense && getExpenses?.data?.expense.length > 0) {
+            const cloneExpenses = [...EXPENSE_STATE.expenses, ...getExpenses?.data?.expense];
+            EXPENSE_DISPATCH({ type: 'SET_EXPENSES', payload: cloneExpenses })
+            EXPENSE_DISPATCH({ type: 'SET_OFFSET', payload: EXPENSE_STATE.offset + 1 })
         } else {
-            dispatch(couponActions.setData({
-                field: 'isNoMoreData',
-                data: true
-            }));
+            setNoMoreData(true)
         }
+        setIsFirstTimeLoading(false)
         setScrollPaging(false);
-        dispatch(couponActions.setData({
-            field: 'isFirstTimeLoading',
-            data: false
-        }));
     }
-    //onload coupon load 
+    //onload expense load 
     useEffect(() => {
-        if ((isFirstTimeLoading || scrollPaging) && !isNoMoreData) {
-            asyncLoadCoupons()
+        if ((isFirstTimeLoading || scrollPaging) && !noMoreData) {
+            loadExpenseDataOnload()
         }
-    }, [isFirstTimeLoading, scrollPaging, isNoMoreData])
+    }, [isFirstTimeLoading, scrollPaging])
+
+    //reset data listing
+    const reset = () => {
+        setNoMoreData(false)
+        setIsFirstTimeLoading(true)
+        EXPENSE_DISPATCH({ type: 'SET_EXPENSES', payload: [] });
+        EXPENSE_DISPATCH({ type: 'SET_OFFSET', payload: 1 });
+    }
 
     //handle scroll processing
     const handleScrollProcessing = () => {
-        if (isNoMoreData) { return; }
+        if (noMoreData) { return; }
         setScrollPaging(true)
-        dispatch(couponActions.setData({
-            field: 'offset',
-            data: offset + 1
-        }));
     }
-
-    const { navigate } = useNavigation<routeProps>();
-
-    const navigateToEditPage = (couponId: string) => {
-        navigate('EditVendorCoupon', { id: couponId });
-
-    }
-    const deleteCouponFromList = (couponId: number) => {
-        Alert.alert(
-            "Confirmation",
-            t('newDeveloper.Areyousureyouwanttoproceed'),
-            [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel" // sets the text style to cancel
-                },
-                {
-                    text: "OK",
-                    onPress: () => {
-                        dispatch(couponActions.deleteCouponById(couponId))
-                        deleteCoupon(couponId)
-                    }
-                }
-            ],
-            { cancelable: false } // prevents the alert from being dismissed by tapping outside
-        );
-    }
-    const updateCouponStatus = (status: boolean, couponId: number) => {
-
-        dispatch(couponActions.changeStatusById(couponId))
-        updateStatus(status, couponId)
+    //change date filter processing
+    const changeDateFilter = (fromDate:Date,toDate:Date)=>{
+        let hasChange =  false
+        if(formatDate(fromDate) !== EXPENSE_STATE.from ){
+           hasChange =  true
+           EXPENSE_DISPATCH({type:'SET_FROM',payload:formatDate(fromDate)})
+        }
+        if(formatDate(toDate) !== EXPENSE_STATE.to ){
+            hasChange =  true
+            EXPENSE_DISPATCH({type:'SET_TO',payload:formatDate(toDate)})
+         }
+         if(hasChange){
+               reset()
+         }
 
     }
+    //execute search filter
+    const executeSearchFilter = (search:string)=>{
+        if(EXPENSE_STATE.search!==search){
+            EXPENSE_DISPATCH({type:'SET_SEARCH',payload:search})
+            reset()
+        }
+    }
+
+     
+
+
     return (
         <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
             <Header
@@ -133,7 +185,13 @@ export default function StoreExpenseReports() {
                 content={''}
             />
             <View style={{ marginTop: 5 }}>
-                <SearchExpense />
+                <SearchExpense
+                    fromDate={EXPENSE_STATE.from}
+                    toDate={EXPENSE_STATE.to}
+                    search={''}
+                    setDateRangeShow={setDateRangeShow}
+                    executeSearchFilter={executeSearchFilter}
+                />
             </View>
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -145,43 +203,35 @@ export default function StoreExpenseReports() {
                     GlobalStyle.mainView,
                     {
                         backgroundColor: isDark ? appColors.darkTheme : appColors.white,
-                        marginTop:10
+                        marginTop: 10
                     },
                 ]}
-            >
+            > 
                 {isFirstTimeLoading && <SkeletonLoader />}
-                {!isFirstTimeLoading && couponList.length === 0 && <NoDataFound
-                    headerTitle="home.noInternet"
-                    image={noNotification}
-                    title="newDeveloper.Nodatafound"
-                    content="newDeveloper.noCouponFound"
-                    gradiantBtn={<GradientBtn
-                        additionalStyle={{ bottom: windowHeight(2) }}
-                        label={'common.refresh'}
-                        onPress={() => {
-                            dispatch(couponActions.resetState())
-                        }} />} infoImage={undefined} />}
-
-                {!isFirstTimeLoading && couponList.length > 0 &&
+                {!isFirstTimeLoading && EXPENSE_STATE.expenses.length === 0 && <HomeNoFataFound message={t('Nodatafound')} />}
+                {!isFirstTimeLoading && EXPENSE_STATE.expenses.length > 0 &&
                     <FlatList
                         onEndReached={handleScrollProcessing}
-                        data={couponList}
+                        data={EXPENSE_STATE.expenses}
+                        keyExtractor={(item)=>'expense'+item.order_id}
                         renderItem={({ item }) => (
                             <>
                                 <ExpenseItemCard
-                                    orderId='104063'
-                                    date='06 dec 2024'
-                                    time='15:07'
-                                    expenseType='Discount on product'
-                                    amount='100'
+                                    item={item}
                                 />
+                                
                             </>
                         )} />
                 }
 
-
                 <View style={GlobalStyle.blankView} />
             </ScrollView>
+            {dateRangerShow  && <DateRangePicker 
+            fromDate={new Date(EXPENSE_STATE.from)}
+            toDate={new Date(EXPENSE_STATE.to)} 
+            changeDateFilter={changeDateFilter}
+            setDatePicker={setDateRangeShow}/>} 
+          
             {scrollPaging && <ActivityIndicator />}
         </View>
     );
@@ -195,7 +245,6 @@ const styles = StyleSheet.create({
         top: 0,
         width: '100%',
         zIndex: 1,
-
         paddingVertical: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

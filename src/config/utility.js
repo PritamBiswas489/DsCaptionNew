@@ -577,12 +577,12 @@ export function parseTime(time) {
 export function isTimeRangeWithin(timeRange, ranges) {
   const [startTime, endTime] = timeRange.split("-").map(parseTime);
 
-  console.log({startTime,endTime})
+  // console.log({startTime,endTime})
   
   for (const range of ranges) {
       const [rangeStart, rangeEnd] = range.split("-").map(parseTime);
 
-      console.log({rangeStart,rangeEnd})
+      // console.log({rangeStart,rangeEnd})
       
       // Check if any part of the timeRange falls within the range
       if ((startTime >= rangeStart && startTime <= rangeEnd) ||
@@ -594,5 +594,10 @@ export function isTimeRangeWithin(timeRange, ranges) {
   
   return false;
 }
-
+export function convertToTitleCase(input) {
+  return input
+      .split('_') // Split the string by underscores
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+      .join(' '); // Join the words with a space
+}
 

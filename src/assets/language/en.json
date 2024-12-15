@@ -1415,7 +1415,9 @@
             "take_away":"Take away",
             "delivery":"Delivery",
             "delivered":"Delivered",
-            "refunded":"Refunded"
+            "refunded":"Refunded",
+            "OrderID":"Order ID",
+            "ExpenseType":"Expense Type"
         }
     }
 }

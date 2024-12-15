@@ -2,43 +2,44 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useValues } from '../../../../../App';
 import appColors from '@src/theme/appColors';
+import { ExpenseInterface } from '@src/interfaces/store/expense.interface';
+import { datetimeArr } from '@src/config/utility';
+import { convertToTitleCase } from '@src/config/utility';
 
 type ExpenseItemProps = {
-    orderId: string;
-    date: string;
-    time: string;
-    expenseType: string;
-    amount: string;
+     
+    item:ExpenseInterface
 };
 
-const ExpenseItemCard: React.FC<ExpenseItemProps> = ({ orderId, date, time, expenseType, amount }) => {
+const ExpenseItemCard: React.FC<ExpenseItemProps> = ({   item}) => {
     const { isDark, t, currSymbol } = useValues();
+    const dateFormatted = datetimeArr(item.created_at)
     return (
         <View style={[styles.container,
         { backgroundColor: isDark ? appColors.darkCardBg : appColors.white, }
         ]}>
             <Text style={[styles.orderId,
             { color: isDark ? appColors.white : appColors.darkText }
-            ]}>Order ID: #{orderId}</Text>
+            ]}>{t('newDeveloper.OrderID')}: #{item.order_id}</Text>
             <View style={[styles.dateRow]}>
                 <Text style={[styles.dateText,
                 { color: isDark ? appColors.darkSubText : appColors.darkText }
-                ]}>{date} {time}</Text>
+                ]}>{`${dateFormatted.day} ${dateFormatted.month} ${dateFormatted.year}`} {`${dateFormatted.hours}:${dateFormatted.minutes} ${dateFormatted.ampm}`}</Text>
                 <Text style={[styles.amountLabel,
                  { color: isDark ? appColors.darkSubText : appColors.darkText }
-                ]}>Amount</Text>
+                ]}>{t('newDeveloper.Amount')}</Text>
             </View>
             <View style={[styles.expenseRow]}>
                 <Text style={[styles.expenseTypeLabel,
                     { color: isDark ? appColors.darkSubText : appColors.darkText }
-                ]}>Expense Type -</Text>
+                ]}>{t('newDeveloper.ExpenseType')} -</Text>
 
                 <Text style={[styles.expenseType,
                     { color: appColors.primary }
-                ]}>{expenseType}</Text>
+                ]}>{convertToTitleCase(item.type)}</Text>
                 <Text style={[styles.amount,
                      { color: isDark ? appColors.white : appColors.darkText }
-                ]}>{currSymbol}{amount}</Text>
+                ]}>{currSymbol}{item.amount}</Text>
             </View>
         </View>
     );

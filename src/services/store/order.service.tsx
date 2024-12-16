@@ -25,3 +25,13 @@ export const getAllOrders = async(): Promise<Response> =>{
 		return error.response;
 	}
 }
+//get current orders
+export const getCurrentOrders = async(): Promise<Response> =>{
+	try {
+		const response = await api.get(`/vendor/current-orders`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}

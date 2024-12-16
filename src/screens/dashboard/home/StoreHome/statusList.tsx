@@ -2,16 +2,16 @@ import appColors from "@src/theme/appColors";
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { useValues } from '../../../../../App';
-
-const OrderStatusList = () => {
+interface Tab {
+    tabid: string;
+    label: string;
+    count: number;
+    active: boolean;
+  }
+  
+const OrderStatusList = ({statusMenuList,setTabStatus}:{statusMenuList:Tab[],setTabStatus:(value:string)=>void}) => {
     const { isDark, t } = useValues();
-    const menuItems = [
-        { label: "Pending", count: 0, active: true },
-        { label: "Confirmed", count: 0, active: false },
-        { label: "Processing", count: 0, active: false },
-        { label: "Ready For Handover", count: 0, active: false },
-        { label: "Delivery Item Is On The Way", count: 4, active: false },
-    ];
+    
 
     return (
         <View style={styles.container}>
@@ -20,9 +20,10 @@ const OrderStatusList = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}
             >
-                {menuItems.map((item, index) => { 
+                {statusMenuList.map((item, index) => { 
                     return <TouchableOpacity
                         key={index}
+                        onPress={()=>setTabStatus(item.tabid)}
                         style={[styles.menuItem,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white, borderColor: isDark ? appColors.darkBorder : appColors.border  }, item.active && styles.activeItem]}
                     >
                         <Text

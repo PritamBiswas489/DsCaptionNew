@@ -18,7 +18,7 @@ export const updateProfileData = async (data:FormData): Promise<Response> => {
 	}
 }
  
-
+//update vendor store data
 export const updateVendorStoreData = async (data:FormData): Promise<Response> => {
     data.append('_method','PUT')
 	try {
@@ -27,6 +27,18 @@ export const updateVendorStoreData = async (data:FormData): Promise<Response> =>
 	} catch (error:any) {
 		return error.response;
 	}
+}
+//update store status 
+export const updateStoreStatusProcess = async (): Promise<Response> =>{
+	const formData = new FormData()
+	formData.append('updateStatus',1)
+	try {
+		const response = await api.post('/vendor/update-active-status',formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
 }
  
 

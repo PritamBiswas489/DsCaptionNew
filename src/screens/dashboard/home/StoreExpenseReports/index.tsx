@@ -10,18 +10,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import appColors from '@theme/appColors';
 import { useValues } from '../../../../../App';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@src/store';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import ExpenseItemCard from './expenseCard';
 import SearchExpense from './searchExpense';
-
-import { couponActions } from '@src/store/redux/store/coupon-redux';
-import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
-import NoDataFound from '@src/commonComponents/noDataFound';
-import { noNotification, wifi } from '@src/utils/images';
-import { windowHeight } from '@src/theme/appConstant';
-import GradientBtn from '@src/commonComponents/gradientBtn';
 import { getExpense } from '@src/services/store/expense.service';
 import { ExpenseInterface } from '@src/interfaces/store/expense.interface';
 import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
@@ -37,7 +28,7 @@ interface Response {
 }
 const currentDate = new Date();
 const previousDate = new Date();
-previousDate.setDate(currentDate.getDate() - 600);
+previousDate.setDate(currentDate.getDate() - 30);
 const formatDate = (date: Date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -106,7 +97,7 @@ export default function StoreExpenseReports() {
     const [scrollPaging, setScrollPaging] = useState(false)
     const [noMoreData, setNoMoreData] = useState(false)
     const [isFirstTimeLoading, setIsFirstTimeLoading] = useState(true)
-    const [dateRangerShow,setDateRangeShow] =  useState(false)
+    const [dateRangerShow, setDateRangeShow] = useState(false)
     const [EXPENSE_STATE, EXPENSE_DISPATCH] = useReducer(reducer, initialState);
 
     //drag screen refresh page
@@ -151,30 +142,30 @@ export default function StoreExpenseReports() {
         setScrollPaging(true)
     }
     //change date filter processing
-    const changeDateFilter = (fromDate:Date,toDate:Date)=>{
-        let hasChange =  false
-        if(formatDate(fromDate) !== EXPENSE_STATE.from ){
-           hasChange =  true
-           EXPENSE_DISPATCH({type:'SET_FROM',payload:formatDate(fromDate)})
+    const changeDateFilter = (fromDate: Date, toDate: Date) => {
+        let hasChange = false
+        if (formatDate(fromDate) !== EXPENSE_STATE.from) {
+            hasChange = true
+            EXPENSE_DISPATCH({ type: 'SET_FROM', payload: formatDate(fromDate) })
         }
-        if(formatDate(toDate) !== EXPENSE_STATE.to ){
-            hasChange =  true
-            EXPENSE_DISPATCH({type:'SET_TO',payload:formatDate(toDate)})
-         }
-         if(hasChange){
-               reset()
-         }
+        if (formatDate(toDate) !== EXPENSE_STATE.to) {
+            hasChange = true
+            EXPENSE_DISPATCH({ type: 'SET_TO', payload: formatDate(toDate) })
+        }
+        if (hasChange) {
+            reset()
+        }
 
     }
     //execute search filter
-    const executeSearchFilter = (search:string)=>{
-        if(EXPENSE_STATE.search!==search){
-            EXPENSE_DISPATCH({type:'SET_SEARCH',payload:search})
+    const executeSearchFilter = (search: string) => {
+        if (EXPENSE_STATE.search !== search) {
+            EXPENSE_DISPATCH({ type: 'SET_SEARCH', payload: search })
             reset()
         }
     }
 
-     
+
 
 
     return (
@@ -206,32 +197,32 @@ export default function StoreExpenseReports() {
                         marginTop: 10
                     },
                 ]}
-            > 
+            >
                 {isFirstTimeLoading && <SkeletonLoader />}
-                {!isFirstTimeLoading && EXPENSE_STATE.expenses.length === 0 && <HomeNoFataFound message={t('Nodatafound')} />}
+                {!isFirstTimeLoading && EXPENSE_STATE.expenses.length === 0 && <HomeNoFataFound message={t('newDeveloper.Nodatafound')} />}
                 {!isFirstTimeLoading && EXPENSE_STATE.expenses.length > 0 &&
                     <FlatList
                         onEndReached={handleScrollProcessing}
                         data={EXPENSE_STATE.expenses}
-                        keyExtractor={(item)=>'expense'+item.order_id}
+                        keyExtractor={(item) => 'expense' + item.order_id}
                         renderItem={({ item }) => (
                             <>
                                 <ExpenseItemCard
                                     item={item}
                                 />
-                                
+
                             </>
                         )} />
                 }
 
                 <View style={GlobalStyle.blankView} />
             </ScrollView>
-            {dateRangerShow  && <DateRangePicker 
-            fromDate={new Date(EXPENSE_STATE.from)}
-            toDate={new Date(EXPENSE_STATE.to)} 
-            changeDateFilter={changeDateFilter}
-            setDatePicker={setDateRangeShow}/>} 
-          
+            {dateRangerShow && <DateRangePicker
+                fromDate={new Date(EXPENSE_STATE.from)}
+                toDate={new Date(EXPENSE_STATE.to)}
+                changeDateFilter={changeDateFilter}
+                setDatePicker={setDateRangeShow} />}
+
             {scrollPaging && <ActivityIndicator />}
         </View>
     );

@@ -185,7 +185,7 @@ export default function StoreOrders() {
                 ]}
             >
                   {isFirstTimeLoading && <SkeletonLoader />}  
-                {!isFirstTimeLoading && ORDER_STATE.orders.length === 0 && <HomeNoFataFound message={t('Nodatafound')}/>} 
+                {!isFirstTimeLoading && ORDER_STATE.orders.length === 0 && <HomeNoFataFound message={t('newDeveloper.Nodatafound')}/>} 
 
                 {!isFirstTimeLoading && ORDER_STATE.orders.length > 0 &&
                 <FlatList

@@ -1417,7 +1417,16 @@
             "delivered":"Delivered",
             "refunded":"Refunded",
             "OrderID":"Order ID",
-            "ExpenseType":"Expense Type"
+            "ExpenseType":"Expense Type",
+            "Today":"Today",
+            "ThisWeek":"This Week",
+            "ThisMonth":"This Month",
+            "StoreTemporarilyClosed":"Store Temporarily Closed",
+            "Pending":"Pending",
+            "Confirmed":"Confirmed",
+            "Processing":"Processing",
+            "Handover":"Ready For Handover",
+            "Pickup":"Delivery Item Is On The Way"
         }
     }
 }

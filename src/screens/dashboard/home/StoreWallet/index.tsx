@@ -49,7 +49,7 @@ export default function StoreWallet() {
   return (
     <>
       <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
-        <Header showBackArrow={true} title={'newDeveloper.StoreWallet'} />
+        <Header showBackArrow={false} title={'newDeveloper.StoreWallet'} />
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           showsVerticalScrollIndicator={false}

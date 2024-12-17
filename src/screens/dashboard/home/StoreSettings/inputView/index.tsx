@@ -208,6 +208,23 @@ export default function InputView(
 
   return (
     <>
+     <Text style={[
+          styles.inputLabel,
+          { color: appColors.primary }
+        ]}> {t('newDeveloper.uploadCoverPhoto')}</Text>
+        {/* store cover photo */}
+
+        <UploadContainerView
+          title={'newDeveloper.uploadStoreCoverPhototwoMb'}
+          onPress={openCoverImage}
+          image={storeCoverPhoto}
+          setImage={setStoreCoverPhoto}
+          error={errorStoreCoverPhoto}
+          isBanner={true}
+        />
+
+       <DashLine />
+
       <View style={{ flex: 1, marginTop: windowHeight(2) }}>
         {/* Store name */}
         <View style={{ marginTop: 5 }}>
@@ -520,21 +537,7 @@ export default function InputView(
           error={errorStoreLogo}
         />
 
-        <DashLine />
-        <Text style={[
-          styles.inputLabel,
-          { color: appColors.primary }
-        ]}> {t('newDeveloper.uploadCoverPhoto')}</Text>
-        {/* store cover photo */}
-
-        <UploadContainerView
-          title={'newDeveloper.uploadStoreCoverPhototwoMb'}
-          onPress={openCoverImage}
-          image={storeCoverPhoto}
-          setImage={setStoreCoverPhoto}
-          error={errorStoreCoverPhoto}
-        />
-
+        
       </View>
 
     </>

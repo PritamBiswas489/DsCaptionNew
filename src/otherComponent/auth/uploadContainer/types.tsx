@@ -8,4 +8,6 @@ export type propsType = {
   image: string | null;
   setImage: (value:string)=>void;
   error:string | null;
+  isBanner?:boolean;
+  disableEdit?:any
 };

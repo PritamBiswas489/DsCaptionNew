@@ -35,6 +35,11 @@ export const styles = StyleSheet.create({
     width: windowWidth(20),
     borderRadius: windowWidth(2),
   },
+  bannerStyle: {
+    height: 200,
+    width: '100%',
+    borderRadius: windowWidth(2),
+  },
   imageContainer: {
     marginHorizontal: windowWidth(6),
     marginTop: windowWidth(3),

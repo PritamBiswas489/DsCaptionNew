@@ -164,7 +164,7 @@ export default function StoreOrders() {
     return (
         <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
             <Header
-                showBackArrow={true}
+                showBackArrow={false}
                 title={'newDeveloper.StoreOrderHistory'}
                 content={''}
             />

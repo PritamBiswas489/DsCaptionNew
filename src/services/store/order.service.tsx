@@ -33,5 +33,24 @@ export const getCurrentOrders = async(): Promise<Response> =>{
 	} catch (error:any) {
 		return error.response;
 	}
+}
 
+//get current order details
+export const getCurrentOrderDetails = async(orderId:string | number): Promise<Response> =>{
+	try {
+		const response = await api.get(`/vendor/order?order_id=${orderId}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}
+//get order details
+export const getOrderProductList = async(orderId:string | number): Promise<Response> =>{
+	try {
+		const response = await api.get(`/vendor/order-details?order_id=${orderId}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
 }

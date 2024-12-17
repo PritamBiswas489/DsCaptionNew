@@ -22,7 +22,8 @@ export default function UploadContainerView({
   image,
   setImage,
   error,
-  disableEdit
+  disableEdit,
+  isBanner
 }: propsType) {
   const {isDark,t} = useValues();
 
@@ -50,7 +51,7 @@ export default function UploadContainerView({
           activeOpacity={0.9}
           onPress={openImage}
           style={styles.imageContainer}>
-          <Image source={{uri: image}} style={styles.imageStyle} />
+          <Image source={{uri: image}} style={isBanner  ? styles.bannerStyle : styles.imageStyle} />
           <TouchableOpacity onPress={removeImage} style={styles.crossButton}>
             <Icon name="close" size={24} color="#fff" /> 
           </TouchableOpacity>

@@ -1408,7 +1408,7 @@
              "ExpenseReports":"Expense reports",
              "StoreWallet":"Wallet",
              "StoreHome":"Home",
-             "OrderDetails":"OrderDetails",
+             "OrderDetails":"Order Details",
             "allOrder":"All",
             "deliveredOrder":"Delivered",
             "refundedOrder":"Refunded",
@@ -1426,7 +1426,26 @@
             "Confirmed":"Confirmed",
             "Processing":"Processing",
             "Handover":"Ready For Handover",
-            "Pickup":"Delivery Item Is On The Way"
+            "Pickup":"Delivery Item Is On The Way",
+            "items":"items" ,
+            "item":"item",
+            "DorkarMallSeller":"Dorkar mall seller",
+            "orders":"Orders",
+            "wallet":"wallet",
+            "StoreItems":"Store items",
+            "OrderDetailsNotFound":"Order details not found",
+            "ItemPrice":"Item Price",
+            "Coupondiscount":"Coupon discount",
+            "Referraldiscount":"Referral discount",
+            "VatTax":"VAT/Tax",
+            "DeliveryManTips":"Delivery Man Tips",
+            "PlatformCharge":"Platform Charge",
+            "DeliveryFee":"Delivery Fee",
+            "Extrapackaging":"Extra packaging",
+            "TotalAmount":"Total Amount",
+            "CustomerDetails":"Customer Details"
+
+             
         }
     }
 }

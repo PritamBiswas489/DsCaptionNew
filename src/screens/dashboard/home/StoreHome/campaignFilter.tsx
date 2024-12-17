@@ -3,18 +3,25 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useValues } from '../../../../../App';
 
-const CampaignFilter = () => {
-  const [isChecked, setIsChecked] = useState(false);
+const CampaignFilter = (
+  {
+    filterCampaign,
+    setFilterCampaign
+  }:
+  {
+    filterCampaign: boolean,
+    setFilterCampaign: React.Dispatch<React.SetStateAction<boolean>>
+  }) => {
   const { isDark, t } = useValues();
   return (
     <TouchableOpacity
-        style={styles.checkboxContainer}
-        onPress={() => setIsChecked(!isChecked)}
+      style={styles.checkboxContainer}
+      onPress={() => setFilterCampaign(!filterCampaign)}
     >
-      <View style={[styles.checkbox,{ borderColor: isDark ? appColors.white : appColors.black}, isChecked && styles.checkedCheckbox]}>
-        {isChecked && <Text style={styles.checkmark}>✔</Text>}
+      <View style={[styles.checkbox, { borderColor: isDark ? appColors.white : appColors.black }, filterCampaign && styles.checkedCheckbox]}>
+        {filterCampaign && <Text style={styles.checkmark}>✔</Text>}
       </View>
-      <Text style={[styles.label, {color: isDark ? appColors.white : appColors.darkText}]}>Campaign Order</Text>
+      <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText }]}>Campaign Order</Text>
     </TouchableOpacity>
   );
 };

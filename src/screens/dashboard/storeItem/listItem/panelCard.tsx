@@ -43,9 +43,6 @@ const PanelCard: React.FC<PanelCardProps> = ({
 
 }) => {
 
-
-
-    console.log("======== render ====================")
     const dispatch = useDispatch()
     const { isDark, t, currSymbol } = useValues();
     const [isModalVisible, setIsModalVisible] = useState(false);

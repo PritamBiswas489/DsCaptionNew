@@ -20,6 +20,68 @@ export const ProfileIcon = (props) => (
   </Svg>
 );
 
+export const StoreSettingsIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : "27"}
+    height={props.height ? props.height : "27"}
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    {/* Store Roof */}
+    <Path
+      d="M3 4.5C3 4.224 3.224 4 3.5 4H20.5C20.776 4 21 4.224 21 4.5V6.5C21 6.776 20.776 7 20.5 7H3.5C3.224 7 3 6.776 3 6.5V4.5Z"
+      fill={props.color ? props.color : "#D8DCDE"}
+    />
+    {/* Store Body */}
+    <Path
+      d="M4 8H20V18C20 18.552 19.552 19 19 19H5C4.448 19 4 18.552 4 18V8Z"
+      fill={props.color ? props.color : "#D8DCDE"}
+    />
+    {/* Gear Icon (Settings) */}
+    <Path
+      d="M12 12.5C11.17 12.5 10.5 13.17 10.5 14C10.5 14.83 11.17 15.5 12 15.5C12.83 15.5 13.5 14.83 13.5 14C13.5 13.17 12.83 12.5 12 12.5ZM12 10.5C12.827 10.5 13.5 11.173 13.5 12C13.5 12.827 12.827 13.5 12 13.5C11.173 13.5 10.5 12.827 10.5 12C10.5 11.173 11.173 10.5 12 10.5Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    <Path
+      d="M16.12 14.19L17.32 13.56L16.69 12.33L15.26 12.8C15.09 12.42 14.83 12.08 14.51 11.8L14.97 10.39L13.74 9.76L13.18 11.18C12.82 11.09 12.41 11 12 11C11.59 11 11.18 11.09 10.82 11.18L10.26 9.76L9.03 10.39L9.49 11.8C9.17 12.08 8.91 12.42 8.74 12.8L7.31 12.33L6.68 13.56L7.88 14.19C7.77 14.46 7.7 14.74 7.7 15C7.7 15.26 7.77 15.54 7.88 15.81L6.68 16.44L7.31 17.67L8.74 17.2C8.91 17.58 9.17 17.92 9.49 18.2L9.03 19.61L10.26 20.24L10.82 18.82C11.18 18.91 11.59 19 12 19C12.41 19 12.82 18.91 13.18 18.82L13.74 20.24L14.97 19.61L14.51 18.2C14.83 17.92 15.09 17.58 15.26 17.2L16.69 17.67L17.32 16.44L16.12 15.81C16.23 15.54 16.3 15.26 16.3 15C16.3 14.74 16.23 14.46 16.12 14.19Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+  </Svg>
+);
+
+export const AnnouncementIcon = (props) => (
+  <Svg
+    width={props.width ? props.width : "27"}
+    height={props.height ? props.height : "27"}
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    {/* Megaphone Body */}
+    <Path
+      d="M3 10C3 9.448 3.448 9 4 9H13C13.552 9 14 9.448 14 10V14C14 14.552 13.552 15 13 15H4C3.448 15 3 14.552 3 14V10Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Megaphone Handle */}
+    <Path
+      d="M6 15V18C6 18.552 6.448 19 7 19H8C8.552 19 9 18.552 9 18V15H6Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    {/* Megaphone Sound Lines */}
+    <Path
+      d="M15 10H16.5C16.776 10 17 10.224 17 10.5V13.5C17 13.776 16.776 14 16.5 14H15V10Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    <Path
+      d="M18.5 9C18.776 9 19 9.224 19 9.5V14.5C19 14.776 18.776 15 18.5 15C18.224 15 18 14.776 18 14.5V9.5C18 9.224 18.224 9 18.5 9Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+    <Path
+      d="M20 8C20.276 8 20.5 8.224 20.5 8.5V15.5C20.5 15.776 20.276 16 20 16C19.724 16 19.5 15.776 19.5 15.5V8.5C19.5 8.224 19.724 8 20 8Z"
+      fill={props.color ? props.color : '#D8DCDE'}
+    />
+  </Svg>
+);
+
 export const AddItemIcon = (props) => (
   <Svg
     width={props.width ? props.width : '27'}

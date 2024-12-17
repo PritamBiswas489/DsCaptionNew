@@ -40,6 +40,18 @@ export const updateStoreStatusProcess = async (): Promise<Response> =>{
 	}
 
 }
+
+//update vendor fcm token process
+export const saveVendorFcmTokenProcess = async (formData:FormData):Promise<Response> => { 
+	formData.append('_method','PUT')
+	try {
+		const response = await api.post(`/vendor/update-fcm-token`,formData);
+		console.log(response?.data)
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
  
 
 //save fcm token process

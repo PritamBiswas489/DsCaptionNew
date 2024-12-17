@@ -1,4 +1,5 @@
 import { Alert, RefreshControl, ScrollView, View, StyleSheet } from 'react-native';
+ 
 import React, { useState, useEffect, useReducer } from 'react';
 import { GlobalStyle } from '@style/styles';
 import Header from '@commonComponents/header';
@@ -21,6 +22,8 @@ import { getAuthUserService as storeAuthService } from '@src/services/store/auth
 import { updateStoreStatusProcess } from '@src/services/store/profile.service';
 import { getCurrentOrders } from '@src/services/store/order.service';
 import { CurrentOrderInterface } from '@src/interfaces/store/currentOrder.interface';
+import { saveVendorFcmTokenProcess } from '@src/services/store/profile.service';
+import messaging from '@react-native-firebase/messaging';
 
 interface Response {
   data: any;
@@ -60,7 +63,7 @@ type Action =
   | { type: 'SET_PROCESSING_ORDERS'; payload: typeof initialState.processingOrders }
   | { type: 'SET_HANDOVER_ORDERS'; payload: typeof initialState.handOverOrders }
   | { type: 'SET_PICKUP_ORDERS'; payload: typeof initialState.pickupOrders }
-   
+
   | { type: 'RESET_ALL' };
 ;
 
@@ -108,7 +111,8 @@ export default function StoreHome() {
     { tabid: "picked_up", label: t("newDeveloper.Pickup"), count: 0, active: false },
   ])
 
-  const [tabOrders,setTabOrders] =  useState<CurrentOrderInterface[]>([])
+  const [tabOrders, setTabOrders] = useState<CurrentOrderInterface[]>([])
+  const [filterCampaign,setFilterCampaign] =  useState(false);
 
 
 
@@ -142,7 +146,7 @@ export default function StoreHome() {
         } else if (currentOrderData[i].order_status === 'handover') { //handover
           setHandOverOrders.push(currentOrderData[i])
         } else if (currentOrderData[i].order_status === 'picked_up') { //picker up
-         
+
           setPickupOrders.push(currentOrderData[i])
         }
       }
@@ -154,6 +158,7 @@ export default function StoreHome() {
     ORDER_DISPATCH({ type: 'SET_PICKUP_ORDERS', payload: setPickupOrders })
   }
 
+  //load home data current order
   useEffect(() => {
     loadHomeDataCurrentOrder()
   }, [])
@@ -161,26 +166,30 @@ export default function StoreHome() {
 
   useEffect(() => {
     setStatusMenuList([
-        { tabid: "pending", label: t("newDeveloper.Pending"), count: ORDER_STATE.pendingOrders.length, active: (activeTabId === 'pending') ?  true : false },
-        { tabid: "confirmed", label: t("newDeveloper.Confirmed"), count: ORDER_STATE.confirmOrders.length, active:  (activeTabId === 'confirmed') ?  true : false },
-        { tabid: "processing", label: t("newDeveloper.Processing"), count: ORDER_STATE.processingOrders.length, active:  (activeTabId === 'processing') ?  true : false },
-        { tabid: "handover", label: t("newDeveloper.Handover"), count: ORDER_STATE.handOverOrders.length, active:  (activeTabId === 'handover') ?  true : false },
-        { tabid: "picked_up", label: t("newDeveloper.Pickup"), count: ORDER_STATE.pickupOrders.length, active:  (activeTabId === 'pickup') ?  true : false },
+      { tabid: "pending", label: t("newDeveloper.Pending"), count: ORDER_STATE.pendingOrders.length, active: (activeTabId === 'pending') ? true : false },
+      { tabid: "confirmed", label: t("newDeveloper.Confirmed"), count: ORDER_STATE.confirmOrders.length, active: (activeTabId === 'confirmed') ? true : false },
+      { tabid: "processing", label: t("newDeveloper.Processing"), count: ORDER_STATE.processingOrders.length, active: (activeTabId === 'processing') ? true : false },
+      { tabid: "handover", label: t("newDeveloper.Handover"), count: ORDER_STATE.handOverOrders.length, active: (activeTabId === 'handover') ? true : false },
+      { tabid: "picked_up", label: t("newDeveloper.Pickup"), count: ORDER_STATE.pickupOrders.length, active: (activeTabId === 'picked_up') ? true : false },
     ])
-    console.log(activeTabId)
+    let orders:CurrentOrderInterface[] = []; //final orders
     if (activeTabId === 'pending') { //pending
-      setTabOrders( ORDER_STATE.pendingOrders)
+       orders = ORDER_STATE.pendingOrders
     } else if (activeTabId === 'confirmed') { //confirmed
-      setTabOrders( ORDER_STATE.confirmOrders)
+        orders = ORDER_STATE.confirmOrders
     } else if (activeTabId === 'processing') { //processing
-      setTabOrders( ORDER_STATE.processingOrders)
+        orders = ORDER_STATE.processingOrders
     } else if (activeTabId === 'handover') { //handover
-      setTabOrders(  ORDER_STATE.handOverOrders)
+        orders = ORDER_STATE.handOverOrders
     } else if (activeTabId === 'picked_up') { //picker up
-      setTabOrders(  ORDER_STATE.pickupOrders)
+        orders = ORDER_STATE.pickupOrders
     }
-    
-  }, [ORDER_STATE, activeTabId])
+    if(filterCampaign && orders.length > 0){
+      orders = orders.filter((order: CurrentOrderInterface) => order.item_campaign === 1);
+    }
+    setTabOrders(orders)
+
+  }, [ORDER_STATE, activeTabId,filterCampaign])
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -191,26 +200,102 @@ export default function StoreHome() {
     }, 1000);
   }, []);
 
+
   const updateStoreStatus = async () => {
     await updateStoreStatusProcess()
     profileReset()
   }
- 
 
   //set tab status
-  const setTabStatus = (tabid:string)=>{
+  const setTabStatus = (tabid: string) => {
     setActiveTabId(tabid)
-  } 
+  }
 
-  useEffect(()=>{
-    console.log("============== tabOrders =================")
-      console.log(tabOrders)
-  },[tabOrders])
+  //navigate to order details page
+  const navigateToOrderDetailsPage = (OrderId: number) => {
+    navigation.navigate('StoreOrderDetails', { OrderId: String(OrderId) });
+  }
+ //============================== Save user token ==================================//
+  //Request user permission
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+  //Save fcm token data
+  const saveFcmTokenData = async (fcmToken:string) =>{
+       const formData = new FormData()
+       formData.append('fcm_token',fcmToken)
+       const response:Response =  await saveVendorFcmTokenProcess(formData)
+       console.log("================ FCM Token update =======================")
+       console.log(response?.data)
+  }
+
+  const getFCMToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        saveFcmTokenData(fcmToken)
+      } else {
+        console.log('Failed to get FCM token');
+      }
+    } catch (error) {
+      console.error('Error getting FCM token:', error);
+    }
+  };
+
+  useEffect(() => {
+    requestUserPermission();
+    getFCMToken();
+
+    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert(t('newDeveloper.NewNotification'), remoteMessage.notification?.title,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",     
+          },
+          { 
+            text: "OK", 
+            onPress: () => console.log("Message received") 
+          }
+        ]
+      );
+    });
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('Notification caused app to open from background state:', remoteMessage.notification);
+    });
+     
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log('Notification caused app to open from quit state:', remoteMessage.notification);
+        }
+      });
+    const unsubscribeOnTokenRefresh = messaging().onTokenRefresh(token => {
+      saveFcmTokenData(token)
+    });
+
+    return () => {
+      unsubscribeOnMessage();
+      unsubscribeOnTokenRefresh();
+    };
+  }, []);
+
+  //============================== End save user token ==================================// 
 
   return (
     <>
       <View style={[styles.container, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
-        <Header showBackArrow={true} title={'newDeveloper.StoreHome'} />
+        <Header showBackArrow={false} title={'newDeveloper.DorkarMallSeller'} />
         <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           showsVerticalScrollIndicator={false}
@@ -226,9 +311,9 @@ export default function StoreHome() {
           ]}
         >
           <View><StoreStatus updateStoreStatus={updateStoreStatus} /></View>
-          <View><OrderStatusList statusMenuList={statusMenuList} setTabStatus={setTabStatus}/></View>
-          <View><CampaignFilter /></View>
-          {/* <View><OrderList /></View> */}
+          <View><OrderStatusList statusMenuList={statusMenuList} setTabStatus={setTabStatus} /></View>
+          <View><CampaignFilter filterCampaign={filterCampaign} setFilterCampaign={setFilterCampaign} /></View>
+          <View><OrderList tabOrders={tabOrders} navigateToOrderDetailsPage={navigateToOrderDetailsPage} /></View>
           <Spinner
             visible={processingLoader}
             textContent={'Processing.....'}

@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {MyTabBar} from './myTabBar';
+import React, { useState } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MyTabBar } from './myTabBar';
 import {
   HomeIcon,
   WalletIcon,
@@ -16,12 +16,16 @@ import {
   ActiveMenuIcon
 } from '@utils/icons';
 import appColors from '../theme/appColors';
-import {Home, Wallet, Setting, Booking, ServiceList, MoreMenus} from '../screens/index';
-import {View,Text} from 'react-native';
-import CartModal from '@otherComponent/cartModal';
-import {windowHeight} from '@theme/appConstant';
+import { Home, Wallet, Setting, Booking, ServiceList, MoreMenus } from '../screens/index';
+import { View, Text } from 'react-native';
+ 
+import StoreCartModal from '@src/otherComponent/cartModal/storeModal';
+import { windowHeight } from '@theme/appConstant';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { MoreMenusVendor } from '@src/screens/dashboard/home/MoreMenusVendor';
+import StoreHome from '@src/screens/dashboard/home/StoreHome';
+import StoreWallet from '@src/screens/dashboard/home/StoreWallet';
+import StoreOrders from '@src/screens/dashboard/home/StoreOrders';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,15 +40,15 @@ export function BottomTabSeller() {
       tabBarIcon: <HomeIcon color={appColors.lightText} />,
     },
     {
-      name: 'bottomTab.booking',
+      name: 'newDeveloper.orders',
       activeIcon: <ActiveBooking />,
       tabBarIcon: <BookingIcon />,
     },
-    {name: '', activeIcon: <Plus />, tabBarIcon: <Plus />},
+    { name: '', activeIcon: <Plus />, tabBarIcon: <Plus /> },
     {
-      name: 'newDeveloper.ServiceList',
-      activeIcon: <Services />,
-      tabBarIcon: <Services />,
+      name: 'newDeveloper.wallet',
+      activeIcon: <ActiveWallet />,
+      tabBarIcon: <WalletIcon />,
     },
     {
       name: 'newDeveloper.moreMenuText',
@@ -67,27 +71,27 @@ export function BottomTabSeller() {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{paddingBottom: windowHeight(9), flex: 1}}>
+    <View style={{ flex: 1 }}>
+      <View style={{ paddingBottom: windowHeight(9), flex: 1 }}>
         {selected == 0 ? (
-          <Text style={{color:'black'}}>Store Seller Page One</Text>
+          <StoreHome />
         ) : selected == 1 ? (
-            <Text style={{color:'black'}}>Store Seller Page Two</Text>
+          <StoreOrders />
         ) : selected == 3 ? (
-            <Text style={{color:'black'}}>Store Seller Page Three</Text>
+          <StoreWallet />
         ) : (
-             <MoreMenusVendor/>
+          <MoreMenusVendor />
         )}
       </View>
       <MyTabBar onPress={onPress} selected={selected} tabData={tabData} />
-      <CartModal
+      <StoreCartModal
         setModalVisible={setModalVisible}
         visible={modalVisible}
         onClose={() => {
           setModalVisible(false);
         }}
-      /> 
-       <Spinner
+      />
+      <Spinner
         visible={processingSpinner}
         textContent={'Processing.....'}
         textStyle={{ color: '#FFF' }}

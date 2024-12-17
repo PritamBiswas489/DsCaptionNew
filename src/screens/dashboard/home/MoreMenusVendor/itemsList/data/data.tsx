@@ -22,7 +22,9 @@ import {
   CategoriesIcon,
   BannerIcon,
   CampaignIcon,
-  CouponIcon
+  CouponIcon,
+  StoreSettingsIcon,
+  AnnouncementIcon
 } from '@utils/icons';
 import {HomeCategoryType} from './types';
 
@@ -30,38 +32,11 @@ import {HomeCategoryType} from './types';
 export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <ProfileIcon height={'36'} width={'36'} />,
-    title: 'Store order details (testing)', 
-    goToScreen:'StoreOrderDetails'
-  },
-  {
-    icon: <ProfileIcon height={'36'} width={'36'} />,
-    title: 'Store Home (testing)', 
-    goToScreen:'StoreHome'
-  },
-  {
-    icon: <ProfileIcon height={'36'} width={'36'} />,
-    title: 'Store Wallet testing (testing)', 
-    goToScreen:'StoreWallet'
-  },
-  {
-    icon: <ProfileIcon height={'36'} width={'36'} />,
-    title: 'Expense Reports (testing)', 
-    goToScreen:'StoreExpenseReports'
-  },
-  {
-    icon: <ProfileIcon height={'36'} width={'36'} />,
-    title: 'Store Order (testing)', 
-    goToScreen:'StoreOrders'
-  },
- 
-  
-  {
-    icon: <ProfileIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.moreMenuProfile', 
     goToScreen:'VendorProfileSettings'
   },
   {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
+    icon: <StoreSettingsIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.StoreSettings', 
     goToScreen:'StoreSettings'
   },
@@ -71,7 +46,7 @@ export const categoriesData: Array<HomeCategoryType> = [
     goToScreen:'StoreScheduleSettings'
   },
   {
-    icon: <AddItemIcon height={'36'} width={'36'} />,
+    icon: <AnnouncementIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.UpdateAnnouncement', 
     goToScreen:'StoreUpdateAnnouncement'
      
@@ -117,6 +92,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   {
     icon: <ReportsIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.ExpenseReport',
+    goToScreen:'StoreExpenseReports'
   },
   {
     icon: <CouponIcon height={'36'} width={'36'} />,

@@ -70,6 +70,7 @@ import vendorAddonsSlice from "./redux/store/addons-redux";
 import couponSlice from "./redux/store/coupon-redux";
 import storeItemSlice from "./redux/store/store-item-redux";
 import itemStatusUpdateSlice from "./redux/store/itemstatus-update-redux";
+import storeHomeOrderSlice from "./redux/store/store-home-order";
 
 //configure store
 const store = configureStore({
@@ -145,7 +146,8 @@ const store = configureStore({
         vendorAddons:vendorAddonsSlice.reducer,
         coupon:couponSlice.reducer,
         storeItem:storeItemSlice.reducer,
-        itemUpdateStatus:itemStatusUpdateSlice.reducer
+        itemUpdateStatus:itemStatusUpdateSlice.reducer,
+        storeHomeOrder:storeHomeOrderSlice.reducer
         //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

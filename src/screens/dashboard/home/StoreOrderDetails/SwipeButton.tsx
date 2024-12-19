@@ -1,4 +1,3 @@
-import appColors from '@src/theme/appColors';
 import React, { useRef } from 'react';
 import {
   View,
@@ -8,12 +7,16 @@ import {
   Dimensions,
   Text,
 } from 'react-native';
+import appColors from '@src/theme/appColors';
 
 const { width } = Dimensions.get('window');
 
-const SwipeButton: React.FC<{ onSwipeComplete: () => void }> = ({
-  onSwipeComplete,
-}) => {
+type SwipeButtonProps = {
+  btnText: string;
+  onSwipeComplete: () => void;
+};
+
+const SwipeButton: React.FC<SwipeButtonProps> = ({ btnText, onSwipeComplete }) => {
   const translateX = useRef(new Animated.Value(0)).current;
 
   const panResponder = useRef(
@@ -30,18 +33,25 @@ const SwipeButton: React.FC<{ onSwipeComplete: () => void }> = ({
             toValue: width - 100,
             duration: 200,
             useNativeDriver: true,
-          }).start(() => onSwipeComplete());
+          }).start(() => {
+            onSwipeComplete();
+            reset(); // Automatically reset after the swipe is completed
+          });
         } else {
-          // Reset position
-          Animated.timing(translateX, {
-            toValue: 0,
-            duration: 200,
-            useNativeDriver: true,
-          }).start();
+          // Reset position if swipe was not far enough
+          reset();
         }
       },
     })
   ).current;
+
+  const reset = () => {
+    Animated.timing(translateX, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  };
 
   return (
     <View style={styles.container}>
@@ -57,7 +67,7 @@ const SwipeButton: React.FC<{ onSwipeComplete: () => void }> = ({
             },
           ]}
         >
-          Swipe to complete
+          {btnText}
         </Animated.Text>
         <Animated.View
           style={[styles.thumb, { transform: [{ translateX }] }]}
@@ -84,16 +94,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'relative',
     justifyContent: 'center',
-   
   },
   swipeText: {
     position: 'absolute',
     left: 20,
-    right: 20,
+    right: 2,
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
-     color:'black'
+    color: 'black',
   },
   thumb: {
     width: 100,
@@ -109,6 +118,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
 
 export default SwipeButton;

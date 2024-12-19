@@ -26,6 +26,10 @@ import { MoreMenusVendor } from '@src/screens/dashboard/home/MoreMenusVendor';
 import StoreHome from '@src/screens/dashboard/home/StoreHome';
 import StoreWallet from '@src/screens/dashboard/home/StoreWallet';
 import StoreOrders from '@src/screens/dashboard/home/StoreOrders';
+import { storeHomeOrderActions } from '@src/store/redux/store/store-home-order';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+ 
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +37,7 @@ export function BottomTabSeller() {
   const [selected, setSelected] = useState<number>(0);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [processingSpinner, setProcessingLoader] = useState(false)
+  const dispatch = useDispatch()
   const tabData = [
     {
       name: 'bottomTab.home',
@@ -58,6 +63,9 @@ export function BottomTabSeller() {
   ];
 
   const onPress = (key: number) => {
+    if(selected === 0 ){
+      dispatch(storeHomeOrderActions.setData({field:'refreshOrders','data':true}))
+    }
     if (key != 2) {
       setSelected(key);
     }

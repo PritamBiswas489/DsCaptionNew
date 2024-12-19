@@ -54,3 +54,72 @@ export const getOrderProductList = async(orderId:string | number): Promise<Respo
 		return error.response;
 	}
 }
+//cancel order process
+export const cancelOrderProcess= async (orderid:string | number,reason:string): Promise<Response> =>{
+     
+    const formData = new FormData()
+	formData.append('_method','PUT')
+	formData.append('order_id',orderid)
+	formData.append('reason',reason)
+	formData.append('status','canceled')
+
+	try {
+		const response = await api.post(`/vendor/update-order-status`,formData);
+		console.log(response?.data)
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+//confirm order process
+export const confirmOrderProcess = async (orderid:string | number): Promise<Response> =>{
+	const formData = new FormData()
+	formData.append('_method','PUT')
+	formData.append('order_id',orderid)
+	formData.append('status','confirmed')
+	try {
+		const response = await api.post(`/vendor/update-order-status`,formData);
+		console.log(response?.data)
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}
+
+export const processingOrderProcess= async (orderid:string | number,processingTime:string): Promise<Response> =>{
+     
+    const formData = new FormData()
+	formData.append('_method','PUT')
+	formData.append('order_id',orderid)
+	formData.append('processing_time',processingTime)
+	formData.append('status','processing')
+
+	 
+
+	try {
+		const response = await api.post(`/vendor/update-order-status`,formData);
+		console.log(response?.data)
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+export const changeStatusToHandover = async (orderid:string | number): Promise<Response> =>{
+	const formData = new FormData()
+	formData.append('_method','PUT')
+	formData.append('order_id',orderid)
+	formData.append('status','handover')
+
+	console.log(formData)
+
+	try {
+		const response = await api.post(`/vendor/update-order-status`,formData);
+		console.log(response?.data)
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}

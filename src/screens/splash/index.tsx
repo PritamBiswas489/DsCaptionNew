@@ -29,6 +29,7 @@ import { storeConfigAppActions } from '@src/store/redux/store/store-config-redux
 import { storeProfileDataActions } from '@src/store/redux/store/store-profile-redux';
 import { getStoreSettings } from '@src/services/store/settings.service';
 import { getAuthUserService as storeAuthService } from '@src/services/store/auth.service';
+import { storeHomeOrderActions } from '@src/store/redux/store/store-home-order';
 
 
 type navigation = NativeStackNavigationProp<RootStackParamList>;
@@ -259,6 +260,7 @@ const SplashScreen = () => {
     const responseuser = await storeAuthService()
     if (responseuser?.data?.id) {
         dispatch(storeProfileDataActions.setData(responseuser?.data))
+        dispatch(storeHomeOrderActions.setData({field:'refreshOrders','data':true}))
         replace('BottomTabSeller');
     }else{
         replace('IntroSlider');

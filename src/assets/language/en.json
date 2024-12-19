@@ -1443,7 +1443,25 @@
             "DeliveryFee":"Delivery Fee",
             "Extrapackaging":"Extra packaging",
             "TotalAmount":"Total Amount",
-            "CustomerDetails":"Customer Details"
+            "CustomerDetails":"Customer Details",
+           "Call":"Call",
+           "DeliveryManDetails":"Delivery man",
+           "Item":"Item",
+           "Variations":"Variations",
+           "cancelBtn":"Cancel",
+           "confirmBtn":"Confirm",
+           "Enteryourcancellationreason":"Enter your cancellation reason",
+           "Submit":"Submit",
+           "ConfirmOrderAlertMessage":"You want to confirm this order?",
+           "PrintInvoice":"Print Invoice",
+           "swipeToProcessing":"Swipe to processing",
+           "CancellationReason":"Cancellation Reason",
+           "Confirmation":"Confirmation",
+           "EnterProcessingTime":"Enter processing time in minutes",
+           "swipeTohandover":"Swipe to handover",
+           "HandOverOrderAlertMessage":"You want to handover this order?"
+
+           
 
              
         }

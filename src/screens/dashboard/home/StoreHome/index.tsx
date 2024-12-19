@@ -24,6 +24,8 @@ import { getCurrentOrders } from '@src/services/store/order.service';
 import { CurrentOrderInterface } from '@src/interfaces/store/currentOrder.interface';
 import { saveVendorFcmTokenProcess } from '@src/services/store/profile.service';
 import messaging from '@react-native-firebase/messaging';
+import { storeHomeOrderActions } from '@src/store/redux/store/store-home-order';
+
 
 interface Response {
   data: any;
@@ -99,6 +101,9 @@ export default function StoreHome() {
   const route = useRoute<EditCouponRouteProp>();
   const { isDark, t } = useValues();
   const dispatch = useDispatch()
+  const {refreshOrders} = useSelector((state: RootState)=>state['storeHomeOrder'])
+  
+
   const [processingLoader, setProcessingLoader] = useState(false)
   const [refreshing, setRefreshing] = React.useState(false);
   const [ORDER_STATE, ORDER_DISPATCH] = useReducer(reducer, initialState);
@@ -113,11 +118,9 @@ export default function StoreHome() {
 
   const [tabOrders, setTabOrders] = useState<CurrentOrderInterface[]>([])
   const [filterCampaign,setFilterCampaign] =  useState(false);
+  
 
-
-
-
-
+  //profile reset 
   const profileReset = async () => {
     const responseuser = await storeAuthService()
     if (responseuser?.data?.id) {
@@ -126,7 +129,7 @@ export default function StoreHome() {
   }
   //load home data current order
   const loadHomeDataCurrentOrder = async () => {
-
+    setProcessingLoader(true)
     const response: Response = await getCurrentOrders()
     const setPendingOrders: CurrentOrderInterface[] = []
     const setConfirmsOrders: CurrentOrderInterface[] = []
@@ -156,12 +159,16 @@ export default function StoreHome() {
     ORDER_DISPATCH({ type: 'SET_PROCESSING_ORDERS', payload: setProcessingOrders })
     ORDER_DISPATCH({ type: 'SET_HANDOVER_ORDERS', payload: setHandOverOrders })
     ORDER_DISPATCH({ type: 'SET_PICKUP_ORDERS', payload: setPickupOrders })
+    setProcessingLoader(false)
   }
 
-  //load home data current order
+  //**** load home data current order ******//
   useEffect(() => {
-    loadHomeDataCurrentOrder()
-  }, [])
+    if(refreshOrders){
+      loadHomeDataCurrentOrder()
+      dispatch(storeHomeOrderActions.setData({field:'refreshOrders','data':false}))
+    }
+  }, [refreshOrders])
 
 
   useEffect(() => {
@@ -194,7 +201,7 @@ export default function StoreHome() {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     profileReset()
-    loadHomeDataCurrentOrder()
+    dispatch(storeHomeOrderActions.setData({field:'refreshOrders','data':true}))
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
@@ -320,6 +327,7 @@ export default function StoreHome() {
             textStyle={{ color: '#FFF' }}
           />
         </ScrollView>
+       
       </View>
 
 

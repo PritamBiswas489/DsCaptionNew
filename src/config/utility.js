@@ -600,4 +600,7 @@ export function convertToTitleCase(input) {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
       .join(' '); // Join the words with a space
 }
-
+export function getIndianPriceFormat(price) {
+  const formattedPrice = new Intl.NumberFormat('en-IN').format(price);
+  return formattedPrice
+}

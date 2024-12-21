@@ -212,4 +212,5 @@ export type RootStackParamList = {
   StoreWallet:undefined;
   StoreHome:undefined;
   StoreOrderDetails:{ OrderId: string }
+  StoreListCampaign:undefined;
 };

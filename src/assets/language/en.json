@@ -1459,7 +1459,24 @@
            "Confirmation":"Confirmation",
            "EnterProcessingTime":"Enter processing time in minutes",
            "swipeTohandover":"Swipe to handover",
-           "HandOverOrderAlertMessage":"You want to handover this order?"
+           "HandOverOrderAlertMessage":"You want to handover this order?",
+           "CampaignList":"Campaigns",
+           "LeaveNow":"Leave now",
+           "JoinNow":"Join now",
+           "Date":"Date",
+           "Daily":"Daily",
+           "WithdrawableBalance":"Withdrawable Balance",
+           "CashinHand":"Cash in Hand",
+           "PendingWithdraw":"Pending Withdraw",
+           "Withdraw":"Withdraw",
+           "WithdrawRequest":"Withdraw Request",
+           "PaymentHistory":"Payment History" ,
+           "TransactionHistory":"Transaction History",
+           "Transferredto":"Transferred to",
+           "PaidVia":"Paid via"
+           
+            
+          
 
            
 

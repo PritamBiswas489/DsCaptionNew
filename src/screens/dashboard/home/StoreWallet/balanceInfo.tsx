@@ -2,18 +2,22 @@ import appColors from '@src/theme/appColors';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useValues } from '../../../../../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { getIndianPriceFormat } from '@src/config/utility';
 
 const BalanceInfo: React.FC = () => {
-  const { isDark, t } = useValues();
+  const { isDark, t, currSymbol } = useValues();
+  const { cash_in_hands, withdraw_able_balance } = useSelector((state: RootState) => state['storeProfileData'])
   return (
     <View style={styles.container}>
-      <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
-        <Text style={styles.amount}>₹ 0</Text>
-        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText}]}>Cash in Hand</Text>
+      <View style={[styles.card, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
+        <Text style={styles.amount}>{currSymbol} {getIndianPriceFormat(cash_in_hands)}</Text>
+        <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText }]}>{t('newDeveloper.CashinHand')}</Text>
       </View>
-      <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
-        <Text style={styles.amount}>₹ 1,109</Text>
-        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText}]}>Withdrawable Balance</Text>
+      <View style={[styles.card, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
+        <Text style={styles.amount}>{currSymbol} {getIndianPriceFormat(withdraw_able_balance)}</Text>
+        <Text style={[styles.label, { color: isDark ? appColors.white : appColors.darkText }]}>{t('newDeveloper.WithdrawableBalance')}</Text>
       </View>
     </View>
   );

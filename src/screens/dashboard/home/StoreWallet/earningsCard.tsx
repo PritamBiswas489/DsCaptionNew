@@ -2,22 +2,26 @@ import appColors from '@src/theme/appColors';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useValues } from '../../../../../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
+import { getIndianPriceFormat } from '@src/config/utility';
 
 const EarningsCard = () => {
-  const { isDark, t } = useValues();
+  const { isDark, t, currSymbol } = useValues();
+  const { total_earning, total_withdrawn,pending_withdraw } = useSelector((state: RootState) => state['storeProfileData'])
   return (
     <View style={styles.container}>
       <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
-        <Text style={styles.amount}>₹ 0</Text>
-        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>Pending Withdraw</Text>
+        <Text style={styles.amount}>{currSymbol} { getIndianPriceFormat(pending_withdraw) }</Text>
+        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>{t('newDeveloper.PendingWithdraw')}</Text>
       </View>
       <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
-        <Text style={styles.amount}>₹ 255</Text>
-        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>Already Withdrawn</Text>
+        <Text style={styles.amount}>{currSymbol} { getIndianPriceFormat(total_withdrawn) }</Text>
+        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>{t('newDeveloper.AlreadyWithdrawn')}</Text>
       </View>
       <View style={[styles.card,{backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }]}>
-        <Text style={styles.amount}>₹ 1,364</Text>
-        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>Total Earning</Text>
+        <Text style={styles.amount}>{currSymbol} { getIndianPriceFormat(total_earning) }</Text>
+        <Text style={[styles.label,{color: isDark ? appColors.white : appColors.darkText,}]}>{t('newDeveloper.TotalEarning')}</Text>
       </View>
     </View>
   );

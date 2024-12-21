@@ -1,30 +1,28 @@
 import appColors from '@src/theme/appColors';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useValues } from '../../../../../App';
-import WithdrawRequestList from './withdrawRequest';
-import PaymentHistoryList from './paymentHistory';
-import { WithdrawInterface } from '@src/interfaces/store/withdraw.interface';
 import { PaymentInterface } from '@src/interfaces/store/payment.interface';
+import { datetimeArr, getIndianPriceFormat } from '@src/config/utility';
+import HomeNoFataFound from '@src/commonComponents/homeNoDataFound';
 
-
-const TransactionHistory: React.FC<{withdrawList:WithdrawInterface[],paymentList:PaymentInterface[]}> = ({withdrawList,paymentList}) => {
-    const { isDark, t } = useValues();
-    const [listTabTyle,setListTabType] = useState<string>('transaction')
+const PaymentHistoryList: React.FC<{paymentList:PaymentInterface[]}> = ({paymentList}) => {
+    const { isDark, t, currSymbol } = useValues();
     return (
         <View style={styles.container}>
-            <View style={styles.tabContainer}>
-                <TouchableOpacity onPress={()=>setListTabType('transaction')}>
-                    <Text style={ [listTabTyle === 'transaction' ? styles.activeTab : styles.inactiveTab,{color: isDark ? appColors.white : appColors.darkText,}]}>{t('newDeveloper.WithdrawRequest')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setListTabType('payment')}>
-                    <Text style={[listTabTyle === 'payment' ? styles.activeTab : styles.inactiveTab,{color: isDark ? appColors.white : appColors.darkText,}]}>{t('newDeveloper.PaymentHistory')}</Text>
-                </TouchableOpacity>
+            <View style={styles.transactionContainer}>
+                <Text style={[styles.transactionTitle,{color: isDark ? appColors.white : appColors.darkText}]}>{t('newDeveloper.PaymentHistory')}</Text>
             </View>
-
-            {listTabTyle === 'transaction' && <WithdrawRequestList  withdrawList={withdrawList}/> } 
-            {listTabTyle === 'payment' && <PaymentHistoryList  paymentList={paymentList} />}
-             
+            {paymentList.length > 0 ? paymentList.map((withdraw:PaymentInterface, withdrawIndex: number) => {
+                return <View key={`${'payment'+withdrawIndex}`} style={[styles.transactionDetails, { backgroundColor: isDark ? appColors.darkCardBg : appColors.white }]}>
+                    <Text style={[styles.amount, { color: isDark ? appColors.white : appColors.darkText }]}>{currSymbol} {getIndianPriceFormat(withdraw.amount)}</Text>
+                    <View style={styles.detailContainer}>
+                        
+                        <Text style={[styles.date, { color: isDark ? appColors.darkSubText : appColors.darkText }]}>{withdraw.payment_time}</Text>
+                    </View>
+                    <Text style={styles.status}>{t('newDeveloper.PaidVia')} {withdraw.method.replace('_',' ')}</Text>
+                </View>
+            }) : <HomeNoFataFound message={t('newDeveloper.Nodatafound')} />}
         </View>
     );
 };
@@ -97,4 +95,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TransactionHistory;
+export default PaymentHistoryList;

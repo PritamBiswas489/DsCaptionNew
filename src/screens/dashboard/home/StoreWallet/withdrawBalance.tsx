@@ -2,19 +2,34 @@ import appColors from '@src/theme/appColors';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Ensure you have react-native-vector-icons installed
+import { useValues } from '../../../../../App';
+import { getIndianPriceFormat } from '@src/config/utility';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
 
+interface Response {
+  data: any;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+  request?: any;
+}
 const WithdrawBalance: React.FC = () => {
+  const { isDark, t, currSymbol } = useValues();
+  const {withdraw_able_balance} = useSelector((state: RootState)=>state['storeProfileData'])
+  
   return (
     <View style={styles.container}>
       <View style={styles.balanceContainer}>
         <Icon name="account-balance-wallet" size={40} color="#fff" />
         <View style={styles.textContainer}>
-          <Text style={styles.label}>Withdrawable Balance</Text>
-          <Text style={styles.amount}>₹ 1,109</Text>
+          <Text style={styles.label}>{t('newDeveloper.WithdrawableBalance')}</Text>
+          <Text style={styles.amount}>{currSymbol} {getIndianPriceFormat(withdraw_able_balance)}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.withdrawButton}>
-        <Text style={styles.withdrawButtonText}>Withdraw</Text>
+        <Text style={styles.withdrawButtonText}>{t('newDeveloper.Withdraw')}</Text>
       </TouchableOpacity>
     </View>
   );

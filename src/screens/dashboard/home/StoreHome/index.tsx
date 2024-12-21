@@ -319,7 +319,7 @@ export default function StoreHome() {
         >
           <View><StoreStatus updateStoreStatus={updateStoreStatus} /></View>
           <View><OrderStatusList statusMenuList={statusMenuList} setTabStatus={setTabStatus} /></View>
-          <View><CampaignFilter filterCampaign={filterCampaign} setFilterCampaign={setFilterCampaign} /></View>
+          <View style={{marginTop:15}}><CampaignFilter filterCampaign={filterCampaign} setFilterCampaign={setFilterCampaign} /></View>
           <View><OrderList tabOrders={tabOrders} navigateToOrderDetailsPage={navigateToOrderDetailsPage} /></View>
           <Spinner
             visible={processingLoader}

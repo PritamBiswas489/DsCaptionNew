@@ -78,6 +78,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   { 
     icon: <CampaignIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Campaign',
+    goToScreen:'StoreListCampaign'
   },
   { 
     icon: <ChatIcon height={'36'} width={'36'} />,

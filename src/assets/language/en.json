@@ -1473,7 +1473,9 @@
            "PaymentHistory":"Payment History" ,
            "TransactionHistory":"Transaction History",
            "Transferredto":"Transferred to",
-           "PaidVia":"Paid via"
+           "PaidVia":"Paid via",
+           "ConversationList":"Conversation List",
+        
            
             
           

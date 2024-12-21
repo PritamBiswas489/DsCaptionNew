@@ -83,6 +83,7 @@ export const categoriesData: Array<HomeCategoryType> = [
   { 
     icon: <ChatIcon height={'36'} width={'36'} />,
     title: 'newDeveloper.Conversation',
+    goToScreen:'StoreChatHistory'
   },
   {
     icon: <SettingIcon height={'36'} width={'36'} />,

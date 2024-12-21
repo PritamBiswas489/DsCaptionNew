@@ -123,9 +123,9 @@ export function HistoryList() {
   }
   const handleScrollCustomerProcessing = () => {
 
-    if (serviceMenIsMoreData) { return }
+    if (customerIsMoreData) { return }
     setCustomerChannelClickMore(true)
-    dispatch(customerChannelActions.setData({ field: 'offset', data: serviceMenChannelOffset + 1 }))
+    dispatch(customerChannelActions.setData({ field: 'offset', data: customerChannelOffset + 1 }))
   }
 
   useEffect(() => {

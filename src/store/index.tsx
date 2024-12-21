@@ -71,6 +71,7 @@ import couponSlice from "./redux/store/coupon-redux";
 import storeItemSlice from "./redux/store/store-item-redux";
 import itemStatusUpdateSlice from "./redux/store/itemstatus-update-redux";
 import storeHomeOrderSlice from "./redux/store/store-home-order";
+import conversationChannelSlice from "./redux/store/customer-conversations-redux";
 
 //configure store
 const store = configureStore({
@@ -147,7 +148,8 @@ const store = configureStore({
         coupon:couponSlice.reducer,
         storeItem:storeItemSlice.reducer,
         itemUpdateStatus:itemStatusUpdateSlice.reducer,
-        storeHomeOrder:storeHomeOrderSlice.reducer
+        storeHomeOrder:storeHomeOrderSlice.reducer,
+        conversationChannel:conversationChannelSlice.reducer
         //DONOT FORGET CLEAR REDUX STATE AFTER LOGOUT DEVELOPER
     },
     middleware: (getDefaultMiddleware) =>

@@ -86,9 +86,9 @@ const Login = ({ route }: any) => {
 
   useEffect(() => {
     if (isServiceManLogin) {
-      setForm({ ...form, ['email']: 'fashion1@gmail.com', ['password']: '@Dorkar1234' });
+      // setForm({ ...form, ['email']: 'fashion1@gmail.com', ['password']: '@Dorkar1234' });
     //  setForm({ ...form, ['email']: 'foodstore1@gmail.com', ['password']: '@Dorkar1234' });
-    //  setForm({ ...form, ['email']: 'arup1012@gmail.com', ['password']: '@Kolkata1234' });
+     setForm({ ...form, ['email']: 'arup1012@gmail.com', ['password']: '@Kolkata1234' });
     //  setForm({ ...form, ['email']: 'Munmun2020@gmail.com', ['password']: '@Kolkata1234' });
       // setForm({ ...form, ['email']: 'medicine1@gmail.com', ['password']: '@Dorkar1234' });
     } else {

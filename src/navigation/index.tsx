@@ -112,6 +112,7 @@ import  StoreWallet  from '@src/screens/dashboard/home/StoreWallet';
 import StoreHome from '@src/screens/dashboard/home/StoreHome';
 import StoreListCampaign from '@src/screens/dashboard/home/StoreCampaign/listCampaign';
 import { StoreChatHistory } from '@src/screens/dashboard/storeChatHistory';
+import { StoreChatMessages } from '@src/screens/dashboard/storeChatMessages';
 
 
 export default function MyStack() {
@@ -463,6 +464,9 @@ export default function MyStack() {
 
            
             <RootStack.Screen name="StoreChatHistory" component={StoreChatHistory} />
+
+            <RootStack.Screen name="StoreChatMessages" component={StoreChatMessages} />
+            
             
             
           </>

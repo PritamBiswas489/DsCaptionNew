@@ -389,6 +389,17 @@ const StoreOrderDetails = () => {
           );
     }
 
+    const redirectToDeliverManChat = (id:number|string | null,name:string | null)=>{
+        if(id){
+            navigation.navigate('StoreChatMessages',{delivery_man_id:id,name})
+        }
+    }
+    const redirectToCustomerChatPanel = (id:number|string | null,name:string | null)=>{
+        if(id){
+            navigation.navigate('StoreChatMessages',{user_id:id,name})
+        }
+    }
+
     return (
         <View style={[styles.container, { backgroundColor: isDark ? appColors.darkTheme : appColors.white, }]}>
             <Header showBackArrow={true} title={'newDeveloper.OrderDetails'} />
@@ -453,7 +464,7 @@ const StoreOrderDetails = () => {
                             <Text style={[styles.customerName, { color: isDark ? appColors.white : appColors.darkText, }]}>{orderMainDetails?.delivery_address?.contact_person_name}</Text>
                             <Text style={[styles.customerAddress, { color: isDark ? appColors.white : appColors.darkText, }]}>{orderMainDetails?.delivery_address?.address}</Text>
                         </View>
-                        <TouchableOpacity style={[styles.chatButton]}>
+                        <TouchableOpacity onPress={()=>redirectToCustomerChatPanel(orderMainDetails?.customer?.id,`${orderMainDetails?.customer?.f_name} ${orderMainDetails?.customer?.l_name}`)} style={[styles.chatButton]}>
                             <Text style={[styles.chatText]}>{t('newDeveloper.Chat')}</Text>
                         </TouchableOpacity>
                     </View>
@@ -471,7 +482,7 @@ const StoreOrderDetails = () => {
                             <Text style={[styles.customerName, { color: isDark ? appColors.white : appColors.darkText, }]}>{`${orderMainDetails?.delivery_man?.f_name} ${orderMainDetails?.delivery_man?.l_name}`}</Text>
                             {orderMainDetails?.delivery_man?.email && <Text style={[styles.customerAddress, { color: isDark ? appColors.white : appColors.darkText, }]}>{orderMainDetails?.delivery_man?.email}</Text>}
                         </View>
-                        <TouchableOpacity style={[styles.chatButton]}>
+                        <TouchableOpacity onPress={()=>redirectToDeliverManChat(orderMainDetails?.delivery_man?.id,`${orderMainDetails?.delivery_man?.f_name} ${orderMainDetails?.delivery_man?.l_name}`)} style={[styles.chatButton]}>
                             <Text style={[styles.chatText]}>{t('newDeveloper.Chat')}</Text>
                         </TouchableOpacity>
                         {orderMainDetails?.delivery_man?.phone && <TouchableOpacity onPress={() => { makePhoneCall(orderMainDetails?.delivery_man?.phone) }} style={[styles.callButton]}>

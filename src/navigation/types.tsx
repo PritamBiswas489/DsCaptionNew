@@ -79,6 +79,13 @@ export type commissionDetailProps = {
 export type loginProps = {
   serviceMenLogin: boolean;
 };
+
+export type StoreChatMessagesProps = {
+  conversation_id?: string | number;
+  delivery_man_id?: string | number;
+  user_id?: string | number;
+  name?:string | null
+};
 export type RootStackParamList = {
   NoInternet: undefined;
   AuthNavigation: undefined;
@@ -214,4 +221,5 @@ export type RootStackParamList = {
   StoreOrderDetails:{ OrderId: string }
   StoreListCampaign:undefined;
   StoreChatHistory:undefined;
+  StoreChatMessages:StoreChatMessagesProps
 };

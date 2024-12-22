@@ -604,3 +604,8 @@ export function getIndianPriceFormat(price) {
   const formattedPrice = new Intl.NumberFormat('en-IN').format(price);
   return formattedPrice
 }
+export function getFileNameFromUrl(url) {
+  const matches = url.match(/([^\/?#]+)(?=[^\/]*$)/);
+
+  return matches ? matches[0] : null;
+}

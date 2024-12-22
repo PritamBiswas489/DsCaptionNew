@@ -17,3 +17,22 @@ export const getConverstions = async(limit:number,offset:number): Promise<Respon
 	}
 
 }
+//get conversation messages
+export const getConversationMessages    = async(query:string): Promise<Response> => {
+	try {
+		const response = await api.get(`/vendor/message/details?${query}`);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+}
+
+export const sendConversationMessage = async(formData:FormData): Promise<Response> => {
+	try {
+		const response = await api.post(`/vendor/message/send`,formData);
+		return response;
+	} catch (error:any) {
+		return error.response;
+	}
+
+}

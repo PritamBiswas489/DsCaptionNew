@@ -18,6 +18,7 @@ import { timeformatting } from '@src/config/utility';
 import { getMediaUrl } from '@src/config/utility';
 import { Attachment } from '@src/utils/icons';
 import { limitWords } from '@src/config/utility';
+import { capitalizeFirstLetter } from '@src/config/utility';
 
 export function CustomerChannels({handleScrollCustomerProcessing}:{
   handleScrollCustomerProcessing:()=>void
@@ -31,8 +32,8 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
 
    
 
-  const gotToChatScreen = (id: string,userName:string) => {
-    navigation.navigate('Chat',{id:id,toUserName:userName})
+  const gotToChatScreen = (conversation_id: number | string,) => {
+    navigation.navigate('StoreChatMessages',{conversation_id})
   }
 
   return (
@@ -42,17 +43,19 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
         data={customerChannels}
         keyExtractor={item=>String(item.id)}
         renderItem={({ item }) => {
-          let profileimage:string | null = ''
+          let profileimage:string | null | undefined = ''
           let fullName:string | null = ''
-          let receivertype:string | null = ''
+          let receivertype:string | null = capitalizeFirstLetter(item.receiver_type.replace('_',' '))
+          const conversation_id = item.id
 
-          if(!item.sender.vendor_id){
-            profileimage = item.sender.image_full_url
-            fullName = item.sender.f_name + ' '+item.sender.l_name
            
-          }else if(!item.receiver.vendor_id){
-            profileimage = item.receiver.image_full_url
-            fullName = item.receiver.f_name + ' '+item.receiver.l_name
+          if(!item?.sender?.vendor_id){
+            profileimage = item?.sender?.image_full_url
+            fullName = item.sender?.f_name + ' '+item.sender?.l_name
+           
+          }else if(!item.receiver?.vendor_id){
+            profileimage = item?.receiver?.image_full_url
+            fullName = item.receiver?.f_name + ' '+item?.receiver?.l_name
           }
 
          
@@ -60,10 +63,10 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
           let bgColor =  isDark ? appColors.darkCard : appColors.boxBg
           let colortext = isDark ? appColors.white : appColors.darkText
            
-          
+
           return <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() =>()=>{}}
+            onPress={() =>{ gotToChatScreen(conversation_id) }}
             style={[
               styles.container,
               { backgroundColor: bgColor },
@@ -81,7 +84,7 @@ export function CustomerChannels({handleScrollCustomerProcessing}:{
                 <Text
                   style={[
                     styles.person,
-                    { color: colortext },
+                    { color: appColors.primary,fontWeight:'bold' },
                   ]}>
                   {receivertype} 
                 </Text>

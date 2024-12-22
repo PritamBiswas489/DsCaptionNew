@@ -9,9 +9,9 @@ export interface ConversationInterface {
     unread_message_count: number;
     created_at: string;
     updated_at: string;
-    sender: Sender;
-    receiver: Receiver;
-    last_message: LastMessage;
+    sender: Sender | undefined;
+    receiver: Receiver | undefined;
+    last_message: LastMessage | undefined;
 }
 
 interface Sender {

@@ -25,7 +25,7 @@ import { Provider } from '@screens/dashboard/serviceMan/home';
 import { ServiceMenDashBoard } from '@screens/dashboard/serviceMan/home';
 import { ServiceMen } from './serviceMen';
 import { ProviderLogin } from './provider';
-import { Alert, RefreshControl } from 'react-native';
+import { Alert, RefreshControl, TouchableOpacity } from 'react-native';
 import SkeletonLoader from '@src/commonComponents/SkeletonLoader';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -42,6 +42,8 @@ import { Platform } from 'react-native';
 import { saveFcmTokenProcess } from '@src/services/profile.service';
 import { getAuthUserService } from '@src/services/auth.service';
 import { serviceProviderAccountDataActions } from '@src/store/redux/service-provider-account-data.redux';
+import { Text } from 'react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
  
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -113,6 +115,28 @@ export function Home() {
     callAllFunctionHome()
   },[])
 
+  //on display notification
+  async function onDisplayNotification(title:string,body:string) {
+    //==== Create a channel =====//
+    await notifee.createChannel({
+      id: 'default_channel_id',
+      name: 'Default Channel',
+      sound: 'notification_sound', // Use the same name as the MP3 file without extension
+      importance: AndroidImportance.HIGH,
+    });
+  
+    //========= Display a notification ============//
+    await notifee.displayNotification({
+      title: title,
+      body: body,
+      android: {
+        channelId: 'default_channel_id',
+        smallIcon: 'ic_launcher', // optional, defaults to your app icon
+      },
+    });
+  }
+
+
    
   useEffect(() => {
     // console.log({ servicemenNeedFresh, subscriptionFresh })
@@ -140,7 +164,7 @@ export function Home() {
  
   //==== save fcm token ======//
   const saveFcmTokenData = async (fcmToken:string) =>{
-     
+     console.log({fcmToken})
      const formData = new FormData()
      formData.append('fcm_token',fcmToken)
      saveFcmTokenProcess(formData)
@@ -163,8 +187,9 @@ export function Home() {
     getFCMToken();
 
     const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      Alert.alert(t('newDeveloper.NewNotification'), remoteMessage.notification?.title,
+     
+      onDisplayNotification(remoteMessage.notification?.title || '',remoteMessage.notification?.body || '')
+      Alert.alert(remoteMessage.notification?.title || t('newDeveloper.NewNotification'), remoteMessage.notification?.body,
         [
           {
             text: "Cancel",
@@ -202,6 +227,7 @@ export function Home() {
   console.log("=============== loggedInUserType =====================")
   console.log(loggedInUserType)
 
+  
 
   return (
     <ScrollView
@@ -225,6 +251,7 @@ export function Home() {
           }
           onTrailIcon={() => navigate('Notification')}
         />
+        {/* <TouchableOpacity onPress={()=>onDisplayNotification('testing title','testing body')}><Text>Click test notification</Text></TouchableOpacity> */}
         {isServiceManLogin && <Provider />}
         <TotalPayBackBalance onPress={() => Alert.alert('NOT DONE YET')} />
         {isServiceManLogin ? <ServiceMenDashBoard /> : <DashBoard />}

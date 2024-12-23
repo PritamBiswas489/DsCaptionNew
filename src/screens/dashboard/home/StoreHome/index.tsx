@@ -25,6 +25,7 @@ import { CurrentOrderInterface } from '@src/interfaces/store/currentOrder.interf
 import { saveVendorFcmTokenProcess } from '@src/services/store/profile.service';
 import messaging from '@react-native-firebase/messaging';
 import { storeHomeOrderActions } from '@src/store/redux/store/store-home-order';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 
 
 interface Response {
@@ -170,6 +171,26 @@ export default function StoreHome() {
     }
   }, [refreshOrders])
 
+  async function onDisplayNotification(title:string,body:string) {
+    //==== Create a channel =====//
+    await notifee.createChannel({
+      id: 'default_channel_id',
+      name: 'Default Channel',
+      sound: 'notification_sound', // Use the same name as the MP3 file without extension
+      importance: AndroidImportance.HIGH,
+    });
+  
+    //========= Display a notification ============//
+    await notifee.displayNotification({
+      title: title,
+      body: body,
+      android: {
+        channelId: 'default_channel_id',
+        smallIcon: 'ic_launcher', // optional, defaults to your app icon
+      },
+    });
+  }
+
 
   useEffect(() => {
     setStatusMenuList([
@@ -261,20 +282,20 @@ export default function StoreHome() {
     getFCMToken();
 
     const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      Alert.alert(t('newDeveloper.NewNotification'), remoteMessage.notification?.title,
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",     
-          },
-          { 
-            text: "OK", 
-            onPress: () => console.log("Message received") 
-          }
-        ]
-      );
+      onDisplayNotification(remoteMessage.notification?.title || '',remoteMessage.notification?.body || '')
+            Alert.alert(remoteMessage.notification?.title || t('newDeveloper.NewNotification'), remoteMessage.notification?.body,
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",     
+                },
+                { 
+                  text: "OK", 
+                  onPress: () => {}
+                }
+              ]
+            );
     });
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log('Notification caused app to open from background state:', remoteMessage.notification);

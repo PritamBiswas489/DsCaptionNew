@@ -13,10 +13,22 @@ import messaging from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance, EventType  } from '@notifee/react-native';
 import {PermissionsAndroid} from 'react-native';
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
- 
 
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-  console.log('Message handled in the background!', remoteMessage);
+  await notifee.createChannel({
+    id: 'default_channel_id',
+    name: 'Default Channel',
+    sound: 'notification_sound', // Use the same name as the MP3 file without extension
+    importance: AndroidImportance.HIGH,
+  });
+  await notifee.displayNotification({
+    title: remoteMessage.notification.title,
+    body: remoteMessage.notification.body,
+    android: {
+      channelId: 'default_channel_id',
+      smallIcon: 'ic_launcher', // optional, defaults to your app icon
+    },
+  });
 });
 
 // Ignore all log warnings

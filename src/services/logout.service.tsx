@@ -52,6 +52,10 @@ import { vendorNotificationsActions } from '@src/store/redux/store/notifications
 import { vendorBannerActions } from '@src/store/redux/store/banner-redux';
 import { vendorAddonsActions } from '@src/store/redux/store/addons-redux';
 import { couponActions } from '@src/store/redux/store/coupon-redux';
+import { storeItemsActions } from '@src/store/redux/store/store-item-redux';
+import { itemStatusActions } from '@src/store/redux/store/itemstatus-update-redux';
+import { storeHomeOrderActions } from '@src/store/redux/store/store-home-order';
+import { conversationChannelActions } from '@src/store/redux/store/customer-conversations-redux';
 //logout clear redux function
 
 
@@ -109,4 +113,8 @@ export function  logoutClearReduxState(dispatch:AppDispatch){
       dispatch(vendorBannerActions.resetState())
       dispatch(vendorAddonsActions.resetState())
       dispatch(couponActions.resetState())
+      dispatch(storeItemsActions.resetState())
+      dispatch(itemStatusActions.resetState())
+      dispatch(storeHomeOrderActions.resetState())
+      dispatch(conversationChannelActions.resetState())
 }

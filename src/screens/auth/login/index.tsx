@@ -100,22 +100,26 @@ const Login = ({ route }: any) => {
   const handleLoginServiceProvider = () => {
     const reg =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let error = false  
     if (!form.email) {
+      error = true
       setErrors(prev => {
         return { ...prev, email: t('error.email') };
       });
     }
     if (!reg.test(form.email)) {
+      error = true
       setErrors(prev => {
         return { ...prev, email: t('error.validEmail') };
       });
     }
     if (!form.password) {
+      error = true
       setErrors(prev => {
         return { ...prev, password: t('error.password') };
       });
     }
-    else {
+    if(!error) {
       //isServiceManLogin ? saveServiceMenCredentials() : clearServiceMenData();
       isServiceManLogin ? handleStoreSellerLoginHandle() : handleServiceProviderLoginHandle()
 

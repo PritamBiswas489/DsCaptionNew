@@ -53,7 +53,7 @@ export default function StatusFilter({ }) {
           {backgroundColor:isDark ? appColors.darkCardBg : appColors.white  }
         ]}
         data={statusList}
-        keyExtractor={item=>item.readableId}
+        keyExtractor={item=>item.value}
         renderItem={({ index, item }) => {
           return (
             <RenderItem

@@ -63,7 +63,7 @@ export function BottomTabSeller() {
   ];
 
   const onPress = (key: number) => {
-    if(selected === 0 ){
+    if(key === 0 ){
       dispatch(storeHomeOrderActions.setData({field:'refreshOrders','data':true}))
     }
     if (key != 2) {

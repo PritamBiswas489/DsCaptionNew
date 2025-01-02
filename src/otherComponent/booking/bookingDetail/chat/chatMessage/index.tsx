@@ -113,10 +113,10 @@ export default function ChatView({ channelData }: { channelData: channelInterfac
     if(isFirstTimeLoading || clickLoadMore){
       loadChatMessages(limit,offset)
     }else{
-      // const intervalId = setInterval(() => {
-      //   loadChatMessages(10,1)
-      // }, 3000);
-      // return () => clearInterval(intervalId);
+      const intervalId = setInterval(() => {
+        loadChatMessages(10,1)
+      }, 3000);
+      return () => clearInterval(intervalId);
     }
   },[isFirstTimeLoading,clickLoadMore])
 

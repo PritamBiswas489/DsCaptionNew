@@ -210,6 +210,11 @@ useEffect(()=>{
 useEffect(()=>{
   if(isFirstTimeLoading || clickLoadMore){
        loadChatMessages(CONVERSATION_STATE.limit,CONVERSATION_STATE.offset)
+  }else{
+    const intervalId = setInterval(() => {
+      loadChatMessages(10,1)
+    }, 3000);
+    return () => clearInterval(intervalId);
   }
 },[isFirstTimeLoading,clickLoadMore,conversation_id,delivery_man_id,user_id])
 

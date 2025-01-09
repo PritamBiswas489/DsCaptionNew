@@ -26,6 +26,7 @@ import { saveVendorFcmTokenProcess } from '@src/services/store/profile.service';
 import messaging from '@react-native-firebase/messaging';
 import { storeHomeOrderActions } from '@src/store/redux/store/store-home-order';
 import notifee, { AndroidImportance } from '@notifee/react-native';
+import { clearValue, getValue } from '@src/utils/localstorage';
 
 
 interface Response {
@@ -171,25 +172,26 @@ export default function StoreHome() {
     }
   }, [refreshOrders])
 
-  async function onDisplayNotification(title:string,body:string) {
-    //==== Create a channel =====//
-    await notifee.createChannel({
-      id: 'default_channel_id',
-      name: 'Default Channel',
-      sound: 'notification_sound', // Use the same name as the MP3 file without extension
-      importance: AndroidImportance.HIGH,
-    });
-  
-    //========= Display a notification ============//
-    await notifee.displayNotification({
-      title: title,
-      body: body,
-      android: {
-        channelId: 'default_channel_id',
-        smallIcon: 'ic_launcher', // optional, defaults to your app icon
-      },
-    });
-  }
+  //check save fcm token
+  const checkSaveFcmToken = async () =>{
+        const fcmTokenStorage = await getValue('fcmTokenStorage')
+        if(fcmTokenStorage){
+            const formData = new FormData()
+            formData.append('fcm_token',fcmTokenStorage)
+            const response:Response =  await saveVendorFcmTokenProcess(formData)
+            console.log(response?.data)
+            clearValue('fcmTokenStorage')
+
+        }
+
+    }
+    //Update user fcm token 
+    useEffect(()=>{
+        checkSaveFcmToken()
+    },[])
+
+
+   
 
 
   useEffect(() => {
@@ -243,82 +245,7 @@ export default function StoreHome() {
   const navigateToOrderDetailsPage = (OrderId: number) => {
     navigation.navigate('StoreOrderDetails', { OrderId: String(OrderId) });
   }
- //============================== Save user token ==================================//
-  //Request user permission
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-    }
-  }
-  //Save fcm token data
-  const saveFcmTokenData = async (fcmToken:string) =>{
-       const formData = new FormData()
-       formData.append('fcm_token',fcmToken)
-       const response:Response =  await saveVendorFcmTokenProcess(formData)
-       console.log("================ FCM Token update =======================")
-       console.log(response?.data)
-  }
-
-  const getFCMToken = async () => {
-    try {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        saveFcmTokenData(fcmToken)
-      } else {
-        console.log('Failed to get FCM token');
-      }
-    } catch (error) {
-      console.error('Error getting FCM token:', error);
-    }
-  };
-
-  useEffect(() => {
-    requestUserPermission();
-    getFCMToken();
-
-    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-      onDisplayNotification(remoteMessage.notification?.title || '',remoteMessage.notification?.body || '')
-            Alert.alert(remoteMessage.notification?.title || t('newDeveloper.NewNotification'), remoteMessage.notification?.body,
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",     
-                },
-                { 
-                  text: "OK", 
-                  onPress: () => {}
-                }
-              ]
-            );
-    });
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log('Notification caused app to open from background state:', remoteMessage.notification);
-    });
-     
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log('Notification caused app to open from quit state:', remoteMessage.notification);
-        }
-      });
-    const unsubscribeOnTokenRefresh = messaging().onTokenRefresh(token => {
-      saveFcmTokenData(token)
-    });
-
-    return () => {
-      unsubscribeOnMessage();
-      unsubscribeOnTokenRefresh();
-    };
-  }, []);
-
-  //============================== End save user token ==================================// 
+ 
 
   return (
     <>

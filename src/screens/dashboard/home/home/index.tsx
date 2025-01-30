@@ -45,6 +45,8 @@ import { serviceProviderAccountDataActions } from '@src/store/redux/service-prov
 import { Text } from 'react-native';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import { clearValue, getValue } from '@src/utils/localstorage';
+import { getPagesContent } from '@src/services/settings.service';
+import { contentPagesActions } from '@src/store/redux/content-pages-redux';
  
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -116,6 +118,40 @@ export function Home() {
     callAllFunctionHome()
   },[])
 
+  const {fetched:contentFetched} = useSelector((state: RootState)=>state.contentPages)
+  const fetchContents = async()=>{
+    const contentConfig = await getPagesContent()
+        if (contentConfig?.data?.content) {
+          Object.keys(contentConfig?.data?.content).forEach((key: string) => {
+            // console.log(contentConfig?.data?.content[key]?.value)
+            if (key === 'about_us') {
+              dispatch(contentPagesActions.setData({ 'field': 'about_us', data: contentConfig?.data?.content[key]?.value }))
+            }
+            if (key === 'terms_and_conditions') {
+              dispatch(contentPagesActions.setData({ 'field': 'terms_and_conditions', data: contentConfig?.data?.content[key]?.value }))
+            }
+            if (key === 'refund_policy') {
+              dispatch(contentPagesActions.setData({ 'field': 'refund_policy', data: contentConfig?.data?.content[key]?.value }))
+            }
+            if (key === 'return_policy') {
+              dispatch(contentPagesActions.setData({ 'field': 'return_policy', data: contentConfig?.data?.content[key]?.value }))
+            }
+            if (key === 'cancellation_policy') {
+              dispatch(contentPagesActions.setData({ 'field': 'cancellation_policy', data: contentConfig?.data?.content[key]?.value }))
+            }
+            if (key === 'privacy_policy') {
+              dispatch(contentPagesActions.setData({ 'field': 'privacy_policy', data: contentConfig?.data?.content[key]?.value }))
+            }
+          })
+          dispatch(contentPagesActions.setData({ 'field': 'fetched', data: true }))
+        }
+  }
+
+  useEffect(()=>{
+    if(!contentFetched){
+      fetchContents()
+    }
+  },[contentFetched])
 
   //check save fcm token
   const checkSaveFcmToken = async () =>{

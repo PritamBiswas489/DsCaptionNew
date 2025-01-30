@@ -35,6 +35,8 @@ const AddressCurrentLocation=({route}: any) =>{
   const navigation =  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { googlekey } = useSelector((state: RootState) => state['providerAppConfig'])
 
+  // console.log({googlekey})
+
 
   const setMapAddressState = () =>{
 

@@ -7,6 +7,7 @@ export interface ContentPageDataInterface {
     return_policy:string;
     cancellation_policy:string;
     privacy_policy:string;
+    fetched:boolean
 }
 
 interface SetDataPayload {
@@ -21,6 +22,8 @@ const initialState: ContentPageDataInterface = {
     return_policy:'',
     cancellation_policy:'',
     privacy_policy:'',
+    fetched:false,
+
 };
 
 const contentPagesSlice = createSlice({

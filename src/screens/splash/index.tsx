@@ -304,6 +304,7 @@ const SplashScreen = () => {
           dispatch(contentPagesActions.setData({ 'field': 'privacy_policy', data: contentConfig?.data?.content[key]?.value }))
         }
       })
+      dispatch(contentPagesActions.setData({ 'field': 'fetched', data: true }))
 
     }
 

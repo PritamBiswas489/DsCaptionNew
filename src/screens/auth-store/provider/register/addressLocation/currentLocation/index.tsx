@@ -19,7 +19,7 @@ import { RootState, AppDispatch } from '@src/store';
  
 import Geocoder from 'react-native-geocoding';
 import Toast from 'react-native-toast-message';
-import { getConfigZoneId } from '@src/services/store/settings.service';
+import { geoCodeApi, getConfigZoneId } from '@src/services/store/settings.service';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { mapStoreFieldActions } from '@src/store/redux/store/map-address-redux';
 
@@ -36,6 +36,7 @@ interface Response {
 
  
 const AddressCurrentLocation=({route}: any) =>{
+
   const screen = route?.params?.screen;
   const dispatch = useDispatch()
   const {isDark} = useValues();
@@ -103,20 +104,32 @@ const AddressCurrentLocation=({route}: any) =>{
 
   }
   
-  const getGeoLocationAddress = (lat:number,lng:number) =>{
-        Geocoder.init(googlekey, { language: 'en' });
-        Geocoder.from([lat, lng])
-        .then(json => {
-            const addressComponent = json.results[0].formatted_address;
-            setMapAddress(addressComponent)
-        })
-        .catch(error => {
+  const getGeoLocationAddress = async (lat:number,lng:number) =>{
+        // Geocoder.init(googlekey, { language: 'en' });
+        // Geocoder.from([lat, lng])
+        // .then(json => {
+        //     const addressComponent = json.results[0].formatted_address;
+        //     setMapAddress(addressComponent)
+        // })
+        // .catch(error => {
+        //   Toast.show({
+        //     type: 'error',
+        //     text1: 'ERROR',
+        //     text2: 'Unable to fetch address',
+        //   });
+        // });
+
+        try {
+          const json:Response = await geoCodeApi(lat, lng);
+          const addressComponent = json?.data?.results?.[0].formatted_address;
+          setMapAddress(addressComponent)
+        } catch (error) {
           Toast.show({
             type: 'error',
             text1: 'ERROR',
             text2: 'Unable to fetch address',
           });
-        });
+        }
   }
 
   const setCoordinatesValue = (lat:number,lng:number) =>{

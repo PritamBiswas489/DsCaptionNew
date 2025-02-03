@@ -44,7 +44,7 @@ export default function InputField() {
   const module_id = useSelector((state: RootState) => state['storeRegisterField'].module_id)
 
   useEffect(()=>{
-    if(modules){
+    if(modules.length > 0){
       const loopZones: { label: string; value: string }[] = [];
          modules.forEach((arr:ModuleInterface,index:number)=>{
             return loopZones.push({ label: arr.module_name, value: arr.id.toString() });

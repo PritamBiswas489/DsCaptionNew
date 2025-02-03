@@ -43,58 +43,32 @@ const Register = ({ route }: any) => {
   const [isSkeletonLoaderView, setSkeletionLoaderView] = useState<boolean>(true);
   const [isProcessRegistering,setIsProcessRegistering] = useState<boolean>(false);
 
-  const {zones} = useSelector((state: RootState)=>state['zoneList'])
+  // const {zones} = useSelector((state: RootState)=>state['zoneList'])
    
-  let zoneList = []; 
-  if(zones!=''){
-    zoneList = JSON.parse(zones)
-  }
-  const [isZoneLoaded,setZoneLoaded] = useState<boolean>(zoneList && false);
-  const [isProviderConfigLoaded,setProviderConfigLoaded] = useState<boolean>(false);
+   
+ 
 
    
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const serviceProviderData = useSelector((state: RootState)=>state['serviceProviderAccountData'])
-    const providerAppConfig = useSelector((state: RootState)=>state['providerAppConfig'])
-
-     
+      
     if(serviceProviderData?.id!==''){
        Alert.alert('Already logged in')
        navigation.navigate('BottomTab');
     }
 
-    const loadConfigData  = async ()=>{
-      const responseProviderConfig = await getProviderConfig();
-      if (responseProviderConfig?.data?.content?.base_url) {
-        console.log(responseProviderConfig?.data?.content?.googlekey)
-          dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
-      }
-      setProviderConfigLoaded(true)
-    }
+     
+    
 
-    useEffect(()=>{
-      if(providerAppConfig?.base_url!==''){
-        setProviderConfigLoaded(true)
-      }else{
-        loadConfigData()  
-      }
-    },[providerAppConfig])
+    
 
 
    useEffect(()=>{
-     if(isZoneLoaded && isProviderConfigLoaded){
-        setSkeletionLoaderView(false)
-     }
-   },[isZoneLoaded,isProviderConfigLoaded])
-
-   useEffect(()=>{
-   
-      const getzones = async()=>{
-        const response:Response = await getZoneList();
-        //console.log("================ called ended ==========================")
-        setZoneLoaded(true);
+    const onLoadData = async ()=>{
+      setSkeletionLoaderView(true)
+        const [response,responseProviderConfig] =  await Promise.all([getZoneList(),getProviderConfig()])
         if(response?.data?.content?.data){
           // console.log(response?.data?.content?.data)
           dispatch(zoneDataActions.setData({
@@ -102,13 +76,15 @@ const Register = ({ route }: any) => {
             data: JSON.stringify(response?.data?.content?.data),
            }))
         }
-      }
-      if(!isZoneLoaded){
-        //console.log("================ called ==========================")
-        getzones()
-      }
-     
-   },[isZoneLoaded ])
+        if (responseProviderConfig?.data?.content?.base_url) {
+            dispatch(configAppActions.setData(responseProviderConfig?.data?.content))
+        }
+        setSkeletionLoaderView(false)
+
+    }
+    onLoadData()
+   },[])
+
 
     
 

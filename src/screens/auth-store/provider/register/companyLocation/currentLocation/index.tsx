@@ -15,6 +15,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {useValues} from '../../../../../../../App';
 
 const CurrentLocation=({route}: any) =>{
+ 
   const screen = route?.params?.screen;
   const {isDark} = useValues();
 

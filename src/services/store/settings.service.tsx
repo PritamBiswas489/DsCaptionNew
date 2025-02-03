@@ -36,3 +36,12 @@ export const getConfigZoneId = async(lat:any,lng:any): Promise<Response> => {
       }
 
 }
+
+export const geoCodeApi = async(lat:any,lng:any): Promise<Response> => {
+  try {
+    const response = await api.get<Response>(`/config/geocode-api?lat=${lat}&lng=${lng}`);
+    return response;
+  } catch (error:any) {
+    return error.response;
+  }
+}

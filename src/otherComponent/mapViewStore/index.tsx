@@ -5,11 +5,7 @@ import appColors from '@theme/appColors';
 import { propsType } from './types';
 import { useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@src/store';
- 
-
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
-import { GooglePlaceData, GooglePlaceDetail } from 'react-native-google-places-autocomplete';
+import CustomAutocomplete from './customAutocomplete';
 
 
 export function MapContainer({ latitude, longitude, setCoordinatesValue, company_address }: propsType) {
@@ -22,9 +18,6 @@ export function MapContainer({ latitude, longitude, setCoordinatesValue, company
     ref.current?.setAddressText('');
   }, []);
 
-  const googlekey = 'AIzaSyDkE91hFqzV-g45mOcBN5-ypHa3TLyfeOs'
- 
- 
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -50,37 +43,8 @@ export function MapContainer({ latitude, longitude, setCoordinatesValue, company
         />
       </MapView>
 
-      <GooglePlacesAutocomplete
-        ref={ref} 
-        placeholder={'Search location here .....'}
-        minLength={2} // minimum length of text to search
-        fetchDetails={true}
-        styles={{
-          textInputContainer: searchLocation.textInputContainer,
-          textInput: searchLocation.textInput,
-          predefinedPlacesDescription: searchLocation.predefinedPlacesDescription,
-          description: searchLocation.description,
-          listView: searchLocation.listView,
-          poweredContainer: searchLocation.poweredContainer,
-          powered: searchLocation.powered,
-          
-        }}
-        textInputProps={{
-          placeholderTextColor: '#000', // Set your desired placeholder color here
-        }}
-        onPress={(data, details = null) => {
-          if(details){
-            const {lat, lng} = details.geometry.location
-            setCoordinatesValue(lat, lng)
-          }
-        }}
-        query={{
-          key: googlekey,
-          language: 'en',
-        }}
-        nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-        debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-      />
+     
+      <CustomAutocomplete setCoordinatesValue={setCoordinatesValue}/>
     </View>
   );
 }
